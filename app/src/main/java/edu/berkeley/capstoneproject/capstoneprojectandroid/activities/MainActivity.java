@@ -60,6 +60,18 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button httpButton = (Button) findViewById(R.id.button_http);
+        httpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Going to HTTP");
+
+                Intent intent = new Intent(MainActivity.this, HttpDemoActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
