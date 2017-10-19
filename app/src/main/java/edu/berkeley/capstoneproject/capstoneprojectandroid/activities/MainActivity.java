@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -98,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(adapterView.getContext(), DeviceActivity.class);
             intent.putExtra(DeviceActivity.EXTRA_DEVICE_ADDRESS, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getAddress());
 
+            mBtAdapter.cancelDiscovery();
+
             startActivity(intent);
             finish();
         }
@@ -129,15 +132,24 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mBtAdapter != null) {
+                mBtAdapter.cancelDiscovery();
+            }
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-        // Make sure we're not doing discovery anymore
+    @Override
+    protected void onDestroy() {
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
 
-        // Unregister broadcast listeners
         this.unregisterReceiver(mReceiver);
+
+        super.onDestroy();
     }
 }

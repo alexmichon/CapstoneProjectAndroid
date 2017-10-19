@@ -10,7 +10,8 @@
         android:id="@+id/button_bluetooth_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:text="Send"/>
 
     <EditText
         android:id="@+id/edit_bluetooth_send"
@@ -19,9 +20,9 @@
         android:layout_toLeftOf="@id/button_bluetooth_send"/>
 
     <TextView
-        android:id="@+id/text_button_received"
+        android:id="@+id/text_bluetooth_received"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/edit_bluetooth_send"/>
+        android:layout_below="@id/edit_bluetooth_send" />
 
 </RelativeLayout>
