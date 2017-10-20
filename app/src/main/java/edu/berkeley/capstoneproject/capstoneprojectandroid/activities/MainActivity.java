@@ -3,10 +3,12 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.activities;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +29,7 @@ public class MainActivity extends Activity {
 
     private static final int REQUEST_ENABLE_BT = 1;
 
+    private final BluetoothManager mBtManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
     private BluetoothAdapter mBtAdapter;
 
     private Button mScanButton;
@@ -38,9 +41,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "Bluetooth LE required !", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         initViews();
 
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBtAdapter = mBtManager.getAdapter();
         if (mBtAdapter == null || !mBtAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
