@@ -45,13 +45,13 @@ public class DeviceActivity extends Activity {
                 case HANDLER_MSG_STATE:
                     switch(mService.getState()) {
                         case NONE:
-                            Toast.makeText(DeviceActivity.this, "Disconnected", Toast.LENGTH_SHORT);
+                            Toast.makeText(DeviceActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
                             break;
                         case CONNECTING:
-                            Toast.makeText(DeviceActivity.this, "Connecting...", Toast.LENGTH_SHORT);
+                            Toast.makeText(DeviceActivity.this, "Connecting...", Toast.LENGTH_SHORT).show();
                             break;
                         case CONNECTED:
-                            Toast.makeText(DeviceActivity.this, "Connected", Toast.LENGTH_SHORT);
+                            Toast.makeText(DeviceActivity.this, "Connected", Toast.LENGTH_SHORT).show();
                             break;
                     }
                     break;

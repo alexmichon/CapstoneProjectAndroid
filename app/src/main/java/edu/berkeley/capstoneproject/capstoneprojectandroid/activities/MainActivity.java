@@ -25,43 +25,74 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
+    private static final int REQUEST_ENABLE_BT = 1;
+
     private BluetoothAdapter mBtAdapter;
 
-    private BluetoothDeviceAdapter mDevicesAdapter;
-    private ListView mListView;
+    private Button mScanButton;
+    private BluetoothDeviceAdapter mPairedDevicesAdapter, mScannedDevicesAdapter;
+    private ListView mPairedListView, mScannedListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDevicesAdapter = new BluetoothDeviceAdapter(this, R.layout.bluetooth_device);
+        initViews();
 
-        mListView = (ListView) findViewById(R.id.list_bluetooth_devices);
-        mListView.setAdapter(mDevicesAdapter);
-        mListView.setOnItemClickListener(mDeviceClickListener);
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBtAdapter == null || !mBtAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+        else {
+            populatePairedDevices();
+        }
 
-        Button scanButton = (Button) findViewById(R.id.button_bluetooth_scan);
-        scanButton.setOnClickListener(new View.OnClickListener() {
+        registerBtReceiver();
+    }
+
+    private void initViews() {
+        mPairedDevicesAdapter = new BluetoothDeviceAdapter(this, R.layout.bluetooth_device);
+        mScannedDevicesAdapter = new BluetoothDeviceAdapter(this, R.layout.bluetooth_device);
+
+        mPairedListView = (ListView) findViewById(R.id.list_bluetooth_paired_devices);
+        mPairedListView.setAdapter(mPairedDevicesAdapter);
+        mPairedListView.setOnItemClickListener(mDeviceClickListener);
+
+        mScannedListView = (ListView) findViewById(R.id.list_bluetooth_scanned_devices);
+        mScannedListView.setAdapter(mScannedDevicesAdapter);
+        mScannedListView.setOnItemClickListener(mDeviceClickListener);
+
+        mScanButton = (Button) findViewById(R.id.button_bluetooth_scan);
+        mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "doDiscovery()");
+                Log.d(TAG, "Start Discovery");
 
                 // If we're already discovering, stop it
                 if (mBtAdapter.isDiscovering()) {
                     mBtAdapter.cancelDiscovery();
                 }
 
-                mDevicesAdapter.clear();
-                mDevicesAdapter.notifyDataSetChanged();
+                mScannedDevicesAdapter.clear();
+                mScannedDevicesAdapter.notifyDataSetChanged();
 
                 mBtAdapter.startDiscovery();
-                view.setEnabled(false);
+                view.setVisibility(View.GONE);
             }
         });
 
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        enableScanButton();
+    }
 
+
+    private void enableScanButton() {
+        mScanButton.setEnabled(mBtAdapter != null && mBtAdapter.isEnabled());
+    }
+
+
+    private void registerBtReceiver() {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(mReceiver, filter);
 
@@ -69,23 +100,36 @@ public class MainActivity extends Activity {
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(mReceiver, filter);
 
-        populatePairedDevices();
+        filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        this.registerReceiver(mReceiver, filter);
     }
 
 
     private void populatePairedDevices() {
         Log.d(TAG, "Populating paired devices");
 
-        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
-        for (BluetoothDevice device : pairedDevices) {
-            mDevicesAdapter.addAll(pairedDevices);
+        if (mBtAdapter == null || !mBtAdapter.isEnabled()) {
+            mPairedDevicesAdapter.clear();
+        }
+        else {
+            Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+            for (BluetoothDevice device : pairedDevices) {
+                mPairedDevicesAdapter.addAll(pairedDevices);
+            }
+
+            if (pairedDevices.size() == 0) {
+                Toast.makeText(this, "No paired device", Toast.LENGTH_SHORT).show();
+            }
         }
 
-        if (pairedDevices.size() == 0) {
-            Toast.makeText(this, "No paired device", Toast.LENGTH_SHORT);
-        }
+        mPairedDevicesAdapter.notifyDataSetChanged();
+    }
 
-        mDevicesAdapter.notifyDataSetChanged();
+    private void addScannedDevice(BluetoothDevice device) {
+        if (!mBtAdapter.getBondedDevices().contains(device)) {
+            mScannedDevicesAdapter.add(device);
+            mScannedDevicesAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -107,23 +151,28 @@ public class MainActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                Log.d(TAG, "Bluetooth state changed");
+                populatePairedDevices();
+                enableScanButton();
+            }
             // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+            else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 Log.d(TAG, "New device found");
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // If it's already paired, skip it, because it's been listed already
-                mDevicesAdapter.add(device);
-                // When discovery is finished, change the Activity title
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                addScannedDevice(device);
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 Log.d(TAG, "Discovery finished");
-                if (mDevicesAdapter.getCount() == 0) {
+                if (mScannedDevicesAdapter.getCount() == 0) {
                     Log.d(TAG, "No device found");
-                    Toast.makeText(context, "No scanned device", Toast.LENGTH_SHORT);
+                    Toast.makeText(context, "No device found", Toast.LENGTH_SHORT).show();
+                    mScanButton.setVisibility(View.VISIBLE);
                 }
             }
 
-            mDevicesAdapter.notifyDataSetChanged();
+
         }
     };
 

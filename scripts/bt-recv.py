@@ -21,14 +21,14 @@ client_sock, client_info = server_sock.accept()
 print("Accepted connection from ", client_info)
 
 while True:
-	try:
+  try:
         data = client_sock.recv(1024)
         if len(data) == 0: break
         print("received [%s]" % data)
-	except IOError:
-	    pass
-	except:
-		break
+  except IOError:
+      pass
+  except:
+    break
 
 print("disconnected")
 
