@@ -103,6 +103,18 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                mScanButton.setEnabled(true);
+            }
+            else {
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -367,8 +379,9 @@ public class MainActivity extends Activity {
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            Intent intent = new Intent(adapterView.getContext(), DeviceActivity.class);
-            intent.putExtra(DeviceActivity.EXTRA_DEVICE_ADDRESS, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getAddress());
+            Intent intent = new Intent(adapterView.getContext(), DeviceLeActivity.class);
+            intent.putExtra(DeviceLeActivity.EXTRAS_DEVICE_ADDRESS, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getAddress());
+            intent.putExtra(DeviceLeActivity.EXTRAS_DEVICE_NAME, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getName());
 
             if (mScanning) {
                 scanLeDevices(false);
@@ -428,7 +441,7 @@ public class MainActivity extends Activity {
             mBtAdapter.cancelDiscovery();
         }
 
-        this.unregisterReceiver(mReceiver);
+        //this.unregisterReceiver(mReceiver);
 
         super.onDestroy();
     }
