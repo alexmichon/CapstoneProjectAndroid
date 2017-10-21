@@ -28,14 +28,11 @@ public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
     private static final String TAG = "BluetoothDeviceAdapter";
 
     private LayoutInflater mInflater;
-
-    public BluetoothDeviceAdapter(@NonNull Context context, @LayoutRes int resource) {
-        super(context, resource);
-        mInflater = LayoutInflater.from(context);
-    }
+    private List<BluetoothDevice> mDevices;
 
     public BluetoothDeviceAdapter(@NonNull Context context, @LayoutRes int resource, List<BluetoothDevice> bluetoothDevices) {
         super(context, resource, bluetoothDevices);
+        mDevices = bluetoothDevices;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -48,8 +45,6 @@ public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Log.d(TAG, "getView (" + position + ")");
-
         Holder holder = new Holder();
 
         if (convertView == null) {
@@ -70,5 +65,10 @@ public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
         }
 
         return convertView;
+    }
+
+
+    public boolean contains(BluetoothDevice device) {
+        return mDevices.contains(device);
     }
 }
