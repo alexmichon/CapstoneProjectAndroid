@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
@@ -30,7 +31,10 @@ import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.SampleGattAttributes;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.BluetoothGattServiceAdapter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothLeService;
+
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.MyServiceActivity.EXTRAS_SERVICE_UUID;
 
 public class DeviceLeActivity extends AppCompatActivity {
 
@@ -51,9 +55,8 @@ public class DeviceLeActivity extends AppCompatActivity {
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
 
-    private ExpandableListView mGattServicesList;
-    private ExpandableListAdapter mGattServicesAdapter;
-    private TextView mDataView;
+    private ListView mGattServicesList;
+    private BluetoothGattServiceAdapter mGattServicesAdapter;
 
 
     @Override
@@ -67,10 +70,8 @@ public class DeviceLeActivity extends AppCompatActivity {
 
         setTitle(mDeviceName);
 
-        mGattServicesList = (ExpandableListView) findViewById(R.id.device_le_gatt_services_list);
-        mGattServicesList.setOnChildClickListener(mServicesClickListener);
-
-        mDataView = (TextView) findViewById(R.id.device_le_data_view);
+        mGattServicesList = (ListView) findViewById(R.id.device_le_gatt_services_list);
+        mGattServicesList.setOnItemClickListener(mServicesClickListener);
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -124,72 +125,11 @@ public class DeviceLeActivity extends AppCompatActivity {
     }
 
     private void clearUI() {
-        mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
-        mDataView.setText("");
-    }
-
-    private void displayData(String data) {
-        if (data != null) {
-            mDataView.setText(data);
-        }
+        mGattServicesList.setAdapter((ArrayAdapter) null);
     }
 
     private void displayGattServices(List<BluetoothGattService> gattServices) {
-        if (gattServices == null) {
-            return;
-        }
-
-        String uuid = null;
-        List<HashMap<String, String>> gattServiceData = new ArrayList<>();
-        List<ArrayList<HashMap<String,String>>> gattCharacteristicData = new ArrayList<>();
-
-        mGattCharacteristics = new ArrayList<>();
-
-        for (BluetoothGattService gattService: gattServices) {
-            HashMap<String, String> currentServiceData = new HashMap<>();
-            uuid = gattService.getUuid().toString();
-
-            currentServiceData.put(
-                    LIST_NAME, SampleGattAttributes.lookup(uuid, "Unknown")
-            );
-            currentServiceData.put(
-                    LIST_UUID, uuid
-            );
-            gattServiceData.add(currentServiceData);
-
-            ArrayList<HashMap<String,String>> gattCharacteristicGroupData = new ArrayList<>();
-            List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
-            ArrayList<BluetoothGattCharacteristic> charas = new ArrayList<>();
-
-            for (BluetoothGattCharacteristic characteristic: gattCharacteristics) {
-                charas.add(characteristic);
-                HashMap<String,String> currentCharaData = new HashMap<>();
-                uuid = characteristic.getUuid().toString();
-                currentCharaData.put(
-                        LIST_NAME, SampleGattAttributes.lookup(uuid, "Unknown")
-                );
-                currentCharaData.put(
-                        LIST_UUID, uuid
-                );
-                gattCharacteristicGroupData.add(currentCharaData);
-            }
-
-            mGattCharacteristics.add(charas);
-            gattCharacteristicData.add(gattCharacteristicGroupData);
-        }
-
-        mGattServicesAdapter = new SimpleExpandableListAdapter(
-                this,
-                gattServiceData,
-                android.R.layout.simple_expandable_list_item_2,
-                new String[] {LIST_NAME, LIST_UUID},
-                new int[] {android.R.id.text1, android.R.id.text2},
-                gattCharacteristicData,
-                android.R.layout.simple_expandable_list_item_2,
-                new String[] {LIST_NAME, LIST_UUID},
-                new int[] {android.R.id.text1, android.R.id.text2}
-        );
-
+        mGattServicesAdapter = new BluetoothGattServiceAdapter(this, android.R.layout.simple_list_item_1, gattServices);
         mGattServicesList.setAdapter(mGattServicesAdapter);
     }
 
@@ -199,7 +139,6 @@ public class DeviceLeActivity extends AppCompatActivity {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
 
@@ -245,34 +184,19 @@ public class DeviceLeActivity extends AppCompatActivity {
             else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             }
-            else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-            }
         }
     };
 
 
-    private final ExpandableListView.OnChildClickListener mServicesClickListener = new ExpandableListView.OnChildClickListener() {
-
+    private final AdapterView.OnItemClickListener mServicesClickListener = new AdapterView.OnItemClickListener() {
         @Override
-        public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-            if (mGattCharacteristics != null) {
-                final BluetoothGattCharacteristic characteristic = mGattCharacteristics.get(i).get(i1);
-                final int charaProp = characteristic.getProperties();
-                if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                    if (mNotifyCharacteristic != null) {
-                        mBluetoothLeService.setCharacteristicNotification(mNotifyCharacteristic, false);
-                        mNotifyCharacteristic = null;
-                    }
-                    mBluetoothLeService.readCharacteristic(characteristic);
-                }
-                if ((charaProp |BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                    mNotifyCharacteristic = characteristic;
-                    mBluetoothLeService.setCharacteristicNotification(characteristic, true);
-                }
-                return true;
-            }
-            return false;
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            BluetoothGattService service = (BluetoothGattService)adapterView.getItemAtPosition(i);
+
+            Intent intent = new Intent(DeviceLeActivity.this, MyServiceActivity.class);
+            intent.putExtra(EXTRAS_SERVICE_UUID, service.getUuid().toString());
+
+            startActivity(intent);
         }
     };
 }

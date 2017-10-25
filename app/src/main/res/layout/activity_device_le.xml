@@ -6,16 +6,11 @@
     android:layout_height="match_parent"
     tools:context="edu.berkeley.capstoneproject.capstoneprojectandroid.activities.DeviceLeActivity">
 
-    <TextView
-        android:id="@+id/device_le_data_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ExpandableListView
+    <ListView
         android:id="@+id/device_le_gatt_services_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ExpandableListView>
+    </ListView>
 
 </RelativeLayout>
