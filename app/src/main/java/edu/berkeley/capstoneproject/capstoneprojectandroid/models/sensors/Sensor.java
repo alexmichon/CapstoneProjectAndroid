@@ -10,12 +10,13 @@ import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.MeasurementSet;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.MeasurementData;
 
 /**
  * Created by Alex on 25/10/2017.
  */
 
-public abstract class Sensor<T> {
+public abstract class Sensor<T extends MeasurementData> {
 
     private static final String TAG = Sensor.class.getSimpleName();
 

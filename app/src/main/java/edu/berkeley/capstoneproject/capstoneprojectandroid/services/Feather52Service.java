@@ -12,28 +12,23 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.util.Log;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.SampleGattAttributes;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.helpers.Feather52Helper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.EncoderData;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMUValue;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.ImuData;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
 
 /**
@@ -399,13 +394,13 @@ public class Feather52Service extends Service {
         if (characteristic.getService() == mSensorService) {
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_IMU)) {
                 IMU imu = mFeather52.getIMU();
-                Measurement<IMUValue> meas = IMU.decodeMeasurement(characteristic.getValue());
+                Measurement<ImuData> meas = IMU.decodeMeasurement(characteristic.getValue());
                 imu.addMeasurement(meas);
                 return meas;
             }
             else if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_ENCODER)) {
                 Encoder encoder = mFeather52.getEncoder();
-                Measurement<Integer> meas = Encoder.decodeMeasurement(characteristic.getValue());
+                Measurement<EncoderData> meas = Encoder.decodeMeasurement(characteristic.getValue());
                 encoder.addMeasurement(meas);
                 return meas;
             }

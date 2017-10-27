@@ -6,32 +6,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.icu.text.SimpleDateFormat;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.MeasurementSet;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMUValue;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.EncoderData;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.ImuData;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service;
 
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_DATA;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_SENSOR_ID;
 
 /**
@@ -54,6 +60,8 @@ public class Feather52Activity extends AppCompatActivity {
     private boolean mStarted;
 
     private TextView mLogView;
+    private LineChart mLineView;
+
 
     @Override
     protected void onStart() {
@@ -76,6 +84,31 @@ public class Feather52Activity extends AppCompatActivity {
         setTitle(mDeviceName);
 
         mLogView = (TextView) findViewById(R.id.feather52_log_textview);
+        mLineView = (LineChart) findViewById(R.id.feather52_line_chart);
+
+        LineData data = new LineData();
+        data.setValueTextColor(Color.WHITE);
+
+        // add empty data
+        mLineView.setData(data);
+
+        XAxis xl = mLineView.getXAxis();
+        //xl.setTypeface(mTfLight);
+        xl.setTextColor(Color.WHITE);
+        xl.setDrawGridLines(false);
+        xl.setAvoidFirstLastClipping(true);
+        xl.setEnabled(true);
+
+        YAxis leftAxis = mLineView.getAxisLeft();
+        //leftAxis.setTypeface(mTfLight);
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setAxisMaximum(100f);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawGridLines(true);
+
+        YAxis rightAxis = mLineView.getAxisRight();
+        rightAxis.setEnabled(false);
     }
 
 
@@ -135,6 +168,7 @@ public class Feather52Activity extends AppCompatActivity {
                 mStarted = false;
                 mFeather52Service.stopRecording();
                 invalidateOptionsMenu();
+                clearUi();
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -179,6 +213,7 @@ public class Feather52Activity extends AppCompatActivity {
             else if (Feather52Service.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 invalidateOptionsMenu();
+                clearUi();
             }
             else if (Feather52Service.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
             }
@@ -199,18 +234,24 @@ public class Feather52Activity extends AppCompatActivity {
                 stringBuilder.append("time=" + m.tookAt() + " ");
                 switch(sensor.getType()) {
                     case IMU:
-                        IMUValue imuValue = ((Measurement<IMUValue>)m).getValue();
-                        stringBuilder.append("accX=" + imuValue.getAccX() + " ");
-                        stringBuilder.append("accY=" + imuValue.getAccY() + " ");
-                        stringBuilder.append("accZ=" + imuValue.getAccZ() + " ");
+                        ImuData imuData = ((Measurement<ImuData>)m).getData();
+                        stringBuilder.append("accX=" + imuData.getAccX() + " ");
+                        stringBuilder.append("accY=" + imuData.getAccY() + " ");
+                        stringBuilder.append("accZ=" + imuData.getAccZ() + " ");
                         break;
                     case ENCODER:
-                        int angle = ((Measurement<Integer>)m).getValue();
-                        stringBuilder.append("angle=" + angle + " ");
+                        EncoderData encoderData = ((Measurement<EncoderData>)m).getData();
+                        stringBuilder.append("angle=" + encoderData.getAngle() + " ");
                         break;
                 }
 
                 appendLog(stringBuilder.toString());
+
+                MeasurementSet<EncoderData> measurementSet = mFeather52.getEncoder().getCurrentMeasurementSet();
+                if (measurementSet != null) {
+                    Map<String, Entry> entries = measurementSet.getLastMeasurement().toEntries();
+                    addEncoderEntry(entries.get(EncoderData.LABEL_ANGLE));
+                }
             }
         }
     };
@@ -220,6 +261,48 @@ public class Feather52Activity extends AppCompatActivity {
         mLogView.setText(
                 dateFormat.format(new Date()) + " $ " + content + "\n" + mLogView.getText().toString()
         );
+    }
+
+    private void addEncoderEntry(Entry e) {
+        LineData data = mLineView.getLineData();
+        if (data != null) {
+            ILineDataSet set = data.getDataSetByIndex(0);
+
+            if(set == null) {
+                set = createSet();
+                data.addDataSet(set);
+            }
+
+            data.addEntry(e, 0);
+            data.notifyDataChanged();
+            mLineView.notifyDataSetChanged();
+            mLineView.setVisibleXRangeMaximum(10000);
+            mLineView.moveViewTo(e.getX(), e.getY(), YAxis.AxisDependency.LEFT);
+        }
+    }
+
+    private LineDataSet createSet() {
+
+        LineDataSet set = new LineDataSet(null, "Dynamic Data");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(ColorTemplate.getHoloBlue());
+        set.setCircleColor(Color.WHITE);
+        set.setLineWidth(2f);
+        set.setCircleRadius(4f);
+        set.setFillAlpha(65);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(9f);
+        set.setDrawValues(false);
+        return set;
+    }
+
+    private void clearUi() {
+        mLogView.setText("");
+        mLineView.clearValues();
+        mLineView.notifyDataSetChanged();
+        mLineView.invalidate();
     }
 
     private static IntentFilter getIntentFilter() {
