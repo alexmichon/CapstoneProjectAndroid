@@ -19,7 +19,7 @@ public class GattOperationQueue extends Thread {
 
     private static final String TAG = GattOperationQueue.class.getSimpleName();
 
-    private static final int THREAD_SLEEP = 50;
+    private static final int THREAD_SLEEP = 100;
 
     private final Queue<Runnable> mQueue = new LinkedBlockingQueue<>();
     private AtomicBoolean mCancel = new AtomicBoolean(false);

@@ -25,6 +25,9 @@ import java.util.Date;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.MeasurementSet;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMUValue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service;
 
@@ -180,23 +183,44 @@ public class Feather52Activity extends AppCompatActivity {
             else if (Feather52Service.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
             }
             else if (Feather52Service.ACTION_DATA_AVAILABLE.equals(action)) {
-                Date date = new Date();
-                java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("hh:mm:ss");
                 int sensorId = intent.getIntExtra(EXTRA_SENSOR_ID, -1);
                 Sensor sensor = mFeather52.getSensor(sensorId);
-                float data = intent.getFloatExtra(EXTRA_DATA, 0);
-                if (sensor == null) {
-                    return;
+                if (sensor == null) { return; }
+
+                MeasurementSet ms = sensor.getCurrentMeasurementSet();
+                if (ms == null) { return; }
+
+                Measurement m = ms.getLastMeasurement();
+                if (m == null) { return; }
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(sensor.getName());
+                stringBuilder.append(": ");
+                stringBuilder.append("time=" + m.tookAt() + " ");
+                switch(sensor.getType()) {
+                    case IMU:
+                        IMUValue imuValue = ((Measurement<IMUValue>)m).getValue();
+                        stringBuilder.append("accX=" + imuValue.getAccX() + " ");
+                        stringBuilder.append("accY=" + imuValue.getAccY() + " ");
+                        stringBuilder.append("accZ=" + imuValue.getAccZ() + " ");
+                        break;
+                    case ENCODER:
+                        int angle = ((Measurement<Integer>)m).getValue();
+                        stringBuilder.append("angle=" + angle + " ");
+                        break;
                 }
-                mLogView.setText(
-                        dateFormat.format(date) + " $ " +
-                        sensor.getName() + ": " +
-                        String.format("%.2f", data) + "\n" +
-                        mLogView.getText().toString()
-                );
+
+                appendLog(stringBuilder.toString());
             }
         }
     };
+
+    private void appendLog(String content) {
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("hh:mm:ss");
+        mLogView.setText(
+                dateFormat.format(new Date()) + " $ " + content + "\n" + mLogView.getText().toString()
+        );
+    }
 
     private static IntentFilter getIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();

@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors;
 
+import android.icu.util.Measure;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.MeasurementSet;
 
 /**
@@ -81,7 +83,17 @@ public abstract class Sensor<T> {
         return mMeasurementSets.get(mMeasurementSets.size() - 1);
     }
 
-    public void newMeasurement(Date tookAt, T value) {
+    public void addMeasurement(Measurement<T> meas) {
+        Log.d(TAG, mName + ": Add measurement");
+        MeasurementSet<T> measurementSet = getCurrentMeasurementSet();
+        if (measurementSet == null) {
+            measurementSet = newMeasurementSet(generateMeasurementSetName());
+        }
+
+        measurementSet.add(meas);
+    }
+
+    public void newMeasurement(long tookAt, T value) {
         Log.d(TAG, mName + ": New measurement");
         MeasurementSet<T> measurementSet = getCurrentMeasurementSet();
         if (measurementSet == null) {
@@ -90,6 +102,7 @@ public abstract class Sensor<T> {
 
         measurementSet.newMeasurement(tookAt, value);
     }
+
 
 
     @Override

@@ -30,8 +30,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroi
 import edu.berkeley.capstoneproject.capstoneprojectandroid.SampleGattAttributes;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.helpers.Feather52Helper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMUValue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
 
 /**
@@ -122,8 +124,8 @@ public class Feather52Service extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead status=" + status + " char=" + characteristic.getUuid().toString());
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                float value = decodeData(gatt, characteristic);
-                broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic, value);
+                decodeData(gatt, characteristic);
+                broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic);
             }
             else {
                 Log.w(TAG, "onCharacteristicRead received: " + status);
@@ -134,8 +136,8 @@ public class Feather52Service extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             Log.d(TAG, "onCharacteristicChanged: " + characteristic.getUuid().toString());
-            float value = decodeData(gatt, characteristic);
-            broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic, value);
+            decodeData(gatt, characteristic);
+            broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic);
         }
 
         @Override
@@ -155,18 +157,18 @@ public class Feather52Service extends Service {
         sendBroadcast(intent);
     }
 
-    private void broadcastData(final String action, final BluetoothGattService service, final BluetoothGattCharacteristic characteristic, float value) {
+    private void broadcastData(final String action, final BluetoothGattService service, final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
         Sensor sensor = getSensorFromCharacteristic(characteristic);
         if (sensor == null) {
+            Log.w(TAG, "Error getting sensor from characteristic");
             return;
         }
 
         intent.putExtra(EXTRA_SERVICE_UUID, service.getUuid().toString());
         intent.putExtra(EXTRA_CHARACTERISTIC_UUID, characteristic.getUuid().toString());
         intent.putExtra(EXTRA_SENSOR_ID, sensor.getId());
-        intent.putExtra(EXTRA_DATA, value);
 
         sendBroadcast(intent);
     }
@@ -393,22 +395,22 @@ public class Feather52Service extends Service {
         return null;
     }
 
-    public float decodeData(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+    public Measurement decodeData(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         if (characteristic.getService() == mSensorService) {
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_IMU)) {
                 IMU imu = mFeather52.getIMU();
-                int value = Feather52Helper.decodeImu(characteristic);
-                imu.newMeasurement(new Date(), (float) value);
-                return value;
+                Measurement<IMUValue> meas = IMU.decodeMeasurement(characteristic.getValue());
+                imu.addMeasurement(meas);
+                return meas;
             }
             else if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_ENCODER)) {
                 Encoder encoder = mFeather52.getEncoder();
-                int value = Feather52Helper.decodeEncoder(characteristic);
-                encoder.newMeasurement(new Date(), (float) value);
-                return value;
+                Measurement<Integer> meas = Encoder.decodeMeasurement(characteristic.getValue());
+                encoder.addMeasurement(meas);
+                return meas;
             }
         }
 
-        return 0;
+        return null;
     }
 }

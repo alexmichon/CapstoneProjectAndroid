@@ -11,9 +11,9 @@ public class Measurement<T> {
     private static final String TAG = Measurement.class.getSimpleName();
 
     private final T mValue;
-    private final Date mTookAt;
+    private final long mTookAt;
 
-    public Measurement(Date tookAt, T value) {
+    public Measurement(long tookAt, T value) {
         mTookAt = tookAt;
         mValue = value;
     }
@@ -22,7 +22,7 @@ public class Measurement<T> {
         return mValue;
     }
 
-    public Date tookAt() {
+    public long tookAt() {
         return mTookAt;
     }
 }

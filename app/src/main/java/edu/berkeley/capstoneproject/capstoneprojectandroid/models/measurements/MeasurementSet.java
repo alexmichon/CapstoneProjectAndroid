@@ -25,7 +25,11 @@ public class MeasurementSet<T> extends ArrayList<Measurement<T>> {
         return mName;
     }
 
-    public void newMeasurement(Date tookAt, T value) {
+    public synchronized void newMeasurement(long tookAt, T value) {
         add(new Measurement<T>(tookAt, value));
+    }
+
+    public synchronized Measurement<T> getLastMeasurement() {
+        return get(size()-1);
     }
 }
