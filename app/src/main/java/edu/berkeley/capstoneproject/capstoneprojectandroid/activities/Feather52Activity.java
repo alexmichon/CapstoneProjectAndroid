@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +17,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service;
+
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_DATA;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_SENSOR_ID;
 
 /**
  * Created by Alex on 25/10/2017.
@@ -34,6 +42,7 @@ public class Feather52Activity extends AppCompatActivity {
     public static final String EXTRA_DEVICE_NAME = "EXTRA_FEATHER52";
     public static final String EXTRA_DEVICE_ADDRESS = "EXTRA_FEATHER52_ADDRESS";
 
+    private final Feather52 mFeather52 = CapstoneProjectAndroidApplication.getInstance().getFeather52();
 
     private Feather52Service mFeather52Service;
     private String mDeviceName;
@@ -41,8 +50,7 @@ public class Feather52Activity extends AppCompatActivity {
     private boolean mConnected;
     private boolean mStarted;
 
-    private ListView mListView;
-    private ArrayAdapter<Sensor> mAdapter;
+    private TextView mLogView;
 
     @Override
     protected void onStart() {
@@ -64,30 +72,7 @@ public class Feather52Activity extends AppCompatActivity {
 
         setTitle(mDeviceName);
 
-        mListView = (ListView) findViewById(R.id.feather52_sensor_listview);
-        mAdapter = new ArrayAdapter<Sensor>(Feather52Activity.this, android.R.layout.simple_list_item_1);
-        mAdapter.addAll(feather52.getSensors());
-        mListView.setAdapter(mAdapter);
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Sensor sensor = mAdapter.getItem(i);
-
-                Intent intent = null;
-                switch(sensor.getType()) {
-                    case IMU:
-                        intent = new Intent(Feather52Activity.this, ImuActivity.class);
-                        intent.putExtra(ImuActivity.EXTRA_SENSOR_ID, sensor.getId());
-                        break;
-                    case ENCODER:
-                        intent = new Intent(Feather52Activity.this, EncoderActivity.class);
-                        break;
-                }
-
-                startActivity(intent);
-            }
-        });
+        mLogView = (TextView) findViewById(R.id.feather52_log_textview);
     }
 
 
@@ -194,6 +179,22 @@ public class Feather52Activity extends AppCompatActivity {
             }
             else if (Feather52Service.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
             }
+            else if (Feather52Service.ACTION_DATA_AVAILABLE.equals(action)) {
+                Date date = new Date();
+                java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("hh:mm:ss");
+                int sensorId = intent.getIntExtra(EXTRA_SENSOR_ID, -1);
+                Sensor sensor = mFeather52.getSensor(sensorId);
+                float data = intent.getFloatExtra(EXTRA_DATA, 0);
+                if (sensor == null) {
+                    return;
+                }
+                mLogView.setText(
+                        dateFormat.format(date) + " $ " +
+                        sensor.getName() + ": " +
+                        String.format("%.2f", data) + "\n" +
+                        mLogView.getText().toString()
+                );
+            }
         }
     };
 
@@ -203,6 +204,7 @@ public class Feather52Activity extends AppCompatActivity {
         intentFilter.addAction(Feather52Service.ACTION_GATT_CONNECTED);
         intentFilter.addAction(Feather52Service.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(Feather52Service.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(Feather52Service.ACTION_DATA_AVAILABLE);
 
         return intentFilter;
     }
