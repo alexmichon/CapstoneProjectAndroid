@@ -277,9 +277,7 @@ public class MainActivity extends Activity {
 
         if (mBtAdapter != null && mBtAdapter.isEnabled()) {
             Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
-            for (BluetoothDevice device : pairedDevices) {
-                mPairedDevicesAdapter.addAll(pairedDevices);
-            }
+            mPairedDevicesAdapter.addAll(pairedDevices);
 
             if (pairedDevices.size() == 0) {
                 Toast.makeText(this, "No paired device", Toast.LENGTH_SHORT).show();
@@ -379,9 +377,9 @@ public class MainActivity extends Activity {
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            Intent intent = new Intent(adapterView.getContext(), DeviceLeActivity.class);
-            intent.putExtra(DeviceLeActivity.EXTRAS_DEVICE_ADDRESS, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getAddress());
-            intent.putExtra(DeviceLeActivity.EXTRAS_DEVICE_NAME, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getName());
+            Intent intent = new Intent(adapterView.getContext(), Feather52Activity.class);
+            intent.putExtra(Feather52Activity.EXTRA_DEVICE_ADDRESS, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getAddress());
+            intent.putExtra(Feather52Activity.EXTRA_DEVICE_NAME, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getName());
 
             if (mScanning) {
                 scanLeDevices(false);

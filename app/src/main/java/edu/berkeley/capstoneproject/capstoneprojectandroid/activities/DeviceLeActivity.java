@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.activities;
 
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -17,20 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleExpandableListAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.SampleGattAttributes;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.BluetoothGattServiceAdapter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothLeService;
 
@@ -172,9 +165,11 @@ public class DeviceLeActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
+            Log.d(TAG, "Receiving intent with action: " + action);
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 invalidateOptionsMenu();
+                BluetoothDevice bluetoothDevice = mBluetoothLeService.getBluetoothDevice();
             }
             else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
@@ -193,7 +188,7 @@ public class DeviceLeActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             BluetoothGattService service = (BluetoothGattService)adapterView.getItemAtPosition(i);
 
-            Intent intent = new Intent(DeviceLeActivity.this, MyServiceActivity.class);
+            Intent intent = new Intent(DeviceLeActivity.this, Feather52Activity.class);
             intent.putExtra(EXTRAS_SERVICE_UUID, service.getUuid().toString());
 
             startActivity(intent);
