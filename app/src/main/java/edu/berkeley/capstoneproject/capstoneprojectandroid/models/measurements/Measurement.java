@@ -2,43 +2,52 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements;
 
 import com.github.mikephil.charting.data.Entry;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.MeasurementData;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Alex on 25/10/2017.
  */
 
-public class Measurement<T extends MeasurementData> {
+public class Measurement<T extends Number> {
 
     private static final String TAG = Measurement.class.getSimpleName();
 
-    private final T mData;
+    private final T mValue;
     private final long mTookAt;
 
-    public Measurement(long tookAt, T data) {
+    private int mID;
+
+    public Measurement(long tookAt, T value) {
         mTookAt = tookAt;
-        mData = data;
+        mValue = value;
     }
 
-    public T getData() {
-        return mData;
+    public T getValue() {
+        return mValue;
     }
 
     public long tookAt() {
         return mTookAt;
     }
 
-    public Map<String, Entry> toEntries () {
-        Map<String, Entry> entries = new HashMap<>();
+    public Entry toEntry () {
+        return new Entry(tookAt(), mValue.floatValue());
+    }
 
-        Map<String, Float> values = mData.getValues();
-        for (String label: values.keySet()) {
-            entries.put(label, new Entry(new Float(mTookAt), values.get(label)));
-        }
+    public int getID() {
+        return mID;
+    }
 
-        return entries;
+    public void setID(int id) {
+        mID = id;
+    }
+
+    public JSONObject toJson() throws JSONException {
+        return new JSONObject()
+                .put("measurement", new JSONObject()
+                    .put("took_at", mTookAt)
+                    .put("value", mValue)
+                );
     }
 }
