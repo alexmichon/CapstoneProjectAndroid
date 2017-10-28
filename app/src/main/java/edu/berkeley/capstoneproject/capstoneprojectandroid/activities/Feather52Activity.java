@@ -6,33 +6,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.MeasurementSet;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMUValue;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.TestExercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.ExerciseHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.MetricHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service;
 
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_DATA;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_SENSOR_ID;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_LABEL;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_TOOK_AT;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_VALUE;
 
 /**
  * Created by Alex on 25/10/2017.
@@ -46,6 +43,7 @@ public class Feather52Activity extends AppCompatActivity {
     public static final String EXTRA_DEVICE_ADDRESS = "EXTRA_FEATHER52_ADDRESS";
 
     private final Feather52 mFeather52 = CapstoneProjectAndroidApplication.getInstance().getFeather52();
+    private final Handler mHandler = new Handler();
 
     private Feather52Service mFeather52Service;
     private String mDeviceName;
@@ -127,13 +125,11 @@ public class Feather52Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.feather52_menu_start:
-                mStarted = true;
-                mFeather52Service.startRecording();
+                startTestExercise();
                 invalidateOptionsMenu();
                 return true;
             case R.id.feather52_menu_stop:
-                mStarted = false;
-                mFeather52Service.stopRecording();
+                stopTestExercise();
                 invalidateOptionsMenu();
                 return true;
             case android.R.id.home:
@@ -183,40 +179,49 @@ public class Feather52Activity extends AppCompatActivity {
             else if (Feather52Service.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
             }
             else if (Feather52Service.ACTION_DATA_AVAILABLE.equals(action)) {
-                int sensorId = intent.getIntExtra(EXTRA_SENSOR_ID, -1);
-                Sensor sensor = mFeather52.getSensor(sensorId);
-                if (sensor == null) { return; }
-
-                MeasurementSet ms = sensor.getCurrentMeasurementSet();
-                if (ms == null) { return; }
-
-                Measurement m = ms.getLastMeasurement();
-                if (m == null) { return; }
-
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(sensor.getName());
-                stringBuilder.append(": ");
-                stringBuilder.append("time=" + m.tookAt() + " ");
-                switch(sensor.getType()) {
-                    case IMU:
-                        IMUValue imuValue = ((Measurement<IMUValue>)m).getValue();
-                        stringBuilder.append("accX=" + imuValue.getAccX() + " ");
-                        stringBuilder.append("accY=" + imuValue.getAccY() + " ");
-                        stringBuilder.append("accZ=" + imuValue.getAccZ() + " ");
-                        break;
-                    case ENCODER:
-                        int angle = ((Measurement<Integer>)m).getValue();
-                        stringBuilder.append("angle=" + angle + " ");
-                        break;
-                }
+
+                String label = intent.getStringExtra(EXTRA_LABEL);
+                stringBuilder.append(label + ": ");
+
+                long tookAt = intent.getLongExtra(EXTRA_TOOK_AT, 0);
+                stringBuilder.append("time=" + tookAt + " ");
+
+                float value = intent.getFloatExtra(EXTRA_VALUE, 0);
+                stringBuilder.append("value=" + value);
 
                 appendLog(stringBuilder.toString());
             }
         }
     };
 
+
+    private void startTestExercise() {
+        mStarted = true;
+        final Exercise exercise = new TestExercise();
+        mFeather52.addExercise(exercise);
+        exercise.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ExerciseHelper.create(exercise);
+                for (Metric m: exercise.getMetrics().values()) {
+                    MetricHelper.create(exercise, m);
+                }
+                mFeather52Service.startRecording();
+            }
+        }).start();
+    }
+
+
+    private void stopTestExercise() {
+        mStarted = false;
+        mFeather52Service.stopRecording();
+    }
+
+
     private void appendLog(String content) {
-        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("hh:mm:ss");
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("HH:mm:ss");
         mLogView.setText(
                 dateFormat.format(new Date()) + " $ " + content + "\n" + mLogView.getText().toString()
         );

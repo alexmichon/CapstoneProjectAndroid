@@ -1,13 +1,9 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.models;
 
-import android.bluetooth.BluetoothDevice;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
@@ -23,6 +19,8 @@ public class Feather52 {
     private final List<Sensor> mSensors = new ArrayList<>();
     private final IMU mIMU = new IMU();
     private final Encoder mEncoder = new Encoder();
+
+    private final List<Exercise> mExercises = new ArrayList<>();
 
     private boolean mConnected;
 
@@ -59,5 +57,22 @@ public class Feather52 {
 
     public synchronized boolean isConnected() {
         return mConnected;
+    }
+
+    public synchronized List<Exercise> getExercises() {
+        return mExercises;
+    }
+
+    public synchronized void addExercise(Exercise exercise) {
+        mExercises.add(exercise);
+    }
+
+    public synchronized Exercise getCurrentExercise() {
+        Exercise e = mExercises.get(mExercises.size() - 1);
+        if (!e.isCompleted()) {
+            return e;
+        }
+
+        return null;
     }
 }

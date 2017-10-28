@@ -12,29 +12,29 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.util.Log;
 
-import java.util.Date;
+import org.json.JSONException;
+
 import java.util.List;
-import java.util.Queue;
+import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.SampleGattAttributes;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.helpers.Feather52Helper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMUValue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.MeasurementHelper;
 
 /**
  * Created by Alex on 21/10/2017.
@@ -63,6 +63,9 @@ public class Feather52Service extends Service {
     public static final String EXTRA_SERVICE_UUID = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.EXTRA_SERVICE_UUID";
     public static final String EXTRA_CHARACTERISTIC_UUID = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.EXTRA_CHARACTERISTIC_UUID";
     public static final String EXTRA_SENSOR_ID = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.EXTRA_SENSOR_ID";
+    public static final String EXTRA_LABEL = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.EXTRA_LABEL";
+    public static final String EXTRA_TOOK_AT = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.EXTRA_TOOK_AT";
+    public static final String EXTRA_VALUE = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.EXTRA_VALUE";
 
 
     private BluetoothManager mBluetoothManager;
@@ -124,8 +127,7 @@ public class Feather52Service extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead status=" + status + " char=" + characteristic.getUuid().toString());
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                decodeData(gatt, characteristic);
-                broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic);
+                receivedData(gatt, characteristic);
             }
             else {
                 Log.w(TAG, "onCharacteristicRead received: " + status);
@@ -136,8 +138,7 @@ public class Feather52Service extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             Log.d(TAG, "onCharacteristicChanged: " + characteristic.getUuid().toString());
-            decodeData(gatt, characteristic);
-            broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic);
+            receivedData(gatt, characteristic);
         }
 
         @Override
@@ -145,6 +146,23 @@ public class Feather52Service extends Service {
             Log.d(TAG, "onCharacteristicWrite status=" + status);
         }
     };
+
+    private void receivedData(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+        Map<String, Measurement> measurements = decodeData(gatt, characteristic);
+        for (String label: measurements.keySet()) {
+            Measurement meas = measurements.get(label);
+            long tookAt = meas.tookAt();
+            Float value = meas.getValue().floatValue();
+            broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic, label, tookAt, value);
+        }
+
+        Exercise e = mFeather52.getCurrentExercise();
+        for (String label: measurements.keySet()) {
+            Metric metric = e.getMetric(label);
+            Measurement meas = measurements.get(label);
+            MeasurementHelper.create(e, metric, meas);
+        }
+    }
 
     private void broadcastNewState(final String action) {
         final Intent intent = new Intent(action);
@@ -157,7 +175,7 @@ public class Feather52Service extends Service {
         sendBroadcast(intent);
     }
 
-    private void broadcastData(final String action, final BluetoothGattService service, final BluetoothGattCharacteristic characteristic) {
+    private void broadcastData(final String action, final BluetoothGattService service, final BluetoothGattCharacteristic characteristic, String label, long tookAt, float value) {
         final Intent intent = new Intent(action);
 
         Sensor sensor = getSensorFromCharacteristic(characteristic);
@@ -168,7 +186,9 @@ public class Feather52Service extends Service {
 
         intent.putExtra(EXTRA_SERVICE_UUID, service.getUuid().toString());
         intent.putExtra(EXTRA_CHARACTERISTIC_UUID, characteristic.getUuid().toString());
-        intent.putExtra(EXTRA_SENSOR_ID, sensor.getId());
+        intent.putExtra(EXTRA_LABEL, label);
+        intent.putExtra(EXTRA_TOOK_AT, tookAt);
+        intent.putExtra(EXTRA_VALUE, value);
 
         sendBroadcast(intent);
     }
@@ -395,18 +415,20 @@ public class Feather52Service extends Service {
         return null;
     }
 
-    public Measurement decodeData(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+    public Map<String, Measurement> decodeData(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         if (characteristic.getService() == mSensorService) {
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_IMU)) {
                 IMU imu = mFeather52.getIMU();
-                Measurement<IMUValue> meas = IMU.decodeMeasurement(characteristic.getValue());
-                imu.addMeasurement(meas);
+                Map<String, Measurement> meas = IMU.decodeMeasurement(characteristic.getValue());
+                Exercise e = mFeather52.getCurrentExercise();
+                e.addMeasurements(meas);
                 return meas;
             }
             else if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_ENCODER)) {
                 Encoder encoder = mFeather52.getEncoder();
-                Measurement<Integer> meas = Encoder.decodeMeasurement(characteristic.getValue());
-                encoder.addMeasurement(meas);
+                Map<String, Measurement> meas = Encoder.decodeMeasurement(characteristic.getValue());
+                Exercise e = mFeather52.getCurrentExercise();
+                e.addMeasurements(meas);
                 return meas;
             }
         }
