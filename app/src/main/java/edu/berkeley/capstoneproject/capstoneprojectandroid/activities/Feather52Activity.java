@@ -26,6 +26,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
@@ -35,6 +36,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.M
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.EncoderData;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.ImuData;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
@@ -70,7 +72,7 @@ public class Feather52Activity extends AppCompatActivity {
 
     private TextView mLogView;
     private LineChart mLineView;
-
+    private Map<String, LineDataSet> mDataSets = new HashMap<>();
 
     @Override
     protected void onStart() {
@@ -110,10 +112,10 @@ public class Feather52Activity extends AppCompatActivity {
 
         YAxis leftAxis = mLineView.getAxisLeft();
         //leftAxis.setTypeface(mTfLight);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMaximum(65000f);
         leftAxis.setTextColor(Color.WHITE);
         leftAxis.setDrawGridLines(false);
-        leftAxis.setAxisMaximum(100f);
-        leftAxis.setAxisMinimum(0f);
         leftAxis.setDrawGridLines(true);
 
         YAxis rightAxis = mLineView.getAxisRight();
@@ -169,13 +171,13 @@ public class Feather52Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.feather52_menu_start:
+                clearUi();
                 startTestExercise();
                 invalidateOptionsMenu();
                 return true;
             case R.id.feather52_menu_stop:
                 stopTestExercise();
                 invalidateOptionsMenu();
-                clearUi();
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -237,10 +239,8 @@ public class Feather52Activity extends AppCompatActivity {
                 stringBuilder.append("value=" + value);
 
                 appendLog(stringBuilder.toString());
-
-                if (intent.getStringExtra(EXTRA_CHARACTERISTIC_UUID).equals(Feather52Service.UUID_CHARACTERISTIC_ENCODER.toString())) {
-                    Log.d(TAG, "Adding encoder entry to graph");
-                    addEncoderEntry(new Entry(tookAt, value));
+                if (label.contains("cc")) {
+                    addDataEntry(label, new Entry(tookAt, value));
                 }
             }
         }
@@ -278,17 +278,17 @@ public class Feather52Activity extends AppCompatActivity {
         );
     }
 
-    private void addEncoderEntry(Entry e) {
+    private void addDataEntry(String label, Entry e) {
         LineData data = mLineView.getLineData();
         if (data != null) {
-            ILineDataSet set = data.getDataSetByIndex(0);
+            ILineDataSet set = data.getDataSetByLabel(label, true);
 
             if(set == null) {
-                set = createSet();
+                set = createSet(label, data.getDataSetCount());
                 data.addDataSet(set);
             }
-
-            data.addEntry(e, 0);
+            set.addEntry(e);
+            //data.addEntry(e, 0);
             data.notifyDataChanged();
             mLineView.notifyDataSetChanged();
             mLineView.setVisibleXRangeMaximum(10000);
@@ -299,20 +299,35 @@ public class Feather52Activity extends AppCompatActivity {
         }
     }
 
-    private LineDataSet createSet() {
+    private int[] mColors = new int[] {
+            ColorTemplate.VORDIPLOM_COLORS[0],
+            ColorTemplate.VORDIPLOM_COLORS[1],
+            ColorTemplate.VORDIPLOM_COLORS[2],
+            ColorTemplate.COLORFUL_COLORS[0],
+            ColorTemplate.COLORFUL_COLORS[1],
+            ColorTemplate.COLORFUL_COLORS[2],
+            ColorTemplate.LIBERTY_COLORS[0],
+            ColorTemplate.LIBERTY_COLORS[1],
+            ColorTemplate.LIBERTY_COLORS[2],
+    };
+
+    private LineDataSet createSet(String label, int index) {
 
         LineDataSet set = new LineDataSet(null, "Dynamic Data");
+        int color = mColors[index % mColors.length];
+
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
+        set.setColor(color);
         set.setCircleColor(Color.WHITE);
         set.setLineWidth(2f);
         set.setCircleRadius(4f);
         set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setFillColor(color);
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setValueTextColor(Color.WHITE);
         set.setValueTextSize(9f);
         set.setDrawValues(false);
+        set.setLabel(label);
         return set;
     }
 
