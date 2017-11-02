@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.models;
 
+import android.bluetooth.BluetoothDevice;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class Feather52 {
 
     private final List<Exercise> mExercises = new ArrayList<>();
 
+    private BluetoothDevice mBluetoothDevice;
     private boolean mConnected;
 
     public Feather52() {
@@ -74,5 +77,21 @@ public class Feather52 {
         }
 
         return null;
+    }
+
+    public BluetoothDevice getBluetoothDevice() {
+        return mBluetoothDevice;
+    }
+
+    public void setBluetoothDevice(BluetoothDevice device) {
+        mBluetoothDevice = device;
+    }
+
+    public String getName() {
+        if (mBluetoothDevice != null) {
+            return mBluetoothDevice.getName();
+        }
+
+        return "Feather52";
     }
 }

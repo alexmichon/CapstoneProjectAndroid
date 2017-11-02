@@ -1,42 +1,43 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.activities;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.Feather52DrawerAdapter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.DeviceInfoFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.ImuFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.LogFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.EncoderData;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.ImuData;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothLeService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
@@ -44,11 +45,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Test
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.ExerciseHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.MetricHelper;
-
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_CHARACTERISTIC_UUID;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_LABEL;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_TOOK_AT;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.Feather52Service.EXTRA_VALUE;
 
 /**
  * Created by Alex on 25/10/2017.
@@ -58,23 +54,25 @@ public class Feather52Activity extends AppCompatActivity {
 
     private static final String TAG = Feather52Activity.class.getSimpleName();
 
-    public static final String EXTRA_DEVICE_NAME = "EXTRA_FEATHER52";
-    public static final String EXTRA_DEVICE_ADDRESS = "EXTRA_FEATHER52_ADDRESS";
 
     private final Feather52 mFeather52 = CapstoneProjectAndroidApplication.getInstance().getFeather52();
-    private final Handler mHandler = new Handler();
 
-    private Feather52Service mFeather52Service;
+    private BluetoothDevice mBluetoothDevice;
     private String mDeviceName;
     private String mDeviceAddress;
+
+    private Feather52Service mFeather52Service;
     private boolean mConnected;
     private boolean mStarted;
 
-    private TextView mLogView;
-    private LineChart mLineView;
-    private Map<String, LineDataSet> mDataSets = new HashMap<>();
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private List<Feather52DrawerAdapter.DrawerItem> mDrawerItems;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private RecyclerView mRecyclerView;
+    private Feather52DrawerAdapter mRecyclerAdapter;
+    private RecyclerView.LayoutManager mRecyclerLayoutManager;
 
-    @Override
     protected void onStart() {
         super.onStart();
         Intent gattServiceIntent = new Intent(this, Feather52Service.class);
@@ -86,40 +84,19 @@ public class Feather52Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feather52);
 
-        final Feather52 feather52 = CapstoneProjectAndroidApplication.getInstance().getFeather52();
+        mToolbar = (Toolbar) findViewById(R.id.feather52_toolbar);
+        setSupportActionBar(mToolbar);
+        setTitle(mFeather52.getName());
 
-        final Intent intent = getIntent();
-        mDeviceName = intent.getStringExtra(EXTRA_DEVICE_NAME);
-        mDeviceAddress = intent.getStringExtra(EXTRA_DEVICE_ADDRESS);
+        setDrawer();
 
-        setTitle(mDeviceName);
-
-        mLogView = (TextView) findViewById(R.id.feather52_log_textview);
-        mLineView = (LineChart) findViewById(R.id.feather52_line_chart);
-
-        LineData data = new LineData();
-        data.setValueTextColor(Color.WHITE);
-
-        // add empty data
-        mLineView.setData(data);
-
-        XAxis xl = mLineView.getXAxis();
-        //xl.setTypeface(mTfLight);
-        xl.setTextColor(Color.WHITE);
-        xl.setDrawGridLines(false);
-        xl.setAvoidFirstLastClipping(true);
-        xl.setEnabled(true);
-
-        YAxis leftAxis = mLineView.getAxisLeft();
-        //leftAxis.setTypeface(mTfLight);
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(65000f);
-        leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setDrawGridLines(false);
-        leftAxis.setDrawGridLines(true);
-
-        YAxis rightAxis = mLineView.getAxisRight();
-        rightAxis.setEnabled(false);
+        mBluetoothDevice = mFeather52.getBluetoothDevice();
+        if (mBluetoothDevice == null) {
+            Log.e(TAG, "No bluetooth device found");
+            finish();
+        }
+        mDeviceName = mBluetoothDevice.getName();
+        mDeviceAddress = mBluetoothDevice.getAddress();
     }
 
 
@@ -171,7 +148,6 @@ public class Feather52Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.feather52_menu_start:
-                clearUi();
                 startTestExercise();
                 invalidateOptionsMenu();
                 return true;
@@ -180,10 +156,71 @@ public class Feather52Activity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 return true;
             case android.R.id.home:
-                onBackPressed();
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        mDrawerToggle.syncState();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.feather52_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+
+        mDrawerItems = new ArrayList<>();
+        mDrawerItems.add(new Feather52DrawerAdapter.DrawerItem("Device info", android.R.drawable.ic_menu_info_details, DeviceInfoFragment.class));
+        mDrawerItems.add(new Feather52DrawerAdapter.DrawerItem("Log", android.R.drawable.ic_btn_speak_now, LogFragment.class));
+        mDrawerItems.add(new Feather52DrawerAdapter.DrawerItem("IMU", android.R.drawable.ic_delete, ImuFragment.class));
+
+        mRecyclerAdapter = new Feather52DrawerAdapter(this, mDrawerItems);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mRecyclerLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
+        mRecyclerAdapter.setOnItemSelectedListener(new Feather52DrawerAdapter.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(View v, int position) {
+                if (position == 0) {
+
+                }
+                else {
+                    Feather52DrawerAdapter.DrawerItem item = mDrawerItems.get(position - 1);
+                    setFragment(item);
+                }
+            }
+        });
+
+        setFragment(mDrawerItems.get(0));
+
+    }
+
+    private void setFragment(Feather52DrawerAdapter.DrawerItem item) {
+        setFragment(item.getFragmentClass());
+        setTitle(item.getTitle());
+    }
+
+    private void setFragment(Class<? extends Fragment> fragmentClass) {
+        Fragment fragment = null;
+
+        try {
+            fragment = fragmentClass.newInstance();
+        } catch (InstantiationException e) {
+            Log.e(TAG, "Error creating fragment", e);
+        } catch (IllegalAccessException e) {
+            Log.e(TAG, "Error creating fragment", e);
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.feather52_container, fragment)
+                .commit();
+
+        mDrawerLayout.closeDrawers();
     }
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -212,37 +249,17 @@ public class Feather52Activity extends AppCompatActivity {
     private final BroadcastReceiver mFeather52Receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
+        final String action = intent.getAction();
 
-            Log.d(TAG, "Receiving intent with action: " + action);
-            if (Feather52Service.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
-                invalidateOptionsMenu();
-            }
-            else if (Feather52Service.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
-                invalidateOptionsMenu();
-                clearUi();
-            }
-            else if (Feather52Service.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-            }
-            else if (Feather52Service.ACTION_DATA_AVAILABLE.equals(action)) {
-                StringBuilder stringBuilder = new StringBuilder();
-
-                String label = intent.getStringExtra(EXTRA_LABEL);
-                stringBuilder.append(label + ": ");
-
-                long tookAt = intent.getLongExtra(EXTRA_TOOK_AT, 0);
-                stringBuilder.append("time=" + tookAt + " ");
-
-                float value = intent.getFloatExtra(EXTRA_VALUE, 0);
-                stringBuilder.append("value=" + value);
-
-                appendLog(stringBuilder.toString());
-                if (label.contains("cc")) {
-                    addDataEntry(label, new Entry(tookAt, value));
-                }
-            }
+        Log.d(TAG, "Receiving intent with action: " + action);
+        if (Feather52Service.ACTION_GATT_CONNECTED.equals(action)) {
+            mConnected = true;
+            invalidateOptionsMenu();
+        }
+        else if (Feather52Service.ACTION_GATT_DISCONNECTED.equals(action)) {
+            mConnected = false;
+            invalidateOptionsMenu();
+        }
         }
     };
 
@@ -270,83 +287,16 @@ public class Feather52Activity extends AppCompatActivity {
         mFeather52Service.stopRecording();
     }
 
-
-    private void appendLog(String content) {
-        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("HH:mm:ss");
-        mLogView.setText(
-                dateFormat.format(new Date()) + " $ " + content + "\n" + mLogView.getText().toString()
-        );
-    }
-
-    private void addDataEntry(String label, Entry e) {
-        LineData data = mLineView.getLineData();
-        if (data != null) {
-            ILineDataSet set = data.getDataSetByLabel(label, true);
-
-            if(set == null) {
-                set = createSet(label, data.getDataSetCount());
-                data.addDataSet(set);
-            }
-            set.addEntry(e);
-            //data.addEntry(e, 0);
-            data.notifyDataChanged();
-            mLineView.notifyDataSetChanged();
-            mLineView.setVisibleXRangeMaximum(10000);
-            mLineView.moveViewTo(e.getX(), e.getY(), YAxis.AxisDependency.LEFT);
-
-            // TODO Autoscale
-
-        }
-    }
-
-    private int[] mColors = new int[] {
-            ColorTemplate.VORDIPLOM_COLORS[0],
-            ColorTemplate.VORDIPLOM_COLORS[1],
-            ColorTemplate.VORDIPLOM_COLORS[2],
-            ColorTemplate.COLORFUL_COLORS[0],
-            ColorTemplate.COLORFUL_COLORS[1],
-            ColorTemplate.COLORFUL_COLORS[2],
-            ColorTemplate.LIBERTY_COLORS[0],
-            ColorTemplate.LIBERTY_COLORS[1],
-            ColorTemplate.LIBERTY_COLORS[2],
-    };
-
-    private LineDataSet createSet(String label, int index) {
-
-        LineDataSet set = new LineDataSet(null, "Dynamic Data");
-        int color = mColors[index % mColors.length];
-
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(color);
-        set.setCircleColor(Color.WHITE);
-        set.setLineWidth(2f);
-        set.setCircleRadius(4f);
-        set.setFillAlpha(65);
-        set.setFillColor(color);
-        set.setHighLightColor(Color.rgb(244, 117, 117));
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(9f);
-        set.setDrawValues(false);
-        set.setLabel(label);
-        return set;
-    }
-
-    private void clearUi() {
-        mLogView.setText("");
-        LineData data = mLineView.getLineData();
-        if (data != null) { data.clearValues(); }
-        mLineView.notifyDataSetChanged();
-        mLineView.invalidate();
-    }
-
     private static IntentFilter getIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 
         intentFilter.addAction(Feather52Service.ACTION_GATT_CONNECTED);
         intentFilter.addAction(Feather52Service.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(Feather52Service.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(Feather52Service.ACTION_DATA_AVAILABLE);
 
         return intentFilter;
+    }
+
+    public Feather52Service getFeather52Service() {
+        return mFeather52Service;
     }
 }

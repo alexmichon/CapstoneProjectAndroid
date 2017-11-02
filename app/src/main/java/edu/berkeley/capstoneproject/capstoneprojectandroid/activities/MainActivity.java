@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.BluetoothDeviceAdapter;
 
@@ -377,15 +378,14 @@ public class MainActivity extends Activity {
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            Intent intent = new Intent(adapterView.getContext(), Feather52Activity.class);
-            intent.putExtra(Feather52Activity.EXTRA_DEVICE_ADDRESS, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getAddress());
-            intent.putExtra(Feather52Activity.EXTRA_DEVICE_NAME, ((BluetoothDevice)adapterView.getItemAtPosition(i)).getName());
+            CapstoneProjectAndroidApplication.getInstance().getFeather52().setBluetoothDevice((BluetoothDevice) adapterView.getItemAtPosition(i));
 
             if (mScanning) {
                 scanLeDevices(false);
                 mScanning = false;
             }
 
+            Intent intent = new Intent(adapterView.getContext(), Feather52Activity.class);
             startActivity(intent);
             finish();
         }

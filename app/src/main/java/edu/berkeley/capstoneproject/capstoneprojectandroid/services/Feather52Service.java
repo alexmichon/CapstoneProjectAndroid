@@ -48,9 +48,9 @@ public class Feather52Service extends Service {
     public static final UUID UUID_CHARACTERISTIC_IMU = UUID.fromString("e0822222-6316-2baf-fa46-96c693d870de");
     public static final UUID UUID_CHARACTERISTIC_STARTSTOP = UUID.fromString("4117d83c-d5d9-51b0-cd48-1615c62e5a65");
 
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
+    public static final int STATE_DISCONNECTED = 0;
+    public static final int STATE_CONNECTING = 1;
+    public static final int STATE_CONNECTED = 2;
 
 
     public static final String ACTION_GATT_CONNECTED = "edu.berkeley.capstoneproject.capstoneprojectandroid.services.ACTION_GATT_CONNECTED";
@@ -370,6 +370,11 @@ public class Feather52Service extends Service {
             return;
         }
 
+        if (mSensorService == null) {
+            Log.w(TAG, "Can't record: no sensor service");
+            return;
+        }
+
         for (BluetoothGattCharacteristic c: mSensorService.getCharacteristics()) {
             if (c.getUuid().equals(UUID_CHARACTERISTIC_ENCODER) || c.getUuid().equals(UUID_CHARACTERISTIC_IMU)) {
                 setCharacteristicNotification(c, true);
@@ -380,6 +385,11 @@ public class Feather52Service extends Service {
     public void stopRecording() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+
+        if (mSensorService == null) {
+            Log.w(TAG, "Can't record: no sensor service");
             return;
         }
 
@@ -433,5 +443,9 @@ public class Feather52Service extends Service {
         }
 
         return null;
+    }
+
+    public int getConnectionState() {
+        return mConnectionState;
     }
 }
