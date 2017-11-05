@@ -177,12 +177,6 @@ public class Feather52Service extends Service {
     private void broadcastData(final String action, final BluetoothGattService service, final BluetoothGattCharacteristic characteristic, String label, long tookAt, float value) {
         final Intent intent = new Intent(action);
 
-        Sensor sensor = getSensorFromCharacteristic(characteristic);
-        if (sensor == null) {
-            Log.w(TAG, "Error getting sensor from characteristic");
-            return;
-        }
-
         intent.putExtra(EXTRA_SERVICE_UUID, service.getUuid().toString());
         intent.putExtra(EXTRA_CHARACTERISTIC_UUID, characteristic.getUuid().toString());
         intent.putExtra(EXTRA_LABEL, label);
@@ -413,29 +407,21 @@ public class Feather52Service extends Service {
         return mBluetoothGatt.getDevice();
     }
 
-    private Sensor getSensorFromCharacteristic(BluetoothGattCharacteristic characteristic) {
-        if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_IMU)) {
-            return mFeather52.getIMU();
-        }
-        else if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_ENCODER)) {
-            return mFeather52.getEncoder();
-        }
-
-        return null;
-    }
-
     public Map<String, Measurement> decodeData(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         if (characteristic.getService() == mSensorService) {
+            byte[] bytes = characteristic.getValue();
+            int id = Sensor.decodeSensorId(bytes);
+
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_IMU)) {
-                IMU imu = mFeather52.getIMU();
-                Map<String, Measurement> meas = IMU.decodeMeasurement(characteristic.getValue());
+                IMU imu = (IMU)mFeather52.getSensor(id);
+                Map<String, Measurement> meas = IMU.decodeMeasurement(bytes);
                 Exercise e = mFeather52.getCurrentExercise();
                 e.addMeasurements(meas);
                 return meas;
             }
             else if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_ENCODER)) {
                 Encoder encoder = mFeather52.getEncoder();
-                Map<String, Measurement> meas = Encoder.decodeMeasurement(characteristic.getValue());
+                Map<String, Measurement> meas = Encoder.decodeMeasurement(bytes);
                 Exercise e = mFeather52.getCurrentExercise();
                 e.addMeasurements(meas);
                 return meas;

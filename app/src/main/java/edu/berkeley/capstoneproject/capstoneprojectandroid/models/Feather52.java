@@ -18,9 +18,12 @@ public class Feather52 {
 
     private static final String TAG = Feather52.class.getSimpleName();
 
+    public static final int ENCODER_ELBOW_ID = 1;
+    public static final int IMU_ARM_ID = 2;
+
     private final List<Sensor> mSensors = new ArrayList<>();
-    private final IMU mIMU = new IMU();
-    private final Encoder mEncoder = new Encoder();
+    private final IMU mArmIMU = new IMU(IMU_ARM_ID);
+    private final Encoder mEncoder = new Encoder(ENCODER_ELBOW_ID);
 
     private final List<Exercise> mExercises = new ArrayList<>();
 
@@ -28,12 +31,12 @@ public class Feather52 {
     private boolean mConnected;
 
     public Feather52() {
-        mSensors.add(mIMU);
+        mSensors.add(mArmIMU);
         mSensors.add(mEncoder);
     }
 
-    public IMU getIMU() {
-        return mIMU;
+    public IMU getArmIMU() {
+        return mArmIMU;
     }
 
     public Encoder getEncoder() {

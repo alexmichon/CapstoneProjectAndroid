@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors;
 
 import android.util.Log;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,12 +22,12 @@ public class Encoder extends Sensor {
 
     public static final String LABEL_ENCODER_ANGLE = "Angle";
 
-    public Encoder() {
-        super(SensorType.ENCODER, DEFAULT_NAME);
+    public Encoder(int id) {
+        super(id, SensorType.ENCODER, DEFAULT_NAME);
     }
 
-    public Encoder(String name) {
-        super(SensorType.ENCODER, name);
+    public Encoder(int id, String name) {
+        super(id, SensorType.ENCODER, name);
     }
 
 
@@ -35,10 +36,10 @@ public class Encoder extends Sensor {
 
         Map<String, Measurement> measurements = new HashMap<>(1);
 
-        long tookAt = BytesUtils.bytesToDate(bytes);
-        int angle = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP);
+        long tookAt = BytesUtils.bytesToDate(bytes, BytesUtils.BYTES_INT16);
+        float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_INT16 + BytesUtils.BYTES_TIMESTAMP);
 
-        measurements.put(LABEL_ENCODER_ANGLE, new Measurement<Integer>(tookAt, angle));
+        measurements.put(LABEL_ENCODER_ANGLE, new Measurement<Float>(tookAt, angle));
 
         return measurements;
     }
