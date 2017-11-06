@@ -21,6 +21,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroi
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.UserHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
 
 /**
  * Created by Alex on 06/11/2017.
@@ -142,12 +143,14 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                mFuture = UserHelper.register(mUser.getEmail(), mUser.getPassword(), mUser.getPasswordConfirmation(), mUser.getFirstName(), mUser.getLastName());
+                mFuture = RequestFuture.newFuture();
+
+                ApiRequest request = UserHelper.register(mUser, mFuture);
                 mFuture.get(30, TimeUnit.SECONDS);
 
                 Log.d(TAG, "Authenticated");
 
-                mUser.setAuthenticated(true);
+                mUser.authenticate(request);
                 CapstoneProjectAndroidApplication.getInstance().setCurrentUser(mUser);
 
                 Message msg = mHandler.obtainMessage();

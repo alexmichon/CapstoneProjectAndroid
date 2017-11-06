@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -19,6 +20,8 @@ public class ApiRequest extends JsonObjectRequest {
 
     private static final String TAG = ApiRequest.class.getSimpleName();
 
+    private Map<String, String> mResponseHeaders;
+
     public ApiRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
     }
@@ -30,5 +33,15 @@ public class ApiRequest extends JsonObjectRequest {
         headers.put("Accept", "application/json");
 
         return headers;
+    }
+
+    @Override
+    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+        mResponseHeaders = response.headers;
+        return super.parseNetworkResponse(response);
+    }
+
+    public Map<String, String> getResponseHeaders() {
+        return mResponseHeaders;
     }
 }
