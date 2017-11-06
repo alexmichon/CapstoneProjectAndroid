@@ -8,20 +8,26 @@ public class User {
 
     private static final String TAG = User.class.getSimpleName();
 
-
-    public static final int HANDLER_MESSAGE_LOGIN = 0;
-    public static final int HANDLER_LOGIN_SUCCESS = 0;
-    public static final int HANDLER_LOGIN_FAILURE = 1;
-
-
     private String mEmail;
     private String mPassword;
+    private String mPasswordConfirmation;
+    private String mFirstName;
+    private String mLastName;
+
     private String mAuthenticationToken;
     private boolean mAuthenticated = false;
 
     public User(String email, String password) {
         mEmail = email;
         mPassword = password;
+    }
+
+    public User(String email, String password, String passwordConfirmation, String firstName, String lastName) {
+        mEmail = email;
+        mPassword = password;
+        mPasswordConfirmation = passwordConfirmation;
+        mFirstName = firstName;
+        mLastName = lastName;
     }
 
 
@@ -39,6 +45,30 @@ public class User {
 
     public void setPassword(String password) {
         mPassword = password;
+    }
+
+    public String getFirstName() {
+        return mFirstName;
+    }
+
+    public String getPasswordConfirmation() {
+        return mPasswordConfirmation;
+    }
+
+    public void setPasswordConfirmation(String passwordConfirmation) {
+        mPasswordConfirmation = passwordConfirmation;
+    }
+
+    public void setFirstName(String firstName) {
+        mFirstName = firstName;
+    }
+
+    public String getLastName() {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
     }
 
     public boolean isAuthenticated() {

@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid;
 import android.app.Application;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 
@@ -17,6 +18,7 @@ public class CapstoneProjectAndroidApplication extends Application {
     private static CapstoneProjectAndroidApplication instance;
 
     private final Feather52 mFeather52 = new Feather52();
+    private User mCurrentUser;
 
     @Override
     public void onCreate() {
@@ -31,5 +33,13 @@ public class CapstoneProjectAndroidApplication extends Application {
 
     public Feather52 getFeather52() {
         return mFeather52;
+    }
+
+    public User getCurrentUser() {
+        return mCurrentUser;
+    }
+
+    public void setCurrentUser(User user) {
+        mCurrentUser = user;
     }
 }

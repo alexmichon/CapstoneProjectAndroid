@@ -69,6 +69,10 @@ public class RailsServer {
         return getUrl().append("/auth/sign_in");
     }
 
+    public StringBuilder getRegisterUrl() {
+        return getUrl().append("/auth");
+    }
+
     public StringBuilder getExercisesUrl() {
         return getUrl().append("/exercises");
     }
