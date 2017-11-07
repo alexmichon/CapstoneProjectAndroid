@@ -31,7 +31,7 @@ public class MetricHelper {
     private static final String TAG = MetricHelper.class.getSimpleName();
 
     public static void create(Exercise exercise, Metric metric) {
-        Log.d(TAG, "Create metric");
+        Log.d(TAG, "Create metric: " + metric.getName());
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
 

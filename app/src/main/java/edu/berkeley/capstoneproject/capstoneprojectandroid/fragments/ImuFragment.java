@@ -75,9 +75,9 @@ public class ImuFragment extends Feather52Fragment {
         mGyrView = (LineChart) mView.findViewById(R.id.fragment_imu_linechart_gyr);
         mEncoderView = (LineChart) mView.findViewById(R.id.fragment_imu_linechart_encoder);
 
-        initLineChart(mAccView);
-        initLineChart(mGyrView);
-        initLineChart(mEncoderView);
+        initLineChart(mAccView, -2, 2);
+        initLineChart(mGyrView, -2, 2);
+        initLineChart(mEncoderView, 0, 360);
 
         return mView;
     }
@@ -179,7 +179,7 @@ public class ImuFragment extends Feather52Fragment {
 
     }
 
-    private void initLineChart(LineChart lineChart) {
+    private void initLineChart(LineChart lineChart, float min, float max) {
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);
         lineChart.setData(data);
@@ -193,8 +193,8 @@ public class ImuFragment extends Feather52Fragment {
 
         YAxis leftAxis = lineChart.getAxisLeft();
         //leftAxis.setTypeface(mTfLight);
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(65000f);
+        leftAxis.setAxisMinimum(min);
+        leftAxis.setAxisMaximum(max);
         leftAxis.setTextColor(Color.WHITE);
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawGridLines(true);
