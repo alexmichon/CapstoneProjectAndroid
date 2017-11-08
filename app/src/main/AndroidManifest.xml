@@ -25,7 +25,7 @@
         <activity android:name=".activities.DeviceActivity" />
         <activity android:name=".activities.DeviceLeActivity" />
         <activity android:name=".activities.Feather52Activity"/>
-        <activity android:name=".activities.ImuActivity"/>
+        <activity android:name=".fragments.ImuFragment"/>
         <activity android:name=".activities.EncoderActivity"/>
         <activity android:name=".activities.MyServiceActivity"/>
 

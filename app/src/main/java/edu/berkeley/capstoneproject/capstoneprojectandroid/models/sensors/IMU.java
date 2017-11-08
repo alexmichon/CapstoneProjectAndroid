@@ -35,12 +35,12 @@ public class IMU extends Sensor {
     public static final String LABEL_IMU_MAG_Z = "Mag Z";
 
 
-    public IMU() {
-        super(Sensor.SensorType.IMU, DEFAULT_NAME);
+    public IMU(int id) {
+        super(id, Sensor.SensorType.IMU, DEFAULT_NAME);
     }
 
-    public IMU(String name) {
-        super(Sensor.SensorType.IMU, name);
+    public IMU(int id, String name) {
+        super(id, Sensor.SensorType.IMU, name);
     }
 
 
@@ -49,34 +49,26 @@ public class IMU extends Sensor {
 
         Map<String, Measurement> measurements = new HashMap<>(3);
 
-        long took_at = BytesUtils.bytesToDate(bytes);
-
-        int type = bytes[BytesUtils.BYTES_TIMESTAMP];
+        int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);
+        long took_at = BytesUtils.bytesToDate(bytes, 2 * BytesUtils.BYTES_INT16);
+        int offset = 2 * BytesUtils.BYTES_INT16 + BytesUtils.BYTES_TIMESTAMP;
 
         switch(type) {
             case IMU_DATA_ACC:
-                int accX = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 1 * BytesUtils.BYTES_INT16);
-                int accY = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 2 * BytesUtils.BYTES_INT16);
-                int accZ = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 3 * BytesUtils.BYTES_INT16);
-                measurements.put(LABEL_IMU_ACC_X, new Measurement<Integer>(took_at, accX));
-                measurements.put(LABEL_IMU_ACC_Y, new Measurement<Integer>(took_at, accY));
-                measurements.put(LABEL_IMU_ACC_Z, new Measurement<Integer>(took_at, accZ));
+                float accX = BytesUtils.bytesToFloat(bytes, offset + 0 * BytesUtils.BYTES_FLOAT);
+                float accY = BytesUtils.bytesToFloat(bytes, offset + 1 * BytesUtils.BYTES_FLOAT);
+                float accZ = BytesUtils.bytesToFloat(bytes, offset + 2 * BytesUtils.BYTES_FLOAT);
+                measurements.put(LABEL_IMU_ACC_X, new Measurement<Float>(took_at, accX));
+                measurements.put(LABEL_IMU_ACC_Y, new Measurement<Float>(took_at, accY));
+                measurements.put(LABEL_IMU_ACC_Z, new Measurement<Float>(took_at, accZ));
                 break;
             case IMU_DATA_GYR:
-                int gyrX = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 1 * BytesUtils.BYTES_INT16);
-                int gyrY = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 2 * BytesUtils.BYTES_INT16);
-                int gyrZ = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 3 * BytesUtils.BYTES_INT16);
-                measurements.put(LABEL_IMU_GYR_X, new Measurement<Integer>(took_at, gyrX));
-                measurements.put(LABEL_IMU_GYR_Y, new Measurement<Integer>(took_at, gyrY));
-                measurements.put(LABEL_IMU_GYR_Z, new Measurement<Integer>(took_at, gyrZ));
-                break;
-            case IMU_DATA_MAG:
-                int magX = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 1 * BytesUtils.BYTES_INT16);
-                int magY = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 2 * BytesUtils.BYTES_INT16);
-                int magZ = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_TIMESTAMP + 3 * BytesUtils.BYTES_INT16);
-                measurements.put(LABEL_IMU_MAG_X, new Measurement<Integer>(took_at, magX));
-                measurements.put(LABEL_IMU_MAG_Y, new Measurement<Integer>(took_at, magY));
-                measurements.put(LABEL_IMU_MAG_Z, new Measurement<Integer>(took_at, magZ));
+                float gyrX = BytesUtils.bytesToFloat(bytes, offset + 0 * BytesUtils.BYTES_FLOAT);
+                float gyrY = BytesUtils.bytesToFloat(bytes, offset + 1 * BytesUtils.BYTES_FLOAT);
+                float gyrZ = BytesUtils.bytesToFloat(bytes, offset + 2 * BytesUtils.BYTES_FLOAT);
+                measurements.put(LABEL_IMU_GYR_X, new Measurement<Float>(took_at, gyrX));
+                measurements.put(LABEL_IMU_GYR_Y, new Measurement<Float>(took_at, gyrY));
+                measurements.put(LABEL_IMU_GYR_Z, new Measurement<Float>(took_at, gyrZ));
                 break;
         }
 

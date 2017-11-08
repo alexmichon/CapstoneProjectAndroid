@@ -27,7 +27,7 @@ public class RailsServer {
 
     private VolleyRequestQueue mRequestQueue;
 
-    private String mHost = "http://192.168.1.2";
+    private String mHost = "http://10.142.34.100";
     private int mPort = 3000;
 
     private RailsServer() {
