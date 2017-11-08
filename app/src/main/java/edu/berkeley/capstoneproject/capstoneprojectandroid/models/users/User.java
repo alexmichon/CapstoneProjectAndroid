@@ -2,6 +2,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.models.users;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.security.InvalidKeyException;
 import java.util.Map;
@@ -16,10 +18,24 @@ public class User {
 
     private static final String TAG = User.class.getSimpleName();
 
+    @SerializedName("email")
+    @Expose
     private String mEmail;
+
+    @SerializedName("password")
+    @Expose
     private String mPassword;
+
+    @SerializedName("password_confirmation")
+    @Expose
     private String mPasswordConfirmation;
+
+    @SerializedName("first_name")
+    @Expose
     private String mFirstName;
+
+    @SerializedName("last_name")
+    @Expose
     private String mLastName;
 
     private AuthHeaders mAuthHeaders;
@@ -55,16 +71,16 @@ public class User {
         mPassword = password;
     }
 
-    public String getFirstName() {
-        return mFirstName;
-    }
-
     public String getPasswordConfirmation() {
         return mPasswordConfirmation;
     }
 
     public void setPasswordConfirmation(String passwordConfirmation) {
         mPasswordConfirmation = passwordConfirmation;
+    }
+
+    public String getFirstName() {
+        return mFirstName;
     }
 
     public void setFirstName(String firstName) {
