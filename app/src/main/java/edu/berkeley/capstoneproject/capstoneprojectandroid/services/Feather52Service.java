@@ -249,7 +249,7 @@ public class Feather52Service extends Service {
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
-            Log.e(TAG, "Unable to initialize BluetoothAdapter");
+            Log.e(TAG, "Unable to initialize BluetoothListAdapter");
             return false;
         }
 
@@ -260,7 +260,7 @@ public class Feather52Service extends Service {
 
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address");
+            Log.w(TAG, "BluetoothListAdapter not initialized or unspecified address");
             return false;
         }
 
@@ -291,7 +291,7 @@ public class Feather52Service extends Service {
 
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothListAdapter not initialized");
             return;
         }
 
@@ -311,7 +311,7 @@ public class Feather52Service extends Service {
 
     public void readCharacteristic(final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothListAdapter not initialized");
             return;
         }
 
@@ -326,7 +326,7 @@ public class Feather52Service extends Service {
 
     public void writeCharacteristic(final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothListAdapter not initialized");
             return;
         }
 
@@ -344,7 +344,7 @@ public class Feather52Service extends Service {
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothListAdapter not initialized");
             return;
         }
 
@@ -366,7 +366,7 @@ public class Feather52Service extends Service {
 
     public void startRecording() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothListAdapter not initialized");
             return;
         }
 
@@ -379,7 +379,7 @@ public class Feather52Service extends Service {
 
     public void stopRecording() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothListAdapter not initialized");
             return;
         }
 

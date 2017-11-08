@@ -5,9 +5,12 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.ApiService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RetroClient;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Alex on 06/11/2017.
@@ -15,38 +18,41 @@ import retrofit2.Response;
 
 public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presenter {
 
-    private Call<User> mLoginService;
+    private Observable<User> mLoginSubscription;
 
     @Override
     public void login(String email, String password) {
         mView.onLoginTry();
 
         final ApiService apiService = RetroClient.getApiService();
-        mLoginService = apiService.login(new LoginRequest(email, password));
-        mLoginService.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    User user = response.body();
-                    response.headers();
+        mLoginSubscription = apiService.login(new LoginRequest(email, password));
+        mLoginSubscription.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<User>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                }
+
+                @Override
+                public void onNext(@NonNull User user) {
                     mView.onLoginSuccess(user);
                 }
-                else {
+
+                @Override
+                public void onError(@NonNull Throwable e) {
                     mView.onLoginFailure();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mView.onLoginFailure();
-            }
-        });
+                @Override
+                public void onComplete() {
+                }
+            });
     }
 
     @Override
     public void cancel() {
-        if (mLoginService != null) {
-            mLoginService.cancel();
+        if (mLoginSubscription != null) {
+            mLoginSubscription.unsubscribeOn(Schedulers.io());
         }
     }
 }

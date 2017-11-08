@@ -5,6 +5,12 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.ApiService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RetroClient;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -15,37 +21,44 @@ import retrofit2.Response;
 
 public class RegisterPresenter extends BasePresenter<RegisterContract.View> implements RegisterContract.Presenter {
 
-    private Call<User> mRegisterService;
+    private Observable<User> mRegisterSubscription;
 
     @Override
     public void register(String email, String password, String passwordConfirmation, String firstName, String lastName) {
         final ApiService apiService = RetroClient.getApiService();
-        mRegisterService = apiService.register(new RegisterRequest(
+        mRegisterSubscription = apiService.register(new RegisterRequest(
            email, password, passwordConfirmation, firstName, lastName
         ));
 
-        mRegisterService.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    mView.onRegisterSuccess(response.body());
+        mRegisterSubscription.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<User>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+
                 }
-                else {
+
+                @Override
+                public void onNext(@NonNull User user) {
+                    mView.onRegisterSuccess(user);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
                     mView.onRegisterFailure();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mView.onRegisterFailure();
-            }
-        });
+                @Override
+                public void onComplete() {
+
+                }
+            });
     }
 
     @Override
     public void cancel() {
-        if (mRegisterService != null) {
-            mRegisterService.cancel();
+        if (mRegisterSubscription != null) {
+            mRegisterSubscription.unsubscribeOn(Schedulers.io());
         }
     }
 }

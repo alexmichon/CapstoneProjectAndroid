@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
 
 /**
  * Created by Alex on 06/11/2017.
@@ -81,6 +83,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             mProgressDialog.dismiss();
         }
         Toast.makeText(LoginActivity.this, "Welcome back " + user.getFirstName() + " !", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(LoginActivity.this, BluetoothListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.network;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -15,8 +16,8 @@ import retrofit2.http.POST;
 public interface ApiService {
 
     @POST("/api/v1/auth/sign_in")
-    Call<User> login(@Body LoginRequest request);
+    Observable<User> login(@Body LoginRequest request);
 
     @POST("/api/v1/auth")
-    Call<User> register(@Body RegisterRequest request);
+    Observable<User> register(@Body RegisterRequest request);
 }
