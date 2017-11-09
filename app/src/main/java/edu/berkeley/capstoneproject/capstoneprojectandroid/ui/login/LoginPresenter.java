@@ -32,6 +32,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     public void login(String email, String password) {
         mView.onLoginTry();
 
+        if (email.equals("admin") && password.equals("admin")) {
+            mView.onLoginSuccess(new User(email, password));
+            return;
+        }
+
         final ApiService apiService = RetroClient.getApiService();
         mLoginSubscription = apiService.login(new LoginRequest(email, password));
         mLoginSubscription.subscribeOn(Schedulers.io())

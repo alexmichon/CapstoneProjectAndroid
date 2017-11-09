@@ -13,5 +13,5 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-    
+
 }
