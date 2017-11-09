@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
+import javax.inject.Inject;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.ApiService;
@@ -10,6 +12,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -20,6 +23,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     private Observable<User> mLoginSubscription;
 
+    @Inject
+    public LoginPresenter(LoginContract.View view) {
+        super(view);
+    }
+
     @Override
     public void login(String email, String password) {
         mView.onLoginTry();
@@ -28,23 +36,15 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         mLoginSubscription = apiService.login(new LoginRequest(email, password));
         mLoginSubscription.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<User>() {
+            .subscribe(new Consumer<User>() {
                 @Override
-                public void onSubscribe(@NonNull Disposable d) {
-                }
-
-                @Override
-                public void onNext(@NonNull User user) {
+                public void accept(User user) throws Exception {
                     mView.onLoginSuccess(user);
                 }
-
+            }, new Consumer<Throwable>() {
                 @Override
-                public void onError(@NonNull Throwable e) {
+                public void accept(Throwable throwable) throws Exception {
                     mView.onLoginFailure();
-                }
-
-                @Override
-                public void onComplete() {
                 }
             });
     }

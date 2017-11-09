@@ -26,8 +26,7 @@ public class BluetoothLe21Adapter extends BluetoothLeAdapter {
     private ScanSettings mSettings;
     private List<ScanFilter> mFilters;
 
-    public BluetoothLe21Adapter(BluetoothAdapter adapter) {
-        super(adapter);
+    public BluetoothLe21Adapter() {
         mScanner = mAdapter.getBluetoothLeScanner();
         mSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
         mFilters = new ArrayList<>();

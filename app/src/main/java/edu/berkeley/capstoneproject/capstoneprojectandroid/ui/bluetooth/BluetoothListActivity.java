@@ -2,10 +2,12 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -13,7 +15,13 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.activities.Feather52Activity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 
 /**
@@ -24,7 +32,8 @@ public class BluetoothListActivity extends BaseActivity implements BluetoothList
 
     private static final String TAG = BluetoothListActivity.class.getSimpleName();
 
-    private BluetoothListPresenter mPresenter;
+    @Inject
+    BluetoothListContract.Presenter mPresenter;
 
     private ListView mPairedList;
     private ListView mScannedList;
@@ -35,33 +44,21 @@ public class BluetoothListActivity extends BaseActivity implements BluetoothList
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
 
         mPairedList = (ListView) findViewById(R.id.bluetooth_list_paired);
-        mScannedList = (ListView) findViewById(R.id.bluetooth_list_scanned);
-        mScannedProgressBar = (ProgressBar) findViewById(R.id.bluetooth_progress_scan);
-
         mPairedAdapter = new BluetoothListAdapter(this, R.layout.bluetooth_device);
-        mScannedAdapter = new BluetoothListAdapter(this, R.layout.bluetooth_device);
-
         mPairedList.setAdapter(mPairedAdapter);
+        mPairedList.setOnItemClickListener(mOnDeviceClickListener);
+
+        mScannedList = (ListView) findViewById(R.id.bluetooth_list_scanned);
+        mScannedAdapter = new BluetoothListAdapter(this, R.layout.bluetooth_device);
         mScannedList.setAdapter(mScannedAdapter);
+        mScannedList.setOnItemClickListener(mOnDeviceClickListener);
 
-        final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-
-        final BluetoothLeAdapter bluetoothLeAdapter;
-        if (Build.VERSION.SDK_INT >= 21) {
-            bluetoothLeAdapter = new BluetoothLe21Adapter(adapter);
-        }
-        else {
-            bluetoothLeAdapter = new BluetoothLe18Adapter(adapter);
-        }
-
-        final BluetoothRepository bluetoothRepository = new BluetoothRepositoryImpl(bluetoothLeAdapter);
-
-        mPresenter = new BluetoothListPresenter(bluetoothRepository);
-        mPresenter.attachView(this);
+        mScannedProgressBar = (ProgressBar) findViewById(R.id.bluetooth_progress_scan);
     }
 
     @Override
@@ -82,7 +79,6 @@ public class BluetoothListActivity extends BaseActivity implements BluetoothList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView();
     }
 
     @Override
@@ -123,4 +119,18 @@ public class BluetoothListActivity extends BaseActivity implements BluetoothList
     public void showError(String message) {
         Toast.makeText(BluetoothListActivity.this, message, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void startFeatherActivity(BluetoothDevice device) {
+        Intent intent = new Intent(BluetoothListActivity.this, Feather52Activity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private AdapterView.OnItemClickListener mOnDeviceClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            mPresenter.onDeviceClick((BluetoothDevice)adapterView.getItemAtPosition(i));
+        }
+    };
 }

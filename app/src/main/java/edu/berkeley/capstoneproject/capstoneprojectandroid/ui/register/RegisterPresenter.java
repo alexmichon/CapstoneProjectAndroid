@@ -23,6 +23,10 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
 
     private Observable<User> mRegisterSubscription;
 
+    public RegisterPresenter(RegisterContract.View view) {
+        super(view);
+    }
+
     @Override
     public void register(String email, String password, String passwordConfirmation, String firstName, String lastName) {
         final ApiService apiService = RetroClient.getApiService();

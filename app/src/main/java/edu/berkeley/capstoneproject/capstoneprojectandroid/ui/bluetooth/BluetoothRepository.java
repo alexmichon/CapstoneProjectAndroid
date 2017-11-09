@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothDevice;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.Repository;
 import io.reactivex.Observable;
 import io.reactivex.Single;

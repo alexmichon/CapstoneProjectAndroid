@@ -19,6 +19,10 @@ public abstract class BluetoothLeAdapter {
     protected boolean mScanning = false;
     protected BluetoothScanListener mScanListener;
 
+    public BluetoothLeAdapter() {
+        mAdapter = BluetoothAdapter.getDefaultAdapter();
+    }
+
     public BluetoothLeAdapter(BluetoothAdapter adapter) {
         mAdapter = adapter;
     }

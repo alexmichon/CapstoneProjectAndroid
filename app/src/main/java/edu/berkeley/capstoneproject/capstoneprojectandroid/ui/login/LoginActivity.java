@@ -10,7 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
@@ -28,10 +33,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     private ProgressDialog mProgressDialog;
 
-    private LoginPresenter mPresenter;
+    @Inject
+    LoginPresenter mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -47,15 +54,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 );
             }
         });
-
-        mPresenter = new LoginPresenter();
-        mPresenter.attachView(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView();
     }
 
     @Override

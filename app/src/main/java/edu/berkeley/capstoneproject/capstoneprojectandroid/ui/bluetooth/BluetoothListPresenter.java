@@ -4,7 +4,11 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Build;
 import android.util.Log;
 
+import org.reactivestreams.Subscription;
+
 import java.util.List;
+
+import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import io.reactivex.Observable;
@@ -22,12 +26,15 @@ public class BluetoothListPresenter extends BasePresenter<BluetoothListContract.
 
     private static final String TAG = BluetoothListPresenter.class.getSimpleName();
 
+    BluetoothRepository mBluetoothRepository;
+
     private boolean mScanning = false;
-    private BluetoothRepository mBluetoothRepository;
     private Observable<BluetoothDevice> mScanSubscription;
     private Observable<BluetoothDevice> mPairSubscription;
 
-    public BluetoothListPresenter(BluetoothRepository bluetoothRepository) {
+    @Inject
+    public BluetoothListPresenter(BluetoothListContract.View view, BluetoothRepository bluetoothRepository) {
+        super(view);
         mBluetoothRepository = bluetoothRepository;
     }
 
@@ -99,4 +106,11 @@ public class BluetoothListPresenter extends BasePresenter<BluetoothListContract.
                     }
                 });
     }
+
+    @Override
+    public void onDeviceClick(BluetoothDevice device) {
+        mView.startFeatherActivity(device);
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 
 /**
@@ -7,4 +8,5 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
  */
 
 public class RegisterActivity extends BaseActivity {
+
 }

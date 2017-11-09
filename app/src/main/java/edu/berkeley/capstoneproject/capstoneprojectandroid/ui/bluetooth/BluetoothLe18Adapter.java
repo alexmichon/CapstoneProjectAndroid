@@ -16,8 +16,7 @@ public class BluetoothLe18Adapter extends BluetoothLeAdapter {
 
     private static final String TAG = BluetoothLe18Adapter.class.getSimpleName();
 
-    public BluetoothLe18Adapter(BluetoothAdapter adapter) {
-        super(adapter);
+    public BluetoothLe18Adapter() {
     }
 
     @Override

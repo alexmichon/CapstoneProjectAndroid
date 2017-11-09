@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 
@@ -32,8 +33,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         mTextInfo = (TextView) findViewById(R.id.splash_text_info);
 
         ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        mPresenter = new SplashPresenter(conMgr);
-        mPresenter.attachView(this);
+        mPresenter = new SplashPresenter(this, conMgr);
     }
 
     @Override

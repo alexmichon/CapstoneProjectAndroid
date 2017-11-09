@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.Specification;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.activities.MainActivity;
 import io.reactivex.Observable;
@@ -36,13 +39,14 @@ import io.reactivex.functions.Consumer;
  * Created by Alex on 08/11/2017.
  */
 
-@TargetApi(21)
+@Singleton
 public class BluetoothRepositoryImpl implements BluetoothRepository {
 
     private static final String TAG = BluetoothRepositoryImpl.class.getSimpleName();
 
-    private BluetoothLeAdapter mAdapter;
+    BluetoothLeAdapter mAdapter;
 
+    @Inject
     public BluetoothRepositoryImpl(BluetoothLeAdapter adapter) {
         mAdapter = adapter;
     }

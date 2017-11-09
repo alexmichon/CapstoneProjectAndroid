@@ -16,7 +16,8 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 
     private ConnectivityManager mConnectivityManager;
 
-    public SplashPresenter(ConnectivityManager connectivityManager) {
+    public SplashPresenter(SplashContract.View view, ConnectivityManager connectivityManager) {
+        super(view);
         mConnectivityManager = connectivityManager;
     }
 

@@ -18,11 +18,14 @@ public interface BluetoothListContract {
         void showScanningProgress();
         void hideScanningProgress();
         void showError(String message);
+
+        void startFeatherActivity(BluetoothDevice device);
     }
 
     interface Presenter {
         void startDiscovery();
         void cancelDiscovery();
         void getPairedDevices();
+        void onDeviceClick(BluetoothDevice device);
     }
 }
