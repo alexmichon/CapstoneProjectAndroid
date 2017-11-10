@@ -3,7 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import io.reactivex.Observable;

@@ -7,10 +7,10 @@ import dagger.Module;
 import dagger.android.ActivityKey;
 import dagger.multibindings.IntoMap;
 import dagger.android.AndroidInjector;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExerciseTypesComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.BluetoothListComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercises.ExercisesActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExercisesComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.LoginComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
@@ -40,6 +40,6 @@ public abstract class ActivityBuilder {
 
     @Binds
     @IntoMap
-    @ActivityKey(ExercisesActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindExercisesActivity(ExercisesComponent.Builder builder);
+    @ActivityKey(ExerciseTypesActivity.class)
+    abstract AndroidInjector.Factory<? extends Activity> bindExercisesActivity(ExerciseTypesComponent.Builder builder);
 }

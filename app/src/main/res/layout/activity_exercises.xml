@@ -7,8 +7,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:textSize="30sp"
+        android:gravity="center"
+        android:textSize="@dimen/activity_title_text_size"
         android:text="Choose an exercise type"/>
 
     <ListView

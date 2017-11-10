@@ -15,13 +15,14 @@ import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
-public class MainActivity extends BaseActivity implements MainContract.View {
+public class MainActivity extends ToolbarActivity implements MainContract.View {
 
     @Inject
     MainContract.Presenter mPresenter;

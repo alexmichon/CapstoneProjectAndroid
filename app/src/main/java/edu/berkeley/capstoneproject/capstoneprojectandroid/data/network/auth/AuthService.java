@@ -1,8 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

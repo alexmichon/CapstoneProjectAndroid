@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercises;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -13,29 +13,37 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
-public class ExercisesAdapter extends ArrayAdapter<Exercise> {
+public class ExerciseTypesAdapter extends ArrayAdapter<ExerciseType> {
 
-    private static final String TAG = ExercisesAdapter.class.getSimpleName();
+    private static final String TAG = ExerciseTypesAdapter.class.getSimpleName();
 
     private LayoutInflater mInflater;
 
-    public ExercisesAdapter(@NonNull Context context, @LayoutRes int resource) {
+    public ExerciseTypesAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
         mInflater = LayoutInflater.from(context);
     }
 
     static class Holder {
         @BindView(R.id.row_exercise_name) TextView mTextName;
-        @BindView(R.id.row_exercise_description) TextView mTextAddress;
+        @BindView(R.id.row_exercise_description) TextView mTextDescription;
 
         public Holder(View view) {
             ButterKnife.bind(this, view);
+        }
+
+        public void setName(String name) {
+            mTextName.setText(name);
+        }
+
+        public void setDescription(String description) {
+            mTextDescription.setText(description);
         }
     }
 
@@ -46,21 +54,17 @@ public class ExercisesAdapter extends ArrayAdapter<Exercise> {
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.row_exercise, null);
-
             holder = new Holder(convertView);
-            holder.mTextName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);
-            holder.mTextAddress = (TextView) convertView.findViewById(R.id.text_bluetooth_address);
-
             convertView.setTag(holder);
         }
         else {
             holder = (Holder) convertView.getTag();
         }
 
-        Exercise exercise = getItem(position);
-        if (exercise != null) {
-            holder.mTextName.setText(exercise.getName());
-            holder.mTextAddress.setText(exercise.getDescription());
+        ExerciseType exerciseType = getItem(position);
+        if (exerciseType != null) {
+            holder.setName(exerciseType.getName());
+            holder.setDescription(exerciseType.getDescription());
         }
 
         return convertView;

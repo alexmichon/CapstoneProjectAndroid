@@ -1,29 +1,19 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.presenter;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.concurrent.Callable;
-
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginPresenter;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.TestScheduler;
 
 import static org.mockito.Matchers.any;

@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.BluetoothListComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExercisesComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExerciseTypesComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.LoginComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.MainComponent;
 
@@ -18,7 +18,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.MainCom
         MainComponent.class,
         BluetoothListComponent.class,
         LoginComponent.class,
-        ExercisesComponent.class
+        ExerciseTypesComponent.class
 })
 public class AppModule {
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth.BluetoothRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -39,8 +40,8 @@ public class BluetoothListPresenter extends BasePresenter<BluetoothListContract.
         Log.d(TAG, "Start scanning");
         mScanning = true;
         mScanSubscription = mBluetoothRepository.getScannedDevices();
-        mScanSubscription.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mScanSubscription.subscribeOn(getSubscribingScheduler())
+                .observeOn(getObservingScheduler())
                 .subscribe(new Observer<BluetoothDevice>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

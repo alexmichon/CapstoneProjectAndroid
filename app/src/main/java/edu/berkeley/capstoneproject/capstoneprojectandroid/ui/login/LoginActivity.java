@@ -5,29 +5,40 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
 
 /**
  * Created by Alex on 06/11/2017.
  */
 
-public class LoginActivity extends BaseActivity implements LoginContract.View {
+public class LoginActivity extends ToolbarActivity implements LoginContract.View {
 
-    private EditText mEmailEdit;
-    private EditText mPasswordEdit;
+    @BindView(R.id.login_email)
+    EditText mEmailEdit;
 
-    private Button mLoginButton;
+    @BindView(R.id.login_password)
+    EditText mPasswordEdit;
+
+    @BindView(R.id.login_register_link)
+    TextView mRegisterLink;
+
+    @BindView(R.id.login_button)
+    Button mLoginButton;
 
     private ProgressDialog mProgressDialog;
 
@@ -40,18 +51,22 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mEmailEdit = findViewById(R.id.login_email);
-        mPasswordEdit = findViewById(R.id.login_password);
-        mLoginButton = findViewById(R.id.login_button);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.login(
-                        mEmailEdit.getText().toString(),
-                        mPasswordEdit.getText().toString()
-                );
-            }
-        });
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.login_button)
+    void onLoginClick() {
+        mPresenter.login(
+                mEmailEdit.getText().toString(),
+                mPasswordEdit.getText().toString()
+        );
+    }
+
+    @OnClick(R.id.login_register_link)
+    void onRegisterLinkClick() {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -84,9 +99,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             mProgressDialog.dismiss();
         }
         Toast.makeText(LoginActivity.this, "Welcome back " + user.getFirstName() + " !", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, BluetoothListActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     @Override
@@ -96,4 +108,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }
         Toast.makeText(LoginActivity.this, "An error occurred !", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void startMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
 
 /**
  * Created by Alex on 06/11/2017.
@@ -12,6 +12,8 @@ public interface LoginContract {
         public void onLoginTry();
         public void onLoginSuccess(User user);
         public void onLoginFailure();
+
+        public void startMainActivity();
     }
 
     interface Presenter {

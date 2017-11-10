@@ -14,14 +14,14 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercises.ExercisesActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesActivity;
 
 /**
  * Created by Alex on 07/11/2017.
  */
 
-public class BluetoothListActivity extends BaseActivity implements BluetoothListContract.View {
+public class BluetoothListActivity extends ToolbarActivity implements BluetoothListContract.View {
 
     private static final String TAG = BluetoothListActivity.class.getSimpleName();
 
@@ -115,7 +115,7 @@ public class BluetoothListActivity extends BaseActivity implements BluetoothList
 
     @Override
     public void startExercisesActivity(BluetoothDevice device) {
-        Intent intent = new Intent(BluetoothListActivity.this, ExercisesActivity.class);
+        Intent intent = new Intent(BluetoothListActivity.this, ExerciseTypesActivity.class);
         startActivity(intent);
         finish();
     }

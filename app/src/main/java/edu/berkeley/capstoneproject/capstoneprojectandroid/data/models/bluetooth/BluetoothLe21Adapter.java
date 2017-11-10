@@ -1,7 +1,6 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth;
 
 import android.annotation.TargetApi;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;

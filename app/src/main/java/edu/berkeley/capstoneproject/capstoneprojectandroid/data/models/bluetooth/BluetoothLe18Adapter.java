@@ -1,11 +1,9 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.util.Log;
-
-import java.util.List;
 
 /**
  * Created by Alex on 08/11/2017.
