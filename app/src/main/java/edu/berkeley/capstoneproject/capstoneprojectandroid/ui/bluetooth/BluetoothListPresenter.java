@@ -1,15 +1,11 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
-import android.os.Build;
 import android.util.Log;
-
-import org.reactivestreams.Subscription;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -109,7 +105,8 @@ public class BluetoothListPresenter extends BasePresenter<BluetoothListContract.
 
     @Override
     public void onDeviceClick(BluetoothDevice device) {
-        mView.startFeatherActivity(device);
+        CapstoneProjectAndroidApplication.getInstance().getFeather52().setBluetoothDevice(device);
+        mView.startExercisesActivity(device);
     }
 
 

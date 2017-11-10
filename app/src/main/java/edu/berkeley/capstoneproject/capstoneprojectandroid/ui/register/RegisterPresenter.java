@@ -1,9 +1,10 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.network.ApiService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RetroClient;
+import javax.inject.Inject;
+
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.RegisterRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -11,9 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -23,14 +21,17 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
 
     private Observable<User> mRegisterSubscription;
 
-    public RegisterPresenter(RegisterContract.View view) {
+    private AuthService mAuthService;
+
+    @Inject
+    public RegisterPresenter(RegisterContract.View view, AuthService authService) {
         super(view);
+        mAuthService = authService;
     }
 
     @Override
     public void register(String email, String password, String passwordConfirmation, String firstName, String lastName) {
-        final ApiService apiService = RetroClient.getApiService();
-        mRegisterSubscription = apiService.register(new RegisterRequest(
+        mRegisterSubscription = mAuthService.register(new RegisterRequest(
            email, password, passwordConfirmation, firstName, lastName
         ));
 

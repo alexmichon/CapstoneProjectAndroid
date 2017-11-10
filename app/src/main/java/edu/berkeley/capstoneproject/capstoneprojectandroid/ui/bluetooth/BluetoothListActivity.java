@@ -1,28 +1,21 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import dagger.android.support.AndroidSupportInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.activities.Feather52Activity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercises.ExercisesActivity;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -121,8 +114,8 @@ public class BluetoothListActivity extends BaseActivity implements BluetoothList
     }
 
     @Override
-    public void startFeatherActivity(BluetoothDevice device) {
-        Intent intent = new Intent(BluetoothListActivity.this, Feather52Activity.class);
+    public void startExercisesActivity(BluetoothDevice device) {
+        Intent intent = new Intent(BluetoothListActivity.this, ExercisesActivity.class);
         startActivity(intent);
         finish();
     }

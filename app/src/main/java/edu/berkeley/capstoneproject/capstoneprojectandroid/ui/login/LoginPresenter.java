@@ -2,16 +2,11 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.network.ApiService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RetroClient;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -23,9 +18,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     private Observable<User> mLoginSubscription;
 
+    private AuthService mAuthService;
+
+
     @Inject
-    public LoginPresenter(LoginContract.View view) {
+    public LoginPresenter(LoginContract.View view, AuthService authService) {
         super(view);
+        mAuthService = authService;
     }
 
     @Override
@@ -33,14 +32,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         mView.onLoginTry();
 
         if (email.equals("admin") && password.equals("admin")) {
-            mView.onLoginSuccess(new User(email, password));
+            mView.onLoginSuccess(new User(email, password, "admin", ""));
             return;
         }
 
-        final ApiService apiService = RetroClient.getApiService();
-        mLoginSubscription = apiService.login(new LoginRequest(email, password));
-        mLoginSubscription.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        mLoginSubscription = mAuthService.login(new LoginRequest(email, password));
+        mLoginSubscription.subscribeOn(getSubscribingScheduler())
+            .observeOn(getObservingScheduler())
             .subscribe(new Consumer<User>() {
                 @Override
                 public void accept(User user) throws Exception {

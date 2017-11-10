@@ -19,7 +19,7 @@ public interface BluetoothListContract {
         void hideScanningProgress();
         void showError(String message);
 
-        void startFeatherActivity(BluetoothDevice device);
+        void startExercisesActivity(BluetoothDevice device);
     }
 
     interface Presenter {

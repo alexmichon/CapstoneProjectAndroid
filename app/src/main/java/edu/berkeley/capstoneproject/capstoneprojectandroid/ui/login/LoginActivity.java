@@ -13,10 +13,8 @@ import android.widget.Toast;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
 

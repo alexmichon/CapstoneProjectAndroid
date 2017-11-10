@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules;
 
 import android.os.Build;
 
@@ -6,13 +6,21 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothLe18Adapter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothLe21Adapter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothLeAdapter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothRepository;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothRepositoryImpl;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
 @Module
-public class BluetoothListActivityModule {
+public class BluetoothListModule {
 
     @Provides
     BluetoothListContract.View provideView(BluetoothListActivity bluetoothListActivity) {

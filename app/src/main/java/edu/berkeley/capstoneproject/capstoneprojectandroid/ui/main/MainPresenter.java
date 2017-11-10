@@ -14,4 +14,14 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
     public MainPresenter(MainContract.View view) {
         super(view);
     }
+
+    @Override
+    public void onStartExerciseClick() {
+        mView.startBluetoothListActivity();
+    }
+
+    @Override
+    public void onViewResultsClick() {
+        mView.showError("Not implemented yet !");
+    }
 }

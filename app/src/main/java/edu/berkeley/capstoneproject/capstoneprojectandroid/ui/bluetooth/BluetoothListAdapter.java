@@ -34,7 +34,7 @@ public class BluetoothListAdapter extends ArrayAdapter<BluetoothDevice> {
     }
 
 
-    public class Holder {
+    private class Holder {
         TextView mTextName;
         TextView mTextAddress;
     }

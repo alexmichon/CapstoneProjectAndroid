@@ -7,10 +7,12 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 public interface MainContract {
 
     interface View {
-
+        void showError(String message);
+        void startBluetoothListActivity();
     }
 
     interface Presenter {
-
+        void onStartExerciseClick();
+        void onViewResultsClick();
     }
 }

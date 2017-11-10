@@ -1,5 +1,6 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.network;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -12,7 +13,7 @@ public class RetroClient {
 
     private static final String URL = "http://192.168.1.2:3000/";
 
-    private static Retrofit getRetrofitInstance() {
+    private Retrofit getRetrofitInstance() {
         return new Retrofit.Builder()
                 .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -20,7 +21,7 @@ public class RetroClient {
                 .build();
     }
 
-    public static ApiService getApiService() {
-        return getRetrofitInstance().create(ApiService.class);
+    public AuthService getApiService() {
+        return getRetrofitInstance().create(AuthService.class);
     }
 }

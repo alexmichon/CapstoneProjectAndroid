@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.User;
 
 /**
  * Created by Alex on 06/11/2017.

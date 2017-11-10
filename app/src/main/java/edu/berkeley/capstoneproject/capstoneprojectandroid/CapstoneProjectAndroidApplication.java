@@ -8,12 +8,11 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.AppModule;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.DaggerAppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.DaggerAppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.AppModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.NetModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 
 /**
@@ -41,6 +40,8 @@ public class CapstoneProjectAndroidApplication extends Application implements Ha
         DaggerAppComponent
                 .builder()
                 .application(this)
+                .appModule(new AppModule(this))
+                .netModule(new NetModule(this))
                 .build()
                 .inject(this);
     }

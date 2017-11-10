@@ -5,15 +5,16 @@ import android.app.Activity;
 import dagger.Binds;
 import dagger.Module;
 import dagger.android.ActivityKey;
-import dagger.android.AndroidInjector;
 import dagger.multibindings.IntoMap;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import dagger.android.AndroidInjector;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivityComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.BluetoothListComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercises.ExercisesActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExercisesComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivityComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.LoginComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivityComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.MainComponent;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -25,15 +26,20 @@ public abstract class ActivityBuilder {
     @Binds
     @IntoMap
     @ActivityKey(MainActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindMainActivity(MainActivityComponent.Builder builder);
+    abstract AndroidInjector.Factory<? extends Activity> bindMainActivity(MainComponent.Builder builder);
 
     @Binds
     @IntoMap
     @ActivityKey(BluetoothListActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindBluetoothListActivity(BluetoothListActivityComponent.Builder builder);
+    abstract AndroidInjector.Factory<? extends Activity> bindBluetoothListActivity(BluetoothListComponent.Builder builder);
 
     @Binds
     @IntoMap
     @ActivityKey(LoginActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindLoginActivity(LoginActivityComponent.Builder builder);
+    abstract AndroidInjector.Factory<? extends Activity> bindLoginActivity(LoginComponent.Builder builder);
+
+    @Binds
+    @IntoMap
+    @ActivityKey(ExercisesActivity.class)
+    abstract AndroidInjector.Factory<? extends Activity> bindExercisesActivity(ExercisesComponent.Builder builder);
 }

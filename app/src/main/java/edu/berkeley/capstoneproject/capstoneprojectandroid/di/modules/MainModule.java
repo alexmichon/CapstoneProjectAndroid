@@ -1,14 +1,17 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainPresenter;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
 @Module
-public class MainActivityModule {
+public class MainModule {
 
     @Provides
     MainContract.View provideMainView(MainActivity mainActivity) {

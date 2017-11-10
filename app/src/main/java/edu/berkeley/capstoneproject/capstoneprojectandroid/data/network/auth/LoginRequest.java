@@ -1,9 +1,7 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 
 /**
  * Created by Alex on 07/11/2017.

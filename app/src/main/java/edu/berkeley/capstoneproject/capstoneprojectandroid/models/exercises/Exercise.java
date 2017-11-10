@@ -26,6 +26,7 @@ public abstract class Exercise {
     private static final String TAG = Exercise.class.getSimpleName();
 
     protected final String mName;
+    protected String mDescription;
     protected final Map<String, Metric> mMetrics = new HashMap<>();
 
     protected Date mStartDate;
@@ -84,6 +85,14 @@ public abstract class Exercise {
 
     public void stop() {
         mStopDate = new Date();
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
     }
 
     public JSONObject toJson() throws JSONException {
