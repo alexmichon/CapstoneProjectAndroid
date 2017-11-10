@@ -1,7 +1,12 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
+import io.reactivex.Observable;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -9,14 +14,19 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exer
 
 public interface ExerciseTypesContract {
 
-    interface View {
+    interface View extends IBaseView {
         void addExerciseType(ExerciseType exerciseType);
         void showError(String message);
         void startExerciseTypeActivity(ExerciseType exerciseType);
     }
 
-    interface Presenter {
-        void loadExerciseTypes();
+    interface Interactor extends IBaseInteractor {
+        Observable<ExerciseType> doLoadExerciseTypes();
+    }
+
+    @PerActivity
+    interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
+        void onLoadExerciseTypes();
         void onExerciseTypeClick(ExerciseType exerciseType);
     }
 }

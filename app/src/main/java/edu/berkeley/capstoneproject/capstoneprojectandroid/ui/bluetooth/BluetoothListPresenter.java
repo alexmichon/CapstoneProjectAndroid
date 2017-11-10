@@ -6,108 +6,93 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth.BluetoothRepository;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth.IBluetoothRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by Alex on 07/11/2017.
  */
 
-public class BluetoothListPresenter extends BasePresenter<BluetoothListContract.View> implements BluetoothListContract.Presenter {
+public class BluetoothListPresenter<V extends BluetoothListContract.View, I extends BluetoothListContract.Interactor>
+        extends BasePresenter<V, I> implements BluetoothListContract.Presenter<V, I> {
 
     private static final String TAG = BluetoothListPresenter.class.getSimpleName();
 
-    BluetoothRepository mBluetoothRepository;
+    IBluetoothRepository mBluetoothRepository;
 
     private boolean mScanning = false;
-    private Observable<BluetoothDevice> mScanSubscription;
-    private Observable<BluetoothDevice> mPairSubscription;
 
     @Inject
-    public BluetoothListPresenter(BluetoothListContract.View view, BluetoothRepository bluetoothRepository) {
-        super(view);
-        mBluetoothRepository = bluetoothRepository;
+    public BluetoothListPresenter(I interactor,
+                                  ISchedulerProvider schedulerProvider,
+                                  CompositeDisposable compositeDisposable) {
+        super(interactor, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    public void startDiscovery() {
-        Log.d(TAG, "Start scanning");
-        mScanning = true;
-        mScanSubscription = mBluetoothRepository.getScannedDevices();
-        mScanSubscription.subscribeOn(getSubscribingScheduler())
-                .observeOn(getObservingScheduler())
-                .subscribe(new Observer<BluetoothDevice>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        mView.showScanningProgress();
-                    }
-
-                    @Override
-                    public void onNext(@NonNull BluetoothDevice bluetoothDevice) {
-                        Log.d(TAG, "New device");
-                        mView.addScannedDevice(bluetoothDevice);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        Log.e(TAG, "Scanning error", t);
-                        mView.hideScanningProgress();
-                        mView.showError("Scanning error");
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "Scan completed");
-                        mView.hideScanningProgress();
-                    }
-                });
-    }
-
-    @Override
-    public void cancelDiscovery() {
-        mScanSubscription.unsubscribeOn(Schedulers.io());
-    }
-
-    @Override
-    public void getPairedDevices() {
+    public void onLoadPairedDevices() {
         Log.d(TAG, "Get paired devices");
-        mPairSubscription = mBluetoothRepository.getPairedDevices();
-        mPairSubscription.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BluetoothDevice>() {
+        getCompositeDisposable().add(getInteractor()
+            .doLoadPairedDevices()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<BluetoothDevice>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
+                    public void accept(BluetoothDevice device) throws Exception {
+                        getView().addPairedDevice(device);
                     }
+                })
+        );
+    }
 
-                    @Override
-                    public void onNext(@NonNull BluetoothDevice device) {
-                        mView.addPairedDevice(device);
-                    }
+    @Override
+    public void onStartScanning() {
+        Log.d(TAG, "Start scanning");
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e(TAG, "Pairing error", e);
-                        mView.showError("Pairing error");
-                    }
+        mScanning = true;
+        getView().showScanningProgress();
 
-                    @Override
-                    public void onComplete() {
+        getCompositeDisposable().add(getInteractor()
+                .doDiscovery()
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableObserver<BluetoothDevice>() {
+                        @Override
+                        public void onNext(@NonNull BluetoothDevice bluetoothDevice) {
+                            Log.d(TAG, "New device");
+                            getView().addScannedDevice(bluetoothDevice);
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onError(Throwable t) {
+                            Log.e(TAG, "Scanning error", t);
+                            getView().hideScanningProgress();
+                            getView().showError("Scanning error");
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Log.d(TAG, "Scan completed");
+                            getView().hideScanningProgress();
+                        }
+                    })
+        );
+    }
+
+    @Override
+    public void onStopScanning() {
+
     }
 
     @Override
     public void onDeviceClick(BluetoothDevice device) {
         CapstoneProjectAndroidApplication.getInstance().getFeather52().setBluetoothDevice(device);
-        mView.startExercisesActivity(device);
+        getView().startExercisesActivity(device);
     }
 
 

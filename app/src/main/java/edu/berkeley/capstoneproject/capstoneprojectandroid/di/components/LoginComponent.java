@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.components;
 
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.LoginModule;
 
@@ -10,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.LoginModul
  */
 
 @Subcomponent(modules = {LoginModule.class})
+@PerActivity
 public interface LoginComponent extends AndroidInjector<LoginActivity> {
 
     @Subcomponent.Builder

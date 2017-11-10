@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -9,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.Bluetoo
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExerciseTypesComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.LoginComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.MainComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.SplashComponent;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -18,7 +21,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.MainCom
         MainComponent.class,
         BluetoothListComponent.class,
         LoginComponent.class,
-        ExerciseTypesComponent.class
+        ExerciseTypesComponent.class,
+        SplashComponent.class
 })
 public class AppModule {
 
@@ -31,4 +35,9 @@ public class AppModule {
     @Provides
     @Singleton
     CapstoneProjectAndroidApplication provideApp() { return mApplication; }
+
+    @Provides
+    Context provideContext() {
+        return mApplication;
+    }
 }

@@ -5,45 +5,50 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseTypeRepository;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
-public class ExerciseTypesPresenter extends BasePresenter<ExerciseTypesContract.View> implements ExerciseTypesContract.Presenter {
+public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I extends ExerciseTypesContract.Interactor>
+        extends BasePresenter<V, I> implements ExerciseTypesContract.Presenter<V, I> {
 
     private static final String TAG = ExerciseTypesPresenter.class.getSimpleName();
 
-    private ExerciseTypeRepository mRepository;
+    private IExerciseTypeRepository mRepository;
 
     @Inject
-    public ExerciseTypesPresenter(ExerciseTypesContract.View view, ExerciseTypeRepository repository) {
-        super(view);
-        mRepository = repository;
+    public ExerciseTypesPresenter(I interactor,
+                                  ISchedulerProvider schedulerProvider,
+                                  CompositeDisposable compositeDisposable) {
+        super(interactor, schedulerProvider, compositeDisposable);
     }
 
 
     @Override
-    public void loadExerciseTypes() {
+    public void onLoadExerciseTypes() {
         Log.d(TAG, "Loading exercise types");
-        mRepository.query()
-                .observeOn(getObservingScheduler())
-                .subscribeOn(getSubscribingScheduler())
+        getCompositeDisposable().add(getInteractor()
+            .doLoadExerciseTypes()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<ExerciseType>() {
                     @Override
                     public void accept(ExerciseType exerciseType) throws Exception {
                         Log.d(TAG, "New exercise type found");
-                        mView.addExerciseType(exerciseType);
+                        getView().addExerciseType(exerciseType);
                     }
-                });
+                })
+        );
     }
 
     @Override
     public void onExerciseTypeClick(ExerciseType exerciseType) {
-        mView.startExerciseTypeActivity(exerciseType);
+        getView().startExerciseTypeActivity(exerciseType);
     }
 }

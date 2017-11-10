@@ -25,7 +25,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.Bluetoot
 public class MainActivity extends ToolbarActivity implements MainContract.View {
 
     @Inject
-    MainContract.Presenter mPresenter;
+    MainContract.Presenter<MainContract.View, MainContract.Interactor> mPresenter;
 
     @BindView(R.id.main_text_hello)
     TextView mHelloView;
@@ -41,6 +41,7 @@ public class MainActivity extends ToolbarActivity implements MainContract.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
+        mPresenter.onAttach(this);
     }
 
 
@@ -59,5 +60,11 @@ public class MainActivity extends ToolbarActivity implements MainContract.View {
     public void startBluetoothListActivity() {
         Intent intent = new Intent(MainActivity.this, BluetoothListActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.onDetach();
+        super.onDestroy();
     }
 }

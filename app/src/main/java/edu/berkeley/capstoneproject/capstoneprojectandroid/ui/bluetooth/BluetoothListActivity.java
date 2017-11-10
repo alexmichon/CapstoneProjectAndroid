@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
@@ -26,11 +28,14 @@ public class BluetoothListActivity extends ToolbarActivity implements BluetoothL
     private static final String TAG = BluetoothListActivity.class.getSimpleName();
 
     @Inject
-    BluetoothListContract.Presenter mPresenter;
+    BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor> mPresenter;
 
-    private ListView mPairedList;
-    private ListView mScannedList;
-    private ProgressBar mScannedProgressBar;
+    @BindView(R.id.bluetooth_list_paired)
+    ListView mPairedList;
+    @BindView(R.id.bluetooth_list_scanned)
+    ListView mScannedList;
+    @BindView(R.id.bluetooth_progress_scan)
+    ProgressBar mScannedProgressBar;
 
     private BluetoothListAdapter mPairedAdapter;
     private BluetoothListAdapter mScannedAdapter;
@@ -40,37 +45,37 @@ public class BluetoothListActivity extends ToolbarActivity implements BluetoothL
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
+        ButterKnife.bind(this);
 
-        mPairedList = (ListView) findViewById(R.id.bluetooth_list_paired);
         mPairedAdapter = new BluetoothListAdapter(this, R.layout.bluetooth_device);
         mPairedList.setAdapter(mPairedAdapter);
         mPairedList.setOnItemClickListener(mOnDeviceClickListener);
 
-        mScannedList = (ListView) findViewById(R.id.bluetooth_list_scanned);
         mScannedAdapter = new BluetoothListAdapter(this, R.layout.bluetooth_device);
         mScannedList.setAdapter(mScannedAdapter);
         mScannedList.setOnItemClickListener(mOnDeviceClickListener);
 
-        mScannedProgressBar = (ProgressBar) findViewById(R.id.bluetooth_progress_scan);
+        mPresenter.onAttach(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.getPairedDevices();
-        mPresenter.startDiscovery();
+        mPresenter.onLoadPairedDevices();
+        mPresenter.onStartScanning();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.cancelDiscovery();
+        mPresenter.onStopScanning();
         cleanPairedDevices();
         cleanScannedDevices();
     }
 
     @Override
     protected void onDestroy() {
+        mPresenter.onDetach();
         super.onDestroy();
     }
 

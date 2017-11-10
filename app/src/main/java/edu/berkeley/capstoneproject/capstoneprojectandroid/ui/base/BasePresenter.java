@@ -1,43 +1,65 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
+import javax.inject.Inject;
+
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Alex on 07/11/2017.
  */
 
-public abstract class BasePresenter<V> {
+public class BasePresenter<V extends IBaseView, I extends IBaseInteractor> implements IBasePresenter<V, I> {
 
-    protected V mView;
+    private final ISchedulerProvider mSchedulerProvider;
 
-    private Scheduler mSubscribingScheduler;
-    private Scheduler mObservingScheduler;
+    private V mView;
+    private I mInteractor;
 
-    public BasePresenter(V view) {
+    private CompositeDisposable mCompositeDisposable;
+
+    @Inject
+    public BasePresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+        mInteractor = interactor;
+        mSchedulerProvider = schedulerProvider;
+        mCompositeDisposable = compositeDisposable;
+    }
+
+    @Override
+    public void onAttach(V view) {
         mView = view;
     }
 
-    public Scheduler getObservingScheduler() {
-        if (mObservingScheduler != null) {
-            return mObservingScheduler;
-        }
-        return AndroidSchedulers.mainThread();
+    @Override
+    public void onDetach() {
+        mCompositeDisposable.dispose();
+        mView = null;
+        mInteractor = null;
     }
 
-    public void setObservingScheduler(Scheduler scheduler) {
-        mObservingScheduler = scheduler;
+    @Override
+    public V getView() {
+        return mView;
     }
 
-    public Scheduler getSubscribingScheduler() {
-        if (mSubscribingScheduler != null) {
-            return mSubscribingScheduler;
-        }
-        return Schedulers.io();
+    @Override
+    public I getInteractor() {
+        return mInteractor;
     }
 
-    public void setSubscribingScheduler(Scheduler scheduler) {
-        mSubscribingScheduler = scheduler;
+    @Override
+    public boolean isViewAttached() {
+        return mView != null;
+    }
+
+    public ISchedulerProvider getSchedulerProvider() {
+        return mSchedulerProvider;
+    }
+
+    public CompositeDisposable getCompositeDisposable() {
+        return mCompositeDisposable;
     }
 }

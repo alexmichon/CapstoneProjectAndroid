@@ -1,6 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ListView;
@@ -14,7 +13,6 @@ import butterknife.OnItemClick;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
 
 /**
@@ -24,7 +22,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivi
 public class ExerciseTypesActivity extends ToolbarActivity implements ExerciseTypesContract.View {
 
     @Inject
-    ExerciseTypesContract.Presenter mPresenter;
+    ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> mPresenter;
 
     @BindView(R.id.exercises_list)
     ListView mExerciseListView;
@@ -40,6 +38,8 @@ public class ExerciseTypesActivity extends ToolbarActivity implements ExerciseTy
 
         mExercisesAdapter = new ExerciseTypesAdapter(this, R.layout.row_exercise);
         mExerciseListView.setAdapter(mExercisesAdapter);
+
+        mPresenter.onAttach(this);
     }
 
     @OnItemClick(R.id.exercises_list)
@@ -50,7 +50,7 @@ public class ExerciseTypesActivity extends ToolbarActivity implements ExerciseTy
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.loadExerciseTypes();
+        mPresenter.onLoadExerciseTypes();
     }
 
     @Override
@@ -67,5 +67,11 @@ public class ExerciseTypesActivity extends ToolbarActivity implements ExerciseTy
     @Override
     public void startExerciseTypeActivity(ExerciseType exerciseType) {
         // TODO
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.onDetach();
+        super.onDestroy();
     }
 }

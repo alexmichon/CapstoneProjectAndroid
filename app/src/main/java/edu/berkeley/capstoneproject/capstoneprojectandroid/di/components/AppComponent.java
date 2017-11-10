@@ -1,14 +1,12 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.components;
 
-import android.app.Application;
-
 import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.ActivityBuilder;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.AppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.NetModule;
 
@@ -17,7 +15,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.NetModule;
  */
 
 @Singleton
-@Component(modules = {AndroidInjectionModule.class, AppModule.class, NetModule.class, ActivityBuilder.class})
+@Component(modules = {AndroidInjectionModule.class, AppModule.class, NetModule.class, ActivityModule.class})
 public interface AppComponent {
 
     @Component.Builder

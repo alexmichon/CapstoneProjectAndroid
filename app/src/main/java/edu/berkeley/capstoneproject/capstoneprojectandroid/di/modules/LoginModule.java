@@ -2,10 +2,14 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules;
 
 import dagger.Module;
 import dagger.Provides;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Retrofit;
 
 /**
@@ -13,7 +17,7 @@ import retrofit2.Retrofit;
  */
 
 @Module
-public class LoginModule {
+public class LoginModule extends BaseModule {
 
     @Provides
     LoginContract.View provideView(LoginActivity loginActivity) {
@@ -21,8 +25,15 @@ public class LoginModule {
     }
 
     @Provides
-    LoginContract.Presenter providePresenter(LoginContract.View view, AuthService authService) {
-        return new LoginPresenter(view, authService);
+    LoginContract.Interactor provideInteractor(AuthService service) {
+        return new LoginInteractor(service);
+    }
+
+    @Provides
+    @PerActivity
+    LoginContract.Presenter<LoginContract.View, LoginContract.Interactor>
+    providePresenter(LoginContract.Interactor interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+        return new LoginPresenter(interactor, schedulerProvider, compositeDisposable);
     }
 
     @Provides

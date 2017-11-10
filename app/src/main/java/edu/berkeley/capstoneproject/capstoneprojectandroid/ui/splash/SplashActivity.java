@@ -8,6 +8,11 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
@@ -20,19 +25,19 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
-    private TextView mTextInfo;
+    @BindView(R.id.splash_text_info)
+    TextView mTextInfo;
 
-    private SplashPresenter mPresenter;
+    @Inject
+    SplashContract.Presenter<SplashContract.View, SplashContract.Interactor> mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        mTextInfo = (TextView) findViewById(R.id.splash_text_info);
-
-        ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        mPresenter = new SplashPresenter(this, conMgr);
+        ButterKnife.bind(this);
+        mPresenter.onAttach(this);
     }
 
     @Override
@@ -65,5 +70,9 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         finish();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        mPresenter.onDetach();
+        super.onDestroy();
+    }
 }

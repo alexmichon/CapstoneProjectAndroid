@@ -26,7 +26,7 @@ public class UserHelper {
     private static final String TAG = UserHelper.class.getSimpleName();
 
     public static ApiRequest login(User user, RequestFuture<JSONObject> future) throws JSONException {
-        Log.d(TAG, "Create login request");
+        Log.d(TAG, "Create onLoginClick request");
 
         if (future == null) {
             future = RequestFuture.newFuture();
@@ -40,7 +40,7 @@ public class UserHelper {
     }
 
     public static ApiRequest register(User user, RequestFuture<JSONObject> future) throws JSONException {
-        Log.d(TAG, "Create register request");
+        Log.d(TAG, "Create doRegisterApiCall request");
 
         if (future == null) {
             future = RequestFuture.newFuture();

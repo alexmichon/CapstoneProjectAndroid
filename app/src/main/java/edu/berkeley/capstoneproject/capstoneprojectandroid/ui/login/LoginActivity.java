@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -43,7 +42,7 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
     private ProgressDialog mProgressDialog;
 
     @Inject
-    LoginPresenter mPresenter;
+    LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,11 +51,12 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
         setContentView(R.layout.activity_login);
 
         ButterKnife.bind(this);
+        mPresenter.onAttach(this);
     }
 
     @OnClick(R.id.login_button)
     void onLoginClick() {
-        mPresenter.login(
+        mPresenter.onLoginClick(
                 mEmailEdit.getText().toString(),
                 mPasswordEdit.getText().toString()
         );
@@ -71,42 +71,18 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
 
     @Override
     protected void onDestroy() {
+        mPresenter.onDetach();
         super.onDestroy();
     }
 
     @Override
-    public void onLoginTry() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Authenticating...");
-        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                mPresenter.cancel();
-                mProgressDialog.dismiss();
-            }
-        });
-        mProgressDialog.show();
-    }
-
-    @Override
     public void onLoginSuccess(User user) {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-        Toast.makeText(LoginActivity.this, "Welcome back " + user.getFirstName() + " !", Toast.LENGTH_SHORT).show();
+        showMessage("Welcome back " + user.getFirstName());
     }
 
     @Override
     public void onLoginFailure() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-        Toast.makeText(LoginActivity.this, "An error occurred !", Toast.LENGTH_SHORT).show();
+        onError("An error occurred !");
     }
 
     @Override
@@ -117,4 +93,29 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
     }
 
 
+    @Override
+    public void showLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Authenticating...");
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                mPresenter.onLoginCancel();
+                mProgressDialog.dismiss();
+            }
+        });
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
 }

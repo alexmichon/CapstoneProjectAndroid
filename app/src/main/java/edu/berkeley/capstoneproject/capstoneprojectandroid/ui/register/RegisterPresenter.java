@@ -2,68 +2,62 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.RegisterRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Alex on 07/11/2017.
  */
 
-public class RegisterPresenter extends BasePresenter<RegisterContract.View> implements RegisterContract.Presenter {
+public class RegisterPresenter<V extends RegisterContract.View, I extends RegisterContract.Interactor>
+        extends BasePresenter<V, I> implements RegisterContract.Presenter<V, I> {
 
-    private Observable<User> mRegisterSubscription;
-
-    private AuthService mAuthService;
 
     @Inject
-    public RegisterPresenter(RegisterContract.View view, AuthService authService) {
-        super(view);
-        mAuthService = authService;
+    public RegisterPresenter(I interactor,
+                             ISchedulerProvider schedulerProvider,
+                             CompositeDisposable compositeDisposable) {
+        super(interactor, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    public void register(String email, String password, String passwordConfirmation, String firstName, String lastName) {
-        mRegisterSubscription = mAuthService.register(new RegisterRequest(
-           email, password, passwordConfirmation, firstName, lastName
-        ));
-
-        mRegisterSubscription.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<User>() {
-                @Override
-                public void onSubscribe(@NonNull Disposable d) {
-
-                }
-
-                @Override
-                public void onNext(@NonNull User user) {
-                    mView.onRegisterSuccess(user);
-                }
-
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    mView.onRegisterFailure();
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-            });
+    public void onRegisterClick(final String email, final String password, String passwordConfirmation, final String firstName, final String lastName) {
+        getView().showLoading();
+        getCompositeDisposable().add(getInteractor()
+                .doRegisterApiCall(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<RegisterResponse>() {
+                    @Override
+                    public void accept(RegisterResponse registerResponse) throws Exception {
+                        // TODO Convert RegisterResponse to User
+                        User user = new User(email, password, firstName, lastName);
+                        getView().hideLoading();
+                        getView().onRegisterSuccess(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getView().onError("Couldn't doRegisterApiCall");
+                    }
+                })
+        );
     }
 
     @Override
-    public void cancel() {
-        if (mRegisterSubscription != null) {
-            mRegisterSubscription.unsubscribeOn(Schedulers.io());
-        }
+    public void onRegisterCancel() {
+        getCompositeDisposable().dispose();
     }
 }

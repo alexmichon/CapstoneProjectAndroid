@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.components;
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.MainModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 
 /**
@@ -10,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
  */
 
 @Subcomponent(modules = {MainModule.class})
+@PerActivity
 public interface MainComponent extends AndroidInjector<MainActivity> {
 
     @Subcomponent.Builder

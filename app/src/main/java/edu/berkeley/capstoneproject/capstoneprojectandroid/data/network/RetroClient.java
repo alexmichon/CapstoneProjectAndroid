@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;

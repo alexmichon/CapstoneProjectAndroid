@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.di;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules;
 
 import android.app.Activity;
 
@@ -8,6 +8,7 @@ import dagger.android.ActivityKey;
 import dagger.multibindings.IntoMap;
 import dagger.android.AndroidInjector;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.ExerciseTypesComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.SplashComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.BluetoothListComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesActivity;
@@ -15,13 +16,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivit
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.LoginComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.MainComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashActivity;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
 @Module
-public abstract class ActivityBuilder {
+public abstract class ActivityModule {
 
     @Binds
     @IntoMap
@@ -42,4 +44,9 @@ public abstract class ActivityBuilder {
     @IntoMap
     @ActivityKey(ExerciseTypesActivity.class)
     abstract AndroidInjector.Factory<? extends Activity> bindExercisesActivity(ExerciseTypesComponent.Builder builder);
+
+    @Binds
+    @IntoMap
+    @ActivityKey(SplashActivity.class)
+    abstract AndroidInjector.Factory<? extends Activity> bindSplashActivity(SplashComponent.Builder builder);
 }

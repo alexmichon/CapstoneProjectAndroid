@@ -2,11 +2,14 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.auth.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -14,50 +17,46 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Alex on 06/11/2017.
  */
 
-public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presenter {
-
-    private Observable<User> mLoginSubscription;
-
-    private AuthService mAuthService;
-
+public class LoginPresenter<V extends LoginContract.View, I extends LoginContract.Interactor>
+        extends BasePresenter<V, I> implements LoginContract.Presenter<V, I> {
 
     @Inject
-    public LoginPresenter(LoginContract.View view, AuthService authService) {
-        super(view);
-        mAuthService = authService;
+    public LoginPresenter(I interactor,
+                          ISchedulerProvider schedulerProvider,
+                          CompositeDisposable compositeDisposable) {
+        super(interactor, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    public void login(String email, String password) {
-        mView.onLoginTry();
+    public void onLoginClick(final String email, final String password) {
+        getView().showLoading();
 
         if (email.equals("admin") && password.equals("admin")) {
-            mView.onLoginSuccess(new User(email, password, "admin", ""));
-            mView.startMainActivity();
+            getView().hideLoading();
+            getView().onLoginSuccess(new User(email, password, "admin", ""));
+            getView().startMainActivity();
             return;
         }
 
-        mLoginSubscription = mAuthService.login(new LoginRequest(email, password));
-        mLoginSubscription.subscribeOn(getSubscribingScheduler())
-            .observeOn(getObservingScheduler())
-            .subscribe(new Consumer<User>() {
-                @Override
-                public void accept(User user) throws Exception {
-                    mView.onLoginSuccess(user);
-                    mView.startMainActivity();
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    mView.onLoginFailure();
-                }
-            });
+        getCompositeDisposable().add(
+                getInteractor().doLoginCall(new LoginRequest(email, password))
+                        .subscribeOn(getSchedulerProvider().io())
+                        .observeOn(getSchedulerProvider().ui())
+                        .subscribe(new Consumer<LoginResponse>() {
+                            @Override
+                            public void accept(LoginResponse loginResponse) throws Exception {
+                                // TODO Convert LoginResponse to User
+                                User user = new User(email, password, "", "");
+                                getView().hideLoading();
+                                getView().onLoginSuccess(user);
+                                getView().startMainActivity();
+                            }
+                        })
+        );
     }
 
     @Override
-    public void cancel() {
-        if (mLoginSubscription != null) {
-            mLoginSubscription.unsubscribeOn(Schedulers.io());
-        }
+    public void onLoginCancel() {
+        getCompositeDisposable().dispose();
     }
 }
