@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.HomeComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
@@ -14,7 +15,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by Alex on 08/11/2017.
  */
 
-@Module
+@Module(subcomponents = {HomeComponent.class})
 public class MainModule extends BaseModule {
 
     @Provides

@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
+import android.support.design.widget.NavigationView;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
@@ -24,5 +26,6 @@ public interface MainContract {
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void onStartExerciseClick();
         void onViewResultsClick();
+        NavigationView.OnNavigationItemSelectedListener getNavigationListener();
     }
 }

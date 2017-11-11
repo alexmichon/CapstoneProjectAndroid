@@ -17,7 +17,7 @@ import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
 

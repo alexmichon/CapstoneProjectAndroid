@@ -13,7 +13,7 @@ import butterknife.OnItemClick;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 
 /**
  * Created by Alex on 08/11/2017.

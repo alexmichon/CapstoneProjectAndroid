@@ -1,5 +1,10 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.view.MenuItem;
+
+import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,5 +33,20 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
     @Override
     public void onViewResultsClick() {
         getView().showError("Not implemented yet !");
+    }
+
+    @Override
+    public NavigationView.OnNavigationItemSelectedListener getNavigationListener() {
+        return new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        getView().showMessage("You're already here !");
+                        return true;
+                }
+                return false;
+            }
+        };
     }
 }

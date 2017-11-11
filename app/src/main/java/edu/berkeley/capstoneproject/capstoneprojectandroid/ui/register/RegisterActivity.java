@@ -9,7 +9,7 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 
 /**
  * Created by Alex on 07/11/2017.
