@@ -2,7 +2,10 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetoot
 
 import android.bluetooth.BluetoothDevice;
 
+import com.polidea.rxandroidble.RxBleDevice;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.IRepository;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Observable;
 
 /**
@@ -11,6 +14,6 @@ import io.reactivex.Observable;
 
 public interface IBluetoothRepository extends IRepository<BluetoothDevice> {
 
-    Observable<BluetoothDevice> getPairedDevices();
-    Observable<BluetoothDevice> getScannedDevices();
+    Observable<Rx2BleDevice> getPairedDevices();
+    Observable<Rx2BleDevice> getScannedDevices();
 }

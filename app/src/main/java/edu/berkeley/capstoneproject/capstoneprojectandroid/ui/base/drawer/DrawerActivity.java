@@ -1,8 +1,11 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +26,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.DeviceInfoF
 import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.ImuFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.LogFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -74,6 +78,5 @@ public class DrawerActivity extends BaseActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
     }
-
 
 }

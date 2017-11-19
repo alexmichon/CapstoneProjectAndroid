@@ -33,10 +33,10 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+        getActivityComponent().inject(this);
         setContentView(R.layout.activity_splash);
-        ButterKnife.bind(this);
+        setUnbinder(ButterKnife.bind(this));
         mPresenter.onAttach(this);
     }
 

@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ListView;
@@ -14,6 +15,7 @@ import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseActivity;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -30,7 +32,6 @@ public class ExerciseTypesActivity extends ToolbarActivity implements ExerciseTy
     private ExerciseTypesAdapter mExercisesAdapter;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercises);
 
@@ -60,13 +61,16 @@ public class ExerciseTypesActivity extends ToolbarActivity implements ExerciseTy
     }
 
     @Override
-    public void showError(String message) {
-        Toast.makeText(ExerciseTypesActivity.this, message, Toast.LENGTH_SHORT).show();
+    public void startExerciseTypeActivity(ExerciseType exerciseType) {
+        Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra(ExerciseActivity.EXTRA_EXERCISE_TYPE, exerciseType);
+        startActivity(intent);
+        finish();
     }
 
     @Override
-    public void startExerciseTypeActivity(ExerciseType exerciseType) {
-        // TODO
+    public void onExerciseTypeSelected(ExerciseType exerciseType) {
+
     }
 
     @Override

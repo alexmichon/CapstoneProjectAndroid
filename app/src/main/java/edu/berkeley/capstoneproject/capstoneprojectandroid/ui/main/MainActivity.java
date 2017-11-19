@@ -2,11 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,24 +12,17 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.BluetoothListActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
-public class MainActivity extends DrawerActivity implements MainContract.View, HasSupportFragmentInjector {
+public class MainActivity extends DrawerActivity implements MainContract.View {
 
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
 
 
     @Inject
@@ -42,17 +31,17 @@ public class MainActivity extends DrawerActivity implements MainContract.View, H
     @BindView(R.id.main_text_hello)
     TextView mHelloView;
 
-    @BindView(R.id.main_button_start_exercise)
-    Button mStartExerciseButton;
+    @BindView(R.id.main_button_start_training)
+    Button mStartTrainingButton;
 
     @BindView(R.id.main_button_view_results)
     Button mViewResultsButton;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+        getActivityComponent().inject(this);
         setContentView(R.layout.activity_main2);
-        ButterKnife.bind(this);
+        setUnbinder(ButterKnife.bind(this));
         mPresenter.onAttach(this);
 
         // TODO
@@ -61,7 +50,7 @@ public class MainActivity extends DrawerActivity implements MainContract.View, H
     }
 
 
-    @OnClick(R.id.main_button_start_exercise)
+    @OnClick(R.id.main_button_start_training)
     void onStartExerciseClick() {
         mPresenter.onStartExerciseClick();
     }
@@ -73,8 +62,8 @@ public class MainActivity extends DrawerActivity implements MainContract.View, H
     }
 
     @Override
-    public void startBluetoothListActivity() {
-        Intent intent = new Intent(MainActivity.this, BluetoothListActivity.class);
+    public void startTrainingActivity() {
+        Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
         startActivity(intent);
     }
 
@@ -82,10 +71,5 @@ public class MainActivity extends DrawerActivity implements MainContract.View, H
     protected void onDestroy() {
         mPresenter.onDetach();
         super.onDestroy();
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return mFragmentDispatchingAndroidInjector;
     }
 }

@@ -3,7 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;

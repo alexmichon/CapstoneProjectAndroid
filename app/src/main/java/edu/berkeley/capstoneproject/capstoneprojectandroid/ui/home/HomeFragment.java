@@ -19,6 +19,8 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
+    private static final String TITLE = "Home";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,8 +29,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     }
 
     @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
+    public String getTitle() {
+        return TITLE;
     }
 }

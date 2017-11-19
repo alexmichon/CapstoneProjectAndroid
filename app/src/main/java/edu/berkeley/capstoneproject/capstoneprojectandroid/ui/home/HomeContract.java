@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
@@ -18,6 +19,7 @@ public interface HomeContract {
 
     }
 
+    @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
 
     }

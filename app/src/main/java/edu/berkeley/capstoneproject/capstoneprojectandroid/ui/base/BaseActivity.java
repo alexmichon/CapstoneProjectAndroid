@@ -1,9 +1,19 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
 import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import butterknife.Unbinder;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerActivityComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -12,6 +22,32 @@ import android.widget.Toast;
 public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ProgressDialog mProgressDialog;
+
+    private ActivityComponent mActivityComponent;
+
+    private Unbinder mUnbinder;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mActivityComponent = DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule(this))
+                .appComponent(((CapstoneProjectAndroidApplication) getApplication()).getAppComponent())
+                .build();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mUnbinder != null) {
+            mUnbinder.unbind();
+        }
+        super.onDestroy();
+    }
+
+    public ActivityComponent getActivityComponent() {
+        return mActivityComponent;
+    }
+
 
     @Override
     public void showMessage(String message) {
@@ -47,5 +83,16 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public void setFragment(@IdRes int containerViewId, BaseFragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(containerViewId, fragment).commit();
+
+        setTitle(fragment.getTitle());
+    }
+
+    public void setUnbinder(Unbinder unBinder) {
+        mUnbinder = unBinder;
     }
 }

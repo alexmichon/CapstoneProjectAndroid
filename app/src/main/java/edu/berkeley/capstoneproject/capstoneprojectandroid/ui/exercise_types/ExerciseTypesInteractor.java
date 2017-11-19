@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
@@ -16,7 +17,8 @@ public class ExerciseTypesInteractor extends BaseInteractor implements ExerciseT
     private final IExerciseTypeRepository mExerciseTypeRepository;
 
     @Inject
-    public ExerciseTypesInteractor(IExerciseTypeRepository exerciseTypeRepository) {
+    public ExerciseTypesInteractor(IDataManager dataManager, IExerciseTypeRepository exerciseTypeRepository) {
+        super(dataManager);
         mExerciseTypeRepository = exerciseTypeRepository;
     }
 

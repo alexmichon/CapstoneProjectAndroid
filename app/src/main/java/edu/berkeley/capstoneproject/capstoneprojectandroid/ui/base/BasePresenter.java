@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Alex on 07/11/2017.
  */
 
-public class BasePresenter<V extends IBaseView, I extends IBaseInteractor> implements IBasePresenter<V, I> {
+public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteractor> implements IBasePresenter<V, I> {
 
     private final ISchedulerProvider mSchedulerProvider;
 
@@ -21,7 +21,6 @@ public class BasePresenter<V extends IBaseView, I extends IBaseInteractor> imple
 
     private CompositeDisposable mCompositeDisposable;
 
-    @Inject
     public BasePresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         mInteractor = interactor;
         mSchedulerProvider = schedulerProvider;

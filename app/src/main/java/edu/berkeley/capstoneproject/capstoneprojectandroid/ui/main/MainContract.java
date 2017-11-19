@@ -2,7 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
 import android.support.design.widget.NavigationView;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scopes.PerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
@@ -15,7 +15,7 @@ public interface MainContract {
 
     interface View extends IBaseView {
         void showError(String message);
-        void startBluetoothListActivity();
+        void startTrainingActivity();
     }
 
     interface Interactor extends IBaseInteractor {

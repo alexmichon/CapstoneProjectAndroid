@@ -49,6 +49,6 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
 
     @Override
     public void onExerciseTypeClick(ExerciseType exerciseType) {
-        getView().startExerciseTypeActivity(exerciseType);
+        getView().onExerciseTypeSelected(exerciseType);
     }
 }

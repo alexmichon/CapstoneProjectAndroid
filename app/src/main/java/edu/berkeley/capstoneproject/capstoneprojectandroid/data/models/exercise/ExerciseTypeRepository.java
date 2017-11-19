@@ -2,6 +2,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise
 
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.ISpecification;
 import io.reactivex.Observable;
 
@@ -15,6 +17,10 @@ public class ExerciseTypeRepository implements IExerciseTypeRepository {
             new ExerciseType("Test Exercise", "This is a test exercise")
     };
 
+    @Inject
+    public ExerciseTypeRepository() {
+
+    }
 
     @Override
     public void create(ExerciseType item) {

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
@@ -18,7 +20,7 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
 
     private static final String TAG = MainPresenter.class.getSimpleName();
 
-
+    @Inject
     public MainPresenter(I interactor,
                          ISchedulerProvider schedulerProvider,
                          CompositeDisposable compositeDisposable) {
@@ -27,7 +29,7 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
 
     @Override
     public void onStartExerciseClick() {
-        getView().startBluetoothListActivity();
+        getView().startTrainingActivity();
     }
 
     @Override

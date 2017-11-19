@@ -15,6 +15,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.Toolb
  * Created by Alex on 07/11/2017.
  */
 
+// TODO
 public class RegisterActivity extends ToolbarActivity implements RegisterContract.View{
 
     @Inject
@@ -23,10 +24,10 @@ public class RegisterActivity extends ToolbarActivity implements RegisterContrac
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+        getActivityComponent().inject(this);
         setContentView(R.layout.activity_register);
-        ButterKnife.bind(this);
+        setUnbinder(ButterKnife.bind(this));
         mPresenter.onAttach(this);
     }
 

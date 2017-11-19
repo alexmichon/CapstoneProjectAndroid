@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
@@ -14,15 +15,14 @@ import io.reactivex.Observable;
 
 public class RegisterInteractor extends BaseInteractor implements RegisterContract.Interactor {
 
-    private final AuthService mAuthService;
-
     @Inject
-    public RegisterInteractor(AuthService authService) {
-        mAuthService = authService;
+    public RegisterInteractor(IDataManager dataManager) {
+        super(dataManager);
     }
 
     @Override
     public Observable<RegisterResponse> doRegisterApiCall(RegisterRequest request) {
-        return mAuthService.doRegisterApiCall(request);
+        return getDataManager().getApiHelper().getAuthService()
+                .doRegisterApiCall(request);
     }
 }

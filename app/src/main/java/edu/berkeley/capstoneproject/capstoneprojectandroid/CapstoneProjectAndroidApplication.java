@@ -1,16 +1,11 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid;
 
-import android.app.Activity;
 import android.app.Application;
 
-import javax.inject.Inject;
-
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.components.DaggerAppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.AppModule;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.modules.NetModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.NetModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
@@ -19,14 +14,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequest
  * Created by Alex on 25/10/2017.
  */
 
-public class CapstoneProjectAndroidApplication extends Application implements HasActivityInjector {
+public class CapstoneProjectAndroidApplication extends Application {
 
     private static final String TAG = CapstoneProjectAndroidApplication.class.getSimpleName();
 
     private static CapstoneProjectAndroidApplication instance;
 
-    @Inject
-    DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
+    private AppComponent mAppComponent;
 
     private final Feather52 mFeather52 = new Feather52();
     private User mCurrentUser;
@@ -37,13 +31,17 @@ public class CapstoneProjectAndroidApplication extends Application implements Ha
         instance = this;
         VolleyRequestQueue.init(getApplicationContext());
 
-        DaggerAppComponent
+        mAppComponent = DaggerAppComponent
                 .builder()
                 .application(this)
                 .appModule(new AppModule(this))
-                .netModule(new NetModule(this))
-                .build()
-                .inject(this);
+                //.netModule(new NetModule(this))
+                .build();
+        mAppComponent.inject(this);
+    }
+
+    public AppComponent getAppComponent() {
+        return mAppComponent;
     }
 
     public static CapstoneProjectAndroidApplication getInstance() {
@@ -60,10 +58,5 @@ public class CapstoneProjectAndroidApplication extends Application implements Ha
 
     public void setCurrentUser(User user) {
         mCurrentUser = user;
-    }
-
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return mDispatchingAndroidInjector;
     }
 }

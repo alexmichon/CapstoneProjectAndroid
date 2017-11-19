@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
+import butterknife.Unbinder;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
+
 /**
  * Created by Alex on 10/11/2017.
  */
@@ -13,6 +16,7 @@ import android.support.v4.app.Fragment;
 public abstract class BaseFragment extends Fragment implements IBaseView {
 
     private BaseActivity mActivity;
+    private Unbinder mUnbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -24,6 +28,13 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
 
     public BaseActivity getBaseActivity() {
         return mActivity;
+    }
+
+    public ActivityComponent getActivityComponent() {
+        if (mActivity != null) {
+            return mActivity.getActivityComponent();
+        }
+        return null;
     }
 
     @Override
@@ -73,4 +84,18 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
         mActivity = null;
         super.onDetach();
     }
+
+    public void setUnbinder(Unbinder unbinder) {
+        mUnbinder = unbinder;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mUnbinder != null) {
+            mUnbinder.unbind();
+        }
+        super.onDestroy();
+    }
+
+    public abstract String getTitle();
 }
