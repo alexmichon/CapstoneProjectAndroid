@@ -1,34 +1,23 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth;
 
 import android.bluetooth.*;
 
-import com.polidea.rxandroidble.RxBleClient;
-import com.polidea.rxandroidble.RxBleDevice;
-import com.polidea.rxandroidble.internal.operations.ScanOperation;
 import com.polidea.rxandroidble.scan.ScanFilter;
 import com.polidea.rxandroidble.scan.ScanResult;
 import com.polidea.rxandroidble.scan.ScanSettings;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.ISpecification;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.ISpecification;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleClient;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Cancellable;
 import io.reactivex.functions.Function;
-import rx.Subscription;
-import rx.functions.Action1;
 
 /**
  * Created by Alex on 08/11/2017.

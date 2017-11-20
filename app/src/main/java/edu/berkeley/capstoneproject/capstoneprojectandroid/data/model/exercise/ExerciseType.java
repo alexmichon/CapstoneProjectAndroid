@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
 import android.os.Parcel;
 import android.os.Parcelable;

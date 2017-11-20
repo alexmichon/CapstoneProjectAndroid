@@ -1,10 +1,13 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service;
 
+import java.util.List;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.EncoderMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.ImuMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
@@ -27,10 +30,15 @@ public class SensorService implements ISensorService {
 
     @Override
     public Observable<Measurement> getEncoderObservable() {
-        return mEncoderObservable.map(new Function<byte[], Measurement>() {
+        return mEncoderObservable.map(new Function<byte[], List<Measurement>>() {
             @Override
-            public Measurement apply(@NonNull byte[] bytes) throws Exception {
+            public List<Measurement> apply(@NonNull byte[] bytes) throws Exception {
                 return Measurement.decodeEncoder(bytes);
+            }
+        }).flatMap(new Function<List<Measurement>, ObservableSource<Measurement>>() {
+            @Override
+            public ObservableSource<Measurement> apply(@NonNull List<Measurement> measurements) throws Exception {
+                return Observable.fromIterable(measurements);
             }
         });
     }
@@ -42,10 +50,15 @@ public class SensorService implements ISensorService {
 
     @Override
     public Observable<Measurement> getImuObservable() {
-        return mImuObservable.map(new Function<byte[], Measurement>() {
+        return mImuObservable.map(new Function<byte[], List<Measurement>>() {
             @Override
-            public Measurement apply(@NonNull byte[] bytes) throws Exception {
+            public List<Measurement> apply(@NonNull byte[] bytes) throws Exception {
                 return Measurement.decodeImu(bytes);
+            }
+        }).flatMap(new Function<List<Measurement>, ObservableSource<Measurement>>() {
+            @Override
+            public ObservableSource<Measurement> apply(@NonNull List<Measurement> measurements) throws Exception {
+                return Observable.fromIterable(measurements);
             }
         });
     }

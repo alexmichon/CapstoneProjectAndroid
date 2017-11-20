@@ -25,17 +25,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.AccMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.EncoderMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.ImuMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Value;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Encoder;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.IMU;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
 /**
@@ -159,21 +154,22 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     }
 
     @Override
-    public void addEncoderValue(Measurement measurement) {
-        Log.d(TAG, "Adding new encoder measurement");
-        addMeasurement(mEncoderView, measurement);
-    }
+    public void addMeasurement(Measurement measurement) {
+        LineChart chart = null;
 
-    @Override
-    public void addAccMeasurement(Measurement measurement) {
-        Log.d(TAG, "Adding new acc measurement");
-        addMeasurement(mAccView, measurement);
-    }
+        switch (measurement.getMetric().getSensor().getId()) {
+            case SensorManager.ID_ACCELEROMETER:
+                chart = mAccView;
+                break;
+            case SensorManager.ID_GYROSCOPE:
+                chart = mGyrView;
+                break;
+            case SensorManager.ID_ENCODER:
+                chart = mEncoderView;
+                break;
+        }
 
-    @Override
-    public void addGyrMeasurement(Measurement measurement) {
-        Log.d(TAG, "Adding new gyr measurement");
-        addMeasurement(mGyrView, measurement);
+        addMeasurement(chart, measurement);
     }
 
     private void addMeasurement(LineChart chart, Measurement measurement) {
@@ -182,21 +178,19 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
             return;
         }
 
-        for (Value v: measurement.getValues()) {
-            ILineDataSet set = data.getDataSetByLabel(v.getLabel(), true);
+        Metric metric = measurement.getMetric();
+        ILineDataSet set = data.getDataSetByLabel(metric.getName(), true);
 
-            if(set == null) {
-                set = createSet(v.getLabel(), data.getDataSetCount());
-                data.addDataSet(set);
-            }
-            Entry e = new Entry(measurement.getTimestamp(), v.getValue());
-            set.addEntry(e);
-            //data.addEntry(e, 0);
-            data.notifyDataChanged();
-            chart.notifyDataSetChanged();
-            chart.setVisibleXRangeMaximum(10000);
-            chart.moveViewTo(e.getX(), e.getY(), YAxis.AxisDependency.LEFT);
+        if(set == null) {
+            set = createSet(metric.getName(), data.getDataSetCount());
+            data.addDataSet(set);
         }
+        Entry e = new Entry(measurement.getTimestamp(), measurement.getValue());
+        set.addEntry(e);
+        data.notifyDataChanged();
+        chart.notifyDataSetChanged();
+        chart.setVisibleXRangeMaximum(10000);
+        chart.moveViewTo(e.getX(), e.getY(), YAxis.AxisDependency.LEFT);
     }
 
 

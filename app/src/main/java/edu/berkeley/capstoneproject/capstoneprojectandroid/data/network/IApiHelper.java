@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.ExerciseService;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -18,4 +19,5 @@ public interface IApiHelper {
     OkHttpClient getOkHttpClient();
 
     AuthService getAuthService();
+    ExerciseService getExerciseService();
 }

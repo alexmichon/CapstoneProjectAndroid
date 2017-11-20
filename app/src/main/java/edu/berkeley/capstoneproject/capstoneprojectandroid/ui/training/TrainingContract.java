@@ -2,7 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training;
 
 import android.support.design.widget.NavigationView;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;

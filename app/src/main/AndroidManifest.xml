@@ -40,6 +40,7 @@
         <activity android:name=".ui.bluetooth.list.BluetoothListActivity"/>
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.training.TrainingActivity"/>
+        <activity android:name=".ui.exercise.ExerciseActivity"/>
 
         <service android:name=".services.BluetoothLeService" />
         <service android:name=".services.Feather52Service" />

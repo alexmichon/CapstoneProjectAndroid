@@ -1,10 +1,10 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
 import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.ISpecification;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.ISpecification;
 import io.reactivex.Observable;
 
 /**

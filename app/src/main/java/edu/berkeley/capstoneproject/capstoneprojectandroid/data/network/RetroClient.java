@@ -11,8 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetroClient {
 
-    private static final String URL = "http://192.168.1.2:3000/";
+    private static final String URL = "http://192.168.1.3:3000/";
 
+    // TODO Use dependency injection
     private Retrofit getRetrofitInstance() {
         return new Retrofit.Builder()
                 .baseUrl(URL)

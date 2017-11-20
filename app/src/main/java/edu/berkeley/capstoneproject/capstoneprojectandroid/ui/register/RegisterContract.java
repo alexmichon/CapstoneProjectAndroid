@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;

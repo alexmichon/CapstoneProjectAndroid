@@ -1,15 +1,14 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.AccMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.EncoderMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.ImuMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ISensorService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -23,22 +22,22 @@ public interface ExerciseContract {
         void onExerciseStart();
         void onExerciseStop();
 
-        void addEncoderValue(Measurement measurement);
-
-        void addAccMeasurement(Measurement measurement);
-
-        void addGyrMeasurement(Measurement measurement);
+        void addMeasurement(Measurement measurement);
     }
 
     interface Interactor extends IBaseInteractor {
 
-        Single doStartExercise();
+        Completable doStartExercise(Exercise exercise);
 
         Observable<Measurement> doListenEncoder();
 
         Observable<Measurement> doListenImu();
 
         void doStopExercise();
+
+        Observable<Measurement> doListenMeasurements();
+
+        Completable doSaveMeasurement(Exercise exercise, Measurement measurement);
     }
 
     @PerActivity

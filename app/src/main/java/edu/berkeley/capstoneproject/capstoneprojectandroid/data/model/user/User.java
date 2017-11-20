@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.user;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 
 /**
  * Created by Alex on 07/11/2017.

@@ -4,22 +4,18 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.EncoderMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.ImuMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
-import io.reactivex.Observer;
+import io.reactivex.CompletableObserver;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
-
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement.LABEL_ACC;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement.LABEL_GYR;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -48,12 +44,12 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     @Override
     public void onStartClick() {
         mExercise.start();
-        getCompositeDisposable().add(getInteractor().doStartExercise()
+        getCompositeDisposable().add(getInteractor().doStartExercise(mExercise)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer() {
+                .subscribe(new Action() {
                     @Override
-                    public void accept(Object o) throws Exception {
+                    public void run() throws Exception {
                         getView().showMessage("Let's go !");
                         getView().onExerciseStart();
                         mStarted = true;
@@ -71,38 +67,13 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     }
 
     private void startListening() {
-        getCompositeDisposable().add(getInteractor().doListenEncoder()
+        getCompositeDisposable().add(getInteractor().doListenMeasurements()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribeWith(new DisposableObserver<Measurement>() {
                     @Override
                     public void onNext(@NonNull Measurement measurement) {
-                        getView().addEncoderValue(measurement);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                })
-        );
-
-        getCompositeDisposable().add(getInteractor().doListenImu()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribeWith(new DisposableObserver<Measurement>() {
-                    @Override
-                    public void onNext(@NonNull Measurement measurement) {
-                        if (measurement.getLabel().equals(LABEL_ACC)) {
-                            getView().addAccMeasurement(measurement);
-                        }
-                        else if (measurement.getLabel().equals(LABEL_GYR)) {
-                            getView().addGyrMeasurement(measurement);
-                        }
+                        onReceiveMeasurement(measurement);
                     }
 
                     @Override
@@ -135,5 +106,15 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         mStarted = false;
         mExercise.stop();
         getInteractor().doStopExercise();
+    }
+
+    private void onReceiveMeasurement(Measurement measurement) {
+        mExercise.addMeasurement(measurement);
+        getView().addMeasurement(measurement);
+        getCompositeDisposable().add(getInteractor().doSaveMeasurement(mExercise, measurement)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe()
+        );
     }
 }

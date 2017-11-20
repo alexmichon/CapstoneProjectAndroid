@@ -1,10 +1,8 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.bluetooth;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 
-import com.polidea.rxandroidble.RxBleDevice;
-
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.IRepository;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.IRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Observable;
 

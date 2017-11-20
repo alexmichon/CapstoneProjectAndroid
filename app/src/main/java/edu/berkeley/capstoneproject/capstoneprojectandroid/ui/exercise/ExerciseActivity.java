@@ -4,21 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.FrameLayout;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.EncoderMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.ImuMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.models.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.imu.ImuFragment;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -78,17 +73,7 @@ public class ExerciseActivity extends ToolbarActivity implements ExerciseContrac
     }
 
     @Override
-    public void addEncoderValue(Measurement measurement) {
-
-    }
-
-    @Override
-    public void addAccMeasurement(Measurement measurement) {
-
-    }
-
-    @Override
-    public void addGyrMeasurement(Measurement measurement) {
+    public void addMeasurement(Measurement measurement) {
 
     }
 }

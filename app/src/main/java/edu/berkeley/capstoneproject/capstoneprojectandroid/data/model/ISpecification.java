@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.models;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model;
 
 /**
  * Created by Alex on 08/11/2017.
