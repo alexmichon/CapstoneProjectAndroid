@@ -2,6 +2,9 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid;
 
 import android.app.Application;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
@@ -30,6 +33,11 @@ public class CapstoneProjectAndroidApplication extends Application {
         super.onCreate();
         instance = this;
         VolleyRequestQueue.init(getApplicationContext());
+
+        AndroidNetworking.initialize(getApplicationContext());
+        if (BuildConfig.DEBUG) {
+            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
+        }
 
         mAppComponent = DaggerAppComponent
                 .builder()

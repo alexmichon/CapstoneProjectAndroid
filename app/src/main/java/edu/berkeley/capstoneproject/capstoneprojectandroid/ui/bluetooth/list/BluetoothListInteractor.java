@@ -6,6 +6,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.IBluetoothRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -43,7 +44,7 @@ public class BluetoothListInteractor extends BaseInteractor implements Bluetooth
     }
 
     @Override
-    public Observable<Boolean> doValidateDevice() {
+    public Completable doValidateDevice() {
         return getDataManager().getBluetoothHelper().validateDevice();
     }
 }

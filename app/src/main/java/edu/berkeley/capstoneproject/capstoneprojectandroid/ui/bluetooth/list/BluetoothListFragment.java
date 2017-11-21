@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,18 +36,17 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
 
     private static final String TITLE = "Bluetooth Devices";
 
+    private static final int REQUEST_ENABLE_BT = 0;
+
     @Inject
     BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor> mPresenter;
 
-//    @BindView(R.id.bluetooth_list_paired)
-//    ListView mPairedList;
     @BindView(R.id.bluetooth_list_scanned)
     ListView mScannedList;
 
 
-    ProgressBar mScannedProgressBar;
+    private ProgressBar mScannedProgressBar;
 
-//    private BluetoothListAdapter mPairedAdapter;
     private BluetoothListAdapter mScannedAdapter;
 
     private BluetoothListFragmentListener mListener;
@@ -85,7 +85,6 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.onLoadPairedDevices();
         mPresenter.onStartScanning();
     }
 
@@ -98,6 +97,12 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     }
 
     @Override
+    public void promptBluetooth() {
+        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+    }
+
+    @Override
     public void addScannedDevice(Rx2BleDevice device) {
         mScannedAdapter.add(device);
         mScannedAdapter.notifyDataSetChanged();
@@ -105,8 +110,7 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
 
     @Override
     public void addPairedDevice(Rx2BleDevice device) {
-//        mPairedAdapter.add(device);
-//        mPairedAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -117,8 +121,7 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
 
     @Override
     public void cleanPairedDevices() {
-//        mPairedAdapter.clear();
-//        mPairedAdapter.notifyDataSetChanged();
+
     }
 
     @Override

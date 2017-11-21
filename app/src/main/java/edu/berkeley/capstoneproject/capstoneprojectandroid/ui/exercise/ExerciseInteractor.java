@@ -12,9 +12,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.MeasurementResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
@@ -45,7 +47,7 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
-                getDataManager().getApiHelper().getExerciseService().createExercise(new ExerciseRequest(exercise)).subscribe(new Consumer<ExerciseResponse>() {
+                getDataManager().getApiHelper().getExerciseService().doCreateExercise(new ExerciseRequest(exercise)).subscribe(new Consumer<ExerciseResponse>() {
                     @Override
                     public void accept(ExerciseResponse exerciseResponse) throws Exception {
                         exercise.setId(exerciseResponse.getId());
@@ -74,24 +76,24 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
-    public Observable<Measurement> doListenEncoder() {
-        return mSensorService.getEncoderObservable();
+    public Flowable<Measurement> doListenEncoder() {
+        return mSensorService.getEncoderObservable().toFlowable(BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public Observable<Measurement> doListenImu() {
-        return mSensorService.getImuObservable();
+    public Flowable<Measurement> doListenImu() {
+        return mSensorService.getImuObservable().toFlowable(BackpressureStrategy.BUFFER);
     }
 
 
     @Override
-    public Observable<Measurement> doListenMeasurements() {
-        return Observable.merge(doListenEncoder(), doListenImu());
+    public Flowable<Measurement> doListenMeasurements() {
+        return Flowable.merge(doListenEncoder(), doListenImu());
     }
 
     @Override
     public Completable doSaveMeasurement(final Exercise exercise, final Measurement measurement) {
-        return Completable.fromObservable(getDataManager().getApiHelper().getExerciseService()
-                .createMeasurement(exercise.getId(), new MeasurementRequest(measurement)));
+        return Completable.fromSingle(getDataManager().getApiHelper().getExerciseService()
+                .doCreateMeasurement(exercise.getId(), new MeasurementRequest(measurement)));
     }
 }

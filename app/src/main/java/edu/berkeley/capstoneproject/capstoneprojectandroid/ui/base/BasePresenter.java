@@ -1,7 +1,19 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
-import javax.inject.Inject;
+import android.util.Log;
 
+import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.error.ANError;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
+import javax.inject.Inject;
+import javax.net.ssl.HttpsURLConnection;
+
+import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.ApiConstants;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.ApiError;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -13,6 +25,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteractor> implements IBasePresenter<V, I> {
+
+    private static final String TAG = BasePresenter.class.getSimpleName();
 
     private final ISchedulerProvider mSchedulerProvider;
 
@@ -60,5 +74,58 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
 
     public CompositeDisposable getCompositeDisposable() {
         return mCompositeDisposable;
+    }
+
+    @Override
+    public void handleApiError(Throwable throwable) {
+
+        ANError error = null;
+        if (throwable instanceof ANError) {
+            error = (ANError) throwable;
+        }
+        else {
+            Log.e(TAG, "Unknown error", throwable);
+        }
+
+        if (error == null || error.getErrorBody() == null) {
+            getView().onError("An error occurred");
+            return;
+        }
+
+        if (error.getErrorCode() == ApiConstants.API_STATUS_CODE_LOCAL_ERROR
+                && error.getErrorDetail().equals(ANConstants.CONNECTION_ERROR)) {
+            getView().onError("Connection error");
+            return;
+        }
+
+        if (error.getErrorCode() == ApiConstants.API_STATUS_CODE_LOCAL_ERROR
+                && error.getErrorDetail().equals(ANConstants.REQUEST_CANCELLED_ERROR)) {
+            getView().onError("Retry error");
+            return;
+        }
+
+        final GsonBuilder builder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+
+        try {
+            ApiError apiError = gson.fromJson(error.getErrorBody(), ApiError.class);
+
+            if (apiError == null || apiError.getMessage() == null) {
+                getView().onError("An error occurred");
+                return;
+            }
+
+            switch (error.getErrorCode()) {
+                case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                case HttpsURLConnection.HTTP_FORBIDDEN:
+                case HttpsURLConnection.HTTP_INTERNAL_ERROR:
+                case HttpsURLConnection.HTTP_NOT_FOUND:
+                default:
+                    getView().onError(apiError.getMessage());
+            }
+        } catch (JsonSyntaxException | NullPointerException e) {
+            Log.e(TAG, "handleApiError", e);
+            getView().onError("An error occurred");
+        }
     }
 }

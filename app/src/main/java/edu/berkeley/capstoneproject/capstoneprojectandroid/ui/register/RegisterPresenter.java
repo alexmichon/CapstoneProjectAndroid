@@ -32,11 +32,9 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
                 .doRegisterApiCall(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<RegisterResponse>() {
+                .subscribe(new Consumer<User>() {
                     @Override
-                    public void accept(RegisterResponse registerResponse) throws Exception {
-                        // TODO Convert RegisterResponse to User
-                        User user = new User(email, password, firstName, lastName);
+                    public void accept(User user) throws Exception {
                         getView().hideLoading();
                         getView().onRegisterSuccess(user);
                     }

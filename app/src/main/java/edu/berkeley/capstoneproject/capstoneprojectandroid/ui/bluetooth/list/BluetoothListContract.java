@@ -4,6 +4,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteract
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -13,6 +14,8 @@ import io.reactivex.Observable;
 public interface BluetoothListContract {
 
     interface View extends IBaseView {
+        void promptBluetooth();
+
         void addScannedDevice(Rx2BleDevice device);
         void addPairedDevice(Rx2BleDevice device);
         void cleanScannedDevices();
@@ -31,7 +34,7 @@ public interface BluetoothListContract {
         void doSelectDevice(Rx2BleDevice device);
         Observable<Rx2BleDevice.ConnectionState> doConnectDevice();
 
-        Observable<Boolean> doValidateDevice();
+        Completable doValidateDevice();
     }
 
     //@PerActivity

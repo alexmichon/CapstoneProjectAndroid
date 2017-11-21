@@ -19,6 +19,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.servic
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDeviceServices;
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -147,38 +150,26 @@ public class BluetoothHelper implements IBluetoothHelper {
 
 
     @Override
-    public Observable<Boolean> validateDevice() {
+    public Completable validateDevice() {
         final Observable<Rx2BleDeviceServices> observable = mConnection.discoverServices();
 
-        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+        return Completable.create(new CompletableOnSubscribe() {
             @Override
-            public void subscribe(@NonNull final ObservableEmitter<Boolean> e) throws Exception {
-                observable.subscribeWith(new DisposableObserver<Rx2BleDeviceServices>() {
+            public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
+                observable.subscribe(new Consumer<Rx2BleDeviceServices>() {
                     @Override
-                    public void onNext(@NonNull final Rx2BleDeviceServices rxBleDeviceServices) {
-                        rxBleDeviceServices.getService(BluetoothConstants.UUID_SERVICE).subscribe(new Consumer<BluetoothGattService>() {
+                    public void accept(Rx2BleDeviceServices rx2BleDeviceServices) throws Exception {
+                        rx2BleDeviceServices.getService(BluetoothConstants.UUID_SERVICE).subscribe(new Consumer<BluetoothGattService>() {
                             @Override
                             public void accept(BluetoothGattService gattService) throws Exception {
-                                e.onNext(true);
                                 e.onComplete();
-                                dispose();
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                e.onNext(false);
+                                e.onError(throwable);
                             }
                         });
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable throwable) {
-                        e.onError(throwable);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        e.onComplete();
                     }
                 });
             }

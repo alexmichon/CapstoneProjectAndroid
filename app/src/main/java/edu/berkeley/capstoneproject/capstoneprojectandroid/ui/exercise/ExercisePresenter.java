@@ -70,21 +70,18 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         getCompositeDisposable().add(getInteractor().doListenMeasurements()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribeWith(new DisposableObserver<Measurement>() {
-                    @Override
-                    public void onNext(@NonNull Measurement measurement) {
-                        onReceiveMeasurement(measurement);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                })
+                .subscribe(new Consumer<Measurement>() {
+                               @Override
+                               public void accept(Measurement measurement) throws Exception {
+                                   onReceiveMeasurement(measurement);
+                               }
+                           },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Log.e(TAG, "Listening error", throwable);
+                            }
+                        })
         );
     }
 
@@ -114,7 +111,17 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         getCompositeDisposable().add(getInteractor().doSaveMeasurement(mExercise, measurement)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe()
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        handleApiError(throwable);
+                    }
+                })
         );
     }
 }

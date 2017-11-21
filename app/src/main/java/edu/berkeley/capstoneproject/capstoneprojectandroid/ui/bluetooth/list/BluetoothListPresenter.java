@@ -13,6 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerPr
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
@@ -165,28 +166,18 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                 .doValidateDevice()
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
-                    .subscribeWith(new DisposableObserver<Boolean>() {
+                    .subscribe(new Action() {
                         @Override
-                        public void onNext(@NonNull Boolean b) {
-                            if (b) {
-                                Log.d(TAG, "Device validated");
-                                getView().showMessage("Device validated");
-                                getView().onDeviceConnected();
-                            }
-                            else {
-                                Log.e(TAG, "Device not validated");
-                                getView().showError("Unknown device");
-                            }
+                        public void run() throws Exception {
+                            Log.d(TAG, "Device validated");
+                            getView().showMessage("Device validated");
+                            getView().onDeviceConnected();
                         }
-
+                    }, new Consumer<Throwable>() {
                         @Override
-                        public void onError(@NonNull Throwable e) {
-                            Log.e(TAG, "Device validation failed", e);
-                        }
-
-                        @Override
-                        public void onComplete() {
-
+                        public void accept(Throwable throwable) throws Exception {
+                            Log.e(TAG, "Device not validated");
+                            getView().showError("Unknown device");
                         }
                     })
         );

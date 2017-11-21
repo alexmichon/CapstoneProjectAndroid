@@ -35,7 +35,7 @@ public class LoginPresenterSuite {
     String mInvalidEmail = "email@email.com";
     String mInvalidPassword = "password";
 
-    User mUser = new User(mValidEmail, mValidPassword, "", "");
+    User mUser = new User(mValidEmail, "", "");
 
     @Before
     public void before() {

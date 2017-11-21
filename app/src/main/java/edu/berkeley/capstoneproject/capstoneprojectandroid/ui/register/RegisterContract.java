@@ -8,6 +8,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteract
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -22,7 +23,7 @@ public interface RegisterContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Observable<RegisterResponse> doRegisterApiCall(RegisterRequest request);
+        Single<User> doRegisterApiCall(RegisterRequest request);
     }
 
     @PerActivity

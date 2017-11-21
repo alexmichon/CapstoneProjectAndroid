@@ -4,20 +4,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.L
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
 /**
- * Created by Alex on 07/11/2017.
+ * Created by Alex on 20/11/2017.
  */
 
-public interface AuthService {
+public interface IAuthService {
 
-    @POST("/api/v1/auth/sign_in")
-    Single<LoginResponse> doLoginApiCall(@Body LoginRequest request);
-
-    @POST("/api/v1/auth")
-    Single<RegisterResponse> doRegisterApiCall(@Body RegisterRequest request);
+    Single<LoginResponse> doLogin(LoginRequest request);
+    Single<RegisterResponse> doRegister(RegisterRequest request);
 }

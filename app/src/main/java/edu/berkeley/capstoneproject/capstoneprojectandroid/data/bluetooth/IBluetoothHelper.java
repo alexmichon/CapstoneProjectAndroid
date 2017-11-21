@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ISensorService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -29,7 +30,7 @@ public interface IBluetoothHelper {
     Observable<Rx2BleDevice.ConnectionState> observeConnectionStateChange();
 
 
-    Observable<Boolean> validateDevice();
+    Completable validateDevice();
 
     Observable<byte[]> readCharacteristic(UUID uuid);
 

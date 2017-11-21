@@ -83,6 +83,11 @@ public class BluetoothListActivity extends ToolbarActivity implements BluetoothL
     }
 
     @Override
+    public void promptBluetooth() {
+
+    }
+
+    @Override
     public void addScannedDevice(Rx2BleDevice device) {
         mScannedAdapter.add(device);
         mScannedAdapter.notifyDataSetChanged();

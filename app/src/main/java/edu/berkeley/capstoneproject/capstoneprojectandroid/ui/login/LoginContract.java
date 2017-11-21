@@ -7,7 +7,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by Alex on 06/11/2017.
@@ -23,7 +25,7 @@ public interface LoginContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Observable<LoginResponse> doLoginCall(LoginRequest loginRequest);
+        Single<User> doLoginCall(LoginRequest loginRequest);
     }
 
     @PerActivity

@@ -7,13 +7,11 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 public class User {
 
     private String mEmail;
-    private String mPassword;
     private String mFirstName;
     private String mLastName;
 
-    public User(String email, String password, String firstName, String lastName) {
+    public User(String email, String firstName, String lastName) {
         mEmail = email;
-        mPassword = password;
         mFirstName = firstName;
         mLastName = lastName;
     }
@@ -24,14 +22,6 @@ public class User {
 
     public void setEmail(String email) {
         mEmail = email;
-    }
-
-    public String getPassword() {
-        return mPassword;
-    }
-
-    public void setPassword(String password) {
-        mPassword = password;
     }
 
     public String getFirstName() {

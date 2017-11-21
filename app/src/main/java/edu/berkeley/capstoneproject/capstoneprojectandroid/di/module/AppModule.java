@@ -7,25 +7,16 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.ApiConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.services.feather52.Feather52Service2;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.services.feather52.IFeather52Service;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.AppSchedulerProvider;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
-import io.reactivex.disposables.CompositeDisposable;
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService2;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.ExerciseService2;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IExerciseService;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -56,6 +47,18 @@ public class AppModule {
         return new Feather52Service2();
     }
     */
+
+    @Provides
+    @Singleton
+    IAuthService provideAuthService(AuthService2 service) {
+        return service;
+    }
+
+    @Provides
+    @Singleton
+    IExerciseService provideExerciseService(ExerciseService2 service) {
+        return service;
+    }
 
     @Provides
     @Singleton

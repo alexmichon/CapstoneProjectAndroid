@@ -9,6 +9,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteract
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -29,13 +30,13 @@ public interface ExerciseContract {
 
         Completable doStartExercise(Exercise exercise);
 
-        Observable<Measurement> doListenEncoder();
+        Flowable<Measurement> doListenEncoder();
 
-        Observable<Measurement> doListenImu();
+        Flowable<Measurement> doListenImu();
 
         void doStopExercise();
 
-        Observable<Measurement> doListenMeasurements();
+        Flowable<Measurement> doListenMeasurements();
 
         Completable doSaveMeasurement(Exercise exercise, Measurement measurement);
     }

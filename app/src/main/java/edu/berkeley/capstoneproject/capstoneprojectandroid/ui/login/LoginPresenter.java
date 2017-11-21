@@ -30,7 +30,7 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
 
         if (email.equals("admin") && password.equals("admin")) {
             getView().hideLoading();
-            getView().onLoginSuccess(new User(email, password, "admin", ""));
+            getView().onLoginSuccess(new User(email, "admin", ""));
             getView().startMainActivity();
             return;
         }
@@ -39,14 +39,18 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
                 getInteractor().doLoginCall(new LoginRequest(email, password))
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
-                        .subscribe(new Consumer<LoginResponse>() {
+                        .subscribe(new Consumer<User>() {
                             @Override
-                            public void accept(LoginResponse loginResponse) throws Exception {
-                                // TODO Convert LoginResponse to User
-                                User user = new User(email, password, "", "");
+                            public void accept(User user) throws Exception {
                                 getView().hideLoading();
                                 getView().onLoginSuccess(user);
                                 getView().startMainActivity();
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                getView().hideLoading();
+                                handleApiError(throwable);
                             }
                         })
         );

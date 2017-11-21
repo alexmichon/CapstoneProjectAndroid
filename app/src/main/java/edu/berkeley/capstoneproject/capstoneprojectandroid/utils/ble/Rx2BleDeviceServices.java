@@ -7,9 +7,11 @@ import com.polidea.rxandroidble.RxBleDeviceServices;
 import java.util.UUID;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.convert.RxObservableConverter;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 
 /**
@@ -24,9 +26,9 @@ public class Rx2BleDeviceServices {
         mDeviceServices = services;
     }
 
-    public Observable<BluetoothGattService> getService(UUID uuid) {
+    public Single<BluetoothGattService> getService(UUID uuid) {
         final rx.Observable<BluetoothGattService> observable = mDeviceServices.getService(uuid);
-        return RxObservableConverter.convert(observable);
+        return RxObservableConverter.convert(observable).singleOrError();
     }
 
 }

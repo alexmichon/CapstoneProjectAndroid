@@ -4,6 +4,8 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.ExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IExerciseService;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -18,6 +20,8 @@ public interface IApiHelper {
     Retrofit getRetrofit();
     OkHttpClient getOkHttpClient();
 
-    AuthService getAuthService();
-    ExerciseService getExerciseService();
+    IAuthService getAuthService();
+    IExerciseService getExerciseService();
+
+    ApiHeader getApiHeader();
 }
