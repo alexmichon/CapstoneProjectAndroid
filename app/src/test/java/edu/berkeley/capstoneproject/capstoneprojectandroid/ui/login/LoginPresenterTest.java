@@ -53,7 +53,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void loginShouldCallApi() {
+    public void loginShouldCallInteractor() {
         String email = "email@email.com";
         String password = "password";
 

@@ -51,12 +51,10 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
 
     private void updateApiHeader(LoginResponse response) {
         Timber.d("Updating api header");
-        getDataManager().getApiHelper().getApiHeader().rebuild()
-                .accessToken(response.getAccessToken())
-                .client(response.getClient())
-                .expiry(response.getExpiry())
-                .tokenType(response.getTokenType())
-                .uid(response.getUid())
-                .build();
+        getDataManager().getApiHelper().getApiHeader().setAccessToken(response.getAccessToken());
+        getDataManager().getApiHelper().getApiHeader().setClient(response.getClient());
+        getDataManager().getApiHelper().getApiHeader().setExpiry(response.getExpiry());
+        getDataManager().getApiHelper().getApiHeader().setTokenType(response.getTokenType());
+        getDataManager().getApiHelper().getApiHeader().setUid(response.getUid());
     }
 }
