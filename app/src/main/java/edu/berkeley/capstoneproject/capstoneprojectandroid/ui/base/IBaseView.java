@@ -14,6 +14,6 @@ public interface IBaseView {
     void showMessage(String message);
     void showMessage(@StringRes int stringRes);
 
-    void onError(String message);
-    void onError(@StringRes int stringRes);
+    void showError(String message);
+    void showError(@StringRes int stringRes);
 }

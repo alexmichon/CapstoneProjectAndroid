@@ -51,7 +51,7 @@ public class MainActivity extends DrawerActivity implements MainContract.View {
 
     @OnClick(R.id.main_button_start_training)
     void onStartExerciseClick() {
-        mPresenter.onStartExerciseClick();
+        mPresenter.onStartTrainingClick();
     }
 
 

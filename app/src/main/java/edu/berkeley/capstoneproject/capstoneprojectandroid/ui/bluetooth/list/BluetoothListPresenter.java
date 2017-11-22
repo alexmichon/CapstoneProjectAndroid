@@ -169,6 +169,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                         @Override
                         public void run() throws Exception {
                             Timber.d("Device validated");
+                            getView().hideLoading();
                             getView().showMessage("Device validated");
                             getView().onDeviceConnected();
                         }
@@ -176,6 +177,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                         @Override
                         public void accept(Throwable throwable) throws Exception {
                             Timber.e("Device not validated");
+                            getView().hideLoading();
                             getView().showError("Unknown device");
                         }
                     })

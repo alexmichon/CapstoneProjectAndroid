@@ -81,7 +81,7 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
 
     @Override
     public void onLoginFailure() {
-        onError("An error occurred !");
+        showError("An error occurred !");
     }
 
     @Override

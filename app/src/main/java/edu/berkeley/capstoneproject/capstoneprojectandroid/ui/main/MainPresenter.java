@@ -28,7 +28,7 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
     }
 
     @Override
-    public void onStartExerciseClick() {
+    public void onStartTrainingClick() {
         getView().startTrainingActivity();
     }
 

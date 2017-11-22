@@ -1,8 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
@@ -52,16 +50,16 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     }
 
     @Override
-    public void onError(String message) {
+    public void showError(String message) {
         if (mActivity != null) {
-            mActivity.onError(message);
+            mActivity.showError(message);
         }
     }
 
     @Override
-    public void onError(@StringRes int stringRes) {
+    public void showError(@StringRes int stringRes) {
         if (mActivity != null) {
-            mActivity.onError(stringRes);
+            mActivity.showError(stringRes);
         }
     }
 

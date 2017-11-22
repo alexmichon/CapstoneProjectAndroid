@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -41,7 +40,7 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        getView().onError("Couldn't doRegisterApiCall");
+                        getView().showError("Couldn't doRegisterApiCall");
                     }
                 })
         );

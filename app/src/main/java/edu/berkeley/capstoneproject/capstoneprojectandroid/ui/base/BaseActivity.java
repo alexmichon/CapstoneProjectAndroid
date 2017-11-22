@@ -60,12 +60,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     }
 
     @Override
-    public void onError(String message) {
+    public void showError(String message) {
         showMessage(message);
     }
 
     @Override
-    public void onError(@StringRes int stringRes) {
+    public void showError(@StringRes int stringRes) {
         showMessage(stringRes);
     }
 

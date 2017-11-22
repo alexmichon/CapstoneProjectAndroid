@@ -11,7 +11,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
@@ -121,7 +120,7 @@ public class LoginPresenterTest {
         mTestScheduler.triggerActions();
 
         verify(mView).hideLoading();
-        verify(mView).onError(anyString());
+        verify(mView).showError(anyString());
     }
 
     @Test
@@ -140,7 +139,7 @@ public class LoginPresenterTest {
         mTestScheduler.triggerActions();
 
         verify(mView).hideLoading();
-        verify(mView).onError(anyString());
+        verify(mView).showError(anyString());
     }
 
     @After

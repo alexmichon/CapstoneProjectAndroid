@@ -24,7 +24,7 @@ public interface MainContract {
 
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void onStartExerciseClick();
+        void onStartTrainingClick();
         void onViewResultsClick();
         NavigationView.OnNavigationItemSelectedListener getNavigationListener();
     }

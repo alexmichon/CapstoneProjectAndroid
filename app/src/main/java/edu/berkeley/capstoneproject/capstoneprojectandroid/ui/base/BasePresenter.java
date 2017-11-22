@@ -82,19 +82,19 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
         }
 
         if (error == null || error.getErrorBody() == null) {
-            getView().onError("An error occurred");
+            getView().showError("An error occurred");
             return;
         }
 
         if (error.getErrorCode() == ApiConstants.API_STATUS_CODE_LOCAL_ERROR
                 && error.getErrorDetail().equals(ANConstants.CONNECTION_ERROR)) {
-            getView().onError("Connection error");
+            getView().showError("Connection error");
             return;
         }
 
         if (error.getErrorCode() == ApiConstants.API_STATUS_CODE_LOCAL_ERROR
                 && error.getErrorDetail().equals(ANConstants.REQUEST_CANCELLED_ERROR)) {
-            getView().onError("Retry error");
+            getView().showError("Retry error");
             return;
         }
 
@@ -105,7 +105,7 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
             ApiError apiError = gson.fromJson(error.getErrorBody(), ApiError.class);
 
             if (apiError == null || apiError.getMessage() == null) {
-                getView().onError("An error occurred");
+                getView().showError("An error occurred");
                 return;
             }
 
@@ -115,11 +115,11 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
                 case HttpsURLConnection.HTTP_INTERNAL_ERROR:
                 case HttpsURLConnection.HTTP_NOT_FOUND:
                 default:
-                    getView().onError(apiError.getMessage());
+                    getView().showError(apiError.getMessage());
             }
         } catch (JsonSyntaxException | NullPointerException e) {
             Timber.e("handleApiError", e);
-            getView().onError("An error occurred");
+            getView().showError("An error occurred");
         }
     }
 }

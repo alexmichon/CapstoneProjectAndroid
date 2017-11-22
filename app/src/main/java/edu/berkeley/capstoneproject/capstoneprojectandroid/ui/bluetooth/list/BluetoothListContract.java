@@ -22,7 +22,6 @@ public interface BluetoothListContract {
         void cleanPairedDevices();
         void showScanningProgress();
         void hideScanningProgress();
-        void showError(String message);
 
         void onDeviceConnected();
     }
