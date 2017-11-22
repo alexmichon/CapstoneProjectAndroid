@@ -21,4 +21,15 @@ public class LoginRequest {
         mEmail = email;
         mPassword = password;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        LoginRequest that = (LoginRequest) obj;
+
+        if (mEmail != null ? !mEmail.equals(that.mEmail) : that.mEmail != null) return false;
+        return mPassword != null ? mPassword.equals(that.mPassword) : that.mPassword == null;
+    }
 }
