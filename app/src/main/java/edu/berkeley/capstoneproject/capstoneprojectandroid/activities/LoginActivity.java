@@ -25,6 +25,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.UserHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 05/11/2017.
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Log.d(TAG, "Created activity");
+        Timber.d("Created activity");
 
         mLoginButton = (Button) findViewById(R.id.login_button);
         mEmailEdit = (EditText) findViewById(R.id.login_email);
@@ -106,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
-        Log.d(TAG, "Login");
+        Timber.d("Login");
 
         User user = new User(mEmailEdit.getText().toString(), mPasswordEdit.getText().toString());
         final LoginThread loginThread = new LoginThread(user);
@@ -148,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                 ApiRequest request = UserHelper.login(mUser, mFuture);
                 mFuture.get(30, TimeUnit.SECONDS);
 
-                Log.d(TAG, "Authenticated");
+                Timber.d("Authenticated");
 
                 mUser.authenticate(request);
                 CapstoneProjectAndroidApplication.getInstance().setCurrentUser(mUser);
@@ -156,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                 mHandler.obtainMessage(HANDLER_MESSAGE_LOGIN, HANDLER_LOGIN_SUCCESS).sendToTarget();
 
             } catch (Exception e) {
-                Log.e(TAG, "Login Error", e);
+                Timber.e(e, "Login Error");
                 mUser.setAuthenticated(false);
                 mHandler.obtainMessage(HANDLER_MESSAGE_LOGIN, HANDLER_LOGIN_FAILURE).sendToTarget();
             }

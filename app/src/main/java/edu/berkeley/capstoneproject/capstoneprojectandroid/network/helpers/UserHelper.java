@@ -16,6 +16,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 05/11/2017.
@@ -23,10 +24,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiR
 
 public class UserHelper {
 
-    private static final String TAG = UserHelper.class.getSimpleName();
-
     public static ApiRequest login(User user, RequestFuture<JSONObject> future) throws JSONException {
-        Log.d(TAG, "Create onLoginClick request");
+        Timber.d("Create onLoginClick request");
 
         if (future == null) {
             future = RequestFuture.newFuture();
@@ -40,7 +39,7 @@ public class UserHelper {
     }
 
     public static ApiRequest register(User user, RequestFuture<JSONObject> future) throws JSONException {
-        Log.d(TAG, "Create doRegisterApiCall request");
+        Timber.d("Create doRegisterApiCall request");
 
         if (future == null) {
             future = RequestFuture.newFuture();

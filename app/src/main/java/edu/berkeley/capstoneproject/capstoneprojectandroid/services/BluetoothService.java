@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import timber.log.Timber;
+
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.DeviceActivity.HANDLER_MSG_READ;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.DeviceActivity.HANDLER_MSG_STATE;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.DeviceActivity.HANDLER_MSG_TOAST;
@@ -20,8 +22,6 @@ import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.Dev
  */
 
 public class BluetoothService {
-
-    private static final String TAG = "BluetoothService";
 
     private static final UUID MY_UUID = UUID.fromString("0000110E-0000-1000-8000-00805F9B34FB");
 
@@ -60,7 +60,7 @@ public class BluetoothService {
     }
 
     public synchronized void connect() {
-        Log.d(TAG, "Initializing connection...");
+        Timber.d("Initializing connection...");
 
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -78,7 +78,7 @@ public class BluetoothService {
 
 
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
-        Log.d(TAG, "Connected");
+        Timber.d("Connected");
 
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -97,7 +97,7 @@ public class BluetoothService {
 
 
     public synchronized void stop() {
-        Log.d(TAG, "Stopping...");
+        Timber.d("Stopping...");
 
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -151,7 +151,7 @@ public class BluetoothService {
         private BluetoothSocket mmSocket;
 
         public ConnectThread(BluetoothDevice device) {
-            Log.i(TAG, "Create Connect Thread: " + mDevice.getName());
+            Timber.i("Create Connect Thread: " + mDevice.getName());
 
             mmDevice = device;
 
@@ -160,7 +160,7 @@ public class BluetoothService {
                 tmp = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
             }
             catch (IOException e) {
-                Log.e(TAG, "Bluetooth Socket error", e);
+                Timber.e(e, "Bluetooth Socket error");
             }
 
             mmSocket = tmp;
@@ -169,31 +169,31 @@ public class BluetoothService {
 
         @Override
         public void run() {
-            Log.i(TAG, "Run Connect Thread: " + mmDevice.getName());
+            Timber.i("Run Connect Thread: " + mmDevice.getName());
 
             setName("ConnectThread" + mmDevice.getName());
 
             try {
                 mmSocket.connect();
             } catch (IOException e) {
-                Log.w(TAG,"Trying fallback...");
+                Timber.w("Trying fallback...");
 
                 try {
                     mmSocket =(BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
                     mmSocket.connect();
                 } catch (Exception e1) {
-                    Log.e(TAG, "Fallback error", e);
+                    Timber.e(e, "Fallback error");
                     connectionFailed();
                 }
             }
 
-            Log.d(TAG, "Done connecting");
+            Timber.d("Done connecting");
 
             synchronized (BluetoothService.this) {
                 mConnectThread = null;
             }
 
-            Log.d(TAG, "Synchronized");
+            Timber.d("Synchronized");
 
             connected(mmSocket, mmDevice);
         }
@@ -203,7 +203,7 @@ public class BluetoothService {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "Socket failed to close", e);
+                Timber.e(e, "Socket failed to close");
             }
         }
     }
@@ -221,7 +221,7 @@ public class BluetoothService {
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            Log.d(TAG, "Create Connected thread: " + mDevice.getName());
+            Timber.d("Create Connected thread: " + mDevice.getName());
 
             mmSocket = socket;
 
@@ -232,7 +232,7 @@ public class BluetoothService {
                 tmpIn = mmSocket.getInputStream();
                 tmpOut = mmSocket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "Failed to get streams", e);
+                Timber.e("Failed to get streams", e);
             }
 
             mmInStream = tmpIn;
@@ -244,7 +244,7 @@ public class BluetoothService {
 
         @Override
         public void run() {
-            Log.i(TAG, "Run Connected thread: " + mDevice.getName());
+            Timber.i("Run Connected thread: " + mDevice.getName());
 
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytes;
@@ -255,7 +255,7 @@ public class BluetoothService {
                     mHandler.obtainMessage(HANDLER_MSG_READ, bytes, -1, buffer)
                             .sendToTarget();
                 } catch (IOException e) {
-                    Log.e(TAG, "Disconnected: " + mDevice.getName(), e);
+                    Timber.e("Disconnected: " + mDevice.getName(), e);
                     connectionLost();
                     break;
                 }
@@ -271,7 +271,7 @@ public class BluetoothService {
                 mHandler.obtainMessage(HANDLER_MSG_WRITE, -1, -1, buffer)
                     .sendToTarget();
             } catch (IOException e) {
-                Log.e(TAG, "Write error", e);
+                Timber.e("Write error", e);
             }
         }
 
@@ -280,7 +280,7 @@ public class BluetoothService {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "Socket failed to close", e);
+                Timber.e("Socket failed to close", e);
             }
         }
 

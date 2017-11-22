@@ -14,6 +14,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -44,7 +45,7 @@ public class ExerciseActivity extends ToolbarActivity implements ExerciseContrac
         Bundle data = getIntent().getExtras();
         mExerciseType = (ExerciseType) data.getParcelable(EXTRA_EXERCISE_TYPE);
         if (mExerciseType == null) {
-            Log.e(TAG, "Exercise type can't be null");
+            Timber.e("Exercise type can't be null");
         }
 
         mPresenter.onAttach(this);

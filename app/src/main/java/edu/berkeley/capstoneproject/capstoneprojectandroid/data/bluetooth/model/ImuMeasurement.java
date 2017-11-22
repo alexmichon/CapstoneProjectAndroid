@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model
 import android.util.Log;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -28,7 +29,7 @@ public abstract class ImuMeasurement {
     }
 
     public static ImuMeasurement decode(byte[] bytes) {
-        Log.d(TAG, "Decoding measurement");
+        Timber.d("Decoding measurement");
 
         int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);
         long timestamp = BytesUtils.bytesToDate(bytes, 2 * BytesUtils.BYTES_INT16);

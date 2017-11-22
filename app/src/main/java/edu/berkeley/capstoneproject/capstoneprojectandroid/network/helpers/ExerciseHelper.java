@@ -22,6 +22,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Exer
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 27/10/2017.
@@ -32,12 +33,12 @@ public class ExerciseHelper {
     private static final String TAG = ExerciseHelper.class.getSimpleName();
 
     public static void create(Exercise exercise) {
-        Log.d(TAG, "Create exercise");
+        Timber.d("Create exercise");
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
         try {
-            Log.d(TAG, "Url: " + RailsServer.getInstance().getExercisesUrl().toString());
-            Log.d(TAG, "JSON: " + exercise.toJson().toString());
+            Timber.d("Url: " + RailsServer.getInstance().getExercisesUrl().toString());
+            Timber.d("JSON: " + exercise.toJson().toString());
 
             ApiRequest request = new ApiRequest(Request.Method.POST, RailsServer.getInstance().getExercisesUrl().toString(), exercise.toJson(), future, future);
             VolleyRequestQueue.getInstance().addRequest(request);
@@ -45,16 +46,16 @@ public class ExerciseHelper {
             JSONObject response = future.get(30, TimeUnit.SECONDS);
             exercise.setID(response.getInt("id"));
 
-            Log.d(TAG, "Done");
+            Timber.d("Done");
 
         } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception", e);
+            Timber.e(e, "JSON Exception");
         } catch (InterruptedException e) {
-            Log.e(TAG, "Interrupted Exception", e);
+            Timber.e(e, "Interrupted Exception");
         } catch (ExecutionException e) {
-            Log.e(TAG, "Execution Exception", e);
+            Timber.e("Execution Exception");
         } catch (TimeoutException e) {
-            Log.e(TAG, "Timeout Exception", e);
+            Timber.e(e, "Timeout Exception");
         }
     }
 }

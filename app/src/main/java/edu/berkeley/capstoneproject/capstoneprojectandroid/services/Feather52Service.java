@@ -34,6 +34,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.d
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.sensors.Sensor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.MeasurementHelper;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 21/10/2017.
@@ -92,25 +93,25 @@ public class Feather52Service extends Service {
                 mConnectionState = STATE_CONNECTED;
                 mFeather52.setConnected(true);
                 broadcastNewState(intentAction);
-                Log.i(TAG, "Connected to GATT server");
-                Log.d(TAG, "Attempting to start service discovery: " + mBluetoothGatt.discoverServices());
+                Timber.i("Connected to GATT server");
+                Timber.d("Attempting to start service discovery: " + mBluetoothGatt.discoverServices());
             }
             else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
                 mFeather52.setConnected(false);
                 broadcastNewState(intentAction);
-                Log.i(TAG, "Disconnected from GATT server");
+                Timber.i("Disconnected from GATT server");
             }
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d(TAG, "New GATT service discovered");
+                Timber.d("New GATT service discovered");
                 for (BluetoothGattService s: gatt.getServices()) {
                     if (s.getUuid().equals(UUID_SERVICE_SENSOR)) {
-                        Log.d(TAG, "Found sensor service!");
+                        Timber.d("Found sensor service!");
                         mSensorService = s;
                         broadcastNewService(ACTION_GATT_SERVICES_DISCOVERED, s);
                         break;
@@ -118,31 +119,31 @@ public class Feather52Service extends Service {
                 }
             }
             else {
-                Log.w(TAG, "onServicesDiscovered received: " + status);
+                Timber.w("onServicesDiscovered received: " + status);
             }
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicRead status=" + status + " char=" + characteristic.getUuid().toString());
+            Timber.d("onCharacteristicRead status=" + status + " char=" + characteristic.getUuid().toString());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 receivedData(gatt, characteristic);
             }
             else {
-                Log.w(TAG, "onCharacteristicRead received: " + status);
+                Timber.w("onCharacteristicRead received: " + status);
                 return;
             }
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            Log.d(TAG, "onCharacteristicChanged: " + characteristic.getUuid().toString());
+            Timber.d("onCharacteristicChanged: " + characteristic.getUuid().toString());
             receivedData(gatt, characteristic);
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicWrite status=" + status);
+            Timber.d("onCharacteristicWrite status=" + status);
         }
     };
 
@@ -220,7 +221,7 @@ public class Feather52Service extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "Starting service");
+        Timber.i("Starting service");
         mOperationQueue = new GattOperationQueue();
         mOperationQueue.start();
         //mHandlerThread = new HandlerThread("Feather52ServiceThread");
@@ -236,14 +237,14 @@ public class Feather52Service extends Service {
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
-                Log.e(TAG, "Unable to initialize BluetoothManager");
+                Timber.e("Unable to initialize BluetoothManager");
                 return false;
             }
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
-            Log.e(TAG, "Unable to initialize BluetoothListAdapter");
+            Timber.e("Unable to initialize BluetoothListAdapter");
             return false;
         }
 
@@ -254,12 +255,12 @@ public class Feather52Service extends Service {
 
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized or unspecified address");
+            Timber.w("BluetoothListAdapter not initialized or unspecified address");
             return false;
         }
 
         if (mDeviceAddress != null && address.equals(mDeviceAddress) && mBluetoothGatt != null) {
-            Log.d(TAG, "Trying to use an exisiting BluetoothGatt for connection");
+            Timber.d("Trying to use an exisiting BluetoothGatt for connection");
             if (mBluetoothGatt.connect()) {
                 mConnectionState = STATE_CONNECTING;
                 return true;
@@ -271,11 +272,11 @@ public class Feather52Service extends Service {
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
-            Log.w(TAG, "Device not found");
+            Timber.w("Device not found");
             return false;
         }
 
-        Log.d(TAG, "Trying to create a new connection");
+        Timber.d("Trying to create a new connection");
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         mDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
@@ -285,7 +286,7 @@ public class Feather52Service extends Service {
 
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
@@ -305,7 +306,7 @@ public class Feather52Service extends Service {
 
     public void readCharacteristic(final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
@@ -320,12 +321,12 @@ public class Feather52Service extends Service {
 
     public void writeCharacteristic(final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
         if ((characteristic.getProperties() & (BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)) != 0) {
-            Log.d(TAG, "Write characteristic OK");
+            Timber.d("Write characteristic OK");
         }
 
         mOperationQueue.enqueue(new Runnable() {
@@ -338,7 +339,7 @@ public class Feather52Service extends Service {
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
@@ -360,12 +361,12 @@ public class Feather52Service extends Service {
 
     public void startRecording() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
         if (mSensorService == null) {
-            Log.w(TAG, "Can't record: no sensor service");
+            Timber.w("Can't record: no sensor service");
             return;
         }
 
@@ -378,12 +379,12 @@ public class Feather52Service extends Service {
 
     public void stopRecording() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
         if (mSensorService == null) {
-            Log.w(TAG, "Can't record: no sensor service");
+            Timber.w("Can't record: no sensor service");
             return;
         }
 

@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -37,7 +38,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
     }
 
     public void checkNetworkState() {
-        Log.d(TAG, "Checking network state");
+        Timber.d("Checking network state");
         getView().updateMessage("Checking network state...");
 
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();

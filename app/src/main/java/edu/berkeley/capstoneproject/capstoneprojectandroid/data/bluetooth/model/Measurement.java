@@ -60,7 +60,6 @@ public class Measurement {
     public float getValue() { return mValue; }
 
     public static List<Measurement> decodeEncoder(byte[] bytes) {
-        Log.d(TAG, "Decoding encoder measurement");
 
         List<Measurement> measurements = new ArrayList<>(1);
 
@@ -75,8 +74,6 @@ public class Measurement {
     }
 
     public static List<Measurement> decodeImu(byte[] bytes) {
-        Log.d(TAG, "Decoding IMU measurement");
-
         List<Measurement> measurements = new ArrayList<>(3);
 
         int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);

@@ -13,8 +13,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelp
 @Singleton
 public class DataManager implements IDataManager {
 
-    private static final String TAG = DataManager.class.getSimpleName();
-
     private final IApiHelper mApiHelper;
     private final IBluetoothHelper mBluetoothHelper;
 

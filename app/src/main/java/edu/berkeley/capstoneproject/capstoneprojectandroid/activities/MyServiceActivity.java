@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothLeService;
+import timber.log.Timber;
 
 import static android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT16;
 import static android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8;
@@ -33,8 +34,6 @@ import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
 
 public class MyServiceActivity extends AppCompatActivity {
-
-    private static final String TAG = "MyServiceActivity";
 
     public static final String EXTRAS_SERVICE_UUID = "EXTRAS_SERVICE_UUID";
 
@@ -80,7 +79,7 @@ public class MyServiceActivity extends AppCompatActivity {
         mButtonRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Read characteristic");
+                Timber.d("Read characteristic");
                 mBluetoothLeService.readCharacteristic(mReadCharacteristic);
             }
         });
@@ -88,7 +87,7 @@ public class MyServiceActivity extends AppCompatActivity {
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Send characteristic");
+                Timber.d("Send characteristic");
 
                 String text = mEditSend.getText().toString();
                 byte[] bytes = new byte[1];
@@ -127,10 +126,10 @@ public class MyServiceActivity extends AppCompatActivity {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            Log.d(TAG, "Service connected");
+            Timber.d("Service connected");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) iBinder).getService();
             if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Timber.e("Unable to initialize Bluetooth");
                 finish();
             }
 
@@ -142,22 +141,22 @@ public class MyServiceActivity extends AppCompatActivity {
             }
 
             if (mGattService == null) {
-                Log.w(TAG, "Service not found");
+                Timber.w("Service not found");
                 Toast.makeText(MyServiceActivity.this, "Service not found", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             mReadCharacteristic = mGattService.getCharacteristic(UUID_CHAR_READ);
-            if (mReadCharacteristic != null) { Log.d(TAG, "Read characteristic found"); }
+            if (mReadCharacteristic != null) { Timber.d("Read characteristic found"); }
             mSendCharacteristic = mGattService.getCharacteristic(UUID_CHAR_SEND);
-            if (mSendCharacteristic != null) { Log.d(TAG, "Send characteristic found"); }
+            if (mSendCharacteristic != null) { Timber.d("Send characteristic found"); }
             mNotifyCharacteristic = mGattService.getCharacteristic(UUID_CHAR_NOTIFY);
-            if (mNotifyCharacteristic != null) { Log.d(TAG, "Notify characteristic found"); }
+            if (mNotifyCharacteristic != null) { Timber.d("Notify characteristic found"); }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.d(TAG, "Service disconnected");
+            Timber.d("Service disconnected");
             mBluetoothLeService = null;
         }
     };
@@ -169,7 +168,7 @@ public class MyServiceActivity extends AppCompatActivity {
             final String action = intent.getAction();
 
             if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                Log.d(TAG, "Disconnected: ending...");
+                Timber.d("Disconnected: ending...");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -178,22 +177,22 @@ public class MyServiceActivity extends AppCompatActivity {
                 });
             }
             else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Log.d(TAG, "New data available");
+                Timber.d("New data available");
 
                 String uuid = intent.getStringExtra(BluetoothLeService.EXTRA_CHARACTERISTIC_UUID);
                 final BluetoothGattCharacteristic characteristic = mGattService.getCharacteristic(UUID.fromString(uuid));
                 if (characteristic == null) {
-                    Log.w(TAG, "Data available but characteristic not found");
+                    Timber.w("Data available but characteristic not found");
                     return;
                 }
 
                 final String data = byteArrayToHex(characteristic.getValue());
-                Log.d(TAG, "Data=" + data);
+                Timber.d("Data=" + data);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "Data: " + data);
+                        Timber.d("Data: " + data);
 
                         if (characteristic.getUuid().equals(UUID_CHAR_READ)) {
                             mTextRead.setText(String.valueOf(data));

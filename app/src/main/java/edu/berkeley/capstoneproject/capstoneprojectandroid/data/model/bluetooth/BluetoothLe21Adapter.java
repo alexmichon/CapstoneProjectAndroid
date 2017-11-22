@@ -11,6 +11,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Alex on 08/11/2017.
  */
@@ -33,7 +35,7 @@ public class BluetoothLe21Adapter extends BluetoothLeAdapter {
 
     @Override
     public void startDiscovery() {
-        Log.d(TAG, "Start scanning");
+        Timber.d("Start scanning");
         if (mScanning) {
             cancelDiscovery();
         }
@@ -49,7 +51,7 @@ public class BluetoothLe21Adapter extends BluetoothLeAdapter {
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            Log.i(TAG, "New LE device scanned");
+            Timber.i("New LE device scanned");
             if (mScanListener != null) {
                 mScanListener.onNewDevice(result.getDevice());
             }
@@ -57,7 +59,7 @@ public class BluetoothLe21Adapter extends BluetoothLeAdapter {
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-            Log.d(TAG, "Scan finished");
+            Timber.d("Scan finished");
             if (mScanListener != null) {
                 mScanListener.onComplete();
             }
@@ -66,7 +68,7 @@ public class BluetoothLe21Adapter extends BluetoothLeAdapter {
 
         @Override
         public void onScanFailed(int errorCode) {
-            Log.e(TAG, "Scan failed");
+            Timber.e("Scan failed");
             if (mScanListener != null) {
                 mScanListener.onError(new Throwable("Scan failed"));
             }

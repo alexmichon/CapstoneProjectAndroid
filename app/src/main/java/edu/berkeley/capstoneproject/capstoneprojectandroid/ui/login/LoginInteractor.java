@@ -14,6 +14,7 @@ import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -41,7 +42,7 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
                 .map(new Function<LoginResponse, User>() {
                     @Override
                     public User apply(@NonNull LoginResponse response) throws Exception {
-                        Log.d(TAG, "Converting response to user");
+                        Timber.d("Converting response to user");
                         return response.getUser();
                     }
                 });
@@ -49,7 +50,7 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
 
 
     private void updateApiHeader(LoginResponse response) {
-        Log.d(TAG, "Updating api header");
+        Timber.d("Updating api header");
         getDataManager().getApiHelper().getApiHeader().rebuild()
                 .accessToken(response.getAccessToken())
                 .client(response.getClient())

@@ -16,6 +16,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.M
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 27/10/2017.
@@ -26,7 +27,7 @@ public class MeasurementHelper {
     private static final String TAG = MeasurementHelper.class.getSimpleName();
 
     public static void create(Exercise exercise, Metric metric, final Measurement measurement) {
-        Log.d(TAG, "Create measurement");
+        Timber.d("Create measurement");
 
         try {
             ApiRequest request = new ApiRequest(
@@ -38,21 +39,21 @@ public class MeasurementHelper {
                         public void onResponse(JSONObject response) {
                             try {
                                 measurement.setID(response.getInt("id"));
-                                Log.d(TAG, "Success");
+                                Timber.d("Success");
                             } catch (JSONException e) {
-                                Log.e(TAG, "No id found");
+                                Timber.e("No id found");
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, "Error", error);
+                            Timber.e(error, "Error");
                         }
                     });
             VolleyRequestQueue.getInstance().addRequest(request);
         } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception", e);
+            Timber.e(e, "JSON Exception");
         }
     }
 }

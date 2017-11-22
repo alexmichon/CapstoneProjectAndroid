@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid;
 
 import android.app.Application;
+import android.os.Build;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
@@ -8,18 +9,16 @@ import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.NetModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 25/10/2017.
  */
 
 public class CapstoneProjectAndroidApplication extends Application {
-
-    private static final String TAG = CapstoneProjectAndroidApplication.class.getSimpleName();
 
     private static CapstoneProjectAndroidApplication instance;
 
@@ -39,11 +38,19 @@ public class CapstoneProjectAndroidApplication extends Application {
             AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
         }
 
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree() {
+                @Override
+                protected String createStackElementTag(StackTraceElement element) {
+                    return element + ":" + element.getLineNumber();
+                }
+            });
+        }
+
         mAppComponent = DaggerAppComponent
                 .builder()
                 .application(this)
                 .appModule(new AppModule(this))
-                //.netModule(new NetModule(this))
                 .build();
         mAppComponent.inject(this);
     }

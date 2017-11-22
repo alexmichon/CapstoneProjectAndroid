@@ -8,6 +8,7 @@ import java.util.Map;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.data.ImuData;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 25/10/2017.
@@ -45,8 +46,6 @@ public class IMU extends Sensor {
 
 
     public static Map<String, Measurement> decodeMeasurement(byte[] bytes) {
-        Log.d(TAG, "Decoding measurement");
-
         Map<String, Measurement> measurements = new HashMap<>(3);
 
         int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);

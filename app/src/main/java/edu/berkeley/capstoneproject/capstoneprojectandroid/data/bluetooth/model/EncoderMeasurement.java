@@ -21,8 +21,6 @@ public class EncoderMeasurement {
     }
 
     public static EncoderMeasurement decode(byte[] bytes) {
-        Log.d(TAG, "Decoding measurement");
-
         long timestamp = BytesUtils.bytesToDate(bytes);
         float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_TIMESTAMP);
 

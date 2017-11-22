@@ -38,6 +38,7 @@ import java.util.Set;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.BluetoothDeviceAdapter;
+import timber.log.Timber;
 
 @TargetApi(21)
 public class MainActivity extends Activity {
@@ -231,7 +232,7 @@ public class MainActivity extends Activity {
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Start Discovery");
+                Timber.d("Start Discovery");
 
                 mScannedDevicesAdapter.clear();
                 mScannedDevicesAdapter.notifyDataSetChanged();
@@ -272,7 +273,7 @@ public class MainActivity extends Activity {
 
 
     private void populatePairedDevices() {
-        Log.d(TAG, "Populating paired devices");
+        Timber.d("Populating paired devices");
 
         mPairedDevicesAdapter.clear();
 
@@ -312,7 +313,7 @@ public class MainActivity extends Activity {
                 }
             }, SCAN_PERIOD);
 
-            Log.d(TAG, "Start scanning");
+            Timber.d("Start scanning");
             mScanning = true;
             if (Build.VERSION.SDK_INT < 21) {
                 mBtAdapter.startLeScan(mScanCallback18);
@@ -339,7 +340,7 @@ public class MainActivity extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i(TAG, "New LE device scanned (API 18)");
+                    Timber.i("New LE device scanned (API 18)");
                     addScannedDevice(bluetoothDevice);
                 }
             });
@@ -350,13 +351,13 @@ public class MainActivity extends Activity {
     private ScanCallback mScanCallback21 = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            Log.i(TAG, "New LE device scanned (API 21)");
+            Timber.i("New LE device scanned (API 21)");
             addScannedDevice(result.getDevice());
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-            Log.d(TAG, "Scan finished");
+            Timber.d("Scan finished");
             if (results.size() == 0) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -370,7 +371,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onScanFailed(int errorCode) {
-            Log.e(TAG, "Scan failed (API 21)");
+            Timber.e("Scan failed (API 21)");
         }
     };
 
@@ -397,22 +398,22 @@ public class MainActivity extends Activity {
             String action = intent.getAction();
 
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-                Log.d(TAG, "Bluetooth state changed");
+                Timber.d("Bluetooth state changed");
                 setupScanner();
                 populatePairedDevices();
                 enableScanButton();
             }
             // When discovery finds a device
             else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                Log.d(TAG, "New device found");
+                Timber.d("New device found");
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 addScannedDevice(device);
             }
             else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                Log.d(TAG, "Discovery finished");
+                Timber.d("Discovery finished");
                 if (mScannedDevicesAdapter.getCount() == 0) {
-                    Log.d(TAG, "No device found");
+                    Timber.d("No device found");
                     Toast.makeText(context, "No device found", Toast.LENGTH_SHORT).show();
                     mScanButton.setVisibility(View.VISIBLE);
                 }

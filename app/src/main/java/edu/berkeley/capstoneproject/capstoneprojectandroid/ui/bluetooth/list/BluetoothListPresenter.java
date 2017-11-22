@@ -17,6 +17,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -40,7 +41,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
     @Override
     public void onLoadPairedDevices() {
-        Log.d(TAG, "Get paired devices");
+        Timber.d("Get paired devices");
         getCompositeDisposable().add(getInteractor()
             .doLoadPairedDevices()
                 .subscribeOn(getSchedulerProvider().io())
@@ -57,7 +58,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
     @Override
     public void onStartScanning() {
-        Log.d(TAG, "Start scanning");
+        Timber.d("Start scanning");
 
         // TODO Check Bluetooth status and prompt if disabled
 
@@ -78,20 +79,20 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                     .subscribeWith(new DisposableObserver<Rx2BleDevice>() {
                         @Override
                         public void onNext(@NonNull Rx2BleDevice bluetoothDevice) {
-                            Log.d(TAG, "New device");
+                            Timber.d("New device");
                             getView().addScannedDevice(bluetoothDevice);
                         }
 
                         @Override
                         public void onError(Throwable t) {
-                            Log.e(TAG, "Scanning error", t);
+                            Timber.e(t, "Scanning error");
                             getView().hideScanningProgress();
                             getView().showError("Scanning error");
                         }
 
                         @Override
                         public void onComplete() {
-                            Log.d(TAG, "Scan completed");
+                            Timber.d("Scan completed");
                             getView().hideScanningProgress();
                         }
                     });
@@ -127,16 +128,16 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
                         @Override
                         public void onNext(@NonNull Rx2BleDevice.ConnectionState connectionState) {
-                            Log.d(TAG, "Connection status: " + connectionState.toString());
+                            Timber.d("Connection status: " + connectionState.toString());
                             switch (connectionState) {
                                 case CONNECTED:
-                                    Log.d(TAG, "Connection succeeded");
+                                    Timber.d("Connection succeeded");
                                     onDeviceConnected();
                                     break;
                                 case CONNECTING:
                                 case DISCONNECTED:
                                 case DISCONNECTING:
-                                    Log.e(TAG, "Connection failed");
+                                    Timber.e("Connection failed");
                                     getView().showError("Connection failed");
                                     break;
                             }
@@ -144,7 +145,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            Log.e(TAG, "Connection failed", e);
+                            Timber.e(e, "Connection failed");
                             getView().showError("Connection failed");
                             getView().hideLoading();
                         }
@@ -169,14 +170,14 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                     .subscribe(new Action() {
                         @Override
                         public void run() throws Exception {
-                            Log.d(TAG, "Device validated");
+                            Timber.d("Device validated");
                             getView().showMessage("Device validated");
                             getView().onDeviceConnected();
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            Log.e(TAG, "Device not validated");
+                            Timber.e("Device not validated");
                             getView().showError("Unknown device");
                         }
                     })

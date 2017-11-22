@@ -10,6 +10,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -32,7 +33,7 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
 
     @Override
     public void onLoadExerciseTypes() {
-        Log.d(TAG, "Loading exercise types");
+        Timber.d("Loading exercise types");
         getCompositeDisposable().add(getInteractor()
             .doLoadExerciseTypes()
                 .subscribeOn(getSchedulerProvider().io())
@@ -40,7 +41,7 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
                 .subscribe(new Consumer<ExerciseType>() {
                     @Override
                     public void accept(ExerciseType exerciseType) throws Exception {
-                        Log.d(TAG, "New exercise type found");
+                        Timber.d("New exercise type found");
                         getView().addExerciseType(exerciseType);
                     }
                 })

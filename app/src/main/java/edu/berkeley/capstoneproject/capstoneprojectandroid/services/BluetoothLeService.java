@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.SampleGattAttributes;
+import timber.log.Timber;
 
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.MyServiceActivity.UUID_CHAR_NOTIFY;
 
@@ -67,14 +68,14 @@ public class BluetoothLeService extends Service {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastNewState(intentAction);
-                Log.i(TAG, "Connected to GATT server");
-                Log.d(TAG, "Attempting to start service discovery: " + mBluetoothGatt.discoverServices());
+                Timber.i("Connected to GATT server");
+                Timber.d("Attempting to start service discovery: " + mBluetoothGatt.discoverServices());
             }
             else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
                 broadcastNewState(intentAction);
-                Log.i(TAG, "Disconnected from GATT server");
+                Timber.i("Disconnected from GATT server");
             }
         }
 
@@ -82,21 +83,21 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastNewService(ACTION_GATT_SERVICES_DISCOVERED);
-                Log.d(TAG, "New GATT service discovered");
+                Timber.d("New GATT service discovered");
             }
             else {
-                Log.w(TAG, "onServicesDiscovered received: " + status);
+                Timber.w("onServicesDiscovered received: " + status);
             }
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicRead status=" + status + " char=" + characteristic.getUuid().toString());
+            Timber.d("onCharacteristicRead status=" + status + " char=" + characteristic.getUuid().toString());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastData(ACTION_DATA_AVAILABLE, characteristic.getService(), characteristic);
             }
             else {
-                Log.w(TAG, "onCharacteristicRead received: " + status);
+                Timber.w("onCharacteristicRead received: " + status);
                 return;
             }
         }
@@ -108,7 +109,7 @@ public class BluetoothLeService extends Service {
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicWrite status=" + status);
+            Timber.d("onCharacteristicWrite status=" + status);
         }
     };
 
@@ -168,14 +169,14 @@ public class BluetoothLeService extends Service {
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
-                Log.e(TAG, "Unable to initialize BluetoothManager");
+                Timber.e("Unable to initialize BluetoothManager");
                 return false;
             }
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
-            Log.e(TAG, "Unable to initialize BluetoothListAdapter");
+            Timber.e("Unable to initialize BluetoothListAdapter");
             return false;
         }
 
@@ -186,12 +187,12 @@ public class BluetoothLeService extends Service {
 
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address");
+            Timber.w("BluetoothAdapter not initialized or unspecified address");
             return false;
         }
 
         if (mDeviceAddress != null && address.equals(mDeviceAddress) && mBluetoothGatt != null) {
-            Log.d(TAG, "Trying to use an exisiting BluetoothGatt for connection");
+            Timber.d("Trying to use an exisiting BluetoothGatt for connection");
             if (mBluetoothGatt.connect()) {
                 mConnectionState = STATE_CONNECTING;
                 return true;
@@ -203,11 +204,11 @@ public class BluetoothLeService extends Service {
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
-            Log.w(TAG, "Device not found");
+            Timber.w("Device not found");
             return false;
         }
 
-        Log.d(TAG, "Trying to create a new connection");
+        Timber.d("Trying to create a new connection");
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         mDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
@@ -217,7 +218,7 @@ public class BluetoothLeService extends Service {
 
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
@@ -237,7 +238,7 @@ public class BluetoothLeService extends Service {
 
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
@@ -246,21 +247,21 @@ public class BluetoothLeService extends Service {
 
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 
         if ((characteristic.getProperties() & (BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)) != 0) {
-            Log.d(TAG, "Write characteristic OK");
+            Timber.d("Write characteristic OK");
         }
 
         boolean status = mBluetoothGatt.writeCharacteristic(characteristic);
-        Log.d(TAG, "Write characteristic status=" + status);
+        Timber.d("Write characteristic status=" + status);
     }
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothListAdapter not initialized");
+            Timber.w("BluetoothListAdapter not initialized");
             return;
         }
 

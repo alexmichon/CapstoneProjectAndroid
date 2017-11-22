@@ -26,6 +26,7 @@ import java.util.List;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.BluetoothGattServiceAdapter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothLeService;
+import timber.log.Timber;
 
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.activities.MyServiceActivity.EXTRAS_SERVICE_UUID;
 
@@ -76,7 +77,7 @@ public class DeviceLeActivity extends AppCompatActivity {
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
+            Timber.d("Connect request result=" + result);
         }
     }
 
@@ -141,10 +142,10 @@ public class DeviceLeActivity extends AppCompatActivity {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            Log.d(TAG, "Service connected");
+            Timber.d("Service connected");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) iBinder).getService();
             if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Timber.e("Unable to initialize Bluetooth");
                 finish();
             }
 
@@ -153,7 +154,7 @@ public class DeviceLeActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.d(TAG, "Service disconnected");
+            Timber.d("Service disconnected");
             mBluetoothLeService = null;
         }
     };
@@ -165,7 +166,7 @@ public class DeviceLeActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            Log.d(TAG, "Receiving intent with action: " + action);
+            Timber.d("Receiving intent with action: " + action);
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 invalidateOptionsMenu();

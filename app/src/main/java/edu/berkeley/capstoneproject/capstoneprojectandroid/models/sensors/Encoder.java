@@ -32,14 +32,10 @@ public class Encoder extends Sensor {
 
 
     public static Map<String, Measurement> decodeMeasurement(byte[] bytes) {
-        Log.d(TAG, "Decoding measurement");
-
         Map<String, Measurement> measurements = new HashMap<>(1);
 
         long tookAt = BytesUtils.bytesToDate(bytes);
         float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_TIMESTAMP);
-
-        Log.d(TAG, "Angle value: " + angle);
 
         measurements.put(LABEL_ENCODER_ANGLE, new Measurement<Float>(tookAt, angle));
 

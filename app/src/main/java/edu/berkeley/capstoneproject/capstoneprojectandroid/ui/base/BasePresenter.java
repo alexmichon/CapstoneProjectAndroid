@@ -19,6 +19,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -84,7 +85,7 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
             error = (ANError) throwable;
         }
         else {
-            Log.e(TAG, "Unknown error", throwable);
+            Timber.e(throwable, "Unknown error");
         }
 
         if (error == null || error.getErrorBody() == null) {
@@ -124,7 +125,7 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
                     getView().onError(apiError.getMessage());
             }
         } catch (JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "handleApiError", e);
+            Timber.e("handleApiError", e);
             getView().onError("An error occurred");
         }
     }

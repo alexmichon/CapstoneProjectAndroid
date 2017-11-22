@@ -1,23 +1,69 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services;
 
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
+import com.rx2androidnetworking.Rx2AndroidNetworking;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import okhttp3.Response;
 
 /**
- * Created by Alex on 07/11/2017.
+ * Created by Alex on 20/11/2017.
  */
 
-public interface AuthService {
+@Singleton
+public class AuthService implements IAuthService {
 
-    @POST("/api/v1/auth/sign_in")
-    Single<LoginResponse> doLoginApiCall(@Body LoginRequest request);
+    @Inject
+    public AuthService() {
 
-    @POST("/api/v1/auth")
-    Single<RegisterResponse> doRegisterApiCall(@Body RegisterRequest request);
+    }
+
+
+    @Override
+    public Single<LoginResponse> doLogin(final LoginRequest request) {
+        return Single.create(new SingleOnSubscribe<LoginResponse>() {
+            @Override
+            public void subscribe(@NonNull final SingleEmitter<LoginResponse> e) throws Exception {
+                Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_LOGIN)
+                        .addBodyParameter(request)
+                        .build()
+                        .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, Object response) {
+                                LoginResponse loginResponse = (LoginResponse) response;
+                                loginResponse.setHeaders(okHttpResponse.headers().toMultimap());
+                                e.onSuccess(loginResponse);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                e.onError(anError);
+                            }
+                        });
+            }
+        });
+    }
+
+    @Override
+    public Single<RegisterResponse> doRegister(RegisterRequest request) {
+        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_REGISTER)
+                .addBodyParameter(request)
+                .build()
+                .getObjectObservable(RegisterResponse.class)
+                .singleOrError();
+    }
 }

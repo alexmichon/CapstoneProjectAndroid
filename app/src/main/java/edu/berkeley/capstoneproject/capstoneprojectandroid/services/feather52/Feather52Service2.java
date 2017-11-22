@@ -26,6 +26,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 11/11/2017.
@@ -72,21 +73,21 @@ public class Feather52Service2 extends BaseService implements IFeather52Service 
     @Override
     public Observable<Rx2BleDevice.ConnectionState> connect(final boolean autoconnect) {
         if (mDevice == null) {
-            Log.e(TAG, "No device: connection aborted");
+            Timber.e("No device: connection aborted");
             return null;
         }
 
-        Log.d(TAG, "Connection to device");
+        Timber.d("Connection to device");
 
         return Observable.create(new ObservableOnSubscribe<Rx2BleDevice.ConnectionState>() {
             @Override
             public void subscribe(@NonNull final ObservableEmitter<Rx2BleDevice.ConnectionState> e) throws Exception {
-                Log.d(TAG, "Starting connection...");
+                Timber.d("Starting connection...");
                 Observable<Rx2BleConnection> observable = mDevice.establishConnection(autoconnect);
                 mConnectionDisposable = observable.subscribe(new Consumer<Rx2BleConnection>() {
                     @Override
                     public void accept(Rx2BleConnection rx2BleConnection) throws Exception {
-                        Log.d(TAG, "Connection received");
+                        Timber.d("Connection received");
                         mConnection = rx2BleConnection;
                         e.onNext(mDevice.getConnectionState());
                         e.onComplete();

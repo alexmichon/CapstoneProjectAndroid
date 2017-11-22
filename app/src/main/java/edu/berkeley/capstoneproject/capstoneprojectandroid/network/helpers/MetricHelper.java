@@ -21,6 +21,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.M
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.RailsServer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 27/10/2017.
@@ -31,7 +32,7 @@ public class MetricHelper {
     private static final String TAG = MetricHelper.class.getSimpleName();
 
     public static void create(Exercise exercise, Metric metric) {
-        Log.d(TAG, "Create metric: " + metric.getName());
+        Timber.d("Create metric: " + metric.getName());
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
 
@@ -43,13 +44,13 @@ public class MetricHelper {
             metric.setID(response.getInt("id"));
 
         } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception", e);
+            Timber.e(e, "JSON Exception");
         } catch (InterruptedException e) {
-            Log.e(TAG, "Interrupted Exception", e);
+            Timber.e(e, "Interrupted Exception");
         } catch (ExecutionException e) {
-            Log.e(TAG, "Execution Exception", e);
+            Timber.e(e, "Execution Exception");
         } catch (TimeoutException e) {
-            Log.e(TAG, "Timeout Exception", e);
+            Timber.e(e, "Timeout Exception");
         }
     }
 

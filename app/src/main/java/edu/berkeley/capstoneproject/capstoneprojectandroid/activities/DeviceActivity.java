@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothService;
+import timber.log.Timber;
 
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.services.BluetoothService.BLUETOOTH_SERVICE_TOAST;
 
@@ -40,7 +41,7 @@ public class DeviceActivity extends Activity {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Log.d(TAG, "Handler message: " + msg.what);
+            Timber.d("Handler message: %d", msg.what);
             switch(msg.what) {
                 case HANDLER_MSG_STATE:
                     switch(mService.getState()) {
@@ -86,7 +87,7 @@ public class DeviceActivity extends Activity {
         mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(address);
 
         if (mBluetoothDevice == null) {
-            Log.e(TAG, "No bluetooth device found");
+            Timber.e("No bluetooth device found");
         }
 
         mService = new BluetoothService(mHandler, mBluetoothDevice);

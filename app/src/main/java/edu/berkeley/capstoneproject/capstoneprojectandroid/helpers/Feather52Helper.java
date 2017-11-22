@@ -3,6 +3,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.helpers;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.util.Log;
 
+import timber.log.Timber;
+
 /**
  * Created by Alex on 26/10/2017.
  */
@@ -17,13 +19,13 @@ public class Feather52Helper {
         int format = -1;
         if ((flag & 0x01) != 0) {
             format = BluetoothGattCharacteristic.FORMAT_UINT16;
-            Log.d(TAG, "IMU format UINT16.");
+            Timber.d("IMU format UINT16.");
         } else {
             format = BluetoothGattCharacteristic.FORMAT_UINT8;
-            Log.d(TAG, "IMU format UINT8.");
+            Timber.d("IMU format UINT8.");
         }
         final int imu = characteristic.getIntValue(format, 1);
-        Log.d(TAG, String.format("Received imu: %d", imu));
+        Timber.d(String.format("Received imu: %d", imu));
 
         return imu;
     }
@@ -34,13 +36,13 @@ public class Feather52Helper {
         int format = -1;
         if ((flag & 0x01) != 0) {
             format = BluetoothGattCharacteristic.FORMAT_UINT16;
-            Log.d(TAG, "Encoder format UINT16.");
+            Timber.d("Encoder format UINT16.");
         } else {
             format = BluetoothGattCharacteristic.FORMAT_UINT8;
-            Log.d(TAG, "Encoder format UINT8.");
+            Timber.d("Encoder format UINT8.");
         }
         final int imu = characteristic.getIntValue(format, 1);
-        Log.d(TAG, String.format("Received encoder: %d", imu));
+        Timber.d(String.format("Received encoder: %d", imu));
 
         return imu;
     }

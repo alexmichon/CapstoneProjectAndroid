@@ -7,14 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.TestScheduler;
@@ -30,9 +28,6 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoginPresenterTest {
-
-    @Mock
-    private AuthService mAuthService;
 
     @Mock
     private LoginContract.View mView;
@@ -111,13 +106,32 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void loginFailureShouldUpdateView() {
+    public void loginANErrorShouldUpdateView() {
         String email = "email@email.com";
         String password = "password";
 
         User user = new User(email, "first name", "last name");
 
         doReturn(Single.error(new ANError()))
+                .when(mInteractor)
+                .doLoginCall(new LoginRequest(email, password));
+
+        mPresenter.onLoginClick(email, password);
+
+        mTestScheduler.triggerActions();
+
+        verify(mView).hideLoading();
+        verify(mView).onError(anyString());
+    }
+
+    @Test
+    public void loginErrorShouldUpdateView() {
+        String email = "email@email.com";
+        String password = "password";
+
+        User user = new User(email, "first name", "last name");
+
+        doReturn(Single.error(new Error()))
                 .when(mInteractor)
                 .doLoginCall(new LoginRequest(email, password));
 

@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.util.Log;
 
+import timber.log.Timber;
+
 /**
  * Created by Alex on 08/11/2017.
  */
@@ -36,7 +38,7 @@ public class BluetoothLe18Adapter extends BluetoothLeAdapter {
     private BluetoothAdapter.LeScanCallback mScanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
-            Log.d(TAG, "New LE device scanned");
+            Timber.d("New LE device scanned");
             if (mScanListener != null) {
                 mScanListener.onNewDevice(bluetoothDevice);
             }

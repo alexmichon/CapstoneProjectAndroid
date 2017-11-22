@@ -6,6 +6,8 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import timber.log.Timber;
+
 /**
  * Created by Alex on 26/10/2017.
  */
@@ -38,7 +40,7 @@ public class BytesUtils {
             return buffer.getFloat();
         }
         catch (BufferUnderflowException e) {
-            Log.e(TAG, "Byte buffer error: " + buffer.toString(), e);
+            Timber.e(e, "Byte buffer error: %s", buffer.toString());
             return 0;
         }
     }

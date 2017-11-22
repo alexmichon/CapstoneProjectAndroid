@@ -11,6 +11,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import timber.log.Timber;
+
 /**
  * Created by Alex on 26/10/2017.
  */
@@ -37,7 +39,7 @@ public class GattOperationQueue extends Thread {
                     }
                 }
 
-                Log.d(TAG, "Executing new runnable");
+                Timber.d("Executing new runnable");
                 Runnable r = mQueue.remove();
                 r.run();
 
@@ -45,18 +47,18 @@ public class GattOperationQueue extends Thread {
             }
         }
         catch (InterruptedException e) {
-            Log.w(TAG, "Received interrupt");
+            Timber.w("Received interrupt");
         }
     }
 
     public synchronized void enqueue(final Runnable runnable) {
-        Log.d(TAG, "Adding new runnable");
+        Timber.d("Adding new runnable");
         mQueue.add(runnable);
         notify();
     }
 
     public synchronized void cancel() {
-        Log.d(TAG, "Canceling...");
+        Timber.d("Canceling...");
         mCancel.set(true);
         notify();
     }

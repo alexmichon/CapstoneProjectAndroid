@@ -45,6 +45,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.models.exercises.Test
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.measurements.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.ExerciseHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.MetricHelper;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 25/10/2017.
@@ -92,7 +93,7 @@ public class Feather52Activity extends AppCompatActivity {
 
         mBluetoothDevice = mFeather52.getBluetoothDevice();
         if (mBluetoothDevice == null) {
-            Log.e(TAG, "No bluetooth device found");
+            Timber.e("No bluetooth device found");
             finish();
         }
         mDeviceName = mBluetoothDevice.getName();
@@ -106,7 +107,7 @@ public class Feather52Activity extends AppCompatActivity {
         registerReceiver(mFeather52Receiver, getIntentFilter());
         if (mFeather52Service != null) {
             final boolean result = mFeather52Service.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
+            Timber.d("Connect request result=" + result);
         }
     }
 
@@ -210,9 +211,9 @@ public class Feather52Activity extends AppCompatActivity {
         try {
             fragment = fragmentClass.newInstance();
         } catch (InstantiationException e) {
-            Log.e(TAG, "Error creating fragment", e);
+            Timber.e(e, "Error creating fragment");
         } catch (IllegalAccessException e) {
-            Log.e(TAG, "Error creating fragment", e);
+            Timber.e(e, "Error creating fragment");
         }
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -227,10 +228,10 @@ public class Feather52Activity extends AppCompatActivity {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            Log.d(TAG, "Service connected");
+            Timber.d("Service connected");
             mFeather52Service = ((Feather52Service.LocalBinder) iBinder).getService();
             if (!mFeather52Service.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Timber.e("Unable to initialize Bluetooth");
                 finish();
             }
 
@@ -239,7 +240,7 @@ public class Feather52Activity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.d(TAG, "Service disconnected");
+            Timber.d("Service disconnected");
             mFeather52Service = null;
         }
     };
@@ -251,7 +252,7 @@ public class Feather52Activity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
 
-        Log.d(TAG, "Receiving intent with action: " + action);
+        Timber.d("Receiving intent with action: " + action);
         if (Feather52Service.ACTION_GATT_CONNECTED.equals(action)) {
             mConnected = true;
             invalidateOptionsMenu();

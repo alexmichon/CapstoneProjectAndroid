@@ -16,6 +16,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -58,7 +59,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.e(TAG, "Error while starting exercise", throwable);
+                        Timber.e("Error while starting exercise", throwable);
                         getView().showMessage("An error occurred");
                         mStarted = false;
                     }
@@ -79,7 +80,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                Log.e(TAG, "Listening error", throwable);
+                                Timber.e(throwable, "Listening error");
                             }
                         })
         );

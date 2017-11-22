@@ -13,8 +13,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.Blueto
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService2;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.ExerciseService2;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.ExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IAuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IExerciseService;
 
@@ -50,13 +50,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    IAuthService provideAuthService(AuthService2 service) {
+    IAuthService provideAuthService(AuthService service) {
         return service;
     }
 
     @Provides
     @Singleton
-    IExerciseService provideExerciseService(ExerciseService2 service) {
+    IExerciseService provideExerciseService(ExerciseService service) {
         return service;
     }
 

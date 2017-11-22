@@ -32,6 +32,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Met
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -90,7 +91,7 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
         Bundle data = getArguments();
         ExerciseType exerciseType = (ExerciseType) data.getParcelable(EXTRA_EXERCISE_TYPE);
         if (exerciseType == null) {
-            Log.e(TAG, "Exercise type can't be null");
+            Timber.e("Exercise type can't be null");
             return null;
         }
 

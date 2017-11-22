@@ -22,6 +22,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.helpers.UserHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.network.requests.ApiRequest;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 06/11/2017.
@@ -81,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void register() {
-        Log.d(TAG, "Register");
+        Timber.d("Register");
 
         User user = new User(
             mEmailEdit.getText().toString(),
@@ -148,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
                 ApiRequest request = UserHelper.register(mUser, mFuture);
                 mFuture.get(30, TimeUnit.SECONDS);
 
-                Log.d(TAG, "Authenticated");
+                Timber.d("Authenticated");
 
                 mUser.authenticate(request);
                 CapstoneProjectAndroidApplication.getInstance().setCurrentUser(mUser);
@@ -159,7 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
                 msg.sendToTarget();
 
             } catch (Exception e) {
-                Log.e(TAG, "Registration Error", e);
+                Timber.e("Registration Error", e);
                 mUser.setAuthenticated(false);
                 Message msg = mHandler.obtainMessage();
                 msg.what = HANDLER_MESSAGE_REGISTER;
