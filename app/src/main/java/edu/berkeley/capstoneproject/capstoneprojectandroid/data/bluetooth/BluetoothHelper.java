@@ -1,7 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth;
 
 import android.bluetooth.BluetoothGattService;
-import android.util.Log;
 
 import com.polidea.rxandroidble.NotificationSetupMode;
 import com.polidea.rxandroidble.RxBleConnection;
@@ -11,7 +10,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.BluetoothConstants;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ISensorService;
@@ -29,7 +28,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 /**

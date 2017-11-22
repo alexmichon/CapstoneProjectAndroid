@@ -1,14 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model;
 
-import android.util.Log;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope;

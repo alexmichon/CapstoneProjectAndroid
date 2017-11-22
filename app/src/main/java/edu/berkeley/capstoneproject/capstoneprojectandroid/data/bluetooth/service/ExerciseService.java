@@ -1,20 +1,13 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service;
 
-import android.bluetooth.BluetoothGatt;
-
 import com.polidea.rxandroidble.NotificationSetupMode;
-import com.polidea.rxandroidble.RxBleClient;
-import com.polidea.rxandroidble.RxBleConnection;
-import com.polidea.rxandroidble.RxBleCustomOperation;
-import com.polidea.rxandroidble.internal.connection.RxBleGattCallback;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.BluetoothConstants;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
-import rx.Scheduler;
 
 /**
  * Created by Alex on 18/11/2017.

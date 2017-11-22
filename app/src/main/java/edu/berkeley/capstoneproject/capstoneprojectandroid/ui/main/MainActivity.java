@@ -14,7 +14,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 
 /**

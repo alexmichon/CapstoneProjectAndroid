@@ -21,10 +21,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.adapters.Feather52DrawerAdapter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.DeviceInfoFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.ImuFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.fragments.LogFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
@@ -42,11 +38,7 @@ public class DrawerActivity extends BaseActivity {
     @BindView(R.id.drawer_navigation_view)
     NavigationView mNavigationView;
 
-    private List<Feather52DrawerAdapter.DrawerItem> mDrawerItems;
     private ActionBarDrawerToggle mDrawerToggle;
-    private RecyclerView mRecyclerView;
-    private Feather52DrawerAdapter mRecyclerAdapter;
-    private RecyclerView.LayoutManager mRecyclerLayoutManager;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {

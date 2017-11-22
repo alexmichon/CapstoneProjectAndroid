@@ -1,12 +1,10 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list;
 
-import android.util.Log;
-
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.BluetoothConstants;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;

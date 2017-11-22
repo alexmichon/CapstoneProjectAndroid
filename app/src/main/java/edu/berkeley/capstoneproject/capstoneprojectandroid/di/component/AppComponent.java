@@ -7,7 +7,6 @@ import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.services.feather52.Feather52Service2;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -26,7 +25,6 @@ public interface AppComponent {
     }
 
     void inject(CapstoneProjectAndroidApplication app);
-    void inject(Feather52Service2 service);
 
     IDataManager dataManager();
 

@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.constants;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants;
 
 import java.util.UUID;
 

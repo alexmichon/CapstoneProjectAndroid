@@ -1,24 +1,17 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
-import android.util.Log;
-
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.error.ANError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
-import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.ApiConstants;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.ApiError;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**

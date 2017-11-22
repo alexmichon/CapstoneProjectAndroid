@@ -17,11 +17,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExercisePresenter;
@@ -111,13 +109,6 @@ public class ActivityModule {
 
 
 
-
-    @Provides
-    @PerActivity
-    BluetoothListContract.View provideBluetoothListView(BluetoothListActivity bluetoothListActivity) {
-        return bluetoothListActivity;
-    }
-
     @Provides
     BluetoothLeAdapter provideBluetoothLeAdapter() {
         if(Build.VERSION.SDK_INT >= 21) {
@@ -158,12 +149,6 @@ public class ActivityModule {
 
 
 
-
-    @Provides
-    @PerActivity
-    ExerciseContract.View provideExerciseView(ExerciseActivity activity) {
-        return activity;
-    }
 
     @Provides
     @PerActivity

@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.constants.ApiConstants;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
 
 /**
  * Created by Alex on 20/11/2017.

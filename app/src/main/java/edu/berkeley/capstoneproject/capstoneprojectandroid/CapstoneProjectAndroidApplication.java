@@ -9,9 +9,6 @@ import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.Feather52;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.models.users.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.network.VolleyRequestQueue;
 import timber.log.Timber;
 
 /**
@@ -24,14 +21,10 @@ public class CapstoneProjectAndroidApplication extends Application {
 
     private AppComponent mAppComponent;
 
-    private final Feather52 mFeather52 = new Feather52();
-    private User mCurrentUser;
-
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-        VolleyRequestQueue.init(getApplicationContext());
 
         AndroidNetworking.initialize(getApplicationContext());
         if (BuildConfig.DEBUG) {
@@ -61,17 +54,5 @@ public class CapstoneProjectAndroidApplication extends Application {
 
     public static CapstoneProjectAndroidApplication getInstance() {
         return instance;
-    }
-
-    public Feather52 getFeather52() {
-        return mFeather52;
-    }
-
-    public User getCurrentUser() {
-        return mCurrentUser;
-    }
-
-    public void setCurrentUser(User user) {
-        mCurrentUser = user;
     }
 }
