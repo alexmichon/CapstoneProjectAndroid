@@ -9,32 +9,27 @@ import android.os.Parcelable;
 
 public class ExerciseType implements Parcelable {
 
-    private String mName;
-    private String mDescription;
+    private final int mId;
 
-    public ExerciseType(String name) {
-        mName = name;
-    }
+    private final String mName;
+    private final String mDescription;
 
-    public ExerciseType(String name, String description) {
+    public ExerciseType(int id, String name, String description) {
+        mId = id;
         mName = name;
         mDescription = description;
+    }
+
+    public int getId() {
+        return mId;
     }
 
     public String getName() {
         return mName;
     }
 
-    public void setName(String name) {
-        mName = name;
-    }
-
     public String getDescription() {
         return mDescription;
-    }
-
-    public void setDescription(String description) {
-        mDescription = description;
     }
 
     @Override
@@ -61,12 +56,14 @@ public class ExerciseType implements Parcelable {
     }
 
     public ExerciseType(Parcel parcel) {
+        mId = parcel.readInt();
         mName = parcel.readString();
         mDescription = parcel.readString();
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
         parcel.writeString(mName);
         parcel.writeString(mDescription);
     }

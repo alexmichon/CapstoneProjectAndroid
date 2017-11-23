@@ -23,10 +23,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.Blu
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExercisePresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types.ExerciseTypesPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;

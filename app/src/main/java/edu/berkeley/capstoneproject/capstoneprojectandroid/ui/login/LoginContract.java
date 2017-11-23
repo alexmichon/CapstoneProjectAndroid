@@ -1,14 +1,11 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
-import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -19,9 +16,14 @@ public interface LoginContract {
 
     interface View extends IBaseView {
         void onLoginSuccess(User user);
+
         void onLoginFailure();
+        void onLoginFailure(Throwable throwable);
+        void onLoginFailure(String message);
 
         void startMainActivity();
+
+        void onLoginStart();
     }
 
     interface Interactor extends IBaseInteractor {

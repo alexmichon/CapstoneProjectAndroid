@@ -13,8 +13,10 @@ import io.reactivex.Observable;
 
 public class ExerciseTypeRepository implements IExerciseTypeRepository {
 
+    private static final int ID_TEST_EXERCISE = 1;
+
     private static ExerciseType EXERCISE_TYPES[] = {
-            new ExerciseType("Test Exercise", "This is a test exercise")
+            new ExerciseType(ID_TEST_EXERCISE, "Test Exercise", "This is a test exercise")
     };
 
     @Inject

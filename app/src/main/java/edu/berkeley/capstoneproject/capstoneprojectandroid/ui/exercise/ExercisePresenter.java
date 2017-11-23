@@ -42,16 +42,45 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         return mStarted;
     }
 
+
+    @Override
+    public void onAttach(V view, ExerciseType exerciseType) {
+        super.onAttach(view);
+        mExerciseType = exerciseType;
+        createExercise();
+    }
+
+    protected void createExercise() {
+        getView().showLoading("Wait...", false);
+        getCompositeDisposable().add(getInteractor().doCreateExercise(mExerciseType)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<Exercise>() {
+                    @Override
+                    public void accept(Exercise exercise) throws Exception {
+                        mExercise = exercise;
+                        getView().hideLoading();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getView().showError(throwable);
+                    }
+                })
+        );
+    }
+
+
     @Override
     public void onStartClick() {
-        mExercise.start();
+        getView().onWaitToStart();
+
         getCompositeDisposable().add(getInteractor().doStartExercise(mExercise)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        getView().showMessage("Let's go !");
                         getView().onExerciseStart();
                         mStarted = true;
                         startListening();
@@ -60,14 +89,14 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Timber.e("Error while starting exercise", throwable);
-                        getView().showMessage("An error occurred");
+                        getView().showError(throwable);
                         mStarted = false;
                     }
                 })
         );
     }
 
-    private void startListening() {
+    protected void startListening() {
         getCompositeDisposable().add(getInteractor().doListenMeasurements()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
@@ -81,6 +110,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                             @Override
                             public void accept(Throwable throwable) throws Exception {
                                 Timber.e(throwable, "Listening error");
+                                getView().showError(throwable);
                             }
                         })
         );
@@ -89,24 +119,18 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     @Override
     public void onStopClick() {
         mStarted = false;
-        mExercise.stop();
         getInteractor().doStopExercise();
         getView().onExerciseStop();
     }
 
     @Override
-    public void setExerciseType(ExerciseType exerciseType) {
-        mExercise = new Exercise(exerciseType);
-    }
-
-    @Override
     public void onPause() {
         mStarted = false;
-        mExercise.stop();
         getInteractor().doStopExercise();
+        getView().onExerciseStop();
     }
 
-    private void onReceiveMeasurement(Measurement measurement) {
+    protected void onReceiveMeasurement(Measurement measurement) {
         mExercise.addMeasurement(measurement);
         getView().addMeasurement(measurement);
         getCompositeDisposable().add(getInteractor().doSaveMeasurement(mExercise, measurement)

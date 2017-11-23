@@ -43,26 +43,34 @@ public class BluetoothListPresenterTest {
         mTestScheduler = new TestScheduler();
         TestSchedulerProvider testSchedulerProvider = new TestSchedulerProvider(mTestScheduler);
 
-        mPresenter = new BluetoothListPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable);
+        mPresenter = Mockito.spy(new BluetoothListPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable));
 
         mPresenter.onAttach(mView);
     }
 
     @Test
     public void onLoadPairedDevicesShouldCallInteractor() {
+        // given
         doReturn(Observable.empty()).when(mInteractor).doLoadPairedDevices();
+
+        // when
         mPresenter.onLoadPairedDevices();
+
+        // then
         verify(mInteractor).doLoadPairedDevices();
     }
 
     @Test
     public void onLoadPairedDevicesShouldUpdateViewWithDevice() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.just(device)).when(mInteractor).doLoadPairedDevices();
-        mPresenter.onLoadPairedDevices();
 
+        // when
+        mPresenter.onLoadPairedDevices();
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).addPairedDevice(device);
     }
 
@@ -75,37 +83,53 @@ public class BluetoothListPresenterTest {
 
     @Test
     public void onStartScanningShouldCallInteractor() {
+        // given
         doReturn(Observable.empty()).when(mInteractor).doDiscovery();
+
+        // when
         mPresenter.onStartScanning();
+
+        // then
         verify(mInteractor).doDiscovery();
     }
 
     @Test
     public void onStartScanningShouldUpdateViewWithLoading() {
+        // given
         doReturn(Observable.empty()).when(mInteractor).doDiscovery();
+
+        // when
         mPresenter.onStartScanning();
+
+        // then
         verify(mView).showScanningProgress();
     }
 
     @Test
     public void onStartScanningShouldUpdateViewWithDevice() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.just(device)).when(mInteractor).doDiscovery();
         doReturn("").when(device).getMacAddress();
-        mPresenter.onStartScanning();
 
+        // when
+        mPresenter.onStartScanning();
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).addScannedDevice(device);
     }
 
     @Test
     public void onStartScanningShouldUpdateViewOnFailure() {
+        // given
         doReturn(Observable.error(new Error())).when(mInteractor).doDiscovery();
-        mPresenter.onStartScanning();
 
+        // when
+        mPresenter.onStartScanning();
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).hideScanningProgress();
         verify(mView).showError(anyString());
     }
@@ -116,11 +140,14 @@ public class BluetoothListPresenterTest {
 
     @Test
     public void onDeviceClickShouldCallInteractor() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.empty()).when(mInteractor).doConnectDevice();
 
+        // when
         mPresenter.onDeviceClick(device);
 
+        // then
         verify(mInteractor).doSelectDevice(device);
         verify(mInteractor).doConnectDevice();
     }
@@ -128,62 +155,72 @@ public class BluetoothListPresenterTest {
 
     @Test
     public void onDeviceClickShouldStopScanning() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.empty()).when(mInteractor).doConnectDevice();
 
-        BluetoothListPresenter spy = Mockito.spy(mPresenter);
-        spy.onDeviceClick(device);
+        // when
+        mPresenter.onDeviceClick(device);
 
-        verify(spy).onStopScanning();
+        // then
+        verify(mPresenter).onStopScanning();
     }
 
 
     @Test
     public void onDeviceClickShouldUpdateView() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.empty()).when(mInteractor).doConnectDevice();
 
+        // when
         mPresenter.onDeviceClick(device);
 
+        // then
         verify(mView).showLoading();
     }
 
     @Test
     public void onDeviceClickShouldCheckDeviceOnSuccess() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.just(Rx2BleDevice.ConnectionState.CONNECTED)).when(mInteractor).doConnectDevice();
+        doNothing().when(mPresenter).onDeviceConnected();
 
-        BluetoothListPresenter spy = Mockito.spy(mPresenter);
-        spy.onDeviceClick(device);
-        doNothing().when(spy).onDeviceConnected();
-
+        // when
+        mPresenter.onDeviceClick(device);
         mTestScheduler.triggerActions();
 
-        verify(spy).onDeviceConnected();
+        // then
+        verify(mPresenter).onDeviceConnected();
     }
 
     @Test
     public void onDeviceClickShouldUpdateViewOnFailure() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.just(Rx2BleDevice.ConnectionState.DISCONNECTED)).when(mInteractor).doConnectDevice();
 
+        // when
         mPresenter.onDeviceClick(device);
-
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).hideLoading();
         verify(mView).showError(anyString());
     }
 
     @Test
     public void onDeviceClickShouldUpdateViewOnError() {
+        // given
         Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
         doReturn(Observable.error(new Error())).when(mInteractor).doConnectDevice();
 
+        // when
         mPresenter.onDeviceClick(device);
-
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).hideLoading();
         verify(mView).showError(anyString());
     }
@@ -196,22 +233,27 @@ public class BluetoothListPresenterTest {
 
     @Test
     public void onDeviceConnectedShouldUpdateView() {
+        // given
         doReturn(Completable.complete()).when(mInteractor).doValidateDevice();
 
+        // when
         mPresenter.onDeviceConnected();
 
+        // then
         verify(mView).showMessage(anyString());
     }
 
 
     @Test
     public void onDeviceConnectedShouldUpdateViewOnSuccess() {
+        // given
         doReturn(Completable.complete()).when(mInteractor).doValidateDevice();
 
+        // when
         mPresenter.onDeviceConnected();
-
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).hideLoading();
         verify(mView, times(2)).showMessage(anyString());
         verify(mView).onDeviceConnected();
@@ -219,12 +261,14 @@ public class BluetoothListPresenterTest {
 
     @Test
     public void onDeviceConnectedShouldUpdateViewOnFailure() {
+        // given
         doReturn(Completable.error(new Error())).when(mInteractor).doValidateDevice();
 
+        // when
         mPresenter.onDeviceConnected();
-
         mTestScheduler.triggerActions();
 
+        // then
         verify(mView).hideLoading();
         verify(mView).showError(anyString());
     }

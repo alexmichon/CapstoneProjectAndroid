@@ -77,17 +77,6 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_exercise, container, false);
 
-        ActivityComponent component = getActivityComponent();
-        if (component != null) {
-            component.inject(this);
-            ButterKnife.bind(this, view);
-            mPresenter.onAttach(this);
-        }
-
-        initLineChart(mAccView, -2, 2);
-        initLineChart(mGyrView, -2, 2);
-        initLineChart(mEncoderView, 0, 360);
-
         Bundle data = getArguments();
         ExerciseType exerciseType = (ExerciseType) data.getParcelable(EXTRA_EXERCISE_TYPE);
         if (exerciseType == null) {
@@ -95,7 +84,16 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
             return null;
         }
 
-        mPresenter.setExerciseType(exerciseType);
+        ActivityComponent component = getActivityComponent();
+        if (component != null) {
+            component.inject(this);
+            ButterKnife.bind(this, view);
+            mPresenter.onAttach(this, exerciseType);
+        }
+
+        initLineChart(mAccView, -2, 2);
+        initLineChart(mGyrView, -2, 2);
+        initLineChart(mEncoderView, 0, 360);
 
         return view;
     }
@@ -147,6 +145,7 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     @Override
     public void onExerciseStart() {
         getActivity().invalidateOptionsMenu();
+        showMessage("Let's go !");
     }
 
     @Override
@@ -171,6 +170,11 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
         }
 
         addMeasurement(chart, measurement);
+    }
+
+    @Override
+    public void onWaitToStart() {
+        showLoading("Wait...");
     }
 
     private void addMeasurement(LineChart chart, Measurement measurement) {

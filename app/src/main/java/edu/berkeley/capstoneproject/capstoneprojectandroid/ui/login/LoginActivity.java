@@ -76,12 +76,26 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
 
     @Override
     public void onLoginSuccess(User user) {
+        hideLoading();
         showMessage("Welcome back " + user.getFirstName());
     }
 
     @Override
     public void onLoginFailure() {
+        hideLoading();
         showError("An error occurred !");
+    }
+
+    @Override
+    public void onLoginFailure(Throwable throwable) {
+        hideLoading();
+        showError(throwable.getMessage());
+    }
+
+    @Override
+    public void onLoginFailure(String message) {
+        hideLoading();
+        showError(message);
     }
 
     @Override
@@ -91,16 +105,21 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
         finish();
     }
 
+    @Override
+    public void onLoginStart() {
+        showLoading();
+    }
+
 
     @Override
-    public void showLoading() {
+    public void showLoading(String message) {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Authenticating...");
+        mProgressDialog.setMessage(message);
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {

@@ -2,9 +2,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,10 +25,9 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
 
     @Override
     public void onLoginClick(final String email, final String password) {
-        getView().showLoading();
+        getView().onLoginStart();
 
         if (email.equals("admin") && password.equals("admin")) {
-            getView().hideLoading();
             getView().onLoginSuccess(new User(email, "admin", ""));
             getView().startMainActivity();
             return;
@@ -42,14 +40,13 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
                         .subscribe(new Consumer<User>() {
                             @Override
                             public void accept(User user) throws Exception {
-                                getView().hideLoading();
                                 getView().onLoginSuccess(user);
                                 getView().startMainActivity();
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                getView().hideLoading();
+                                getView().onLoginFailure(throwable);
                                 handleApiError(throwable);
                             }
                         })

@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -93,6 +93,16 @@ public class ExerciseTypesFragment extends BaseFragment implements ExerciseTypes
         if (mListener != null) {
             mListener.onExerciseTypeSelected(exerciseType);
         }
+    }
+
+    @Override
+    public void onExerciseTypesLoading() {
+        showLoading();
+    }
+
+    @Override
+    public void onExerciseTypesDoneLoading() {
+        hideLoading();
     }
 
 

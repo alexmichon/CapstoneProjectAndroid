@@ -1,10 +1,13 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
+import android.support.design.widget.NavigationView;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
@@ -37,18 +40,34 @@ public class MainPresenterTest {
         mTestScheduler = new TestScheduler();
         TestSchedulerProvider testSchedulerProvider = new TestSchedulerProvider(mTestScheduler);
 
-        mPresenter = new MainPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable);
+        mPresenter = Mockito.spy(new MainPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable));
         mPresenter.onAttach(mView);
     }
 
     @Test
     public void startExerciseClickShouldNavigateToExerciseView() {
+        // when
         mPresenter.onStartTrainingClick();
+
+        // then
         verify(mView).startTrainingActivity();
     }
 
     @Test
     public void viewResultClickShouldNavigateToResultView() {
+        // when
+        mPresenter.onViewResultsClick();
+
+        // then
+        // TODO
+    }
+
+    @Test
+    public void navigationListenerShouldOpenHomeOnClick() {
+        // given
+        NavigationView.OnNavigationItemSelectedListener navigationListener = mPresenter.getNavigationListener();
+
+        // when
         // TODO
     }
 

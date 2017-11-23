@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
@@ -18,6 +18,10 @@ public interface ExerciseTypesContract {
         void startExerciseTypeActivity(ExerciseType exerciseType);
 
         void onExerciseTypeSelected(ExerciseType exerciseType);
+
+        void onExerciseTypesLoading();
+
+        void onExerciseTypesDoneLoading();
     }
 
     interface Interactor extends IBaseInteractor {

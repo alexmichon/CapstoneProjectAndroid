@@ -32,7 +32,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
     }
 
     @Override
-    public void start() {
+    public void onStart() {
         checkNetworkState();
         getView().done();
     }

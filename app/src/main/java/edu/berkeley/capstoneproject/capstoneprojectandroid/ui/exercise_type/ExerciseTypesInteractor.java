@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
 
 import javax.inject.Inject;
 

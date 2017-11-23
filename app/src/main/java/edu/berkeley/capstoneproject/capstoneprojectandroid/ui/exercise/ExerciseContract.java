@@ -24,9 +24,13 @@ public interface ExerciseContract {
         void onExerciseStop();
 
         void addMeasurement(Measurement measurement);
+
+        void onWaitToStart();
     }
 
     interface Interactor extends IBaseInteractor {
+
+        Single<Exercise> doCreateExercise(ExerciseType exerciseType);
 
         Completable doStartExercise(Exercise exercise);
 
@@ -50,8 +54,8 @@ public interface ExerciseContract {
 
         void onStopClick();
 
-        void setExerciseType(ExerciseType exerciseType);
-
         void onPause();
+
+        void onAttach(V view, ExerciseType exerciseType);
     }
 }

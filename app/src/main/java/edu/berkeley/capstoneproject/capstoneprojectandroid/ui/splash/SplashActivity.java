@@ -1,8 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -12,7 +10,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.AndroidInjection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
@@ -43,7 +40,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.start();
+        mPresenter.onStart();
     }
 
     @Override

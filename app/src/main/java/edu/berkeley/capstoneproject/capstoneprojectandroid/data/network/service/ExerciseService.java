@@ -1,6 +1,5 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service;
 
-import com.rx2androidnetworking.Rx2ANRequest;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
 import javax.inject.Inject;
@@ -8,10 +7,10 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.ExerciseRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.ExerciseResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.MeasurementRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementResponse;
 import io.reactivex.Single;
 
 /**

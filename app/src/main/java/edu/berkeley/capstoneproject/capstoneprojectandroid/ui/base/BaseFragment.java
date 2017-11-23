@@ -43,6 +43,48 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     }
 
     @Override
+    public void showLoading(@StringRes int stringRes) {
+        if (mActivity != null) {
+            mActivity.showLoading(stringRes);
+        }
+    }
+
+    @Override
+    public void showLoading(String message) {
+        if (mActivity != null) {
+            mActivity.showLoading(message);
+        }
+    }
+
+    @Override
+    public void showLoading(String message, boolean cancelable) {
+        if (mActivity != null) {
+            mActivity.showLoading(message, cancelable);
+        }
+    }
+
+    @Override
+    public void showLoading(@StringRes int stringRes, boolean cancelable) {
+        if (mActivity != null) {
+            mActivity.showLoading(stringRes, cancelable);
+        }
+    }
+
+    @Override
+    public void showLoading(String message, OnCancelListener listener) {
+        if (mActivity != null) {
+            mActivity.showLoading(message, listener);
+        }
+    }
+
+    @Override
+    public void showLoading(@StringRes int stringRes, OnCancelListener listener) {
+        if (mActivity != null) {
+            mActivity.showLoading(stringRes, listener);
+        }
+    }
+
+    @Override
     public void hideLoading() {
         if (mActivity != null) {
             mActivity.hideLoading();
@@ -60,6 +102,13 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     public void showError(@StringRes int stringRes) {
         if (mActivity != null) {
             mActivity.showError(stringRes);
+        }
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        if (mActivity != null) {
+            mActivity.showError(throwable);
         }
     }
 

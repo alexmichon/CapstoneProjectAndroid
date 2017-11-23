@@ -13,10 +13,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.Blueto
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.AuthService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.ExerciseService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IAuthService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.AuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.ExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IExerciseService;
 
 /**
  * Created by Alex on 08/11/2017.

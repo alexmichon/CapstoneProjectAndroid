@@ -1,19 +1,17 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
-import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
-import io.reactivex.Observable;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterResponse;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;

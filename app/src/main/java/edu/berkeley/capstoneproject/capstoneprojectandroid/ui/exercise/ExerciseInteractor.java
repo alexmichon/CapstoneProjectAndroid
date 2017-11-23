@@ -7,20 +7,17 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ISensorService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.ExerciseRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.ExerciseResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.MeasurementRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -43,16 +40,21 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
+    public Single<Exercise> doCreateExercise(final ExerciseType exerciseType) {
+        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(new ExerciseRequest(exerciseType))
+                .map(new Function<ExerciseResponse, Exercise>() {
+                    @Override
+                    public Exercise apply(@NonNull ExerciseResponse exerciseResponse) throws Exception {
+                        return exerciseResponse.getExercise(exerciseType);
+                    }
+                });
+    }
+
+    @Override
     public Completable doStartExercise(final Exercise exercise) {
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
-                getDataManager().getApiHelper().getExerciseService().doCreateExercise(new ExerciseRequest(exercise)).subscribe(new Consumer<ExerciseResponse>() {
-                    @Override
-                    public void accept(ExerciseResponse exerciseResponse) throws Exception {
-                        exercise.setId(exerciseResponse.getId());
-                    }
-                });
                 mNotificationDisposable = mExerciseService.startExercise()
                         .subscribe(new Consumer<ISensorService>() {
                             @Override

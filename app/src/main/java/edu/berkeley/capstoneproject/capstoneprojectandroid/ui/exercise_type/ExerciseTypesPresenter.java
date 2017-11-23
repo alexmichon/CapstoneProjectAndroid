@@ -1,6 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_types;
-
-import android.util.Log;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
 
 import javax.inject.Inject;
 
@@ -8,8 +6,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.internal.observers.SubscriberCompletableObserver;
+import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 /**
@@ -34,15 +35,28 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
     @Override
     public void onLoadExerciseTypes() {
         Timber.d("Loading exercise types");
+
+        getView().onExerciseTypesLoading();
+
         getCompositeDisposable().add(getInteractor()
             .doLoadExerciseTypes()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<ExerciseType>() {
+                .subscribeWith(new DisposableObserver<ExerciseType>() {
                     @Override
-                    public void accept(ExerciseType exerciseType) throws Exception {
+                    public void onNext(@NonNull ExerciseType exerciseType) {
                         Timber.d("New exercise type found");
                         getView().addExerciseType(exerciseType);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        getView().showError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        getView().onExerciseTypesDoneLoading();
                     }
                 })
         );

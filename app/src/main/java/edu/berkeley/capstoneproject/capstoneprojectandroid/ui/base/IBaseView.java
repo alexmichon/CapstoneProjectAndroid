@@ -9,6 +9,13 @@ import android.support.annotation.StringRes;
 public interface IBaseView {
 
     void showLoading();
+    void showLoading(String message);
+    void showLoading(@StringRes int stringRes);
+    void showLoading(String message, OnCancelListener listener);
+    void showLoading(@StringRes int stringRes, OnCancelListener listener);
+    void showLoading(String message, boolean cancelable);
+    void showLoading(@StringRes int stringRes, boolean cancelable);
+
     void hideLoading();
 
     void showMessage(String message);
@@ -16,4 +23,9 @@ public interface IBaseView {
 
     void showError(String message);
     void showError(@StringRes int stringRes);
+    void showError(Throwable throwable);
+
+    interface OnCancelListener {
+        void onCancel();
+    }
 }

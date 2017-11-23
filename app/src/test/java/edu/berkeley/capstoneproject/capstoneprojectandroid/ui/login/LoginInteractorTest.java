@@ -1,22 +1,18 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import org.junit.Before;
-import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.services.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IAuthService;
 import io.reactivex.Single;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -54,18 +50,22 @@ public class LoginInteractorTest {
 
     @Test
     public void loginShouldCallApi() {
+        // given
         String email = "email";
         String password = "password";
 
         doReturn(Single.just(new LoginResponse())).when(mAuthService).doLogin(new LoginRequest(email, password));
 
+        //  when
         mInteractor.doLoginCall(new LoginRequest(email, password));
 
+        // then
         verify(mAuthService).doLogin(new LoginRequest(email, password));
     }
 
     @Test
     public void loginShouldSetHeadersOnSuccess() {
+        // given
         String email = "email";
         String password = "password";
 
@@ -84,8 +84,10 @@ public class LoginInteractorTest {
         doReturn(tokenType).when(response).getTokenType();
         doReturn(uid).when(response).getUid();
 
+        // when
         mInteractor.doLoginCall(new LoginRequest(email, password)).test();
 
+        // then
         verify(mApiHeader).setAccessToken(accessToken);
         verify(mApiHeader).setClient(client);
         verify(mApiHeader).setExpiry(expiry);

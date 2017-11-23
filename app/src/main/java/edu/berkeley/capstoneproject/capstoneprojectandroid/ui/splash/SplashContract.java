@@ -24,6 +24,6 @@ public interface SplashContract {
 
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void start();
+        void onStart();
     }
 }

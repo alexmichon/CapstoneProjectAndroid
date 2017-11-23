@@ -1,15 +1,12 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;

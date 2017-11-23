@@ -19,9 +19,7 @@ public class Exercise {
         UNSTARTED, STARTED, ENDED
     }
 
-    private int mID;
-
-    private String mName;
+    private final int mId;
 
     private final ExerciseType mType;
     private Date mStartDate;
@@ -31,7 +29,8 @@ public class Exercise {
 
     private final Map<Metric, List<Measurement>> mMeasurements = new HashMap<>();
 
-    public Exercise(ExerciseType type) {
+    public Exercise(int id, ExerciseType type) {
+        mId = id;
         mType = type;
     }
 
@@ -53,34 +52,6 @@ public class Exercise {
         return mState;
     }
 
-    public String getName() {
-        if (mName != null) {
-            return mName;
-        }
-
-        return getDefaultName();
-    }
-
-    private String getDefaultName() {
-        StringBuilder sb = new StringBuilder();
-        if (mType != null) {
-            sb.append(mType.getName());
-        }
-        else {
-            sb.append("Exercise");
-        }
-
-        if (mStartDate != null) {
-            sb.append(" " + mStartDate.toString());
-        }
-
-        return sb.toString();
-    }
-
-    public void setName(String name) {
-        mName = name;
-    }
-
     public void addMeasurement(Measurement measurement) {
         if (!mMeasurements.containsKey(measurement.getMetric())) {
             mMeasurements.put(measurement.getMetric(), new ArrayList<Measurement>());
@@ -90,10 +61,6 @@ public class Exercise {
     }
 
     public int getId() {
-        return mID;
-    }
-
-    public void setId(int ID) {
-        mID = ID;
+        return mId;
     }
 }

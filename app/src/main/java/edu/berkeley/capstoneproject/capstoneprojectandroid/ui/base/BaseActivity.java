@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -70,18 +71,62 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     }
 
     @Override
+    public void showError(Throwable throwable) {
+        showMessage(throwable.getMessage());
+    }
+
+    @Override
     public void showLoading() {
+        showLoading("Loading...");
+    }
+
+    @Override
+    public void showLoading(@StringRes int stringRes) {
+        showLoading(getString(stringRes));
+    }
+
+    @Override
+    public void showLoading(String message) {
         hideLoading();
         mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(message);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
+    }
+
+    @Override
+    public void showLoading(String message, boolean cancelable) {
+        showLoading(message);
+        mProgressDialog.setCancelable(cancelable);
+    }
+
+    @Override
+    public void showLoading(@StringRes int stringRes, boolean cancelable) {
+        showLoading(getString(stringRes), cancelable);
+    }
+
+    @Override
+    public void showLoading(String message, final OnCancelListener listener) {
+        showLoading(message);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                listener.onCancel();
+            }
+        });
+    }
+
+    @Override
+    public void showLoading(@StringRes int stringRes, OnCancelListener listener) {
+        showLoading(getString(stringRes), listener);
     }
 
     @Override
     public void hideLoading() {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
+            mProgressDialog = null;
         }
     }
 

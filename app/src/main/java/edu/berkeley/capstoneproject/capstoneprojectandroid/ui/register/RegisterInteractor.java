@@ -4,9 +4,8 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;

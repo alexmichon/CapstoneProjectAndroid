@@ -2,7 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.models.RegisterRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
