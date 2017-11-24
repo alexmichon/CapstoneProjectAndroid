@@ -1,7 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,8 +36,6 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
     @BindView(R.id.login_button)
     Button mLoginButton;
 
-    private ProgressDialog mProgressDialog;
-
     @Inject
     LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> mPresenter;
 
@@ -75,6 +71,11 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
     }
 
     @Override
+    public void onLoginStart(OnCancelListener listener) {
+        showLoading("Authenticating...", listener);
+    }
+
+    @Override
     public void onLoginSuccess(User user) {
         hideLoading();
         showMessage("Welcome back " + user.getFirstName());
@@ -103,37 +104,5 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    public void onLoginStart() {
-        showLoading();
-    }
-
-
-    @Override
-    public void showLoading(String message) {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(message);
-        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                mPresenter.onLoginCancel();
-                mProgressDialog.dismiss();
-            }
-        });
-        mProgressDialog.show();
-    }
-
-    @Override
-    public void hideLoading() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
     }
 }

@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Value;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
@@ -143,14 +144,26 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     }
 
     @Override
-    public void onExerciseStart() {
+    public void onExerciseCreated(Exercise exercise) {
+
+    }
+
+    @Override
+    public void onExerciseStarted(Exercise exercise) {
         getActivity().invalidateOptionsMenu();
+        hideLoading();
         showMessage("Let's go !");
     }
 
     @Override
-    public void onExerciseStop() {
+    public void onExerciseStopped(Exercise exercise) {
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onExerciseError(Throwable throwable) {
+        hideLoading();
+        showError(throwable);
     }
 
     @Override
@@ -173,8 +186,13 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     }
 
     @Override
-    public void onWaitToStart() {
+    public void onCreatingExercise() {
         showLoading("Wait...");
+    }
+
+    @Override
+    public void onStartingExercise() {
+
     }
 
     private void addMeasurement(LineChart chart, Measurement measurement) {

@@ -18,8 +18,6 @@ import io.reactivex.disposables.CompositeDisposable;
 public class MainPresenter<V extends MainContract.View, I extends MainContract.Interactor>
         extends BasePresenter<V, I> implements MainContract.Presenter<V, I> {
 
-    private static final String TAG = MainPresenter.class.getSimpleName();
-
     @Inject
     public MainPresenter(I interactor,
                          ISchedulerProvider schedulerProvider,

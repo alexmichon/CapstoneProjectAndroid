@@ -38,10 +38,10 @@ public class ExerciseService implements IExerciseService {
     }
 
     @Override
-    public Single<MeasurementResponse> doCreateMeasurement(int exerciseId, MeasurementRequest request) {
+    public Single<MeasurementResponse> doCreateMeasurement(MeasurementRequest request) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_MEASUREMENTS)
                 .addHeaders(mApiHeader)
-                .addPathParameter("exercise_id", String.valueOf(exerciseId))
+                .addPathParameter("exercise_id", String.valueOf(request.getExerciseId()))
                 .addBodyParameter(request)
                 .build()
                 .getObjectObservable(MeasurementResponse.class)

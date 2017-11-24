@@ -1,7 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model;
 
-import android.util.Log;
-
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
 import timber.log.Timber;
 
@@ -32,7 +30,7 @@ public abstract class ImuMeasurement {
         Timber.d("Decoding measurement");
 
         int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);
-        long timestamp = BytesUtils.bytesToDate(bytes, 2 * BytesUtils.BYTES_INT16);
+        long timestamp = BytesUtils.bytesToTimestamp(bytes, 2 * BytesUtils.BYTES_INT16);
         int offset = 2 * BytesUtils.BYTES_INT16 + BytesUtils.BYTES_TIMESTAMP;
 
         switch(type) {

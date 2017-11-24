@@ -29,14 +29,12 @@ import io.reactivex.functions.Function;
 
 public class ExerciseInteractor extends BaseInteractor implements ExerciseContract.Interactor {
 
-    private final IExerciseService mExerciseService;
     private ISensorService mSensorService;
     private Disposable mNotificationDisposable;
 
     @Inject
     public ExerciseInteractor(IDataManager dataManager) {
         super(dataManager);
-        mExerciseService = getDataManager().getBluetoothHelper().getExerciseService();
     }
 
     @Override
@@ -55,7 +53,7 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
-                mNotificationDisposable = mExerciseService.startExercise()
+                mNotificationDisposable = getDataManager().getBluetoothHelper().getExerciseService().startExercise()
                         .subscribe(new Consumer<ISensorService>() {
                             @Override
                             public void accept(ISensorService iSensorService) throws Exception {
@@ -74,7 +72,9 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public void doStopExercise() {
-        mNotificationDisposable.dispose();
+        if (mNotificationDisposable != null) {
+            mNotificationDisposable.dispose();
+        }
     }
 
     @Override
@@ -96,6 +96,6 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     @Override
     public Completable doSaveMeasurement(final Exercise exercise, final Measurement measurement) {
         return Completable.fromSingle(getDataManager().getApiHelper().getExerciseService()
-                .doCreateMeasurement(exercise.getId(), new MeasurementRequest(measurement)));
+                .doCreateMeasurement(new MeasurementRequest(measurement)));
     }
 }

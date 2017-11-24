@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -25,7 +26,12 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
 
     @Override
     public void onLoginClick(final String email, final String password) {
-        getView().onLoginStart();
+        getView().onLoginStart(new IBaseView.OnCancelListener() {
+            @Override
+            public void onCancel() {
+                onLoginCancel();
+            }
+        });
 
         if (email.equals("admin") && password.equals("admin")) {
             getView().onLoginSuccess(new User(email, "admin", ""));

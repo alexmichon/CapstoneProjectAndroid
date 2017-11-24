@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope;
@@ -16,8 +17,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
  */
 
 public class Measurement {
-
-    private static final String TAG = Measurement.class.getSimpleName();
 
     public static final String LABEL_ACC = "Acceleration";
     public static final String LABEL_GYR = "Gyroscope";
@@ -41,6 +40,8 @@ public class Measurement {
 
     private final Metric mMetric;
 
+    private Exercise mExercise;
+
     public Measurement(Metric metric, long timestamp, float value) {
         mMetric = metric;
         mTimestamp = timestamp;
@@ -59,7 +60,7 @@ public class Measurement {
 
         Sensor encoder = SensorManager.find(SensorManager.ID_ENCODER);
 
-        long timestamp = BytesUtils.bytesToDate(bytes);
+        long timestamp = BytesUtils.bytesToTimestamp(bytes);
         float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_TIMESTAMP);
 
         measurements.add(new Measurement(encoder.getMetric(Encoder.ID_ANGLE), timestamp, angle));
@@ -71,7 +72,7 @@ public class Measurement {
         List<Measurement> measurements = new ArrayList<>(3);
 
         int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);
-        long timestamp = BytesUtils.bytesToDate(bytes, 2 * BytesUtils.BYTES_INT16);
+        long timestamp = BytesUtils.bytesToTimestamp(bytes, 2 * BytesUtils.BYTES_INT16);
         int offset = 2 * BytesUtils.BYTES_INT16 + BytesUtils.BYTES_TIMESTAMP;
 
         float valX = BytesUtils.bytesToFloat(bytes, offset + 0 * BytesUtils.BYTES_FLOAT);
@@ -101,5 +102,14 @@ public class Measurement {
 
     public Metric getMetric() {
         return mMetric;
+    }
+
+    public Exercise getExercise() {
+        return mExercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        mExercise = exercise;
+        mExercise.addMeasurement(this);
     }
 }

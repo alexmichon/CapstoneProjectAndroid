@@ -13,5 +13,5 @@ import io.reactivex.Single;
 public interface IExerciseService {
 
     Single<ExerciseResponse> doCreateExercise(ExerciseRequest request);
-    Single<MeasurementResponse> doCreateMeasurement(int exerciseId, MeasurementRequest request);
+    Single<MeasurementResponse> doCreateMeasurement(MeasurementRequest request);
 }

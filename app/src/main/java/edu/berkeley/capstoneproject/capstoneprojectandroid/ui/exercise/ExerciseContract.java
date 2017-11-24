@@ -20,12 +20,16 @@ import io.reactivex.Single;
 public interface ExerciseContract {
 
     interface View extends IBaseView {
-        void onExerciseStart();
-        void onExerciseStop();
+        void onExerciseCreated(Exercise exercise);
+        void onExerciseStarted(Exercise exercise);
+        void onExerciseStopped(Exercise exercise);
 
         void addMeasurement(Measurement measurement);
 
-        void onWaitToStart();
+        void onCreatingExercise();
+        void onStartingExercise();
+
+        void onExerciseError(Throwable throwable);
     }
 
     interface Interactor extends IBaseInteractor {

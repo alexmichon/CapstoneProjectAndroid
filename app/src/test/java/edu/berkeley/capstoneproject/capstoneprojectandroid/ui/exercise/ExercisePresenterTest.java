@@ -14,7 +14,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.TestScheduler;
@@ -22,6 +21,7 @@ import io.reactivex.schedulers.TestScheduler;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -68,66 +68,128 @@ public class ExercisePresenterTest {
 
 
 
+
     @Test
-    public void onCreateExerciseShouldUpdateView() {
+    public void onStartClickShouldCallInteractor() {
+        // given
+        Single single = Single.just(mExercise);
+        doReturn(single).when(mInteractor).doCreateExercise(mExerciseType);
+
+        // when
+        mPresenter.onStartClick();
+
+        // then
+        verify(mInteractor).doCreateExercise(mExerciseType);
+        single.test().assertSubscribed();
+    }
+
+
+    @Test
+    public void onStartClickShouldUpdateView() {
         // given
         doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
 
         // when
-        mPresenter.createExercise();
+        mPresenter.onStartClick();
 
         // then
-        verify(mView).showLoading(anyString(), eq(false));
+        verify(mView).onCreatingExercise();
     }
 
     @Test
-    public void onCreateExerciseShouldUpdateViewOnComplete() {
+    public void onStartClickShouldStartExerciseOnComplete() {
         // given
         doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
+        doNothing().when(mPresenter).startExercise(any(Exercise.class));
 
         // when
-        mPresenter.createExercise();
+        mPresenter.onStartClick();
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).hideLoading();
+        verify(mPresenter).startExercise(mExercise);
     }
 
     @Test
-    public void onCreateExerciseShouldUpdateViewOnError() {
+    public void onStartClickShouldUpdateViewOnComplete() {
+        // given
+        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
+        doNothing().when(mPresenter).startExercise(any(Exercise.class));
+
+        // when
+        mPresenter.onStartClick();
+        mTestScheduler.triggerActions();
+
+        // then
+        verify(mView).onExerciseCreated(mExercise);
+    }
+
+    @Test
+    public void onStartClickShouldUpdateViewOnError() {
         // given
         Error error = new Error();
         doReturn(Single.error(error)).when(mInteractor).doCreateExercise(mExerciseType);
 
         // when
-        mPresenter.createExercise();
+        mPresenter.onStartClick();
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).showError(error);
+        verify(mView).onExerciseError(error);
     }
 
 
 
-
     @Test
-    public void onStartClickShouldShowLoading() {
+    public void startExerciseShouldCallInteractor() {
         // given
-        doReturn(Completable.complete()).when(mInteractor)
-                .doStartExercise(any(Exercise.class));
+        Completable completable = Completable.complete();
+        doReturn(completable).when(mInteractor).doStartExercise(mExercise);
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.startExercise(mExercise);
 
         // then
-        verify(mView).onWaitToStart();
+        verify(mInteractor).doStartExercise(mExercise);
+        completable.test().assertSubscribed();
+    }
+
+
+    @Test
+    public void startExerciseShouldUpdateView() {
+        // given
+        doReturn(Completable.complete()).when(mInteractor)
+                .doStartExercise(mExercise);
+
+        // when
+        mPresenter.startExercise(mExercise);
+
+        // then
+        verify(mView).onStartingExercise();
     }
 
     @Test
-    public void onStartClickShouldUpdateViewOnSuccess() {
+    public void startExerciseShouldUpdateViewOnSuccess() {
         // given
         doReturn(Completable.complete()).when(mInteractor)
-                .doStartExercise(any(Exercise.class));
+                .doStartExercise(mExercise);
+
+        doReturn(Flowable.empty()).when(mInteractor)
+                .doListenMeasurements();
+
+        // when
+        mPresenter.startExercise(mExercise);
+        mTestScheduler.triggerActions();
+
+        // then
+        verify(mView).onExerciseStarted(mExercise);
+    }
+
+    @Test
+    public void startExerciseShouldStartListeningOnSuccess() {
+        // given
+        doReturn(Completable.complete()).when(mInteractor)
+                .doStartExercise(mExercise);
 
         doReturn(Flowable.empty()).when(mInteractor)
                 .doListenMeasurements();
@@ -137,28 +199,11 @@ public class ExercisePresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).onExerciseStart();
+        verify(mPresenter).startListening(mExercise);
     }
 
     @Test
-    public void onStartClickShouldStartListeningOnSuccess() {
-        // given
-        doReturn(Completable.complete()).when(mInteractor)
-                .doStartExercise(any(Exercise.class));
-
-        doReturn(Flowable.empty()).when(mInteractor)
-                .doListenMeasurements();
-
-        // when
-        mPresenter.onStartClick();
-        mTestScheduler.triggerActions();
-
-        // then
-        verify(mPresenter).startListening();
-    }
-
-    @Test
-    public void onStartClickShouldUpdateViewOnFailure() {
+    public void startExerciseShouldUpdateViewOnFailure() {
         // given
         Error error = new Error();
         doReturn(Completable.error(error)).when(mInteractor)
@@ -169,31 +214,39 @@ public class ExercisePresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).showError(error);
+        verify(mView).onExerciseError(error);
     }
 
+
+
+
+
+
+
     @Test
-    public void onStartListeningShouldCallInteractor() {
+    public void startListeningShouldCallInteractor() {
         // given
-        doReturn(Flowable.empty()).when(mInteractor)
+        Flowable flowable = Flowable.empty();
+        doReturn(flowable).when(mInteractor)
                 .doListenMeasurements();
 
         // when
-        mPresenter.startListening();
+        mPresenter.startListening(mExercise);
 
         // then
         verify(mInteractor).doListenMeasurements();
+        flowable.test().assertSubscribed();
     }
 
     @Test
-    public void onStartListeningShouldUpdateViewWithMeasurement() {
+    public void startListeningShouldUpdateViewWithMeasurement() {
         // given
         Measurement measurement = Mockito.mock(Measurement.class);
         doReturn(Flowable.just(measurement)).when(mInteractor)
                 .doListenMeasurements();
 
         // when
-        mPresenter.startListening();
+        mPresenter.startListening(mExercise);
         mTestScheduler.triggerActions();
 
         // then
@@ -201,29 +254,29 @@ public class ExercisePresenterTest {
     }
 
     @Test
-    public void onStartListeningShouldSaveMeasurement() {
+    public void startListeningShouldSaveMeasurement() {
         // given
         Measurement measurement = Mockito.mock(Measurement.class);
         doReturn(Flowable.just(measurement)).when(mInteractor)
                 .doListenMeasurements();
 
         // when
-        mPresenter.startListening();
+        mPresenter.startListening(mExercise);
         mTestScheduler.triggerActions();
 
         // then
-        verify(mPresenter).onReceiveMeasurement(measurement);
+        verify(mPresenter).onReceiveMeasurement(mExercise, measurement);
     }
 
     @Test
-    public void onStartListeningShouldUpdateViewOnFailure() {
+    public void startListeningShouldUpdateViewOnFailure() {
         // given
         Error error = new Error();
         doReturn(Flowable.error(error)).when(mInteractor)
                 .doListenMeasurements();
 
         // when
-        mPresenter.startListening();
+        mPresenter.startListening(mExercise);
         mTestScheduler.triggerActions();
 
         // then
@@ -238,14 +291,16 @@ public class ExercisePresenterTest {
     public void onReceiveMeasurementShouldCallInteractor() {
         // given
         Measurement measurement = Mockito.mock(Measurement.class);
-        doReturn(Completable.complete()).when(mInteractor)
+        Completable completable = Completable.complete();
+        doReturn(completable).when(mInteractor)
                 .doSaveMeasurement(mExercise, measurement);
 
         // when
-        mPresenter.onReceiveMeasurement(measurement);
+        mPresenter.onReceiveMeasurement(mExercise, measurement);
 
         // then
         verify(mInteractor).doSaveMeasurement(mExercise, measurement);
+        completable.test().assertSubscribed();
     }
 
     @Test
@@ -256,10 +311,10 @@ public class ExercisePresenterTest {
                 .doSaveMeasurement(mExercise, measurement);
 
         // when
-        mPresenter.onReceiveMeasurement(measurement);
+        mPresenter.onReceiveMeasurement(mExercise, measurement);
 
         // then
-        verify(mExercise).addMeasurement(measurement);
+        verify(measurement).setExercise(mExercise);
     }
 
 
@@ -281,7 +336,7 @@ public class ExercisePresenterTest {
         mPresenter.onStopClick();
 
         // then
-        verify(mView).onExerciseStop();
+        verify(mView).onExerciseStopped(any(Exercise.class));
     }
 
 

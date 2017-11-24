@@ -23,7 +23,7 @@ public interface LoginContract {
 
         void startMainActivity();
 
-        void onLoginStart();
+        void onLoginStart(OnCancelListener listener);
     }
 
     interface Interactor extends IBaseInteractor {

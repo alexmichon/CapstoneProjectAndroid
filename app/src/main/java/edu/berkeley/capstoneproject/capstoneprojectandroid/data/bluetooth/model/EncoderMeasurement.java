@@ -1,7 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model;
 
-import android.util.Log;
-
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
 
 /**
@@ -21,7 +19,7 @@ public class EncoderMeasurement {
     }
 
     public static EncoderMeasurement decode(byte[] bytes) {
-        long timestamp = BytesUtils.bytesToDate(bytes);
+        long timestamp = BytesUtils.bytesToTimestamp(bytes);
         float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_TIMESTAMP);
 
         return new EncoderMeasurement(timestamp, angle);

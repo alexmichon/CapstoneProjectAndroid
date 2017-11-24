@@ -23,9 +23,29 @@ public class MeasurementRequest {
     @Expose
     private final int mMetricId;
 
+    private final int mExerciseId;
+
     public MeasurementRequest(Measurement measurement) {
         mTookAt = measurement.getTimestamp();
         mValue = measurement.getValue();
         mMetricId = measurement.getMetric().getId();
+        mExerciseId = measurement.getExercise().getId();
+    }
+
+    public int getExerciseId() {
+        return mExerciseId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        MeasurementRequest that = (MeasurementRequest) obj;
+
+        return (this.mExerciseId == that.mExerciseId) &&
+                (this.mMetricId == that.mMetricId) &&
+                (this.mTookAt == that.mTookAt) &&
+                (this.mValue == that.mValue);
     }
 }

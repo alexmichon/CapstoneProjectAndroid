@@ -1,7 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
-import com.androidnetworking.error.ANError;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,11 +10,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -52,7 +53,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void loginShouldCallInteractor() {
+    public void onLoginClickShouldCallInteractor() {
         // given
         String email = "email@email.com";
         String password = "password";
@@ -72,7 +73,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void loginShouldShowLoading() {
+    public void onLoginClickShouldShowLoading() {
         // given
         String email = "email@email.com";
         String password = "password";
@@ -88,11 +89,11 @@ public class LoginPresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).onLoginStart();
+        verify(mView).onLoginStart(any(IBaseView.OnCancelListener.class));
     }
 
     @Test
-    public void loginShouldUpdateViewOnSuccess() {
+    public void onLoginClickShouldUpdateViewOnSuccess() {
         // given
         String email = "email@email.com";
         String password = "password";
@@ -112,7 +113,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void loginShouldUpdateViewOnFailure() {
+    public void onLoginClickShouldUpdateViewOnFailure() {
         // given
         String email = "email@email.com";
         String password = "password";
@@ -130,6 +131,20 @@ public class LoginPresenterTest {
         // then
         verify(mView).onLoginFailure(error);
     }
+
+
+
+    @Test
+    public void onLoginCancel() {
+        // when
+        mPresenter.onLoginCancel();
+
+        // then
+        assertTrue(mPresenter.getCompositeDisposable().isDisposed());
+    }
+
+
+
 
     @After
     public void after() {

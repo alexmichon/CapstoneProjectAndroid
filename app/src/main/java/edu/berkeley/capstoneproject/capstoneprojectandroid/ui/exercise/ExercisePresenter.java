@@ -1,7 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
@@ -9,13 +7,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
-import io.reactivex.CompletableObserver;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 /**
@@ -25,12 +19,10 @@ import timber.log.Timber;
 public class ExercisePresenter<V extends ExerciseContract.View, I extends ExerciseContract.Interactor>
     extends BasePresenter<V, I> implements ExerciseContract.Presenter<V, I> {
 
-    private static final String TAG = ExercisePresenter.class.getSimpleName();
-
     private boolean mStarted = false;
 
-    private ExerciseType mExerciseType;
     private Exercise mExercise;
+    private ExerciseType mExerciseType;
 
     @Inject
     public ExercisePresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -47,11 +39,13 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     public void onAttach(V view, ExerciseType exerciseType) {
         super.onAttach(view);
         mExerciseType = exerciseType;
-        createExercise();
     }
 
-    protected void createExercise() {
-        getView().showLoading("Wait...", false);
+
+    @Override
+    public void onStartClick() {
+        getView().onCreatingExercise();
+
         getCompositeDisposable().add(getInteractor().doCreateExercise(mExerciseType)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
@@ -59,51 +53,50 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                     @Override
                     public void accept(Exercise exercise) throws Exception {
                         mExercise = exercise;
-                        getView().hideLoading();
+                        getView().onExerciseCreated(exercise);
+                        startExercise(exercise);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        getView().showError(throwable);
+                        getView().onExerciseError(throwable);
                     }
                 })
         );
     }
 
+    protected void startExercise(final Exercise exercise) {
+        getView().onStartingExercise();
 
-    @Override
-    public void onStartClick() {
-        getView().onWaitToStart();
-
-        getCompositeDisposable().add(getInteractor().doStartExercise(mExercise)
+        getCompositeDisposable().add(getInteractor().doStartExercise(exercise)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        getView().onExerciseStart();
+                        getView().onExerciseStarted(exercise);
                         mStarted = true;
-                        startListening();
+                        startListening(exercise);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Timber.e("Error while starting exercise", throwable);
-                        getView().showError(throwable);
+                        getView().onExerciseError(throwable);
                         mStarted = false;
                     }
                 })
         );
     }
 
-    protected void startListening() {
+    protected void startListening(final Exercise exercise) {
         getCompositeDisposable().add(getInteractor().doListenMeasurements()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<Measurement>() {
                                @Override
                                public void accept(Measurement measurement) throws Exception {
-                                   onReceiveMeasurement(measurement);
+                                   onReceiveMeasurement(exercise, measurement);
                                }
                            },
                         new Consumer<Throwable>() {
@@ -120,20 +113,20 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     public void onStopClick() {
         mStarted = false;
         getInteractor().doStopExercise();
-        getView().onExerciseStop();
+        getView().onExerciseStopped(mExercise);
     }
 
     @Override
     public void onPause() {
         mStarted = false;
         getInteractor().doStopExercise();
-        getView().onExerciseStop();
+        getView().onExerciseStopped(mExercise);
     }
 
-    protected void onReceiveMeasurement(Measurement measurement) {
-        mExercise.addMeasurement(measurement);
+    protected void onReceiveMeasurement(Exercise exercise, Measurement measurement) {
+        measurement.setExercise(exercise);
         getView().addMeasurement(measurement);
-        getCompositeDisposable().add(getInteractor().doSaveMeasurement(mExercise, measurement)
+        getCompositeDisposable().add(getInteractor().doSaveMeasurement(exercise, measurement)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Action() {
