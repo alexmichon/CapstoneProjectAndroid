@@ -39,4 +39,35 @@ public class User {
     public void setLastName(String lastName) {
         mLastName = lastName;
     }
+
+
+
+    public static class UserBuilder {
+        private String mEmail;
+        private String mFirstName;
+        private String mLastName;
+
+        public UserBuilder() {
+
+        }
+
+        public UserBuilder email(String email) {
+            mEmail = email;
+            return this;
+        }
+
+        public UserBuilder firstName(String firstName) {
+            mFirstName = firstName;
+            return this;
+        }
+
+        public UserBuilder lastName(String lastName) {
+            mLastName = lastName;
+            return this;
+        }
+
+        public User build() {
+            return new User(mEmail, mFirstName, mLastName);
+        }
+    }
 }

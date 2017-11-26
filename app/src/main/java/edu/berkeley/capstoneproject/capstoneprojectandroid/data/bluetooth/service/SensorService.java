@@ -3,8 +3,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.servi
 import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.EncoderMeasurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.ImuMeasurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

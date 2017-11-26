@@ -1,6 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,21 +14,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.servic
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

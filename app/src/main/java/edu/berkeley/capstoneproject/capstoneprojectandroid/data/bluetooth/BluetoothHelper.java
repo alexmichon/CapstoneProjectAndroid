@@ -37,8 +37,6 @@ import timber.log.Timber;
 @Singleton
 public class BluetoothHelper implements IBluetoothHelper {
 
-    private static final String TAG = BluetoothHelper.class.getSimpleName();
-
     private Rx2BleDevice mDevice;
     private Rx2BleConnection mConnection;
     private Disposable mConnectionDisposable;

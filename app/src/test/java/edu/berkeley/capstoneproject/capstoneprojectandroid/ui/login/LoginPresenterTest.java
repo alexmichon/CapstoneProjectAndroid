@@ -10,6 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.TestUsers;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Single;
@@ -55,12 +56,10 @@ public class LoginPresenterTest {
     @Test
     public void onLoginClickShouldCallInteractor() {
         // given
-        String email = "email@email.com";
+        String email = "toto@toto.fr";
         String password = "password";
 
-        User user = new User(email, "first name", "last name");
-
-        doReturn(Single.just(user))
+        doReturn(Single.never())
                 .when(mInteractor)
                 .doLoginCall(new LoginRequest(email, password));
 
@@ -75,17 +74,12 @@ public class LoginPresenterTest {
     @Test
     public void onLoginClickShouldShowLoading() {
         // given
-        String email = "email@email.com";
-        String password = "password";
-
-        User user = new User(email, "first name", "last name");
-
-        doReturn(Single.just(user))
+        doReturn(Single.never())
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest(email, password));
+                .doLoginCall(new LoginRequest("", ""));
 
         // when
-        mPresenter.onLoginClick(email, password);
+        mPresenter.onLoginClick("", "");
         mTestScheduler.triggerActions();
 
         // then
@@ -95,17 +89,14 @@ public class LoginPresenterTest {
     @Test
     public void onLoginClickShouldUpdateViewOnSuccess() {
         // given
-        String email = "email@email.com";
-        String password = "password";
-
-        User user = new User(email, "first name", "last name");
+        User user = TestUsers.defaultUser().build();
 
         doReturn(Single.just(user))
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest(email, password));
+                .doLoginCall(new LoginRequest(user.getEmail(), ""));
 
         // when
-        mPresenter.onLoginClick(email, password);
+        mPresenter.onLoginClick(user.getEmail(), "");
         mTestScheduler.triggerActions();
 
         // then
@@ -115,17 +106,14 @@ public class LoginPresenterTest {
     @Test
     public void onLoginClickShouldUpdateViewOnFailure() {
         // given
-        String email = "email@email.com";
-        String password = "password";
-
         Error error = new Error();
 
         doReturn(Single.error(error))
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest(email, password));
+                .doLoginCall(new LoginRequest("", ""));
 
         // when
-        mPresenter.onLoginClick(email, password);
+        mPresenter.onLoginClick("", "");
         mTestScheduler.triggerActions();
 
         // then

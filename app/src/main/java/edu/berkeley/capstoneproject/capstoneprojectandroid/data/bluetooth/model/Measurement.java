@@ -31,9 +31,9 @@ public class Measurement {
     private static final String LABEL_GYR_Z = "Gyr Z";
 
 
-    private static final byte IMU_DATA_ACC = 0;
-    private static final byte IMU_DATA_GYR = 1;
-    private static final byte IMU_DATA_MAG = 2;
+    public static final byte IMU_DATA_ACC = 0;
+    public static final byte IMU_DATA_GYR = 1;
+    public static final byte IMU_DATA_MAG = 2;
 
     private final long mTimestamp;
     private final float mValue;
