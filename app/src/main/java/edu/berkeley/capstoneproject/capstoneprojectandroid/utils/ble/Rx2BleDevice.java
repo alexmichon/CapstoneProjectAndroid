@@ -10,7 +10,9 @@ import com.polidea.rxandroidble.RxBleConnection;
 import com.polidea.rxandroidble.RxBleDevice;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.convert.RxObservableConverter;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
@@ -28,6 +30,20 @@ public class Rx2BleDevice {
             this.description = description;
         }
 
+        private static ConnectionState fromRxConnectionState(RxBleConnection.RxBleConnectionState rxState) {
+            switch (rxState) {
+                case CONNECTED:
+                    return ConnectionState.CONNECTED;
+                case CONNECTING:
+                    return ConnectionState.CONNECTING;
+                case DISCONNECTED:
+                    return ConnectionState.DISCONNECTED;
+                case DISCONNECTING:
+                    return ConnectionState.DISCONNECTING;
+            }
+            return null;
+        }
+
         @Override
         public String toString() {
             return "RxBleConnectionState{" + description + '}';
@@ -40,19 +56,24 @@ public class Rx2BleDevice {
         mDevice = device;
     }
 
-    public Observable<Rx2BleConnection> establishConnection(boolean autoconnect) {
+    public Single<Rx2BleConnection> establishConnection(boolean autoconnect) {
         final rx.Observable<RxBleConnection> connectionObservable = mDevice.establishConnection(autoconnect);
         return RxObservableConverter.convert(connectionObservable).map(new Function<RxBleConnection, Rx2BleConnection>() {
             @Override
             public Rx2BleConnection apply(@NonNull RxBleConnection connection) throws Exception {
                 return new Rx2BleConnection(connection);
             }
-        });
+        }).singleOrError();
     }
 
-    public Observable<RxBleConnection.RxBleConnectionState> observeConnectionStateChange() {
+    public Observable<ConnectionState> observeConnectionStateChange() {
         final rx.Observable<RxBleConnection.RxBleConnectionState> observable = mDevice.observeConnectionStateChanges();
-        return RxObservableConverter.convert(observable);
+        return RxObservableConverter.convert(observable).map(new Function<RxBleConnection.RxBleConnectionState, ConnectionState>() {
+            @Override
+            public ConnectionState apply(@NonNull RxBleConnection.RxBleConnectionState rxBleConnectionState) throws Exception {
+                return ConnectionState.fromRxConnectionState(rxBleConnectionState);
+            }
+        });
     }
 
     public BluetoothDevice getBluetoothDevice() {
@@ -68,18 +89,6 @@ public class Rx2BleDevice {
     }
 
     public ConnectionState getConnectionState() {
-        RxBleConnection.RxBleConnectionState state = mDevice.getConnectionState();
-        switch (state) {
-            case CONNECTED:
-                return ConnectionState.CONNECTED;
-            case CONNECTING:
-                return ConnectionState.CONNECTING;
-            case DISCONNECTED:
-                return ConnectionState.DISCONNECTED;
-            case DISCONNECTING:
-                return ConnectionState.DISCONNECTING;
-        }
-
-        return ConnectionState.DISCONNECTED;
+        return ConnectionState.fromRxConnectionState(mDevice.getConnectionState());
     }
 }

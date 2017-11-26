@@ -9,11 +9,6 @@ import com.polidea.rxandroidble.RxBleClient;
 
 import dagger.Module;
 import dagger.Provides;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.BluetoothLe18Adapter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.BluetoothLe21Adapter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.BluetoothLeAdapter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.BluetoothRepository;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.IBluetoothRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
@@ -109,30 +104,7 @@ public class ActivityModule {
 
 
 
-    @Provides
-    BluetoothLeAdapter provideBluetoothLeAdapter() {
-        if(Build.VERSION.SDK_INT >= 21) {
-            return new BluetoothLe21Adapter();
-        }
-        else {
-            return new BluetoothLe18Adapter();
-        }
-    }
 
-    @Provides
-    RxBleClient provideRxBleClient(Context context) {
-        return RxBleClient.create(context);
-    }
-
-    @Provides
-    Rx2BleClient provideRx2BleClient(RxBleClient client) {
-        return new Rx2BleClient(client);
-    }
-
-    @Provides
-    IBluetoothRepository provideBluetoothRepository(Rx2BleClient client) {
-        return new BluetoothRepository(client);
-    }
 
     @Provides
     @PerActivity

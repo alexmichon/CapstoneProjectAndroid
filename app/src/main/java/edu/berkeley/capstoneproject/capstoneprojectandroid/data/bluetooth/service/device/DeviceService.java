@@ -1,6 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth;
-
-import android.bluetooth.*;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.device;
 
 import com.polidea.rxandroidble.scan.ScanFilter;
 import com.polidea.rxandroidble.scan.ScanResult;
@@ -9,9 +7,8 @@ import com.polidea.rxandroidble.scan.ScanSettings;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.ISpecification;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.BaseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleClient;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Observable;
@@ -20,18 +17,15 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
 /**
- * Created by Alex on 08/11/2017.
+ * Created by Alex on 26/11/2017.
  */
 
-@Singleton
-public class BluetoothRepository implements IBluetoothRepository {
-
-    private static final String TAG = BluetoothRepository.class.getSimpleName();
+public class DeviceService extends BaseService implements IDeviceService {
 
     Rx2BleClient mRxBleClient;
 
     @Inject
-    public BluetoothRepository(Rx2BleClient client) {
+    public DeviceService(Rx2BleClient client) {
         mRxBleClient = client;
     }
 
@@ -61,40 +55,5 @@ public class BluetoothRepository implements IBluetoothRepository {
                 return new Rx2BleDevice(scanResult.getBleDevice());
             }
         });
-    }
-
-    @Override
-    public void create(BluetoothDevice item) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void create(Iterable<BluetoothDevice> items) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void update(BluetoothDevice item) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void delete(BluetoothDevice item) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void delete(ISpecification specification) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Observable<BluetoothDevice> query() {
-        return null;
-    }
-
-    @Override
-    public Observable<BluetoothDevice> query(ISpecification specification) {
-        return null;
     }
 }

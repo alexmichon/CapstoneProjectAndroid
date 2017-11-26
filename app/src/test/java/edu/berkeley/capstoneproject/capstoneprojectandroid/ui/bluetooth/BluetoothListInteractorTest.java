@@ -9,11 +9,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.BluetoothRepository;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.bluetooth.IBluetoothRepository;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.connection.IConnectionService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.device.IDeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,12 +38,20 @@ public class BluetoothListInteractorTest {
     private IBluetoothHelper mBluetoothHelper;
 
     @Mock
-    private IBluetoothRepository mRepository;
+    private IDeviceService mDeviceService;
+
+    @Mock
+    private IConnectionService mConnectionService;
+
+    @Mock
+    private Rx2BleDevice mDevice;
 
     @Before
     public void setup() {
-        mInteractor = new BluetoothListInteractor(mDataManager, mRepository);
+        mInteractor = new BluetoothListInteractor(mDataManager);
         when(mDataManager.getBluetoothHelper()).thenReturn(mBluetoothHelper);
+        when(mBluetoothHelper.getDeviceService()).thenReturn(mDeviceService);
+        when(mBluetoothHelper.getConnectionService()).thenReturn(mConnectionService);
     }
 
     @Test
@@ -47,7 +60,7 @@ public class BluetoothListInteractorTest {
         mInteractor.doDiscovery();
 
         // then
-        verify(mRepository).getScannedDevices();
+        verify(mDeviceService).getScannedDevices();
     }
 
     @Test
@@ -56,7 +69,7 @@ public class BluetoothListInteractorTest {
         mInteractor.doLoadPairedDevices();
 
         // then
-        verify(mRepository).getPairedDevices();
+        verify(mDeviceService).getPairedDevices();
     }
 
     @Test
@@ -73,11 +86,14 @@ public class BluetoothListInteractorTest {
 
     @Test
     public void doConnectDeviceShouldCallHelper() {
+        // given
+        doReturn(Single.never()).when(mConnectionService).connect(eq(mDevice), anyBoolean());
+
         // when
-        mInteractor.doConnectDevice();
+        mInteractor.doConnect(mDevice);
 
         // then
-        verify(mBluetoothHelper).connect(false);
+        verify(mConnectionService).connect(mDevice, false);
     }
 
     @Test
@@ -86,6 +102,6 @@ public class BluetoothListInteractorTest {
         mInteractor.doValidateDevice();
 
         // then
-        verify(mBluetoothHelper).validateDevice();
+        verify(mConnectionService).validateDevice();
     }
 }

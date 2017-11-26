@@ -7,10 +7,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.HashMap;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ISensorService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement.IMeasurementService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
@@ -59,7 +62,7 @@ public class ExerciseInteractorTest {
     private edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IExerciseService mApiExerciseService;
 
     @Mock
-    private edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.IExerciseService mBluetoothExerciseService;
+    private IExerciseService mBluetoothExerciseService;
 
     @Before
     public void setup() {
@@ -108,7 +111,7 @@ public class ExerciseInteractorTest {
     @Test
     public void doStartExerciseShouldCallBluetooth() {
         // given
-        ISensorService sensorService = Mockito.mock(ISensorService.class);
+        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
         doReturn(Observable.just(sensorService)).when(mBluetoothExerciseService).startExercise();
 
         // when
@@ -121,8 +124,9 @@ public class ExerciseInteractorTest {
     @Test
     public void doStartExerciseShouldReturnOnComplete() {
         // given
-        ISensorService sensorService = Mockito.mock(ISensorService.class);
-        Observable observable = Observable.just(sensorService);
+        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
+        doReturn(sensorService).when(mBluetoothHelper).getMeasurementService();
+        Observable observable = Observable.just(new HashMap<String, Observable<byte[]>>());
         doReturn(observable).when(mBluetoothExerciseService).startExercise();
 
         // when
@@ -152,8 +156,8 @@ public class ExerciseInteractorTest {
     @Test
     public void doStopExerciseShouldDisposeSubscription() {
         // given
-        ISensorService sensorService = Mockito.mock(ISensorService.class);
-        Observable<ISensorService> observable = Mockito.mock(Observable.class);
+        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
+        Observable<IMeasurementService> observable = Mockito.mock(Observable.class);
 
         doReturn(observable).when(mBluetoothExerciseService).startExercise();
         mInteractor.doStartExercise(mExercise);
@@ -190,14 +194,10 @@ public class ExerciseInteractorTest {
     @Test
     public void doListenImuShouldCallSensorService() {
         // given
-        ISensorService sensorService = Mockito.mock(ISensorService.class);
-        Observable<ISensorService> observable = Observable.just(sensorService);
-        Observable<Measurement> imuObservable = Observable.empty();
+        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
+        doReturn(sensorService).when(mBluetoothHelper).getMeasurementService();
 
-        doReturn(observable).when(mBluetoothExerciseService).startExercise();
-        Completable completable = mInteractor.doStartExercise(mExercise);
-        completable.blockingAwait();
-
+        Observable<byte[]> imuObservable = Observable.never();
         doReturn(imuObservable).when(sensorService).getImuObservable();
 
         // when
@@ -210,14 +210,10 @@ public class ExerciseInteractorTest {
     @Test
     public void doListenEncoderShouldCallSensorService() {
         // given
-        ISensorService sensorService = Mockito.mock(ISensorService.class);
-        Observable<ISensorService> observable = Observable.just(sensorService);
-        Observable<Measurement> encoderObservable = Observable.empty();
+        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
+        doReturn(sensorService).when(mBluetoothHelper).getMeasurementService();
 
-        doReturn(observable).when(mBluetoothExerciseService).startExercise();
-        Completable completable = mInteractor.doStartExercise(mExercise);
-        completable.blockingAwait();
-
+        Observable<byte[]> encoderObservable = Observable.never();
         doReturn(encoderObservable).when(sensorService).getEncoderObservable();
 
         // when

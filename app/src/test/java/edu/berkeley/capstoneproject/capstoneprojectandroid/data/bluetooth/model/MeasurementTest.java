@@ -16,6 +16,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.TestBytes;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 
@@ -75,99 +76,57 @@ public class MeasurementTest {
     @Test
     public void decodeAccShouldReturnCorrectMeasurement() {
         // given
-        short sensorId = SensorManager.ID_ACCELEROMETER;
-        short type = IMU_DATA_ACC;
-        long timestamp = 999;
-        float valX = 0.1f;
-        float valY = 0.2f;
-        float valZ = 0.3f;
-
-        byte bytes[] = ByteBuffer.allocate(20).order(ByteOrder.LITTLE_ENDIAN)
-                .putShort(0, sensorId)
-                .putShort(2, type)
-                .putLong(4, timestamp)
-                .putFloat(8, valX)
-                .putFloat(12, valY)
-                .putFloat(16, valZ)
-                .array();
+        byte[] bytes = TestBytes.accBytes();
+        List<Measurement> expectedMeasurements = TestBytes.accMeasurements();
 
         // when
         List<Measurement> measurements = Measurement.decodeImu(bytes);
 
         // then
-        assertThat(measurements, hasSize(3));
+        assertThat(measurements, hasSize(expectedMeasurements.size()));
 
-        assertThat(measurements.get(0).getMetric().getId(), is(ID_ACC_X));
-        assertThat(measurements.get(0).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(0).getValue(), is(valX));
-
-        assertThat(measurements.get(1).getMetric().getId(), is(ID_ACC_Y));
-        assertThat(measurements.get(1).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(1).getValue(), is(valY));
-
-        assertThat(measurements.get(2).getMetric().getId(), is(ID_ACC_Z));
-        assertThat(measurements.get(2).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(2).getValue(), is(valZ));
+        for (int i = 0; i < expectedMeasurements.size(); i++) {
+            assertEquals(measurements.get(i).getMetric(), expectedMeasurements.get(i).getMetric());
+            assertEquals(measurements.get(i).getTimestamp(), expectedMeasurements.get(i).getTimestamp());
+            assertEquals(measurements.get(i).getValue(), expectedMeasurements.get(i).getValue());
+        }
     }
 
     @Test
     public void decodeGyrShouldReturnCorrectMeasurement() {
         // given
-        short sensorId = SensorManager.ID_GYROSCOPE;
-        short type = IMU_DATA_GYR;
-        long timestamp = 999;
-        float valX = 0.1f;
-        float valY = 0.2f;
-        float valZ = 0.3f;
-
-        byte bytes[] = ByteBuffer.allocate(20).order(ByteOrder.LITTLE_ENDIAN)
-                .putShort(0, sensorId)
-                .putShort(2, type)
-                .putLong(4, timestamp)
-                .putFloat(8, valX)
-                .putFloat(12, valY)
-                .putFloat(16, valZ)
-                .array();
+        byte[] bytes = TestBytes.gyrBytes();
+        List<Measurement> expectedMeasurements = TestBytes.gyrMeasurements();
 
         // when
         List<Measurement> measurements = Measurement.decodeImu(bytes);
 
         // then
-        assertThat(measurements, hasSize(3));
+        assertThat(measurements, hasSize(expectedMeasurements.size()));
 
-        assertThat(measurements.get(0).getMetric().getId(), is(ID_GYR_X));
-        assertThat(measurements.get(0).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(0).getValue(), is(valX));
-
-        assertThat(measurements.get(1).getMetric().getId(), is(ID_GYR_Y));
-        assertThat(measurements.get(1).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(1).getValue(), is(valY));
-
-        assertThat(measurements.get(2).getMetric().getId(), is(ID_GYR_Z));
-        assertThat(measurements.get(2).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(2).getValue(), is(valZ));
+        for (int i = 0; i < expectedMeasurements.size(); i++) {
+            assertEquals(measurements.get(i).getMetric(), expectedMeasurements.get(i).getMetric());
+            assertEquals(measurements.get(i).getTimestamp(), expectedMeasurements.get(i).getTimestamp());
+            assertEquals(measurements.get(i).getValue(), expectedMeasurements.get(i).getValue());
+        }
     }
 
     @Test
     public void decodeEncoderShouldReturnCorrectMeasurement() {
         // given
-        short sensorId = SensorManager.ID_ENCODER;
-        long timestamp = 999;
-        float angle = 0.1f;
-
-        byte bytes[] = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN)
-                .putLong(0, timestamp)
-                .putFloat(4, angle)
-                .array();
+        byte[] bytes = TestBytes.encoderBytes();
+        List<Measurement> expectedMeasurements = TestBytes.encoderMeasurements();
 
         // when
         List<Measurement> measurements = Measurement.decodeEncoder(bytes);
 
         // then
-        assertThat(measurements, hasSize(1));
+        assertThat(measurements, hasSize(expectedMeasurements.size()));
 
-        assertThat(measurements.get(0).getMetric().getId(), is(ID_ANGLE));
-        assertThat(measurements.get(0).getTimestamp(), is(timestamp));
-        assertThat(measurements.get(0).getValue(), is(angle));
+        for (int i = 0; i < expectedMeasurements.size(); i++) {
+            assertEquals(measurements.get(i).getMetric(), expectedMeasurements.get(i).getMetric());
+            assertEquals(measurements.get(i).getTimestamp(), expectedMeasurements.get(i).getTimestamp());
+            assertEquals(measurements.get(i).getValue(), expectedMeasurements.get(i).getValue());
+        }
     }
 }

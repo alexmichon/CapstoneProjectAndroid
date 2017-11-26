@@ -1,13 +1,12 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth;
 
-import com.polidea.rxandroidble.NotificationSetupMode;
-
-import java.util.UUID;
-
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.IExerciseService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.ISensorService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.connection.IConnectionService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.device.IDeviceService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement.IMeasurementService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -19,28 +18,17 @@ import io.reactivex.Observable;
 @Singleton
 public interface IBluetoothHelper {
 
+    Rx2BleDevice getDevice();
     void setDevice(Rx2BleDevice device);
 
-    Rx2BleDevice getDevice();
+    Rx2BleConnection getConnection();
+    void setConnection(Rx2BleConnection connection);
 
-    Observable<Rx2BleDevice.ConnectionState> connect(boolean autoconnect);
+    IConnectionService getConnectionService();
 
-    Rx2BleDevice.ConnectionState getConnectionState();
-
-    Observable<Rx2BleDevice.ConnectionState> observeConnectionStateChange();
-
-
-    Completable validateDevice();
-
-    Observable<byte[]> readCharacteristic(UUID uuid);
-
-    Observable<byte[]> writeCharacteristic(UUID uuid, byte[] bytes);
-
-    Observable<Rx2BleDevice.ConnectionState> disconnect();
-
-    Observable<Observable<byte[]>> setupNotification(UUID uuid, NotificationSetupMode setupMode);
+    IDeviceService getDeviceService();
 
     IExerciseService getExerciseService();
 
-    ISensorService getSensorService();
+    IMeasurementService getMeasurementService();
 }

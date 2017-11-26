@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
@@ -115,43 +116,26 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
         getView().showLoading();
 
-        getInteractor().doSelectDevice(device);
-        mConnectionDisposable = getInteractor()
-                .doConnectDevice()
+        getCompositeDisposable().add(getInteractor()
+                .doConnect(device)
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
-                    .subscribeWith(new DisposableObserver<Rx2BleDevice.ConnectionState>() {
+                    .subscribe(new Consumer<Rx2BleConnection>() {
 
                         @Override
-                        public void onNext(@NonNull Rx2BleDevice.ConnectionState connectionState) {
-                            Timber.d("Connection status: %s", connectionState.toString());
-                            switch (connectionState) {
-                                case CONNECTED:
-                                    Timber.d("Connection succeeded");
-                                    onDeviceConnected();
-                                    break;
-                                case CONNECTING:
-                                case DISCONNECTED:
-                                case DISCONNECTING:
-                                    Timber.e("Connection failed");
-                                    getView().showError("Connection failed");
-                                    break;
-                            }
+                        public void accept(Rx2BleConnection connection) throws Exception {
+                            Timber.d("Connection succeeded");
+                            onDeviceConnected();
                         }
-
+                    }, new Consumer<Throwable>() {
                         @Override
-                        public void onError(@NonNull Throwable e) {
-                            Timber.e(e, "Connection failed");
+                        public void accept(Throwable throwable) throws Exception {
+                            Timber.e(throwable, "Connection failed");
                             getView().showError("Connection failed");
                             getView().hideLoading();
                         }
-
-                        @Override
-                        public void onComplete() {
-                            getView().hideLoading();
-                        }
                     }
-        );
+        ));
 
     }
 
@@ -184,9 +168,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
     @Override
     public void onDetach() {
+        getInteractor().doDisconnect();
         super.onDetach();
-        if (mConnectionDisposable != null) {
-            mConnectionDisposable.dispose();
-        }
     }
 }

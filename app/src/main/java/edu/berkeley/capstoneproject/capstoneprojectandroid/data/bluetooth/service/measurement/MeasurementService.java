@@ -1,9 +1,11 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement;
 
 import java.util.List;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
+import javax.inject.Inject;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.BaseService;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
@@ -13,17 +15,14 @@ import io.reactivex.functions.Function;
  * Created by Alex on 18/11/2017.
  */
 
-public class SensorService implements ISensorService {
-
-    private static final String TAG = SensorService.class.getSimpleName();
-
-    private final IBluetoothHelper mBluetoothHelper;
+public class MeasurementService extends BaseService implements IMeasurementService {
 
     private Observable<byte[]> mEncoderObservable;
     private Observable<byte[]> mImuObservable;
 
-    public SensorService(IBluetoothHelper helper) {
-        mBluetoothHelper = helper;
+    @Inject
+    public MeasurementService() {
+        // Empty constructor
     }
 
     @Override

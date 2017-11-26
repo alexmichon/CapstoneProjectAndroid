@@ -6,15 +6,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.TestScheduler;
 
@@ -35,6 +36,9 @@ public class BluetoothListPresenterTest {
     @Mock
     private BluetoothListContract.View mView;
 
+    @Mock
+    private Rx2BleDevice mDevice;
+
     private TestScheduler mTestScheduler;
 
     @Before
@@ -44,6 +48,7 @@ public class BluetoothListPresenterTest {
         TestSchedulerProvider testSchedulerProvider = new TestSchedulerProvider(mTestScheduler);
 
         mPresenter = Mockito.spy(new BluetoothListPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable));
+        doNothing().when(mInteractor).doDisconnect();
 
         mPresenter.onAttach(mView);
     }
@@ -141,26 +146,23 @@ public class BluetoothListPresenterTest {
     @Test
     public void onDeviceClickShouldCallInteractor() {
         // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-        doReturn(Observable.empty()).when(mInteractor).doConnectDevice();
+        doReturn(Single.never()).when(mInteractor).doConnect(mDevice);
 
         // when
-        mPresenter.onDeviceClick(device);
+        mPresenter.onDeviceClick(mDevice);
 
         // then
-        verify(mInteractor).doSelectDevice(device);
-        verify(mInteractor).doConnectDevice();
+        verify(mInteractor).doConnect(mDevice);
     }
 
 
     @Test
     public void onDeviceClickShouldStopScanning() {
         // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-        doReturn(Observable.empty()).when(mInteractor).doConnectDevice();
+        doReturn(Single.never()).when(mInteractor).doConnect(mDevice);
 
         // when
-        mPresenter.onDeviceClick(device);
+        mPresenter.onDeviceClick(mDevice);
 
         // then
         verify(mPresenter).onStopScanning();
@@ -170,11 +172,10 @@ public class BluetoothListPresenterTest {
     @Test
     public void onDeviceClickShouldUpdateView() {
         // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-        doReturn(Observable.empty()).when(mInteractor).doConnectDevice();
+        doReturn(Single.never()).when(mInteractor).doConnect(mDevice);
 
         // when
-        mPresenter.onDeviceClick(device);
+        mPresenter.onDeviceClick(mDevice);
 
         // then
         verify(mView).showLoading();
@@ -183,12 +184,12 @@ public class BluetoothListPresenterTest {
     @Test
     public void onDeviceClickShouldCheckDeviceOnSuccess() {
         // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-        doReturn(Observable.just(Rx2BleDevice.ConnectionState.CONNECTED)).when(mInteractor).doConnectDevice();
+        Rx2BleConnection connection = Mockito.mock(Rx2BleConnection.class);
+        doReturn(Single.just(connection)).when(mInteractor).doConnect(mDevice);
         doNothing().when(mPresenter).onDeviceConnected();
 
         // when
-        mPresenter.onDeviceClick(device);
+        mPresenter.onDeviceClick(mDevice);
         mTestScheduler.triggerActions();
 
         // then
@@ -196,28 +197,12 @@ public class BluetoothListPresenterTest {
     }
 
     @Test
-    public void onDeviceClickShouldUpdateViewOnFailure() {
-        // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-        doReturn(Observable.just(Rx2BleDevice.ConnectionState.DISCONNECTED)).when(mInteractor).doConnectDevice();
-
-        // when
-        mPresenter.onDeviceClick(device);
-        mTestScheduler.triggerActions();
-
-        // then
-        verify(mView).hideLoading();
-        verify(mView).showError(anyString());
-    }
-
-    @Test
     public void onDeviceClickShouldUpdateViewOnError() {
         // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-        doReturn(Observable.error(new Error())).when(mInteractor).doConnectDevice();
+        doReturn(Single.error(new Error())).when(mInteractor).doConnect(mDevice);
 
         // when
-        mPresenter.onDeviceClick(device);
+        mPresenter.onDeviceClick(mDevice);
         mTestScheduler.triggerActions();
 
         // then

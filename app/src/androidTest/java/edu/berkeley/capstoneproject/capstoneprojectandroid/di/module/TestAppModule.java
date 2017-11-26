@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.TestApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothHelper;
@@ -25,58 +26,12 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.Applicat
  */
 
 @Module
-public class TestAppModule {
+public class TestAppModule extends AppModule {
 
     private final Application mApplication;
 
-    public TestAppModule(Application application) {
-        mApplication = application;
-    }
-
-    @Provides
-    @ApplicationContext
-    Context provideContext() {
-        return mApplication;
-    }
-
-    @Provides
-    Application provideApplication() {
-        return mApplication;
-    }
-
-    @Provides
-    @Singleton
-    IApiHelper provideApiHelper(ApiHelper apiHelper) {
-        return apiHelper;
-    }
-
-    @Provides
-    @Singleton
-    ApiHeader provideApiHeader() {
-        return new ApiHeader();
-    }
-
-    @Provides
-    @Singleton
-    IAuthService provideAuthService(AuthService service) {
-        return service;
-    }
-
-    @Provides
-    @Singleton
-    IExerciseService provideExerciseService(ExerciseService service) {
-        return service;
-    }
-
-    @Provides
-    @Singleton
-    IBluetoothHelper provideBluetoothHelper(BluetoothHelper bluetoothHelper) {
-        return bluetoothHelper;
-    }
-
-    @Provides
-    @Singleton
-    IDataManager provideDataManager(DataManager dataManager) {
-        return dataManager;
+    public TestAppModule(TestApplication application) {
+        super(application);
+        mApplication= application;
     }
 }
