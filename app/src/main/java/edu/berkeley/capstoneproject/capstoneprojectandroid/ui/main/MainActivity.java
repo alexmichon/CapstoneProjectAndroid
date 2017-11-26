@@ -39,7 +39,7 @@ public class MainActivity extends DrawerActivity implements MainContract.View {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
         setUnbinder(ButterKnife.bind(this));
         mPresenter.onAttach(this);
 

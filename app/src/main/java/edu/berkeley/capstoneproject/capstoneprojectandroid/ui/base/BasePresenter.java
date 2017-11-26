@@ -118,7 +118,7 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
                     getView().showError(apiError.getMessage());
             }
         } catch (JsonSyntaxException | NullPointerException e) {
-            Timber.e("handleApiError", e);
+            Timber.e(e, "handleApiError");
             getView().showError("An error occurred");
         }
     }

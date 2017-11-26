@@ -45,7 +45,7 @@ public class BluetoothListAdapter extends ArrayAdapter<Rx2BleDevice> {
         BluetoothListAdapter.Holder holder = new BluetoothListAdapter.Holder();
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.bluetooth_device, null);
+            convertView = mInflater.inflate(R.layout.bluetooth_device, parent);
             holder.mTextName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);
             holder.mTextAddress = (TextView) convertView.findViewById(R.id.text_bluetooth_address);
 

@@ -81,7 +81,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Timber.e("Error while starting exercise", throwable);
+                        Timber.e(throwable, "Error while starting exercise");
                         getView().onExerciseError(throwable);
                         mStarted = false;
                     }

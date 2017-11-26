@@ -24,8 +24,6 @@ import timber.log.Timber;
 public class BluetoothListPresenter<V extends BluetoothListContract.View, I extends BluetoothListContract.Interactor>
         extends BasePresenter<V, I> implements BluetoothListContract.Presenter<V, I> {
 
-    private static final String TAG = BluetoothListPresenter.class.getSimpleName();
-
     private boolean mScanning = false;
     private Disposable mScanDisposable;
     private Disposable mConnectionDisposable;
@@ -126,7 +124,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
                         @Override
                         public void onNext(@NonNull Rx2BleDevice.ConnectionState connectionState) {
-                            Timber.d("Connection status: " + connectionState.toString());
+                            Timber.d("Connection status: %s", connectionState.toString());
                             switch (connectionState) {
                                 case CONNECTED:
                                     Timber.d("Connection succeeded");

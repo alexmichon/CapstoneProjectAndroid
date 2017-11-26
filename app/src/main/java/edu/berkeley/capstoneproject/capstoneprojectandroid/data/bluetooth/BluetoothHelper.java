@@ -43,7 +43,7 @@ public class BluetoothHelper implements IBluetoothHelper {
 
     @Inject
     public BluetoothHelper() {
-
+        // Empty constructor
     }
 
     @Override
