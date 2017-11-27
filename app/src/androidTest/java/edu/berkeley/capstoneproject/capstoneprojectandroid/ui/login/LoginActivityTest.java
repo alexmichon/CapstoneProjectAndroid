@@ -19,6 +19,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.TestActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivityTestRule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseEspressoTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -36,7 +37,7 @@ import static org.mockito.Mockito.verify;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class LoginActivityTest {
+public class LoginActivityTest extends BaseEspressoTest {
 
     @Inject
     LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> mPresenter;
@@ -50,6 +51,7 @@ public class LoginActivityTest {
     @Before
     public void setup() {
         login.getActivityComponent().inject(this);
+        unlockScreen(login.getActivity());
     }
 
     @Test
