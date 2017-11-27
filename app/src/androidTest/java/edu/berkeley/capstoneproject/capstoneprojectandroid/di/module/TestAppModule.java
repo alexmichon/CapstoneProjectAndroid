@@ -28,10 +28,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.Applicat
 @Module
 public class TestAppModule extends AppModule {
 
-    private final Application mApplication;
+    private final TestApplication mApplication;
 
     public TestAppModule(TestApplication application) {
         super(application);
-        mApplication= application;
+        mApplication = application;
     }
 }

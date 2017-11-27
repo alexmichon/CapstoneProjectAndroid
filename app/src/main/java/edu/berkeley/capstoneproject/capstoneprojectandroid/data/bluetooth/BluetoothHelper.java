@@ -39,6 +39,7 @@ public class BluetoothHelper implements IBluetoothHelper {
         mMeasurementService = measurementService;
 
         mServices.add(mDeviceService);
+        mServices.add(mConnectionService);
         mServices.add(mExerciseService);
         mServices.add(mMeasurementService);
     }

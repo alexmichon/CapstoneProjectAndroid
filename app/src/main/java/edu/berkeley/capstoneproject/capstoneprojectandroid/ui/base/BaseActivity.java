@@ -31,10 +31,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivityComponent = DaggerActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
-                .appComponent(((CapstoneProjectAndroidApplication) getApplication()).getAppComponent())
-                .build();
+        /*
+        if (mActivityComponent == null) {
+            mActivityComponent = DaggerActivityComponent.builder()
+                    .activityModule(new ActivityModule(this))
+                    .appComponent(((CapstoneProjectAndroidApplication) getApplication()).getAppComponent())
+                    .build();
+        }*/
+        mActivityComponent = ((CapstoneProjectAndroidApplication)getApplication()).getActivityComponent(this);
     }
 
     @Override
@@ -49,6 +53,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         return mActivityComponent;
     }
 
+    public void setActivityComponent(ActivityComponent activityComponent) {
+        mActivityComponent = activityComponent;
+    }
 
     @Override
     public void showMessage(String message) {

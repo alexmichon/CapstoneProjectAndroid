@@ -13,12 +13,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.Toolb
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
 /**
  * Created by Alex on 17/11/2017.
  */
 
-public class TrainingActivity extends ToolbarActivity implements TrainingContract.View {
+public class TrainingActivity extends ToolbarActivity implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener {
 
     private static final String TAG = TrainingActivity.class.getSimpleName();
 
@@ -44,12 +45,7 @@ public class TrainingActivity extends ToolbarActivity implements TrainingContrac
     @Override
     public void showBluetoothListFragment() {
         BluetoothListFragment fragment = new BluetoothListFragment();
-        fragment.setListener(new BluetoothListFragment.BluetoothListFragmentListener() {
-            @Override
-            public void onDeviceConnected() {
-                showExerciseTypesFragment();
-            }
-        });
+        fragment.setListener(this);
 
         setFragment(fragment);
     }
@@ -75,5 +71,17 @@ public class TrainingActivity extends ToolbarActivity implements TrainingContrac
         fragment.setArguments(bundle);
 
         setFragment(fragment);
+    }
+
+    @Override
+    public void onDeviceConnected() {
+        hideLoading();
+        showMessage("Device validated");
+        showExerciseTypesFragment();
+    }
+
+    @Override
+    public void onDeviceSelected(Rx2BleDevice device) {
+        mPresenter.onDeviceSelected(device);
     }
 }

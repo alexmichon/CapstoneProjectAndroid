@@ -53,7 +53,7 @@ public class ExerciseTypesAdapter extends ArrayAdapter<ExerciseType> {
         Holder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.row_exercise, parent);
+            convertView = mInflater.inflate(R.layout.row_exercise, parent, false);
             holder = new Holder(convertView);
             convertView.setTag(holder);
         }

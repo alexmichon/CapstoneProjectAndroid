@@ -56,14 +56,13 @@ public class Rx2BleDevice {
         mDevice = device;
     }
 
-    public Single<Rx2BleConnection> establishConnection(boolean autoconnect) {
-        final rx.Observable<RxBleConnection> connectionObservable = mDevice.establishConnection(autoconnect);
-        return RxObservableConverter.convert(connectionObservable).map(new Function<RxBleConnection, Rx2BleConnection>() {
+    public Observable<Rx2BleConnection> establishConnection(boolean autoconnect) {
+        return RxObservableConverter.convert(mDevice.establishConnection(autoconnect)).map(new Function<RxBleConnection, Rx2BleConnection>() {
             @Override
             public Rx2BleConnection apply(@NonNull RxBleConnection connection) throws Exception {
                 return new Rx2BleConnection(connection);
             }
-        }).singleOrError();
+        });
     }
 
     public Observable<ConnectionState> observeConnectionStateChange() {

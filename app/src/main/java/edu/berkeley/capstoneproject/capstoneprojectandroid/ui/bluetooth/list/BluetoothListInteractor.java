@@ -32,32 +32,4 @@ public class BluetoothListInteractor extends BaseInteractor implements Bluetooth
     public Observable<Rx2BleDevice> doLoadPairedDevices() {
         return getDataManager().getBluetoothHelper().getDeviceService().getPairedDevices();
     }
-
-    @Override
-    public void doSelectDevice(Rx2BleDevice device) {
-        getDataManager().getBluetoothHelper().setDevice(device);
-    }
-
-    @Override
-    public Single<Rx2BleConnection> doConnect(final Rx2BleDevice device) {
-        return getDataManager().getBluetoothHelper().getConnectionService().connect(device, false)
-                .map(new Function<Rx2BleConnection, Rx2BleConnection>() {
-                    @Override
-                    public Rx2BleConnection apply(@NonNull Rx2BleConnection connection) throws Exception {
-                        getDataManager().getBluetoothHelper().setConnection(connection);
-                        getDataManager().getBluetoothHelper().setDevice(device);
-                        return connection;
-                    }
-                });
-    }
-
-    @Override
-    public Completable doValidateDevice() {
-        return getDataManager().getBluetoothHelper().getConnectionService().validateDevice();
-    }
-
-    @Override
-    public void doDisconnect() {
-        getDataManager().getBluetoothHelper().getConnectionService().disconnect();
-    }
 }

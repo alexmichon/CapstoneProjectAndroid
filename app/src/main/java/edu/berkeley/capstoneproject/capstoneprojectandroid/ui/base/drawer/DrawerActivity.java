@@ -38,13 +38,15 @@ public class DrawerActivity extends BaseActivity {
     @BindView(R.id.drawer_navigation_view)
     NavigationView mNavigationView;
 
+    FrameLayout mContainer;
+
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(R.layout.activity_drawer);
-        final FrameLayout container = (FrameLayout) findViewById(R.id.drawer_container);
-        LayoutInflater.from(this).inflate(layoutResID, container, true);
+        mContainer = (FrameLayout) findViewById(R.id.drawer_container);
+        LayoutInflater.from(this).inflate(layoutResID, mContainer, true);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
     }

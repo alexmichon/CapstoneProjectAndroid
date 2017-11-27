@@ -29,8 +29,6 @@ import timber.log.Timber;
 
 public class ConnectionService extends BaseService implements IConnectionService {
 
-    private Rx2BleDevice mDevice;
-    private Rx2BleConnection mConnection;
     private Disposable mConnectionDisposable;
 
     @Inject
@@ -40,19 +38,12 @@ public class ConnectionService extends BaseService implements IConnectionService
 
 
     @Override
-    public Rx2BleDevice getDevice() {
-        return mDevice;
-    }
-
-
-    @Override
     public Single<Rx2BleConnection> connect(final Rx2BleDevice device, final boolean autoconnect) {
         Timber.d("Connection to device");
-        mDevice = device;
         return Single.create(new SingleOnSubscribe<Rx2BleConnection>() {
             @Override
             public void subscribe(@NonNull final SingleEmitter<Rx2BleConnection> e) throws Exception {
-                mConnectionDisposable = mDevice.establishConnection(autoconnect).subscribe(new Consumer<Rx2BleConnection>() {
+                mConnectionDisposable = device.establishConnection(autoconnect).subscribe(new Consumer<Rx2BleConnection>() {
                     @Override
                     public void accept(Rx2BleConnection connection) throws Exception {
                         e.onSuccess(connection);
@@ -79,13 +70,13 @@ public class ConnectionService extends BaseService implements IConnectionService
 
     @Override
     public Rx2BleDevice.ConnectionState getConnectionState() {
-        return mDevice.getConnectionState();
+        return getDevice().getConnectionState();
     }
 
 
     @Override
     public Observable<Rx2BleDevice.ConnectionState> observeConnectionStateChange() {
-        return mDevice.observeConnectionStateChange();
+        return getDevice().observeConnectionStateChange();
     }
 
 
@@ -95,7 +86,7 @@ public class ConnectionService extends BaseService implements IConnectionService
 
     @Override
     public Completable validateDevice() {
-        final Observable<Rx2BleDeviceServices> observable = mConnection.discoverServices();
+        final Observable<Rx2BleDeviceServices> observable = getConnection().discoverServices();
 
         return Completable.create(new CompletableOnSubscribe() {
             @Override

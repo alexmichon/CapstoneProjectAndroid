@@ -27,8 +27,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 
 public class BluetoothListFragment extends BaseFragment implements BluetoothListContract.View {
 
-    private static final String TAG = BluetoothListFragment.class.getSimpleName();
-
     private static final String TITLE = "Bluetooth Devices";
 
     private static final int REQUEST_ENABLE_BT = 0;
@@ -135,13 +133,6 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     }
 
     @Override
-    public void onDeviceConnected() {
-        if (mListener != null) {
-            mListener.onDeviceConnected();
-        }
-    }
-
-    @Override
     public String getTitle() {
         return TITLE;
     }
@@ -149,7 +140,10 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     @OnItemClick(R.id.bluetooth_list_scanned)
     void OnDeviceClickListener(int position) {
         Rx2BleDevice device = mScannedAdapter.getItem(position);
-        mPresenter.onDeviceClick(device);
+        mPresenter.onDeviceSelected(device);
+        if (mListener != null) {
+            mListener.onDeviceSelected(device);
+        }
     };
 
 
@@ -159,6 +153,6 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     }
 
     public interface BluetoothListFragmentListener {
-        void onDeviceConnected();
+        void onDeviceSelected(Rx2BleDevice device);
     }
 }

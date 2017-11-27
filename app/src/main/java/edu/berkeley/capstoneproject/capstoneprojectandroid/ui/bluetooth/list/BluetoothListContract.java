@@ -24,28 +24,19 @@ public interface BluetoothListContract {
         void cleanPairedDevices();
         void showScanningProgress();
         void hideScanningProgress();
-
-        void onDeviceConnected();
     }
 
     interface Interactor extends IBaseInteractor {
         Observable<Rx2BleDevice> doDiscovery();
         Observable<Rx2BleDevice> doLoadPairedDevices();
-
-        void doSelectDevice(Rx2BleDevice device);
-
-        Single<Rx2BleConnection> doConnect(Rx2BleDevice device);
-        Completable doValidateDevice();
-        void doDisconnect();
     }
 
     //@PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void onLoadPairedDevices();
         void onStartScanning();
-        void onStopScanning();
-        void onDeviceClick(Rx2BleDevice device);
+        void onStopScanning();;
 
-        void onDeviceConnected();
+        void onDeviceSelected(Rx2BleDevice device);
     }
 }

@@ -71,37 +71,4 @@ public class BluetoothListInteractorTest {
         // then
         verify(mDeviceService).getPairedDevices();
     }
-
-    @Test
-    public void doSelectDeviceShouldUpdateHelper() {
-        // given
-        Rx2BleDevice device = Mockito.mock(Rx2BleDevice.class);
-
-        // when
-        mInteractor.doSelectDevice(device);
-
-        // then
-        verify(mBluetoothHelper).setDevice(device);
-    }
-
-    @Test
-    public void doConnectDeviceShouldCallHelper() {
-        // given
-        doReturn(Single.never()).when(mConnectionService).connect(eq(mDevice), anyBoolean());
-
-        // when
-        mInteractor.doConnect(mDevice);
-
-        // then
-        verify(mConnectionService).connect(mDevice, false);
-    }
-
-    @Test
-    public void doValidateDeviceShouldCallHelper() {
-        // when
-        mInteractor.doValidateDevice();
-
-        // then
-        verify(mConnectionService).validateDevice();
-    }
 }

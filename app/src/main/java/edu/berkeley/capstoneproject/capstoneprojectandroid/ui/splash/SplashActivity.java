@@ -20,8 +20,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivit
 
 public class SplashActivity extends BaseActivity implements SplashContract.View {
 
-    private static final String TAG = SplashActivity.class.getSimpleName();
-
     @BindView(R.id.splash_text_info)
     TextView mTextInfo;
 

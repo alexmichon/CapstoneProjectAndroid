@@ -1,14 +1,18 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid;
 
 import android.app.Application;
-import android.os.Build;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import timber.log.Timber;
 
 /**
@@ -38,6 +42,8 @@ public class CapstoneProjectAndroidApplication extends Application {
                     return element + ":" + element.getLineNumber();
                 }
             });
+            Log.i("Timber", Timber.asTree().toString());
+            Timber.i("Timber enabled");
         }
 
         mAppComponent = DaggerAppComponent
@@ -50,6 +56,13 @@ public class CapstoneProjectAndroidApplication extends Application {
 
     public AppComponent getAppComponent() {
         return mAppComponent;
+    }
+
+    public ActivityComponent getActivityComponent(BaseActivity activity) {
+        return DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule(activity))
+                .appComponent(getAppComponent())
+                .build();
     }
 
     public static CapstoneProjectAndroidApplication getInstance() {

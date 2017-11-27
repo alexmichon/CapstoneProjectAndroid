@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
@@ -12,7 +11,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerPr
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
@@ -25,9 +23,7 @@ import timber.log.Timber;
 public class BluetoothListPresenter<V extends BluetoothListContract.View, I extends BluetoothListContract.Interactor>
         extends BasePresenter<V, I> implements BluetoothListContract.Presenter<V, I> {
 
-    private boolean mScanning = false;
     private Disposable mScanDisposable;
-    private Disposable mConnectionDisposable;
 
     @Inject
     public BluetoothListPresenter(I interactor,
@@ -59,7 +55,6 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
         // TODO Check Bluetooth status and prompt if disabled
 
-        mScanning = true;
         getView().showScanningProgress();
 
         mScanDisposable = getInteractor()
@@ -107,68 +102,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
     }
 
     @Override
-    public void onDeviceClick(Rx2BleDevice device) {
-        //CapstoneProjectAndroidApplication.getInstance().getFeather52().setBluetoothDevice(device.getBluetoothDevice());
-        //getView().startTrainingActivity(device);
-        final Rx2BleDevice.ConnectionState connectionState;
-
+    public void onDeviceSelected(Rx2BleDevice device) {
         onStopScanning();
-
-        getView().showLoading();
-
-        getCompositeDisposable().add(getInteractor()
-                .doConnect(device)
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(new Consumer<Rx2BleConnection>() {
-
-                        @Override
-                        public void accept(Rx2BleConnection connection) throws Exception {
-                            Timber.d("Connection succeeded");
-                            onDeviceConnected();
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            Timber.e(throwable, "Connection failed");
-                            getView().showError("Connection failed");
-                            getView().hideLoading();
-                        }
-                    }
-        ));
-
-    }
-
-    @Override
-    public void onDeviceConnected() {
-        mConnectionDisposable = null;
-        getView().showMessage("Connected");
-        getCompositeDisposable().add(getInteractor()
-                .doValidateDevice()
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            Timber.d("Device validated");
-                            getView().hideLoading();
-                            getView().showMessage("Device validated");
-                            getView().onDeviceConnected();
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            Timber.e("Device not validated");
-                            getView().hideLoading();
-                            getView().showError("Unknown device");
-                        }
-                    })
-        );
-    }
-
-    @Override
-    public void onDetach() {
-        getInteractor().doDisconnect();
-        super.onDetach();
     }
 }

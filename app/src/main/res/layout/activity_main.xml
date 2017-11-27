@@ -38,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:background="?android:attr/buttonBarButtonStyle"
-                android:text="Start training"/>
+                android:text="Start training"
+                style="?android:attr/buttonBarButtonStyle"/>
 
             <Button
                 android:id="@+id/main_button_view_results"
@@ -47,8 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:background="?android:attr/buttonBarButtonStyle"
-                android:text="View results"/>
+                android:text="View results"
+                style="?android:attr/buttonBarButtonStyle"/>
 
         </android.support.v7.widget.ButtonBarLayout>
 
