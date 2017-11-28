@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
@@ -11,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.Ex
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
 import io.reactivex.Single;
 
 /**

@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth;
 
 import com.polidea.rxandroidble.NotificationSetupMode;
 
@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.BaseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import io.reactivex.Observable;

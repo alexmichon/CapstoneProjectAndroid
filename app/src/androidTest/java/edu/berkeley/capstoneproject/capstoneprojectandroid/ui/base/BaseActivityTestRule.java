@@ -9,14 +9,9 @@ import org.junit.Rule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.TestApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerTestActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.TestActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestActivityModule;
 
 /**

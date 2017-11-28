@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.device;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth;
 
 import com.polidea.rxandroidble.scan.ScanFilter;
 import com.polidea.rxandroidble.scan.ScanResult;
@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.BaseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleClient;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Observable;

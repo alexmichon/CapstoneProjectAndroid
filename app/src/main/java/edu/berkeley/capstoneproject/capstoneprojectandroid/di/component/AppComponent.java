@@ -12,17 +12,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
  * Created by Alex on 08/11/2017.
  */
 
-@Singleton
-@Component(modules = {AppModule.class})
 public interface AppComponent {
-
-    @Component.Builder
-    interface Builder {
-        @BindsInstance Builder application(CapstoneProjectAndroidApplication application);
-        Builder appModule(AppModule appModule);
-        //Builder netModule(NetModule netModule);
-        AppComponent build();
-    }
 
     void inject(CapstoneProjectAndroidApplication app);
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.TestBytes;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement.MeasurementService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.MeasurementService;
 import io.reactivex.Observable;
 import io.reactivex.subscribers.TestSubscriber;
 

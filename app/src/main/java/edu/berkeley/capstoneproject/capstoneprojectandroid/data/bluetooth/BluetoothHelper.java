@@ -6,11 +6,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.IBaseService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.connection.IConnectionService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.device.IDeviceService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement.IMeasurementService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IBaseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IConnectionService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IDeviceService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMeasurementService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 

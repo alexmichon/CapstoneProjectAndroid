@@ -2,8 +2,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IAuthService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
 
 /**
  * Created by Alex on 18/11/2017.

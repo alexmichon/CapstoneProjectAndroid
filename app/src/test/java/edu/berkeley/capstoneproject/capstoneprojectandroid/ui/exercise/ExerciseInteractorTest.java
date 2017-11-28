@@ -12,8 +12,8 @@ import java.util.HashMap;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.IExerciseService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement.IMeasurementService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMeasurementService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
@@ -59,7 +59,7 @@ public class ExerciseInteractorTest {
     private IBluetoothHelper mBluetoothHelper;
 
     @Mock
-    private edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service.IExerciseService mApiExerciseService;
+    private edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService mApiExerciseService;
 
     @Mock
     private IExerciseService mBluetoothExerciseService;

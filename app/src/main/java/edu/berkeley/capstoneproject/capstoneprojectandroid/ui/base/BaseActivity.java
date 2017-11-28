@@ -13,8 +13,6 @@ import android.widget.Toast;
 import butterknife.Unbinder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 
 /**
  * Created by Alex on 07/11/2017.

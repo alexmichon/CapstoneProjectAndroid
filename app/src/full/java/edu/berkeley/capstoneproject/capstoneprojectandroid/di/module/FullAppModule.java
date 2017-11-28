@@ -4,7 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.TestApplication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.FullApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.DeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IConnectionService;
@@ -15,17 +15,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.AuthS
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
 
 /**
- * Created by Alex on 24/11/2017.
+ * Created by Alex on 27/11/2017.
  */
 
 @Module
-public class TestAppModule extends AppModule {
-
-    private final TestApplication mApplication;
-
-    public TestAppModule(TestApplication application) {
+public class FullAppModule extends AppModule {
+    public FullAppModule(FullApplication application) {
         super(application);
-        mApplication = application;
     }
 
     @Provides

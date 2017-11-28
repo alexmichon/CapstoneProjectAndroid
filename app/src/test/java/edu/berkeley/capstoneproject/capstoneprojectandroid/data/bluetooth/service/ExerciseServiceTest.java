@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Map;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.ExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import io.reactivex.Observable;

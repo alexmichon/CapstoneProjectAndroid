@@ -24,8 +24,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.ExerciseService.ENCODER_OBSERVABLE;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise.ExerciseService.IMU_OBSERVABLE;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.ENCODER_OBSERVABLE;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.IMU_OBSERVABLE;
 
 /**
  * Created by Alex on 10/11/2017.

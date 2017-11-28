@@ -1,8 +1,7 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.exercise;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth;
 
 import java.util.Map;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.IBaseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import io.reactivex.Observable;
 

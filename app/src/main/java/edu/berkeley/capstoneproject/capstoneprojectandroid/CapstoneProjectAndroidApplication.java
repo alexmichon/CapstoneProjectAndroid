@@ -8,10 +8,6 @@ import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import timber.log.Timber;
 
@@ -19,11 +15,11 @@ import timber.log.Timber;
  * Created by Alex on 25/10/2017.
  */
 
-public class CapstoneProjectAndroidApplication extends Application {
+public abstract class CapstoneProjectAndroidApplication extends Application {
 
     private static CapstoneProjectAndroidApplication instance;
 
-    private AppComponent mAppComponent;
+    protected AppComponent mAppComponent;
 
     @Override
     public void onCreate() {
@@ -45,25 +41,13 @@ public class CapstoneProjectAndroidApplication extends Application {
             Log.i("Timber", Timber.asTree().toString());
             Timber.i("Timber enabled");
         }
-
-        mAppComponent = DaggerAppComponent
-                .builder()
-                .application(this)
-                .appModule(new AppModule(this))
-                .build();
-        mAppComponent.inject(this);
     }
 
     public AppComponent getAppComponent() {
         return mAppComponent;
     }
 
-    public ActivityComponent getActivityComponent(BaseActivity activity) {
-        return DaggerActivityComponent.builder()
-                .activityModule(new ActivityModule(activity))
-                .appComponent(getAppComponent())
-                .build();
-    }
+    public abstract ActivityComponent getActivityComponent(BaseActivity activity);
 
     public static CapstoneProjectAndroidApplication getInstance() {
         return instance;

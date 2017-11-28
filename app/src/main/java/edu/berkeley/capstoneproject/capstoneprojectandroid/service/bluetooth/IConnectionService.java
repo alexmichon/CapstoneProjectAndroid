@@ -1,6 +1,5 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.connection;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.IBaseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Completable;

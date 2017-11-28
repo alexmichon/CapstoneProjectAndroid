@@ -27,8 +27,29 @@ android {
         }
     }
 
+    productFlavors {
+        fake {
+            applicationIdSuffix ".fake"
+            versionNameSuffix "-fake"
+        }
+
+        full {
+            applicationIdSuffix ".full"
+            versionNameSuffix "-full"
+        }
+    }
+
     sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+        }
+
         instrumentTest.setRoot('src/androidTest/')
+        full {
+            java.srcDirs = ['src/main/java', 'src/full/java/', 'src/full/java', 'src/full/java/2']
+            manifest.srcFile 'src/full/AndroidManifest.xml'
+        }
+
     }
 
     testOptions.unitTests.all {

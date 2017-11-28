@@ -1,7 +1,6 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.measurement;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service.base.IBaseService;
 import io.reactivex.Observable;
 
 /**

@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.service;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;

@@ -1,7 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerTestActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerTestComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.TestComponent;
