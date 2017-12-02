@@ -76,9 +76,4 @@ public class AppModule {
     IBluetoothHelper provideBluetoothHelper(BluetoothHelper bluetoothHelper) {
         return bluetoothHelper;
     }
-
-    @Provides
-    RxBleClient provideRxBleClient(Context context) {
-        return RxBleClient.create(context);
-    }
 }

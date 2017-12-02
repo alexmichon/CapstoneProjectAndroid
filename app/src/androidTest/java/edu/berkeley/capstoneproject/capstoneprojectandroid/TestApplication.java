@@ -3,7 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerTestActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerTestComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.TestComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.TestAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestAppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
@@ -14,7 +14,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 
 public class TestApplication extends CapstoneProjectAndroidApplication {
 
-    private TestComponent mTestComponent;
+    private TestAppComponent mTestComponent;
 
     @Override
     public void onCreate() {
@@ -28,7 +28,7 @@ public class TestApplication extends CapstoneProjectAndroidApplication {
     }
 
     @Override
-    public TestComponent getAppComponent() {
+    public TestAppComponent getAppComponent() {
         return mTestComponent;
     }
 

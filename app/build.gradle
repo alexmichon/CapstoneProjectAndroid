@@ -45,8 +45,14 @@ android {
         }
 
         instrumentTest.setRoot('src/androidTest/')
+
+        fake {
+            java.srcDirs = ['src/main/java', 'src/fake/java']
+            manifest.srcFile 'src/fake/AndroidManifest.xml'
+        }
+
         full {
-            java.srcDirs = ['src/main/java', 'src/full/java/', 'src/full/java', 'src/full/java/2']
+            java.srcDirs = ['src/main/java', 'src/full/java/']
             manifest.srcFile 'src/full/AndroidManifest.xml'
         }
 
@@ -80,9 +86,11 @@ dependencies {
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex.rxjava2:rxjava:2.1.5'
-    compile "com.github.akarnokd:rxjava2-interop:0.11.0"
+    compile "com.github.akarnokd:rxjava2-interop:0.10.7"
 
-    compile 'com.polidea.rxandroidble:rxandroidble:1.4.2'
+    compile 'com.polidea.rxandroidble:rxandroidble:1.4.3'
+    fakeCompile "com.polidea.rxandroidble:mockclient:1.4.3"
+    testCompile "com.polidea.rxandroidble:mockclient:1.4.3"
 
     compile 'com.google.dagger:dagger:2.13'
     apt 'com.google.dagger:dagger-compiler:2.13'

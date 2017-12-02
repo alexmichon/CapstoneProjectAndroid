@@ -8,6 +8,8 @@ import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.AppComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerActivityComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import timber.log.Timber;
 
@@ -47,7 +49,12 @@ public abstract class CapstoneProjectAndroidApplication extends Application {
         return mAppComponent;
     }
 
-    public abstract ActivityComponent getActivityComponent(BaseActivity activity);
+    public ActivityComponent getActivityComponent(BaseActivity activity) {
+        return DaggerActivityComponent.builder()
+                .appComponent(getAppComponent())
+                .activityModule(new ActivityModule(activity))
+                .build();
+    }
 
     public static CapstoneProjectAndroidApplication getInstance() {
         return instance;

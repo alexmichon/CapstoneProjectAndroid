@@ -11,13 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -92,7 +96,7 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
 
         initLineChart(mAccView, -2, 2);
         initLineChart(mGyrView, -2, 2);
-        initLineChart(mEncoderView, 0, 360);
+        initLineChart(mEncoderView, -1, 360);
 
         return view;
     }
@@ -208,10 +212,11 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
         }
         Entry e = new Entry(measurement.getTimestamp(), measurement.getValue());
         set.addEntry(e);
+        Timber.d("Adding measurement: %d, %d, %d, %.2f", measurement.getMetric().getSensor().getId(), measurement.getMetric().getId(), measurement.getTimestamp(), measurement.getValue());
         data.notifyDataChanged();
         chart.notifyDataSetChanged();
-        chart.setVisibleXRangeMaximum(10000);
-        chart.moveViewTo(e.getX(), e.getY(), YAxis.AxisDependency.LEFT);
+        chart.setVisibleXRangeMaximum(1000);
+        chart.moveViewToX(e.getX());
     }
 
 
@@ -252,12 +257,28 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
         xl.setTextColor(Color.WHITE);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
+        /*xl.setGranularity(100f);
+        xl.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return String.valueOf(value);
+            }
+        });*/
         xl.setEnabled(true);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         //leftAxis.setTypeface(mTfLight);
         leftAxis.setAxisMinimum(min);
         leftAxis.setAxisMaximum(max);
+        /*leftAxis.setGranularity(30f);
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return String.valueOf(value);
+            }
+        });*/
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
         leftAxis.setTextColor(Color.WHITE);
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawGridLines(true);

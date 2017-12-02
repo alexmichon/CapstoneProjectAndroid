@@ -10,7 +10,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivit
  */
 
 @PerActivity
-@Component(dependencies = {TestComponent.class}, modules = {ActivityModule.class})
+@Component(dependencies = {TestAppComponent.class}, modules = {ActivityModule.class})
 public interface TestActivityComponent extends ActivityComponent {
 
     void inject(LoginActivityTest activity);

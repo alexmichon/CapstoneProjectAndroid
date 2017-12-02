@@ -2,10 +2,14 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.module;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.content.Context;
+import android.hardware.SensorManager;
 
 import com.polidea.rxandroidble.RxBleClient;
 import com.polidea.rxandroidble.RxBleDevice;
+import com.polidea.rxandroidble.RxBleDeviceServices;
 import com.polidea.rxandroidble.mockrxandroidble.RxBleClientMock;
+import com.polidea.rxandroidble.mockrxandroidble.RxBleDeviceMock;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +18,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.TestApplication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.FakeApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.DeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IConnectionService;
@@ -26,17 +31,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuth
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 
 /**
- * Created by Alex on 24/11/2017.
+ * Created by Alex on 28/11/2017.
  */
 
 @Module
-public class TestAppModule extends AppModule {
+public class FakeAppModule extends AppModule {
 
-    private final TestApplication mApplication;
-
-    public TestAppModule(TestApplication application) {
+    public FakeAppModule(FakeApplication application) {
         super(application);
-        mApplication = application;
     }
 
     @Provides
@@ -51,10 +53,6 @@ public class TestAppModule extends AppModule {
     provideExerciseService(edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.ExerciseService service) {
         return service;
     }
-
-
-
-
 
 
 
@@ -78,14 +76,14 @@ public class TestAppModule extends AppModule {
     @Singleton
     RxBleDevice provideRxBleDevice(List<BluetoothGattCharacteristic> characteristicList) {
         return new RxBleClientMock.DeviceBuilder()
-                .deviceName("Test device")
-                .deviceMacAddress("00:00:00:00:00:00")
-                .scanRecord(new byte[] {(byte) 0x00})
-                .rssi(1)
-                .addService(
-                        BluetoothConstants.UUID_SERVICE,
-                        characteristicList
-                ).build();
+            .deviceName("Fake device")
+            .deviceMacAddress("00:00:00:00:00:00")
+            .scanRecord(new byte[] {(byte) 0x00})
+            .rssi(1)
+            .addService(
+                    BluetoothConstants.UUID_SERVICE,
+                    characteristicList
+            ).build();
     }
 
 
@@ -97,6 +95,11 @@ public class TestAppModule extends AppModule {
                 .build();
     }
 
+    @Provides
+    @Singleton
+    SensorManager provideSensorManager(Context context) {
+        return (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+    }
 
     @Provides
     @Singleton
@@ -119,7 +122,7 @@ public class TestAppModule extends AppModule {
 
     @Provides
     @Singleton
-    IMeasurementService provideSensorService(MeasurementService service) {
+    IMeasurementService provideMeasurementService(MeasurementService service) {
         return service;
     }
 }

@@ -2,12 +2,14 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble;
 
 import com.polidea.rxandroidble.RxBleClient;
 import com.polidea.rxandroidble.RxBleDevice;
+import com.polidea.rxandroidble.RxBleScanResult;
 import com.polidea.rxandroidble.scan.ScanFilter;
 import com.polidea.rxandroidble.scan.ScanResult;
 import com.polidea.rxandroidble.scan.ScanSettings;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,6 +51,11 @@ public class Rx2BleClient {
 
     public Observable<ScanResult> scanBleDevices(ScanSettings scanSettings, ScanFilter... scanFilters) {
         rx.Observable<ScanResult> observable = mClient.scanBleDevices(scanSettings, scanFilters);
+        return RxObservableConverter.convert(observable);
+    }
+
+    public Observable<RxBleScanResult> scanBleDevices(UUID... filterServiceUUIDs) {
+        rx.Observable<RxBleScanResult> observable = mClient.scanBleDevices(filterServiceUUIDs);
         return RxObservableConverter.convert(observable);
     }
 }

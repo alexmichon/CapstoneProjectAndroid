@@ -52,6 +52,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                 .subscribe(new Consumer<Exercise>() {
                     @Override
                     public void accept(Exercise exercise) throws Exception {
+                        Timber.d("Exercise created");
                         mExercise = exercise;
                         getView().onExerciseCreated(exercise);
                         startExercise(exercise);
@@ -74,6 +75,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
+                        Timber.d("Exercise started");
                         getView().onExerciseStarted(exercise);
                         mStarted = true;
                         startListening(exercise);
@@ -113,6 +115,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     public void onStopClick() {
         mStarted = false;
         getInteractor().doStopExercise();
+        getCompositeDisposable().clear();
         getView().onExerciseStopped(mExercise);
     }
 

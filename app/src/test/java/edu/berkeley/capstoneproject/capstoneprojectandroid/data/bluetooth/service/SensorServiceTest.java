@@ -28,7 +28,7 @@ public class SensorServiceTest {
 
     @Before
     public void setup() {
-        mSensorService = new MeasurementService();
+        //mSensorService = new MeasurementService();
     }
 
     @Test

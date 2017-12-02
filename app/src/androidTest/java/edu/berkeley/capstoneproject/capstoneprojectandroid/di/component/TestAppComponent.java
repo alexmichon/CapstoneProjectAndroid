@@ -14,14 +14,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestAppModu
 
 @Singleton
 @Component(modules = TestAppModule.class)
-public interface TestComponent extends AppComponent {
+public interface TestAppComponent extends AppComponent {
 
     @Component.Builder
     interface Builder {
         @BindsInstance
-        TestComponent.Builder application(TestApplication application);
-        TestComponent.Builder appTestModule(TestAppModule appModule);
-        TestComponent build();
+        TestAppComponent.Builder application(TestApplication application);
+        TestAppComponent.Builder appTestModule(TestAppModule appModule);
+        TestAppComponent build();
     }
 
     void inject(TestApplication app);

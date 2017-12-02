@@ -39,6 +39,12 @@ public class FullAppModule extends AppModule {
 
     @Provides
     @Singleton
+    RxBleClient provideRxBleClient(Context context) {
+        return RxBleClient.create(context);
+    }
+
+    @Provides
+    @Singleton
     IDeviceService provideDeviceService(DeviceService service) {
         return service;
     }

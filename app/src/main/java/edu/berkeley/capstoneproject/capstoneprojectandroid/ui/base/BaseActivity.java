@@ -36,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                     .appComponent(((CapstoneProjectAndroidApplication) getApplication()).getAppComponent())
                     .build();
         }*/
+
         mActivityComponent = ((CapstoneProjectAndroidApplication)getApplication()).getActivityComponent(this);
     }
 

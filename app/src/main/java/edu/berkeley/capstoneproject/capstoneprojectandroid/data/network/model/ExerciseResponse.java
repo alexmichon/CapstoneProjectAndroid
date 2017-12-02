@@ -28,6 +28,14 @@ public class ExerciseResponse {
         mId = id;
     }
 
+    public int getExerciseTypeId() {
+        return mExerciseTypeId;
+    }
+
+    public void setExerciseTypeId(int exerciseTypeId) {
+        mExerciseTypeId = exerciseTypeId;
+    }
+
     public Exercise getExercise(ExerciseType exerciseType) {
         if (mExerciseTypeId != exerciseType.getId()) {
             return null;
