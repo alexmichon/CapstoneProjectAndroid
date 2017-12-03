@@ -11,17 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -58,7 +65,7 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     @BindView(R.id.exercise_linechart_gyr)
     LineChart mGyrView;
     @BindView(R.id.exercise_linechart_encoder)
-    LineChart mEncoderView;
+    PieChart mEncoderView;
 
     private int[] mColors = new int[] {
             ColorTemplate.COLORFUL_COLORS[0],
@@ -96,7 +103,7 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
 
         initLineChart(mAccView, -2, 2);
         initLineChart(mGyrView, -2, 2);
-        initLineChart(mEncoderView, -1, 360);
+        initPieChart(mEncoderView);
 
         return view;
     }
@@ -180,11 +187,13 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
                 chart = mGyrView;
                 break;
             case SensorManager.ID_ENCODER:
-                chart = mEncoderView;
-                break;
+                setPieMeasurement(mEncoderView, measurement);
+                return;
         }
 
-        addMeasurement(chart, measurement);
+        if (chart != null) {
+            addMeasurement(chart, measurement);
+        }
     }
 
     @Override
@@ -244,7 +253,11 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     public void clearUi() {
         clearLineChart(mAccView);
         clearLineChart(mGyrView);
-        clearLineChart(mEncoderView);
+        clearPieChart(mEncoderView);
+    }
+
+    private void initPieChart(PieChart pieChart) {
+        pieChart.setUsePercentValues(false);
     }
 
     private void initLineChart(LineChart lineChart, float min, float max) {
@@ -287,11 +300,52 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
         rightAxis.setEnabled(false);
     }
 
+    private void setPieMeasurement(PieChart pieChart, Measurement measurement) {
+        Timber.d("Adding measurement: %d, %d, %d, %.2f", measurement.getMetric().getSensor().getId(), measurement.getMetric().getId(), measurement.getTimestamp(), measurement.getValue());
+
+        float angle = (float) (measurement.getValue() * 180 / Math.PI) + 180f;
+
+        List<PieEntry> pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry(angle));
+
+        Metric metric = measurement.getMetric();
+        IPieDataSet set = new PieDataSet(pieEntries, metric.getName());
+
+        PieData data = new PieData(set);
+        pieChart.setData(data);
+
+        pieChart.setMaxAngle(angle);
+
+        data.notifyDataChanged();
+        pieChart.notifyDataSetChanged();
+        pieChart.invalidate();
+    }
+
+    private PieDataSet createPieSet(String label, int index) {
+        PieDataSet set = new PieDataSet(null, "Dynamic Data");
+        int color = mColors[index % mColors.length];
+
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(color);
+        set.setValueTextColor(Color.BLACK);
+        set.setValueTextSize(9f);
+        set.setDrawValues(false);
+        set.setLabel(label);
+        return set;
+    }
+
     private void clearLineChart(LineChart lineChart) {
         LineData data = lineChart.getLineData();
         if (data != null) { data.clearValues(); }
         lineChart.notifyDataSetChanged();
         lineChart.invalidate();
+    }
+
+    private void clearPieChart(PieChart pieChart) {
+        PieData data = pieChart.getData();
+        if (data != null) { data.clearValues(); }
+        pieChart.notifyDataSetChanged();
+        pieChart.invalidate();
     }
 
 

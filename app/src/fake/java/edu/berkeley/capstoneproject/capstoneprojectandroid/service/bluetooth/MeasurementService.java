@@ -32,8 +32,8 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     private final SensorManager mSensorManager;
     private final Sensor mSensor;
 
-    private float mAccValues[];
-    private float mAngleValues[];
+    private float mAccValues[] = new float[3];
+    private float mAngleValues[] = new float[1];
 
     private final long mStartTime;
 
@@ -55,7 +55,7 @@ public class MeasurementService extends BaseService implements IMeasurementServi
                     return Observable.just(new Measurement(
                             edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ENCODER).getMetric(ID_ANGLE),
                             timed.time() - mStartTime,
-                            0
+                            mAngleValues[0]
                     ));
                 }
             });
@@ -102,6 +102,7 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         mAccValues = sensorEvent.values;
+        mAngleValues[0] = (float) Math.atan2(mAccValues[2], mAccValues[0]);
     }
 
     @Override
