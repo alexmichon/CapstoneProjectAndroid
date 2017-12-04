@@ -9,7 +9,7 @@ import com.google.gson.JsonSyntaxException;
 import javax.net.ssl.HttpsURLConnection;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ApiError;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiError;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;

@@ -1,11 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
-import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.Rule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
@@ -42,7 +39,7 @@ public class BaseActivityTestRule<T extends BaseActivity> extends ActivityTestRu
     @Override
     public Statement apply(Statement base, Description description) {
         mActivityComponent = DaggerTestActivityComponent.builder()
-                .testComponent(getApplication().getAppComponent())
+                .testAppComponent(getApplication().getAppComponent())
                 .activityModule(new TestActivityModule(getActivity(), mMockMode))
                 .build();
         return super.apply(base, description);

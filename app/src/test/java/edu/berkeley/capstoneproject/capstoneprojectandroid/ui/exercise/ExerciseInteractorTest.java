@@ -18,9 +18,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -81,22 +78,19 @@ public class ExerciseInteractorTest {
     @Test
     public void doCreateExerciseShouldCallApi() {
         // given
-        ExerciseRequest request = new ExerciseRequest(mExerciseType);
-        doReturn(Single.never()).when(mApiExerciseService).doCreateExercise(request);
+        doReturn(Single.never()).when(mApiExerciseService).doCreateExercise(mExerciseType);
 
         // when
         mInteractor.doCreateExercise(mExerciseType);
 
         // then
-        verify(mApiExerciseService).doCreateExercise(request);
+        verify(mApiExerciseService).doCreateExercise(mExerciseType);
     }
 
     @Test
     public void doCreateExerciseShouldReturnCorrectExercise() {
         // given
-        ExerciseResponse response = Mockito.mock(ExerciseResponse.class);
-        doReturn(mExercise).when(response).getExercise(mExerciseType);
-        doReturn(Single.just(response)).when(mApiExerciseService).doCreateExercise(any(ExerciseRequest.class));
+        doReturn(Single.just(mExercise)).when(mApiExerciseService).doCreateExercise(mExerciseType);
 
         // when
         Exercise exercise = mInteractor.doCreateExercise(mExerciseType).blockingGet();
@@ -180,15 +174,13 @@ public class ExerciseInteractorTest {
 
         when(measurement.getExercise()).thenReturn(mExercise);
 
-        MeasurementRequest request = new MeasurementRequest(measurement);
-
-        doReturn(Single.just(measurement)).when(mApiExerciseService).doCreateMeasurement(request);
+        doReturn(Single.just(measurement)).when(mApiExerciseService).doSaveMeasurement(measurement);
 
         // when
         mInteractor.doSaveMeasurement(mExercise, measurement);
 
         // then
-        verify(mApiExerciseService).doCreateMeasurement(request);
+        verify(mApiExerciseService).doSaveMeasurement(measurement);
     }
 
     @Test

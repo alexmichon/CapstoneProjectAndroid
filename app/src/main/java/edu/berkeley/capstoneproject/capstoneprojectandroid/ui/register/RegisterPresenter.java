@@ -2,7 +2,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
@@ -28,7 +27,7 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
     public void onRegisterClick(final String email, final String password, String passwordConfirmation, final String firstName, final String lastName) {
         getView().showLoading();
         getCompositeDisposable().add(getInteractor()
-                .doRegisterApiCall(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
+                .doRegisterApiCall(email, password, passwordConfirmation, firstName, lastName)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {

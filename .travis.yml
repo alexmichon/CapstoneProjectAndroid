@@ -11,7 +11,7 @@ env:
         - ANDROID_TAG=default
     matrix:
         - EMULATOR_API_LEVEL=24
-        - EMULATOR_API_LEVEL=18
+        - EMULATOR_API_LEVEL=19
 
 android:
   components:

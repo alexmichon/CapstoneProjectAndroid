@@ -15,7 +15,6 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "edu.berkeley.capstoneproject.capstoneprojectandroid.MockTestRunner"
     }
     buildTypes {
         debug {
@@ -31,17 +30,22 @@ android {
         fake {
             applicationIdSuffix ".fake"
             versionNameSuffix "-fake"
+
+            testInstrumentationRunner "edu.berkeley.capstoneproject.capstoneprojectandroid.FakeTestRunner"
         }
 
         full {
             applicationIdSuffix ".full"
             versionNameSuffix "-full"
+
+            testInstrumentationRunner "edu.berkeley.capstoneproject.capstoneprojectandroid.FullTestRunner"
         }
     }
 
     sourceSets {
         main {
             manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
         }
 
         instrumentTest.setRoot('src/androidTest/')
@@ -49,14 +53,30 @@ android {
         fake {
             java.srcDirs = ['src/main/java', 'src/fake/java']
             manifest.srcFile 'src/fake/AndroidManifest.xml'
+            instrumentTest.setRoot('src/androidTestFake')
         }
 
         full {
             java.srcDirs = ['src/main/java', 'src/full/java/']
             manifest.srcFile 'src/full/AndroidManifest.xml'
+            instrumentTest.setRoot('src/androidTestFull')
         }
 
+        test {
+            java.srcDir 'src/test'
+        }
+
+        androidTest {
+            java.srcDir 'src/androidTest'
+        }
+
+        //test {
+        //    java.srcDirs = ['src/main/java', 'src/full/java', 'src/test/java']
+        //}
+
     }
+
+
 
     testOptions.unitTests.all {
         testLogging {
@@ -74,6 +94,8 @@ configurations.all {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    testCompile 'junit:junit:4.12'
+
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
     compile 'com.android.support:support-annotations:26.1.0'
@@ -90,7 +112,6 @@ dependencies {
 
     compile 'com.polidea.rxandroidble:rxandroidble:1.4.3'
     fakeCompile "com.polidea.rxandroidble:mockclient:1.4.3"
-    testCompile "com.polidea.rxandroidble:mockclient:1.4.3"
 
     compile 'com.google.dagger:dagger:2.13'
     apt 'com.google.dagger:dagger-compiler:2.13'
@@ -112,11 +133,13 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
 
     testCompile 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
 //    testCompile group: 'junit', name: 'junit-dep', version: '4.10'
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
+
+    //testFullCompile 'junit:junit:4.12'
+    //testFullCompile 'org.mockito:mockito-core:1.10.19'
 
     androidTestCompile 'org.mockito:mockito-core:1.10.19'
     androidTestCompile 'com.linkedin.dexmaker:dexmaker-mockito:2.2.0'

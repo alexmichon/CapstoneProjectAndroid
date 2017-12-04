@@ -1,7 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
@@ -27,7 +26,7 @@ public interface LoginContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Single<User> doLoginCall(LoginRequest loginRequest);
+        Single<User> doLoginCall(String email, String password);
     }
 
     @PerActivity

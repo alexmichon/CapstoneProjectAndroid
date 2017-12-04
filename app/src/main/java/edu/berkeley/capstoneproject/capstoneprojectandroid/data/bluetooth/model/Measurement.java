@@ -41,6 +41,7 @@ public class Measurement {
     private final Metric mMetric;
 
     private Exercise mExercise;
+    private int mId;
 
     public Measurement(Metric metric, long timestamp, float value) {
         mMetric = metric;
@@ -111,5 +112,13 @@ public class Measurement {
     public void setExercise(Exercise exercise) {
         mExercise = exercise;
         mExercise.addMeasurement(this);
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    public int getId() {
+        return mId;
     }
 }

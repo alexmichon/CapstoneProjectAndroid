@@ -1,9 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import io.reactivex.Single;
 
 /**
@@ -12,6 +9,6 @@ import io.reactivex.Single;
 
 public interface IAuthService {
 
-    Single<LoginResponse> doLogin(LoginRequest request);
-    Single<RegisterResponse> doRegister(RegisterRequest request);
+    Single<User> doLogin(String email, String password);
+    Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName);
 }

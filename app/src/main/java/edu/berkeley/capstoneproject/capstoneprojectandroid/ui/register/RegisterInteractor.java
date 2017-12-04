@@ -4,8 +4,6 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
@@ -24,29 +22,17 @@ public class RegisterInteractor extends BaseInteractor implements RegisterContra
     }
 
     @Override
-    public Single<User> doRegisterApiCall(RegisterRequest request) {
+    public Single<User> doRegisterApiCall(String email, String password, String passwordConfirmation, String firstName, String lastName) {
         return getDataManager().getApiHelper().getAuthService()
-                .doRegister(request).doOnSuccess(new Consumer<RegisterResponse>() {
+                .doRegister(email, password, passwordConfirmation, firstName, lastName).doOnSuccess(new Consumer<User>() {
                     @Override
-                    public void accept(RegisterResponse registerResponse) throws Exception {
-                        updateApiHeader(registerResponse);
-                    }
-                })
-                .map(new Function<RegisterResponse, User>() {
-                    @Override
-                    public User apply(@NonNull RegisterResponse registerResponse) throws Exception {
-                        return registerResponse.getUser();
+                    public void accept(User user) throws Exception {
+                        updateApiHeader(user);
                     }
                 });
     }
 
-    private void updateApiHeader(RegisterResponse response) {
-        getDataManager().getApiHelper().getApiHeader().rebuild()
-                .accessToken(response.getAccessToken())
-                .client(response.getClient())
-                .expiry(response.getExpiry())
-                .tokenType(response.getTokenType())
-                .uid(response.getUid())
-                .build();
+    private void updateApiHeader(User user) {
+        // TODO
     }
 }

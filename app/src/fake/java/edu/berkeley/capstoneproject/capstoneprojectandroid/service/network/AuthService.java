@@ -2,11 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import io.reactivex.Single;
 
 /**
@@ -21,12 +17,12 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public Single<LoginResponse> doLogin(LoginRequest request) {
-        return null;
+    public Single<User> doLogin(String email, String password) {
+        return Single.never();
     }
 
     @Override
-    public Single<RegisterResponse> doRegister(RegisterRequest request) {
-        return null;
+    public Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName) {
+        return Single.never();
     }
 }

@@ -1,4 +1,6 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service;
+
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,14 +23,14 @@ import static org.mockito.Mockito.verify;
  * Created by Alex on 26/11/2017.
  */
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class SensorServiceTest {
 
-    private MeasurementService mSensorService;
+    private MeasurementService mMeasurementService;
 
     @Before
     public void setup() {
-        //mSensorService = new MeasurementService();
+        mMeasurementService = new MeasurementService();
     }
 
     @Test
@@ -37,10 +39,10 @@ public class SensorServiceTest {
         List<Measurement> expectedMeasurements = TestBytes.encoderMeasurements();
 
         Observable<byte[]> encoderObservable = Observable.just(bytes);
-        mSensorService.setEncoderObservable(encoderObservable);
+        mMeasurementService.setEncoderObservable(encoderObservable);
 
         // when
-        Observable<Measurement> observable = mSensorService.getEncoderObservable();
+        Observable<Measurement> observable = mMeasurementService.getEncoderObservable();
         List<Measurement> measurements = observable.test().values();
 
         // then
@@ -57,10 +59,10 @@ public class SensorServiceTest {
         List<Measurement> expectedMeasurements = TestBytes.accMeasurements();
 
         Observable<byte[]> imuObservable = Observable.just(bytes);
-        mSensorService.setImuObservable(imuObservable);
+        mMeasurementService.setImuObservable(imuObservable);
 
         // when
-        Observable<Measurement> observable = mSensorService.getImuObservable();
+        Observable<Measurement> observable = mMeasurementService.getImuObservable();
         TestSubscriber<Measurement> testSubscriber = TestSubscriber.create();
         List<Measurement> measurements = observable.test().values();
 

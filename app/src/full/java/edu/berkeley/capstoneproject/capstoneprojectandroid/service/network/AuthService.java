@@ -7,15 +7,17 @@ import com.rx2androidnetworking.Rx2AndroidNetworking;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.LoginRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.RegisterRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.RegisterResponse;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import okhttp3.Response;
 
 /**
@@ -32,19 +34,20 @@ public class AuthService implements IAuthService {
 
 
     @Override
-    public Single<LoginResponse> doLogin(final LoginRequest request) {
-        return Single.create(new SingleOnSubscribe<LoginResponse>() {
+    public Single<User> doLogin(final String email, final String password) {
+        return Single.create(new SingleOnSubscribe<User>() {
             @Override
-            public void subscribe(@NonNull final SingleEmitter<LoginResponse> e) throws Exception {
+            public void subscribe(@NonNull final SingleEmitter<User> e) throws Exception {
                 Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_LOGIN)
-                        .addBodyParameter(request)
+                        .addBodyParameter(new LoginRequest(email, password))
                         .build()
                         .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
                             @Override
                             public void onResponse(Response okHttpResponse, Object response) {
                                 LoginResponse loginResponse = (LoginResponse) response;
                                 loginResponse.setHeaders(okHttpResponse.headers().toMultimap());
-                                e.onSuccess(loginResponse);
+                                User user = loginResponse.getUser();
+                                e.onSuccess(user);
                             }
 
                             @Override
@@ -57,11 +60,17 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public Single<RegisterResponse> doRegister(RegisterRequest request) {
+    public Single<User> doRegister(final String email, final String password, final String passwordConfirmation, final String firstName, final String lastName) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_REGISTER)
-                .addBodyParameter(request)
+                .addBodyParameter(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
                 .build()
                 .getObjectObservable(RegisterResponse.class)
-                .singleOrError();
+                .singleOrError()
+                .map(new Function<RegisterResponse, User>() {
+                    @Override
+                    public User apply(@NonNull RegisterResponse registerResponse) throws Exception {
+                        return registerResponse.getUser();
+                    }
+                });
     }
 }

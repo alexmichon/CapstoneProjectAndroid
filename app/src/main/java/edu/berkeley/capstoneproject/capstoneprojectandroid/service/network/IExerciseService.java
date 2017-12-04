@@ -1,9 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import io.reactivex.Single;
 
 /**
@@ -12,6 +11,8 @@ import io.reactivex.Single;
 
 public interface IExerciseService {
 
-    Single<ExerciseResponse> doCreateExercise(ExerciseRequest request);
-    Single<MeasurementResponse> doCreateMeasurement(MeasurementRequest request);
+    Single<Exercise> doCreateExercise(ExerciseType exerciseType);
+    Single<Measurement> doSaveMeasurement(Measurement measurement);
+
+    Single<Measurement> getMaxMeasurement();
 }

@@ -4,8 +4,6 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
@@ -28,30 +26,19 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
 
 
     @Override
-    public Single<User> doLoginCall(LoginRequest loginRequest) {
+    public Single<User> doLoginCall(String email, String password) {
         return getDataManager().getApiHelper().getAuthService()
-                .doLogin(loginRequest).doOnSuccess(new Consumer<LoginResponse>() {
+                .doLogin(email, password).doOnSuccess(new Consumer<User>() {
                     @Override
-                    public void accept(LoginResponse loginResponse) throws Exception {
-                        updateApiHeader(loginResponse);
-                    }
-                })
-                .map(new Function<LoginResponse, User>() {
-                    @Override
-                    public User apply(@NonNull LoginResponse response) throws Exception {
-                        Timber.d("Converting response to user");
-                        return response.getUser();
+                    public void accept(User user) throws Exception {
+                        updateApiHeader(user);
                     }
                 });
     }
 
 
-    private void updateApiHeader(LoginResponse response) {
+    private void updateApiHeader(User user) {
         Timber.d("Updating api header");
-        getDataManager().getApiHelper().getApiHeader().setAccessToken(response.getAccessToken());
-        getDataManager().getApiHelper().getApiHeader().setClient(response.getClient());
-        getDataManager().getApiHelper().getApiHeader().setExpiry(response.getExpiry());
-        getDataManager().getApiHelper().getApiHeader().setTokenType(response.getTokenType());
-        getDataManager().getApiHelper().getApiHeader().setUid(response.getUid());
+        // TODO
     }
 }

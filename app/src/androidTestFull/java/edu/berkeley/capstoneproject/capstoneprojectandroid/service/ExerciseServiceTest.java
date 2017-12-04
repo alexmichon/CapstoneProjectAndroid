@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.service;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service;
 
 import com.polidea.rxandroidble.NotificationSetupMode;
 

@@ -13,4 +13,8 @@
         android:name=".FakeApplication"
         />
 
+    <instrumentation
+        android:name=".FakeTestRunner"
+        android:targetPackage="edu.berkeley.capstoneproject.capstoneprojectandroid"/>
+    
 </manifest>

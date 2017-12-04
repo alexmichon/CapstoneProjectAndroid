@@ -1,7 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
@@ -21,7 +20,7 @@ public interface RegisterContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Single<User> doRegisterApiCall(RegisterRequest request);
+        Single<User> doRegisterApiCall(String email, String password, String passwordConfirmation, String firstName, String lastName);
     }
 
     @PerActivity

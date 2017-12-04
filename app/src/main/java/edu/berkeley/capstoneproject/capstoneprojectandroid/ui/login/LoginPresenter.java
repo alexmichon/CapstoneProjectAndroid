@@ -2,7 +2,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
@@ -33,6 +32,7 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
             }
         });
 
+        // TODO: Move to fake
         if (email.equals("admin") && password.equals("admin")) {
             getView().onLoginSuccess(new User(email, "admin", ""));
             getView().startMainActivity();
@@ -40,7 +40,7 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
         }
 
         getCompositeDisposable().add(
-                getInteractor().doLoginCall(new LoginRequest(email, password))
+                getInteractor().doLoginCall(email, password)
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .subscribe(new Consumer<User>() {

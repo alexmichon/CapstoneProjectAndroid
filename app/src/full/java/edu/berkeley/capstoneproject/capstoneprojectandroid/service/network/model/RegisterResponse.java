@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,17 +12,27 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
  * Created by Alex on 10/11/2017.
  */
 
-public class LoginResponse {
+public class RegisterResponse {
 
-    @SerializedName("data")
+    @SerializedName("email")
     @Expose
-    private UserResponse mUserResponse;
+    private String mEmail;
+
+    @SerializedName("first_name")
+    @Expose
+    private String mFirstName;
+
+    @SerializedName("last_name")
+    @Expose
+    private String mLastName;
+
 
     private String mAccessToken;
     private String mClient;
     private String mExpiry;
     private String mTokenType;
     private String mUid;
+
 
     public void setHeaders(Map<String, List<String>> headers) {
         mAccessToken = headers.get("access-token").get(0);
@@ -52,28 +62,7 @@ public class LoginResponse {
         return mUid;
     }
 
-
-
-    private class UserResponse {
-
-        @SerializedName("email")
-        @Expose
-        private String mEmail;
-
-        @SerializedName("first_name")
-        @Expose
-        private String mFirstName;
-
-        @SerializedName("last_name")
-        @Expose
-        private String mLastName;
-
-        public User getUser() {
-            return new User(mEmail, mFirstName, mLastName);
-        }
-    }
-
     public User getUser() {
-        return mUserResponse.getUser();
+        return new User(mEmail, mFirstName, mLastName);
     }
 }

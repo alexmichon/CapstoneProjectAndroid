@@ -9,13 +9,10 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.TestUsers;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 
 import static junit.framework.Assert.assertTrue;
@@ -53,33 +50,37 @@ public class LoginPresenterTest {
         mPresenter.onAttach(mView);
     }
 
+    private User getFakeUser() {
+        return new User("email@email.com", "firstName", "lastName");
+    }
+
     @Test
     public void onLoginClickShouldCallInteractor() {
         // given
-        String email = "toto@toto.fr";
-        String password = "password";
+        User user = getFakeUser();
 
         doReturn(Single.never())
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest(email, password));
+                .doLoginCall(user.getEmail(), "password");
 
         // when
-        mPresenter.onLoginClick(email, password);
+        mPresenter.onLoginClick(user.getEmail(), "password");
         mTestScheduler.triggerActions();
 
         // then
-        verify(mInteractor).doLoginCall(new LoginRequest(email, password));
+        verify(mInteractor).doLoginCall(user.getEmail(), "password");
     }
 
     @Test
     public void onLoginClickShouldShowLoading() {
         // given
+        User user = getFakeUser();
         doReturn(Single.never())
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest("", ""));
+                .doLoginCall(user.getEmail(), "password");
 
         // when
-        mPresenter.onLoginClick("", "");
+        mPresenter.onLoginClick(user.getEmail(), "password");
         mTestScheduler.triggerActions();
 
         // then
@@ -89,14 +90,14 @@ public class LoginPresenterTest {
     @Test
     public void onLoginClickShouldUpdateViewOnSuccess() {
         // given
-        User user = TestUsers.defaultUser().build();
+        User user = getFakeUser();
 
         doReturn(Single.just(user))
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest(user.getEmail(), ""));
+                .doLoginCall(user.getEmail(), "password");
 
         // when
-        mPresenter.onLoginClick(user.getEmail(), "");
+        mPresenter.onLoginClick(user.getEmail(), "password");
         mTestScheduler.triggerActions();
 
         // then
@@ -106,14 +107,15 @@ public class LoginPresenterTest {
     @Test
     public void onLoginClickShouldUpdateViewOnFailure() {
         // given
+        User user = getFakeUser();
         Error error = new Error();
 
         doReturn(Single.error(error))
                 .when(mInteractor)
-                .doLoginCall(new LoginRequest("", ""));
+                .doLoginCall(user.getEmail(), "wrong");
 
         // when
-        mPresenter.onLoginClick("", "");
+        mPresenter.onLoginClick(user.getEmail(), "wrong");
         mTestScheduler.triggerActions();
 
         // then

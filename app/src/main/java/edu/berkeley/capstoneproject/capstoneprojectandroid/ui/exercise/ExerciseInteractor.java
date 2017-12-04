@@ -8,9 +8,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
@@ -22,7 +19,6 @@ import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.ENCODER_OBSERVABLE;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.IMU_OBSERVABLE;
@@ -42,13 +38,7 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public Single<Exercise> doCreateExercise(final ExerciseType exerciseType) {
-        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(new ExerciseRequest(exerciseType))
-                .map(new Function<ExerciseResponse, Exercise>() {
-                    @Override
-                    public Exercise apply(@NonNull ExerciseResponse exerciseResponse) throws Exception {
-                        return exerciseResponse.getExercise(exerciseType);
-                    }
-                });
+        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseType);
     }
 
     @Override
@@ -104,6 +94,6 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     @Override
     public Completable doSaveMeasurement(final Exercise exercise, final Measurement measurement) {
         return Completable.fromSingle(getDataManager().getApiHelper().getExerciseService()
-                .doCreateMeasurement(new MeasurementRequest(measurement)));
+                .doSaveMeasurement(measurement));
     }
 }

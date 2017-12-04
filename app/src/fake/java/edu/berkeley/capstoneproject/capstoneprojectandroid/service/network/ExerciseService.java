@@ -8,10 +8,9 @@ import org.json.JSONObject;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.ExerciseResponse;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.model.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import io.reactivex.Single;
 import timber.log.Timber;
 
@@ -31,26 +30,18 @@ public class ExerciseService implements IExerciseService {
     }
 
     @Override
-    public Single<ExerciseResponse> doCreateExercise(ExerciseRequest request) {
-        final GsonBuilder builder = new GsonBuilder();
-        final Gson gson = builder.create();
-
-        JSONObject data = null;
-        try {
-            data = new JSONObject()
-                    .put("id", ID++)
-                    .put("exercise_type_id", ID_TEST_EXERCISE);
-        } catch (JSONException e) {
-            Timber.e(e, "JSON error");
-        }
-        ExerciseResponse exerciseResponse = gson
-                .fromJson(data.toString(),
-                        ExerciseResponse.class);
-        return Single.just(exerciseResponse);
+    public Single<Exercise> doCreateExercise(ExerciseType exerciseType) {
+        return Single.just(new Exercise(0, exerciseType));
     }
 
     @Override
-    public Single<MeasurementResponse> doCreateMeasurement(MeasurementRequest request) {
+    public Single<Measurement> doSaveMeasurement(Measurement measurement) {
+        measurement.setId(0);
+        return Single.just(measurement);
+    }
+
+    @Override
+    public Single<Measurement> getMaxMeasurement() {
         return Single.never();
     }
 }
