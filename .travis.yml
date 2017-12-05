@@ -10,7 +10,6 @@ env:
         - ANDROID_BUILD_TOOLS=26.0.3
         - ANDROID_TAG=default
     matrix:
-        - EMULATOR_API_LEVEL=24
         - EMULATOR_API_LEVEL=19
 
 android:
