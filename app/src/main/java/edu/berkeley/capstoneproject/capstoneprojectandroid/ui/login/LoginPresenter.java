@@ -32,13 +32,6 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
             }
         });
 
-        // TODO: Move to fake
-        if (email.equals("admin") && password.equals("admin")) {
-            getView().onLoginSuccess(new User(email, "admin", ""));
-            getView().startMainActivity();
-            return;
-        }
-
         getCompositeDisposable().add(
                 getInteractor().doLoginCall(email, password)
                         .subscribeOn(getSchedulerProvider().io())

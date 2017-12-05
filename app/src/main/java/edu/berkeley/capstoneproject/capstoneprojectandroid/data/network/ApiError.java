@@ -7,46 +7,39 @@ import com.google.gson.annotations.SerializedName;
  * Created by Alex on 20/11/2017.
  */
 
-public class ApiError {
+public class ApiError extends Error {
 
-    private int errorCode;
+    public static final int ERROR_UNAUTHORIZED = 401;
+    public static final int ERROR_FORBIDDEN = 403;
+    public static final int ERROR_NOT_FOUND = 404;
 
     @Expose
     @SerializedName("status_code")
-    private String statusCode;
+    private int mStatusCode;
 
     @Expose
-    @SerializedName("message")
-    private String message;
+    @SerializedName("mMessage")
+    private String mMessage;
 
-    public ApiError(int errorCode, String statusCode, String message) {
-        this.errorCode = errorCode;
-        this.statusCode = statusCode;
-        this.message = message;
+    public ApiError(int statusCode, String message) {
+        this.mStatusCode = statusCode;
+        this.mMessage = message;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public int getStatusCode() {
+        return mStatusCode;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public String getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
+    public void setStatusCode(int statusCode) {
+        mStatusCode = statusCode;
     }
 
     public String getMessage() {
-        return message;
+        return mMessage;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        mMessage = message;
     }
 
     @Override
@@ -56,19 +49,11 @@ public class ApiError {
 
         ApiError apiError = (ApiError) object;
 
-        if (errorCode != apiError.errorCode) return false;
-        if (statusCode != null ? !statusCode.equals(apiError.statusCode)
-                : apiError.statusCode != null)
+        if (mStatusCode != apiError.mStatusCode) {
             return false;
-        return message != null ? message.equals(apiError.message) : apiError.message == null;
+        }
 
-    }
+        return mMessage != null ? mMessage.equals(apiError.mMessage) : apiError.mMessage == null;
 
-    @Override
-    public int hashCode() {
-        int result = errorCode;
-        result = 31 * result + (statusCode != null ? statusCode.hashCode() : 0);
-        result = 31 * result + (message != null ? message.hashCode() : 0);
-        return result;
     }
 }
