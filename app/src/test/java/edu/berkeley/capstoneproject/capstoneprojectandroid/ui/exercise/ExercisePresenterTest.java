@@ -55,9 +55,10 @@ public class ExercisePresenterTest {
         mExerciseType = Mockito.mock(ExerciseType.class);
 
         doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
+        doReturn(mExerciseType).when(mView).getExerciseType();
 
         mPresenter = Mockito.spy(new ExercisePresenter<>(mInteractor, provider, compositeDisposable));
-        mPresenter.onAttach(mView, mExerciseType);
+        mPresenter.attachView(mView);
 
         mTestScheduler.triggerActions();
 
@@ -341,6 +342,7 @@ public class ExercisePresenterTest {
 
     @After
     public void cleanup() {
-        mPresenter.onDetach();
+        mPresenter.detachView();
+        mPresenter.destroy();
     }
 }

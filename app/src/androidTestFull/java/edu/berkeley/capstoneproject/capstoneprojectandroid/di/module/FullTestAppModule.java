@@ -23,26 +23,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuth
  */
 
 @Module
-public class FullTestAppModule extends TestAppModule {
+public class FullTestAppModule extends FullAppModule {
 
     private final FullTestApplication mApplication;
 
     public FullTestAppModule(FullTestApplication application) {
         super(application);
         mApplication = application;
-    }
-
-    @Provides
-    @Singleton
-    IAuthService provideAuthService(AuthService service) {
-        return service;
-    }
-
-    @Provides
-    @Singleton
-    edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService
-    provideExerciseService(edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.ExerciseService service) {
-        return service;
     }
 
 

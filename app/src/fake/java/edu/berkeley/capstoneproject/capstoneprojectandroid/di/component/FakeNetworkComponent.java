@@ -6,10 +6,10 @@ import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FakeNetworkModule;
 
 /**
- * Created by Alex on 05/12/2017.
+ * Created by Alex on 06/12/2017.
  */
 
 @Singleton
 @Component(modules = FakeNetworkModule.class)
-interface FakeNetworkComponent {
+public interface FakeNetworkComponent extends NetworkComponent {
 }

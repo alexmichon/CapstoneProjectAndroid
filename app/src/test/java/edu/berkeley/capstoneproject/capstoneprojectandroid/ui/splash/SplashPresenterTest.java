@@ -44,7 +44,7 @@ public class SplashPresenterTest {
         TestSchedulerProvider provider = new TestSchedulerProvider(mTestScheduler);
 
         mPresenter = Mockito.spy(new SplashPresenter<>(mInteractor, provider, compositeDisposable, mConnectivityManager));
-        mPresenter.onAttach(mView);
+        mPresenter.attachView(mView);
     }
 
     @Test
@@ -67,6 +67,7 @@ public class SplashPresenterTest {
 
     @After
     public void cleanup() {
-        mPresenter.onDetach();
+        mPresenter.detachView();
+        mPresenter.destroy();
     }
 }

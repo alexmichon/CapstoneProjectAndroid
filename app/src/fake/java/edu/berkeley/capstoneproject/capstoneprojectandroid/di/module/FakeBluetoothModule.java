@@ -31,7 +31,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.Bluet
  * Created by Alex on 05/12/2017.
  */
 
-@Module(includes = FakeAppModule.class)
+@Module(includes = AppModule.class)
 public class FakeBluetoothModule {
 
     @Provides

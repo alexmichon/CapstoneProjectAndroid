@@ -10,11 +10,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuth
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
 
 /**
- * Created by Alex on 05/12/2017.
+ * Created by Alex on 06/12/2017.
  */
 
 @Module
-public class FakeTestNetworkModule extends FakeNetworkModule {
+public class FullTestNetworkModule extends FullNetworkModule {
 
     @Provides
     @Singleton
@@ -27,5 +27,4 @@ public class FakeTestNetworkModule extends FakeNetworkModule {
     IExerciseService provideExerciseService() {
         return Mockito.mock(IExerciseService.class);
     }
-
 }

@@ -41,7 +41,7 @@ public class MainPresenterTest {
         TestSchedulerProvider testSchedulerProvider = new TestSchedulerProvider(mTestScheduler);
 
         mPresenter = Mockito.spy(new MainPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable));
-        mPresenter.onAttach(mView);
+        mPresenter.attachView(mView);
     }
 
     @Test
@@ -73,6 +73,7 @@ public class MainPresenterTest {
 
     @After
     public void cleanup() {
-        mPresenter.onDetach();
+        mPresenter.detachView();
+        mPresenter.destroy();
     }
 }

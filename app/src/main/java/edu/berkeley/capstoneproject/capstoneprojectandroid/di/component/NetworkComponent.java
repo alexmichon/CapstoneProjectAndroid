@@ -7,7 +7,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExer
  * Created by Alex on 05/12/2017.
  */
 
-interface NetworkComponent {
+public interface NetworkComponent {
 
     IAuthService authService();
     IExerciseService exerciseService();

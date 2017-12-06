@@ -7,9 +7,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.TestApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerTestActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.TestActivityComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestActivityModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 
 /**
  * Created by Alex on 26/11/2017.
@@ -17,7 +15,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.TestActivit
 
 public class BaseActivityTestRule<T extends BaseActivity> extends ActivityTestRule<T> {
 
-    private TestActivityComponent mActivityComponent;
+    private ActivityComponent mActivityComponent;
     private boolean mMockMode = true;
 
     public BaseActivityTestRule(Class<T> activityClass) {
@@ -38,14 +36,15 @@ public class BaseActivityTestRule<T extends BaseActivity> extends ActivityTestRu
 
     @Override
     public Statement apply(Statement base, Description description) {
-        mActivityComponent = DaggerTestActivityComponent.builder()
-                .testAppComponent(getApplication().getAppComponent())
+        /*mActivityComponent = DaggerTestActivityComponent.builder()
+                .appComponent(getApplication().getAppComponent())
                 .activityModule(new TestActivityModule(getActivity(), mMockMode))
                 .build();
+                */
         return super.apply(base, description);
     }
 
-    public TestActivityComponent getActivityComponent() {
+    public ActivityComponent getActivityComponent() {
         return mActivityComponent;
     }
 

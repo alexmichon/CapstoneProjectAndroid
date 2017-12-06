@@ -13,18 +13,12 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginPresent
 
 public class TestActivityModule extends ActivityModule {
 
-    private final boolean mMockMode;
-
-    public TestActivityModule(AppCompatActivity activity, boolean mockMode) {
+    public TestActivityModule(AppCompatActivity activity) {
         super(activity);
-        mMockMode = mockMode;
     }
 
     @Override
     LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> provideLoginPresenter(LoginPresenter<LoginContract.View, LoginContract.Interactor> presenter) {
-        if (mMockMode) {
-            return Mockito.mock(LoginContract.Presenter.class);
-        }
-        return super.provideLoginPresenter(presenter);
+        return Mockito.mock(LoginContract.Presenter.class);
     }
 }

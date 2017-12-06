@@ -56,7 +56,7 @@ public class BluetoothListPresenterTest {
 
         mPresenter = Mockito.spy(new BluetoothListPresenter<>(mInteractor, testSchedulerProvider, compositeDisposable));
 
-        mPresenter.onAttach(mView);
+        mPresenter.attachView(mView);
     }
 
     @Test
@@ -179,6 +179,7 @@ public class BluetoothListPresenterTest {
 
     @After
     public void cleanup() {
-        mPresenter.onDetach();
+        mPresenter.detachView();
+        mPresenter.destroy();
     }
 }

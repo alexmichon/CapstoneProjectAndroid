@@ -51,24 +51,9 @@ public class AppModule {
 
     @Provides
     @Singleton
-    IAuthService provideAuthService(AuthService authService) {
-        return authService;
-    };
-
-    @Provides
-    @Singleton
-    edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService provideNetworkExerciseService(edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.ExerciseService exerciseService) {
-        return exerciseService;
-    }
-
-
-    @Provides
-    @Singleton
     IDataManager provideDataManager(DataManager dataManager) {
         return dataManager;
     }
-
-
 
 
     @Provides
@@ -76,10 +61,6 @@ public class AppModule {
     IApiHelper provideApiHelper(ApiHelper apiHelper) {
         return apiHelper;
     }
-
-
-
-
 
 
     @Provides

@@ -47,7 +47,7 @@ public class LoginPresenterTest {
                 testSchedulerProvider,
                 compositeDisposable
         ));
-        mPresenter.onAttach(mView);
+        mPresenter.attachView(mView);
     }
 
     private User getFakeUser() {
@@ -138,7 +138,8 @@ public class LoginPresenterTest {
 
     @After
     public void after() {
-        mPresenter.onDetach();
+        mPresenter.detachView();
+        mPresenter.destroy();
     }
 
 }

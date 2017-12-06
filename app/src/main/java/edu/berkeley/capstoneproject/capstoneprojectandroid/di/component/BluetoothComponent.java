@@ -9,7 +9,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMe
  * Created by Alex on 05/12/2017.
  */
 
-interface BluetoothComponent {
+public interface BluetoothComponent {
 
     IDeviceService deviceService();
     IConnectionService connectionService();

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class SensorServiceTest {
+public class MeasurementServiceTest {
 
     private MeasurementService mMeasurementService;
 
