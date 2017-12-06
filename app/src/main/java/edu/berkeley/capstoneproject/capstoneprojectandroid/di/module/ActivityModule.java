@@ -2,10 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.module;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
-
-import com.polidea.rxandroidble.RxBleClient;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,10 +15,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.Blu
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExercisePresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;
@@ -42,7 +39,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingA
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleClient;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.AppSchedulerProvider;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -144,20 +140,20 @@ public class ActivityModule {
 
     @Provides
     @PerActivity
-    ExerciseTypesContract.View provideExerciseTypeView(ExerciseTypesFragment fragment) {
+    ExerciseTypeContract.View provideExerciseTypeView(ExerciseTypeFragment fragment) {
         return fragment;
     }
 
     @Provides
     @PerActivity
-    ExerciseTypesContract.Interactor provideExerciseTypeInteractor(ExerciseTypesInteractor interactor) {
+    ExerciseTypeContract.Interactor provideExerciseTypeInteractor(ExerciseTypeInteractor interactor) {
         return interactor;
     }
 
     @Provides
     @PerActivity
-    ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor>
-    provideExerciseTypePresenter(ExerciseTypesPresenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> presenter) {
+    ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor>
+    provideExerciseTypePresenter(ExerciseTypePresenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> presenter) {
         return presenter;
     }
 

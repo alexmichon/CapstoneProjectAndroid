@@ -9,12 +9,14 @@ import android.widget.FrameLayout;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 
 /**
  * Created by Alex on 09/11/2017.
  */
 
-public abstract class ToolbarActivity extends BaseActivity {
+public abstract class ToolbarActivity<V extends IBaseView, P extends IBasePresenter<V, ?>> extends BaseActivity<V, P> {
 
     protected Toolbar mToolbar;
 

@@ -22,15 +22,15 @@ import static org.mockito.Mockito.verify;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExerciseTypesPresenterTest {
+public class ExerciseTypePresenterTest {
 
-    private ExerciseTypesPresenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> mPresenter;
-
-    @Mock
-    private ExerciseTypesContract.View mView;
+    private ExerciseTypePresenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> mPresenter;
 
     @Mock
-    private ExerciseTypesContract.Interactor mInteractor;
+    private ExerciseTypeContract.View mView;
+
+    @Mock
+    private ExerciseTypeContract.Interactor mInteractor;
 
     private TestScheduler mTestScheduler;
 
@@ -40,7 +40,7 @@ public class ExerciseTypesPresenterTest {
         mTestScheduler = new TestScheduler();
         TestSchedulerProvider provider = new TestSchedulerProvider(mTestScheduler);
 
-        mPresenter = Mockito.spy(new ExerciseTypesPresenter<>(mInteractor, provider, compositeDisposable));
+        mPresenter = Mockito.spy(new ExerciseTypePresenter<>(mInteractor, provider, compositeDisposable));
         mPresenter.onAttach(mView);
     }
 

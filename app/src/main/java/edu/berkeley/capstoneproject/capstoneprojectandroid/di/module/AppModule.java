@@ -23,6 +23,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMe
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.MeasurementService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
 
 /**
@@ -48,7 +49,17 @@ public class AppModule {
     }
 
 
+    @Provides
+    @Singleton
+    IAuthService provideAuthService(AuthService authService) {
+        return authService;
+    };
 
+    @Provides
+    @Singleton
+    edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService provideNetworkExerciseService(edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.ExerciseService exerciseService) {
+        return exerciseService;
+    }
 
 
     @Provides

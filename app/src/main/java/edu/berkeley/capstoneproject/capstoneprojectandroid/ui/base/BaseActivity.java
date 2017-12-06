@@ -10,6 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
+import com.hannesdorfmann.mosby3.mvp.viewstate.ViewState;
+
 import butterknife.Unbinder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
@@ -18,27 +22,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.Activity
  * Created by Alex on 07/11/2017.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
+public abstract class BaseActivity<V extends IBaseView, P extends IBasePresenter<V, ?>> extends MvpActivity<V, P> implements IBaseView {
 
     private ProgressDialog mProgressDialog;
 
-    private ActivityComponent mActivityComponent;
-
     private Unbinder mUnbinder;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        /*
-        if (mActivityComponent == null) {
-            mActivityComponent = DaggerActivityComponent.builder()
-                    .activityModule(new ActivityModule(this))
-                    .appComponent(((CapstoneProjectAndroidApplication) getApplication()).getAppComponent())
-                    .build();
-        }*/
-
-        mActivityComponent = ((CapstoneProjectAndroidApplication)getApplication()).getActivityComponent(this);
-    }
 
     @Override
     protected void onDestroy() {
@@ -49,11 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     }
 
     public ActivityComponent getActivityComponent() {
-        return mActivityComponent;
-    }
-
-    public void setActivityComponent(ActivityComponent activityComponent) {
-        mActivityComponent = activityComponent;
+        return ((CapstoneProjectAndroidApplication)getApplication()).getActivityComponent(this);
     }
 
     @Override

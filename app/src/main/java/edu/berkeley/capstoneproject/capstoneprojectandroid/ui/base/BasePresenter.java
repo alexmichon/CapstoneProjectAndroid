@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
+import android.support.annotation.NonNull;
+
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.error.ANError;
 import com.google.gson.Gson;
@@ -36,20 +38,29 @@ public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteract
     }
 
     @Override
-    public void onAttach(V view) {
+    public void attachView(@NonNull V view) {
         mView = view;
     }
 
-    @Override
-    public void onDetach() {
-        mCompositeDisposable.dispose();
-        mView = null;
-        mInteractor = null;
+    public V getView() {
+        return mView;
     }
 
     @Override
-    public V getView() {
-        return mView;
+    public void detachView() {
+        mView = null;
+    }
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        if (!retainInstance) {
+            getCompositeDisposable().dispose();
+        }
+    }
+
+    @Override
+    public void destroy() {
+
     }
 
     @Override

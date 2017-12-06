@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
@@ -15,19 +16,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.Toolb
  */
 
 // TODO
-public class RegisterActivity extends ToolbarActivity implements RegisterContract.View{
-
-    @Inject
-    RegisterContract.Presenter<RegisterContract.View, RegisterContract.Interactor> mPresenter;
+public class RegisterActivity extends ToolbarActivity<RegisterContract.View, RegisterContract.Presenter<RegisterContract.View, RegisterContract.Interactor>> implements RegisterContract.View{
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
         setContentView(R.layout.activity_register);
         setUnbinder(ButterKnife.bind(this));
-        mPresenter.onAttach(this);
     }
 
     @Override
@@ -45,9 +41,9 @@ public class RegisterActivity extends ToolbarActivity implements RegisterContrac
 
     }
 
+    @NonNull
     @Override
-    protected void onDestroy() {
-        mPresenter.onDetach();
-        super.onDestroy();
+    public RegisterContract.Presenter<RegisterContract.View, RegisterContract.Interactor> createPresenter() {
+        return getActivityComponent().registerPresenter();
     }
 }

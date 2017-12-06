@@ -5,7 +5,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +21,9 @@ import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sen
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer.ID_ACC_Y;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer.ID_ACC_Z;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Encoder.ID_ANGLE;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope.ID_GYR_X;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope.ID_GYR_Y;
+import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope.ID_GYR_Z;
 
 /**
  * Created by Alex on 28/11/2017.
@@ -30,9 +32,10 @@ import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sen
 public class MeasurementService extends BaseService implements IMeasurementService, SensorEventListener {
 
     private final SensorManager mSensorManager;
-    private final Sensor mSensor;
+    private final Sensor mAccSensor, mGyrSensor;
 
     private float mAccValues[] = new float[3];
+    private float mGyrValues[] = new float[3];
     private float mAngleValues[] = new float[1];
 
     private final long mStartTime;
@@ -40,8 +43,11 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     @Inject
     public MeasurementService(SensorManager sensorManager) {
         mSensorManager = sensorManager;
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mSensor, 100000);
+        mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mGyrSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        mSensorManager.registerListener(this, mAccSensor, 100000);
+        mSensorManager.registerListener(this, mGyrSensor, 100000);
 
         mStartTime = new Date().getTime();
     }
@@ -68,6 +74,10 @@ public class MeasurementService extends BaseService implements IMeasurementServi
 
     @Override
     public Observable<Measurement> getImuObservable() {
+        return Observable.merge(getAccObservable(), getGyrObservable());
+    }
+
+    private Observable<Measurement> getAccObservable() {
         return Observable.interval(100, TimeUnit.MILLISECONDS).timestamp(TimeUnit.MILLISECONDS)
                 .flatMap(new Function<Timed<?>, ObservableSource<Measurement>>() {
                     @Override
@@ -94,6 +104,33 @@ public class MeasurementService extends BaseService implements IMeasurementServi
                 });
     }
 
+    private Observable<Measurement> getGyrObservable() {
+        return Observable.interval(100, TimeUnit.MILLISECONDS).timestamp(TimeUnit.MILLISECONDS)
+                .flatMap(new Function<Timed<?>, ObservableSource<Measurement>>() {
+                    @Override
+                    public ObservableSource<Measurement> apply(@NonNull Timed<?> longTimed) throws Exception {
+                        Measurement measurements[] = new Measurement[]{
+                                new Measurement(
+                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_X),
+                                        longTimed.time() - mStartTime,
+                                        mGyrValues[0]
+                                ),
+                                new Measurement(
+                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_Y),
+                                        longTimed.time() - mStartTime,
+                                        mGyrValues[1]
+                                ),
+                                new Measurement(
+                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_Z),
+                                        longTimed.time() - mStartTime,
+                                        mGyrValues[2]
+                                )
+                        };
+                        return Observable.fromArray(measurements);
+                    }
+                });
+    }
+
     @Override
     public void setImuObservable(Observable<byte[]> imuObservable) {
 
@@ -101,8 +138,15 @@ public class MeasurementService extends BaseService implements IMeasurementServi
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        mAccValues = sensorEvent.values;
-        mAngleValues[0] = (float) Math.atan2(mAccValues[2], mAccValues[0]);
+        switch (sensorEvent.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+                mAccValues = sensorEvent.values;
+                mAngleValues[0] = (float) Math.atan2(mAccValues[2], mAccValues[0]);
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+                mGyrValues = sensorEvent.values;
+                break;
+        }
     }
 
     @Override

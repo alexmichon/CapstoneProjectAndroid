@@ -15,7 +15,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
  * Created by Alex on 10/11/2017.
  */
 
-public class HomeFragment extends BaseFragment implements HomeContract.View {
+public class HomeFragment extends BaseFragment<HomeContract.View, HomeContract.Presenter<HomeContract.View, HomeContract.Interactor>> implements HomeContract.View {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -31,5 +31,10 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     @Override
     public String getTitle() {
         return TITLE;
+    }
+
+    @Override
+    public HomeContract.Presenter<HomeContract.View, HomeContract.Interactor> createPresenter() {
+        return null;
     }
 }

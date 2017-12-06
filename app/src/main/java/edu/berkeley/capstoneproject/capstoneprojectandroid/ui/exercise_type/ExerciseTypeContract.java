@@ -11,7 +11,7 @@ import io.reactivex.Observable;
  * Created by Alex on 08/11/2017.
  */
 
-public interface ExerciseTypesContract {
+public interface ExerciseTypeContract {
 
     interface View extends IBaseView {
         void addExerciseType(ExerciseType exerciseType);

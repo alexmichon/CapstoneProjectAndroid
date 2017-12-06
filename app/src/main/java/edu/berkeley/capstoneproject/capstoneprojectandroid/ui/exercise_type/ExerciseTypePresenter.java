@@ -8,8 +8,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.internal.observers.SubscriberCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -17,17 +15,17 @@ import timber.log.Timber;
  * Created by Alex on 08/11/2017.
  */
 
-public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I extends ExerciseTypesContract.Interactor>
-        extends BasePresenter<V, I> implements ExerciseTypesContract.Presenter<V, I> {
+public class ExerciseTypePresenter<V extends ExerciseTypeContract.View, I extends ExerciseTypeContract.Interactor>
+        extends BasePresenter<V, I> implements ExerciseTypeContract.Presenter<V, I> {
 
-    private static final String TAG = ExerciseTypesPresenter.class.getSimpleName();
+    private static final String TAG = ExerciseTypePresenter.class.getSimpleName();
 
     private IExerciseTypeRepository mRepository;
 
     @Inject
-    public ExerciseTypesPresenter(I interactor,
-                                  ISchedulerProvider schedulerProvider,
-                                  CompositeDisposable compositeDisposable) {
+    public ExerciseTypePresenter(I interactor,
+                                 ISchedulerProvider schedulerProvider,
+                                 CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
     }
 

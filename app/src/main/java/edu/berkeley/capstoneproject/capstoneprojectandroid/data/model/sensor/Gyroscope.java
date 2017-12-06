@@ -10,9 +10,9 @@ public class Gyroscope extends Sensor {
     public static final int ID_GYR_Y = 5;
     public static final int ID_GYR_Z = 6;
 
-    private static final String NAME_GYR_X = "Acc X";
-    private static final String NAME_GYR_Y = "Acc Y";
-    private static final String NAME_GYR_Z = "Acc Z";
+    private static final String NAME_GYR_X = "Gyr X";
+    private static final String NAME_GYR_Y = "Gyr Y";
+    private static final String NAME_GYR_Z = "Gyr Z";
 
     public Gyroscope(int id, String name) {
         super(id, name);

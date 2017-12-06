@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,12 +21,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingA
  * Created by Alex on 08/11/2017.
  */
 
-public class MainActivity extends DrawerActivity implements MainContract.View {
-
-
-
-    @Inject
-    MainContract.Presenter<MainContract.View, MainContract.Interactor> mPresenter;
+public class MainActivity extends DrawerActivity<MainContract.View, MainContract.Presenter<MainContract.View, MainContract.Interactor>> implements MainContract.View {
 
     @BindView(R.id.main_text_hello)
     TextView mHelloView;
@@ -38,20 +34,18 @@ public class MainActivity extends DrawerActivity implements MainContract.View {
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
         setContentView(R.layout.activity_main);
         setUnbinder(ButterKnife.bind(this));
-        mPresenter.onAttach(this);
 
         // TODO
-        setNavigationDrawerMenu(R.menu.main_navigation, mPresenter.getNavigationListener());
+        setNavigationDrawerMenu(R.menu.main_navigation, getPresenter().getNavigationListener());
         initNavigationDrawer();
     }
 
 
     @OnClick(R.id.main_button_start_training)
     void onStartExerciseClick() {
-        mPresenter.onStartTrainingClick();
+        getPresenter().onStartTrainingClick();
     }
 
 
@@ -66,9 +60,9 @@ public class MainActivity extends DrawerActivity implements MainContract.View {
         startActivity(intent);
     }
 
+    @NonNull
     @Override
-    protected void onDestroy() {
-        mPresenter.onDetach();
-        super.onDestroy();
+    public MainContract.Presenter<MainContract.View, MainContract.Interactor> createPresenter() {
+        return getActivityComponent().mainPresenter();
     }
 }

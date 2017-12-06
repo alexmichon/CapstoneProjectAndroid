@@ -23,12 +23,14 @@ import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 
 /**
  * Created by Alex on 10/11/2017.
  */
 
-public class DrawerActivity extends BaseActivity {
+public abstract class DrawerActivity<V extends IBaseView, P extends IBasePresenter<V, ?>> extends BaseActivity<V, P> {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;

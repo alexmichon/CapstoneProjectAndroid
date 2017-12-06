@@ -12,7 +12,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FakeAppModu
  */
 
 @Singleton
-@Component(modules = {FakeAppModule.class})
+@Component(modules = {FakeAppModule.class}, dependencies = BluetoothComponent.class)
 public interface FakeAppComponent extends AppComponent {
 
     @Component.Builder
@@ -20,6 +20,7 @@ public interface FakeAppComponent extends AppComponent {
         @BindsInstance
         Builder application(FakeApplication application);
         Builder appModule(FakeAppModule appModule);
+        Builder bluetoothComponent(BluetoothComponent bluetoothComponent);
         FakeAppComponent build();
     }
 

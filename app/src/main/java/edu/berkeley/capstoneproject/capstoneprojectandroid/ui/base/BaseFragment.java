@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+
 import butterknife.Unbinder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 
@@ -11,7 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.Activity
  * Created by Alex on 10/11/2017.
  */
 
-public abstract class BaseFragment extends Fragment implements IBaseView {
+public abstract class BaseFragment<V extends IBaseView, P extends IBasePresenter<V, ?>> extends MvpFragment<V, P> implements IBaseView {
 
     private BaseActivity mActivity;
     private Unbinder mUnbinder;

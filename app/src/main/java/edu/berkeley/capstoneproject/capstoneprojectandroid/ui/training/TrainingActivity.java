@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
@@ -12,29 +13,32 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
 /**
  * Created by Alex on 17/11/2017.
  */
 
-public class TrainingActivity extends ToolbarActivity implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener {
-
-    private static final String TAG = TrainingActivity.class.getSimpleName();
+public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>> implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
-
-    @Inject
-    TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor> mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
         setContentView(R.layout.activity_training);
         setUnbinder(ButterKnife.bind(this));
-        mPresenter.onAttach(this);
+
+        if (savedInstanceState == null) {
+            showBluetoothListFragment();
+        }
+    }
+
+    @NonNull
+    @Override
+    public TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor> createPresenter() {
+        return getActivityComponent().trainingPresenter();
     }
 
     private void setFragment(BaseFragment fragment) {
@@ -52,8 +56,8 @@ public class TrainingActivity extends ToolbarActivity implements TrainingContrac
 
     @Override
     public void showExerciseTypesFragment() {
-        ExerciseTypesFragment fragment = new ExerciseTypesFragment();
-        fragment.setListener(new ExerciseTypesFragment.ExerciseTypesFragmentListener() {
+        ExerciseTypeFragment fragment = new ExerciseTypeFragment();
+        fragment.setListener(new ExerciseTypeFragment.ExerciseTypesFragmentListener() {
             @Override
             public void onExerciseTypeSelected(ExerciseType exerciseType) {
                 showExerciseFragment(exerciseType);
@@ -82,6 +86,6 @@ public class TrainingActivity extends ToolbarActivity implements TrainingContrac
 
     @Override
     public void onDeviceSelected(Rx2BleDevice device) {
-        mPresenter.onDeviceSelected(device);
+        getPresenter().onDeviceSelected(device);
     }
 }

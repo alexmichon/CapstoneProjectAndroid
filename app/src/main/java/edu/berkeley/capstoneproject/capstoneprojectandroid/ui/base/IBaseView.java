@@ -2,11 +2,13 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
 import android.support.annotation.StringRes;
 
+import com.hannesdorfmann.mosby3.mvp.MvpView;
+
 /**
  * Created by Alex on 09/11/2017.
  */
 
-public interface IBaseView {
+public interface IBaseView extends MvpView {
 
     void showLoading();
     void showLoading(String message);

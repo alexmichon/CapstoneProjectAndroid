@@ -48,16 +48,13 @@ import timber.log.Timber;
  * Created by Alex on 18/11/2017.
  */
 
-public class ExerciseFragment extends BaseFragment implements ExerciseContract.View {
+public class ExerciseFragment extends BaseFragment<ExerciseContract.View, ExerciseContract.Presenter<ExerciseContract.View, ExerciseContract.Interactor>> implements ExerciseContract.View {
 
     private static final String TAG = ExerciseFragment.class.getSimpleName();
 
     private static final String TITLE = "Exercise";
 
     public static final String EXTRA_EXERCISE_TYPE = "ExerciseType";
-
-    @Inject
-    ExerciseContract.Presenter<ExerciseContract.View, ExerciseContract.Interactor> mPresenter;
 
 
     @BindView(R.id.exercise_linechart_acc)
@@ -76,6 +73,8 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
             ColorTemplate.LIBERTY_COLORS[2],
     };
 
+    private ExerciseType mExerciseType;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,18 +87,13 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
         View view = inflater.inflate(R.layout.activity_exercise, container, false);
 
         Bundle data = getArguments();
-        ExerciseType exerciseType = (ExerciseType) data.getParcelable(EXTRA_EXERCISE_TYPE);
-        if (exerciseType == null) {
+        mExerciseType = (ExerciseType) data.getParcelable(EXTRA_EXERCISE_TYPE);
+        if (mExerciseType == null) {
             Timber.e("Exercise type can't be null");
             return null;
         }
 
-        ActivityComponent component = getActivityComponent();
-        if (component != null) {
-            component.inject(this);
-            ButterKnife.bind(this, view);
-            mPresenter.onAttach(this, exerciseType);
-        }
+        ButterKnife.bind(this, view);
 
         initLineChart(mAccView, -2, 2);
         initLineChart(mGyrView, -2, 2);
@@ -115,15 +109,8 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
-    }
-
-    @Override
-    public void onDestroyView() {
-        mPresenter.onDetach();
-        super.onDestroyView();
+    public ExerciseContract.Presenter<ExerciseContract.View, ExerciseContract.Interactor> createPresenter() {
+        return getActivityComponent().exercisePresenter();
     }
 
     @Override
@@ -134,8 +121,8 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_exercise, menu);
-        menu.findItem(R.id.exercise_menu_start).setVisible(!mPresenter.isStarted());
-        menu.findItem(R.id.exercise_menu_stop).setVisible(mPresenter.isStarted());
+        menu.findItem(R.id.exercise_menu_start).setVisible(!getPresenter().isStarted());
+        menu.findItem(R.id.exercise_menu_stop).setVisible(getPresenter().isStarted());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -143,13 +130,18 @@ public class ExerciseFragment extends BaseFragment implements ExerciseContract.V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.exercise_menu_start:
-                mPresenter.onStartClick();
+                getPresenter().onStartClick();
                 return true;
             case R.id.exercise_menu_stop:
-                mPresenter.onStopClick();
+                getPresenter().onStopClick();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public ExerciseType getExerciseType() {
+        return mExerciseType;
     }
 
     @Override

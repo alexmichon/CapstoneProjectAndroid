@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
@@ -18,27 +19,28 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivit
  * Created by Alex on 07/11/2017.
  */
 
-public class SplashActivity extends BaseActivity implements SplashContract.View {
+public class SplashActivity extends BaseActivity<SplashContract.View, SplashContract.Presenter<SplashContract.View, SplashContract.Interactor>> implements SplashContract.View {
 
     @BindView(R.id.splash_text_info)
     TextView mTextInfo;
 
-    @Inject
-    SplashContract.Presenter<SplashContract.View, SplashContract.Interactor> mPresenter;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
         setContentView(R.layout.activity_splash);
         setUnbinder(ButterKnife.bind(this));
-        mPresenter.onAttach(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onStart();
+        getPresenter().onStart();
+    }
+
+    @NonNull
+    @Override
+    public SplashContract.Presenter<SplashContract.View, SplashContract.Interactor> createPresenter() {
+        return getActivityComponent().splashPresenter();
     }
 
     @Override
@@ -63,11 +65,5 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mPresenter.onDetach();
-        super.onDestroy();
     }
 }

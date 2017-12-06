@@ -13,7 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FakeTestApp
  */
 
 @Singleton
-@Component(modules = FakeTestAppModule.class)
+@Component(modules = FakeTestAppModule.class, dependencies = BluetoothComponent.class)
 public interface FakeTestAppComponent extends TestAppComponent {
 
     @Component.Builder
@@ -21,6 +21,7 @@ public interface FakeTestAppComponent extends TestAppComponent {
         @BindsInstance
         FakeTestAppComponent.Builder application(FakeTestApplication application);
         FakeTestAppComponent.Builder appTestModule(FakeTestAppModule appModule);
+        Builder bluetoothComponent(BluetoothComponent bluetoothComponent);
         FakeTestAppComponent build();
     }
 

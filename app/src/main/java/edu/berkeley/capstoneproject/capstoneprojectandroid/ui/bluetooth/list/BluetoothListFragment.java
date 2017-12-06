@@ -25,14 +25,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
  * Created by Alex on 18/11/2017.
  */
 
-public class BluetoothListFragment extends BaseFragment implements BluetoothListContract.View {
+public class BluetoothListFragment extends BaseFragment<BluetoothListContract.View, BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor>> implements BluetoothListContract.View {
 
     private static final String TITLE = "Bluetooth Devices";
 
     private static final int REQUEST_ENABLE_BT = 0;
-
-    @Inject
-    BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor> mPresenter;
 
     @BindView(R.id.bluetooth_list_scanned)
     ListView mScannedList;
@@ -49,42 +46,35 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_bluetooth, container, false);
 
-        ActivityComponent component = getActivityComponent();
-        if (component != null) {
-            component.inject(this);
-            ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
 
-            mScannedAdapter = new BluetoothListAdapter(getContext(), R.layout.bluetooth_device);
-            mScannedList.setAdapter(mScannedAdapter);
+        mScannedAdapter = new BluetoothListAdapter(getContext(), R.layout.bluetooth_device);
+        mScannedList.setAdapter(mScannedAdapter);
 
-            mScannedProgressBar = new ProgressBar(getContext());
-            mScannedProgressBar.setIndeterminate(true);
-            mScannedProgressBar.setVisibility(View.GONE);
+        mScannedProgressBar = new ProgressBar(getContext());
+        mScannedProgressBar.setIndeterminate(true);
+        mScannedProgressBar.setVisibility(View.GONE);
 
-            mScannedList.addFooterView(mScannedProgressBar);
-
-            mPresenter.onAttach(this);
-        }
+        mScannedList.addFooterView(mScannedProgressBar);
 
         return view;
     }
 
     @Override
-    public void onDestroyView() {
-        mPresenter.onDetach();
-        super.onDestroyView();
+    public BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor> createPresenter() {
+        return getActivityComponent().bluetoothListPresenter();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.onStartScanning();
+        getPresenter().onStartScanning();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.onStopScanning();
+        getPresenter().onStopScanning();
         cleanPairedDevices();
         cleanScannedDevices();
     }
@@ -140,7 +130,7 @@ public class BluetoothListFragment extends BaseFragment implements BluetoothList
     @OnItemClick(R.id.bluetooth_list_scanned)
     void OnDeviceClickListener(int position) {
         Rx2BleDevice device = mScannedAdapter.getItem(position);
-        mPresenter.onDeviceSelected(device);
+        getPresenter().onDeviceSelected(device);
         if (mListener != null) {
             mListener.onDeviceSelected(device);
         }

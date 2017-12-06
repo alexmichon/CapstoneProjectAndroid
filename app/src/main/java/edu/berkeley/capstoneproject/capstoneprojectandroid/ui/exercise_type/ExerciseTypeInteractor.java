@@ -12,12 +12,12 @@ import io.reactivex.Observable;
  * Created by Alex on 10/11/2017.
  */
 
-public class ExerciseTypesInteractor extends BaseInteractor implements ExerciseTypesContract.Interactor {
+public class ExerciseTypeInteractor extends BaseInteractor implements ExerciseTypeContract.Interactor {
 
     private final IExerciseTypeRepository mExerciseTypeRepository;
 
     @Inject
-    public ExerciseTypesInteractor(IDataManager dataManager, IExerciseTypeRepository exerciseTypeRepository) {
+    public ExerciseTypeInteractor(IDataManager dataManager, IExerciseTypeRepository exerciseTypeRepository) {
         super(dataManager);
         mExerciseTypeRepository = exerciseTypeRepository;
     }

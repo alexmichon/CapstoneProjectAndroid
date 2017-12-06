@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,19 +22,14 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
  * Created by Alex on 17/11/2017.
  */
 
-public class ExerciseTypesFragment extends BaseFragment implements ExerciseTypesContract.View {
-
-    private static final String TAG = ExerciseTypesFragment.class.getSimpleName();
+public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View, ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor>> implements ExerciseTypeContract.View {
 
     private static final String TITLE = "Exercise Types";
-
-    @Inject
-    ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> mPresenter;
 
     @BindView(R.id.exercises_list)
     ListView mExerciseListView;
 
-    private ExerciseTypesAdapter mExercisesAdapter;
+    private ExerciseTypeAdapter mExercisesAdapter;
     private ExerciseTypesFragmentListener mListener;
 
     @Nullable
@@ -41,16 +37,10 @@ public class ExerciseTypesFragment extends BaseFragment implements ExerciseTypes
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_exercises, container, false);
 
-        ActivityComponent component = getActivityComponent();
-        if (component != null) {
-            component.inject(this);
-            ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
 
-            mExercisesAdapter = new ExerciseTypesAdapter(getContext(), R.layout.row_exercise);
-            mExerciseListView.setAdapter(mExercisesAdapter);
-
-            mPresenter.onAttach(this);
-        }
+        mExercisesAdapter = new ExerciseTypeAdapter(getContext(), R.layout.row_exercise);
+        mExerciseListView.setAdapter(mExercisesAdapter);
 
         return view;
     }
@@ -63,13 +53,13 @@ public class ExerciseTypesFragment extends BaseFragment implements ExerciseTypes
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.onLoadExerciseTypes();
+        getPresenter().onLoadExerciseTypes();
     }
 
+    @NonNull
     @Override
-    public void onDestroyView() {
-        mPresenter.onDetach();
-        super.onDestroyView();
+    public ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> createPresenter() {
+        return getActivityComponent().exerciseTypePresenter();
     }
 
     @Override
@@ -85,7 +75,7 @@ public class ExerciseTypesFragment extends BaseFragment implements ExerciseTypes
 
     @OnItemClick(R.id.exercises_list)
     void onExerciseClick(int position) {
-        mPresenter.onExerciseTypeClick(mExercisesAdapter.getItem(position));
+        getPresenter().onExerciseTypeClick(mExercisesAdapter.getItem(position));
     }
 
     @Override

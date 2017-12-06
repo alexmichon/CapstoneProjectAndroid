@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterA
  * Created by Alex on 06/11/2017.
  */
 
-public class LoginActivity extends ToolbarActivity implements LoginContract.View {
+public class LoginActivity extends ToolbarActivity<LoginContract.View, LoginContract.Presenter<LoginContract.View, LoginContract.Interactor>> implements LoginContract.View {
 
     @BindView(R.id.login_email)
     EditText mEmailEdit;
@@ -36,22 +37,17 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
     @BindView(R.id.login_button)
     Button mLoginButton;
 
-    @Inject
-    LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> mPresenter;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
         setContentView(R.layout.activity_login);
 
         setUnbinder(ButterKnife.bind(this));
-        mPresenter.onAttach(this);
     }
 
     @OnClick(R.id.login_button)
     void onLoginClick() {
-        mPresenter.onLoginClick(
+        getPresenter().onLoginClick(
                 mEmailEdit.getText().toString(),
                 mPasswordEdit.getText().toString()
         );
@@ -64,10 +60,10 @@ public class LoginActivity extends ToolbarActivity implements LoginContract.View
         finish();
     }
 
+    @NonNull
     @Override
-    protected void onDestroy() {
-        mPresenter.onDetach();
-        super.onDestroy();
+    public LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> createPresenter() {
+        return getActivityComponent().loginPresenter();
     }
 
     @Override

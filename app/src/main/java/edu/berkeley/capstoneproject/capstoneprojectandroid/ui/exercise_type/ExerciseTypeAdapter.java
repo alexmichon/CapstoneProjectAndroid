@@ -19,13 +19,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
  * Created by Alex on 08/11/2017.
  */
 
-public class ExerciseTypesAdapter extends ArrayAdapter<ExerciseType> {
+public class ExerciseTypeAdapter extends ArrayAdapter<ExerciseType> {
 
-    private static final String TAG = ExerciseTypesAdapter.class.getSimpleName();
+    private static final String TAG = ExerciseTypeAdapter.class.getSimpleName();
 
     private LayoutInflater mInflater;
 
-    public ExerciseTypesAdapter(@NonNull Context context, @LayoutRes int resource) {
+    public ExerciseTypeAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
         mInflater = LayoutInflater.from(context);
     }

@@ -43,12 +43,6 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
         };
     }
 
-    @Override
-    public void onAttach(V view) {
-        super.onAttach(view);
-        getView().showBluetoothListFragment();
-    }
-
 
     @Override
     public void onDeviceSelected(Rx2BleDevice device) {
