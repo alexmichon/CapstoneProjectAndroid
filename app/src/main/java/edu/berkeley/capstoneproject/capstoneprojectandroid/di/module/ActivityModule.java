@@ -19,6 +19,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.Exer
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.ExercisesContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.ExercisesInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.ExercisesPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;
@@ -242,6 +249,38 @@ public class ActivityModule {
     @PerActivity
     TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>
     provideTrainingPresenter(TrainingPresenter<TrainingContract.View, TrainingContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+
+    @Provides
+    @PerActivity
+    HistoryContract.Interactor provideHistoryInteractor(HistoryInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    HistoryContract.Presenter<HistoryContract.View, HistoryContract.Interactor> provideHistoryPresenter(HistoryPresenter<HistoryContract.View, HistoryContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+
+
+
+    @Provides
+    @PerActivity
+    ExercisesContract.Interactor provideExercisesInteractor(ExercisesInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExercisesContract.Presenter<ExercisesContract.View, ExercisesContract.Interactor> provideExercisesPresenter(ExercisesPresenter<ExercisesContract.View, ExercisesContract.Interactor> presenter) {
         return presenter;
     }
 }

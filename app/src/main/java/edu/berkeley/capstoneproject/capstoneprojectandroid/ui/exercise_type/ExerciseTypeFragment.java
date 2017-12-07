@@ -8,14 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
 /**
@@ -39,7 +36,7 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
 
         ButterKnife.bind(this, view);
 
-        mExercisesAdapter = new ExerciseTypeAdapter(getContext(), R.layout.row_exercise);
+        mExercisesAdapter = new ExerciseTypeAdapter(getContext(), R.layout.row_exercise_type);
         mExerciseListView.setAdapter(mExercisesAdapter);
 
         return view;

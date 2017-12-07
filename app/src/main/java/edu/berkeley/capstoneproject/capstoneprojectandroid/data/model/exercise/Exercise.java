@@ -60,6 +60,14 @@ public class Exercise {
         mMeasurements.get(measurement.getMetric()).add(measurement);
     }
 
+    public Date getStartDate() {
+        return mStartDate;
+    }
+
+    public Date getEndDate() {
+        return mEndDate;
+    }
+
     public int getId() {
         return mId;
     }

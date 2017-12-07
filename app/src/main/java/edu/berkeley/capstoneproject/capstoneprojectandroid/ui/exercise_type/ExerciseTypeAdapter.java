@@ -31,8 +31,8 @@ public class ExerciseTypeAdapter extends ArrayAdapter<ExerciseType> {
     }
 
     static class Holder {
-        @BindView(R.id.row_exercise_name) TextView mTextName;
-        @BindView(R.id.row_exercise_description) TextView mTextDescription;
+        @BindView(R.id.row_exercise_type_name) TextView mTextName;
+        @BindView(R.id.row_exercise_type_description) TextView mTextDescription;
 
         public Holder(View view) {
             ButterKnife.bind(this, view);
@@ -53,7 +53,7 @@ public class ExerciseTypeAdapter extends ArrayAdapter<ExerciseType> {
         Holder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.row_exercise, parent, false);
+            convertView = mInflater.inflate(R.layout.row_exercise_type, parent, false);
             holder = new Holder(convertView);
             convertView.setTag(holder);
         }
