@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -15,4 +16,6 @@ public interface IExerciseService {
     Single<Measurement> doSaveMeasurement(Measurement measurement);
 
     Single<Measurement> getMaxMeasurement();
+
+    Observable<ExerciseType> getExerciseTypes();
 }
