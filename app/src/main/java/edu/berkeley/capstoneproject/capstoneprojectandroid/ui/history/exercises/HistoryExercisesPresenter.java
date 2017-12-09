@@ -6,18 +6,18 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by Alex on 06/12/2017.
  */
 
-public class ExercisesPresenter<V extends ExercisesContract.View, I extends ExercisesContract.Interactor> extends BasePresenter<V, I> implements ExercisesContract.Presenter<V, I> {
+public class HistoryExercisesPresenter<V extends HistoryExercisesContract.View, I extends HistoryExercisesContract.Interactor> extends BasePresenter<V, I> implements HistoryExercisesContract.Presenter<V, I> {
 
     @Inject
-    public ExercisesPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+    public HistoryExercisesPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
@@ -35,23 +35,23 @@ public class ExercisesPresenter<V extends ExercisesContract.View, I extends Exer
         getCompositeDisposable().add(getInteractor().doGetExercises()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<Exercise>() {
+                .subscribeWith(new DisposableObserver<Exercise>() {
                     @Override
-                    public void accept(Exercise exercise) throws Exception {
+                    public void onNext(@NonNull Exercise exercise) {
                         if (isViewAttached()) {
                             getView().addExercise(exercise);
                         }
                     }
-                }, new Consumer<Throwable>() {
+
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void onError(@NonNull Throwable e) {
                         if (isViewAttached()) {
-                            getView().showError(throwable);
+                            getView().showError(e);
                         }
                     }
-                }, new Action() {
+
                     @Override
-                    public void run() throws Exception {
+                    public void onComplete() {
                         if (isViewAttached()) {
                             getView().onExercisesLoaded();
                         }

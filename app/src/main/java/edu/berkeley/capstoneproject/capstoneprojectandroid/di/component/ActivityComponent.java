@@ -4,22 +4,15 @@ import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.ExercisesContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercise.HistoryExerciseContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.HistoryExercisesContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
 
 /**
@@ -39,5 +32,6 @@ public interface ActivityComponent {
     TrainingContract.Presenter<TrainingContract.View,TrainingContract.Interactor> trainingPresenter();
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
     HistoryContract.Presenter<HistoryContract.View,HistoryContract.Interactor> historyPresenter();
-    ExercisesContract.Presenter<ExercisesContract.View,ExercisesContract.Interactor> exercisesPresenter();
+    HistoryExercisesContract.Presenter<HistoryExercisesContract.View,HistoryExercisesContract.Interactor> historyExercisesPresenter();
+    HistoryExerciseContract.Presenter<HistoryExerciseContract.View,HistoryExerciseContract.Interactor> historyExercisePresenter();
 }

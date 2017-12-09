@@ -32,7 +32,7 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
 
     @Override
     public void onViewResultsClick() {
-        getView().showError("Not implemented yet !");
+        getView().startResultsActivity();
     }
 
     @Override

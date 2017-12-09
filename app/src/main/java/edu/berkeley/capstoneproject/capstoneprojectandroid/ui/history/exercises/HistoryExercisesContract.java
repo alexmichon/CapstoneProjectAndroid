@@ -10,7 +10,7 @@ import io.reactivex.Observable;
  * Created by Alex on 06/12/2017.
  */
 
-public interface ExercisesContract {
+public interface HistoryExercisesContract {
 
     interface View extends IBaseView {
         void addExercise(Exercise exercise);

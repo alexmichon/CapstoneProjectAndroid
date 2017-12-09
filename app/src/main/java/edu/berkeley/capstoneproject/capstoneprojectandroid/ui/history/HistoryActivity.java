@@ -2,12 +2,11 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.ListView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.HistoryExercisesFragment;
 
 /**
  * Created by Alex on 06/12/2017.
@@ -20,6 +19,9 @@ public class HistoryActivity extends DrawerActivity<HistoryContract.View, Histor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         setUnbinder(ButterKnife.bind(this));
+        if (savedInstanceState == null) {
+            setFragment(R.id.history_container, new HistoryExercisesFragment());
+        }
     }
 
     @NonNull

@@ -16,6 +16,7 @@ public interface MainContract {
     interface View extends IBaseView {
         void showError(String message);
         void startTrainingActivity();
+        void startResultsActivity();
     }
 
     interface Interactor extends IBaseInteractor {

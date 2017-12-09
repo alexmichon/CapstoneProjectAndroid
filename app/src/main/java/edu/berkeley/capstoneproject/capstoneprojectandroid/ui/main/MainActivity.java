@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 
 /**
@@ -48,6 +49,9 @@ public class MainActivity extends DrawerActivity<MainContract.View, MainContract
         getPresenter().onStartTrainingClick();
     }
 
+    @OnClick(R.id.main_button_view_results)
+    void onViewResultsClick() { getPresenter().onViewResultsClick(); }
+
 
     @Override
     public void showError(String message) {
@@ -57,6 +61,12 @@ public class MainActivity extends DrawerActivity<MainContract.View, MainContract
     @Override
     public void startTrainingActivity() {
         Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void startResultsActivity() {
+        Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
         startActivity(intent);
     }
 

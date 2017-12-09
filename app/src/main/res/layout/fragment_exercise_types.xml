@@ -14,7 +14,7 @@
         android:text="Choose an exercise type"/>
 
     <ListView
-        android:id="@+id/exercises_list"
+        android:id="@+id/exercise_types_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

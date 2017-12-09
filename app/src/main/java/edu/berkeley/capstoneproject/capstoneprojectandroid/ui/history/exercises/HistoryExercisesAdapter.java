@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,45 +23,48 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
  * Created by Alex on 06/12/2017.
  */
 
-public class ExercisesAdapter extends ArrayAdapter<Exercise> {
+public class HistoryExercisesAdapter extends ArrayAdapter<Exercise> {
 
     private LayoutInflater mInflater;
+    private Locale mLocale;
 
-    public ExercisesAdapter(@NonNull Context context, @LayoutRes int resource) {
+    public HistoryExercisesAdapter(@NonNull Context context, @LayoutRes int resource, Locale locale) {
         super(context, resource);
         mInflater = LayoutInflater.from(context);
+        mLocale = locale;
     }
 
-    static class Holder {
+    class Holder {
         @BindView(R.id.row_exercise_name)
         TextView mTextName;
         @BindView(R.id.row_exercise_date) TextView mTextDate;
 
-        public Holder(View view) {
+        Holder(View view) {
             ButterKnife.bind(this, view);
         }
 
-        public void setName(String name) {
+        void setName(String name) {
             mTextName.setText(name);
         }
 
-        public void setDate(Date date) {
-            mTextDate.setText(date.toString());
+        void setDate(Date date) {
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, mLocale);
+            mTextDate.setText(dateFormat.format(date));
         }
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ExercisesAdapter.Holder holder;
+        HistoryExercisesAdapter.Holder holder;
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.row_exercise, parent, false);
-            holder = new ExercisesAdapter.Holder(convertView);
+            holder = new HistoryExercisesAdapter.Holder(convertView);
             convertView.setTag(holder);
         }
         else {
-            holder = (ExercisesAdapter.Holder) convertView.getTag();
+            holder = (HistoryExercisesAdapter.Holder) convertView.getTag();
         }
 
         Exercise exercise = getItem(position);

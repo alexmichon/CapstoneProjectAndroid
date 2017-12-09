@@ -11,10 +11,10 @@ import io.reactivex.Observable;
  * Created by Alex on 06/12/2017.
  */
 
-public class ExercisesInteractor extends BaseInteractor implements ExercisesContract.Interactor {
+public class HistoryExercisesInteractor extends BaseInteractor implements HistoryExercisesContract.Interactor {
 
     @Inject
-    public ExercisesInteractor(IDataManager dataManager) {
+    public HistoryExercisesInteractor(IDataManager dataManager) {
         super(dataManager);
     }
 

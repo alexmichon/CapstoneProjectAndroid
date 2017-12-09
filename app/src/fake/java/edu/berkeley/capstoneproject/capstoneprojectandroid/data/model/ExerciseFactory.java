@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
@@ -28,6 +29,10 @@ public class ExerciseFactory {
 
         private ExerciseType mExerciseType;
         private List<Measurement> mMeasurementList = new ArrayList<>();
+        private Date mStartDate;
+        private Date mEndDate;
+
+        private long mDuration;
 
         public Builder() {
             mExerciseType = ExerciseTypeFactory.create();
@@ -35,6 +40,21 @@ public class ExerciseFactory {
 
         public Builder withExerciseType(ExerciseType exerciseType) {
             mExerciseType = exerciseType;
+            return this;
+        }
+
+        public Builder withStartDate(Date startDate) {
+            mStartDate = startDate;
+            return this;
+        }
+
+        public Builder withEndDate(Date endDate) {
+            mEndDate = endDate;
+            return this;
+        }
+
+        public Builder withDuration(long duration) {
+            mDuration = duration;
             return this;
         }
 
@@ -55,6 +75,18 @@ public class ExerciseFactory {
             for (Measurement m: mMeasurementList) {
                 exercise.addMeasurement(m);
             }
+
+            if (mDuration > 0) {
+                if (mStartDate == null && mEndDate != null) {
+                    mStartDate = new Date(mEndDate.getTime() - mDuration);
+                }
+                if (mStartDate != null && mEndDate == null) {
+                    mEndDate = new Date(mStartDate.getTime() + mDuration);
+                }
+            }
+
+            exercise.setStartDate(mStartDate);
+            exercise.setEndDate(mEndDate);
 
             return exercise;
         }

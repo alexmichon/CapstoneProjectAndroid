@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
@@ -47,6 +49,8 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Observable<Exercise> getExercises() {
         return Observable.just(ExerciseFactory.builder()
+                .withStartDate(new Date())
+                .withDuration(120)
                 .withMeasurements(
                         MeasurementFactory.listBuilder(100)
                                 .withinRange(-1, 1)

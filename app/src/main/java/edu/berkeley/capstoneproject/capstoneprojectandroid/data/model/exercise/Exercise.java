@@ -64,8 +64,16 @@ public class Exercise {
         return mStartDate;
     }
 
+    public void setStartDate(Date startDate) {
+        mStartDate = startDate;
+    }
+
     public Date getEndDate() {
         return mEndDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        mEndDate = endDate;
     }
 
     public int getId() {

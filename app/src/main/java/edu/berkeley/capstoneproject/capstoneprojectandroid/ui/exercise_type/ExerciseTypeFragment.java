@@ -23,7 +23,7 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
 
     private static final String TITLE = "Exercise Types";
 
-    @BindView(R.id.exercises_list)
+    @BindView(R.id.exercise_types_list)
     ListView mExerciseListView;
 
     private ExerciseTypeAdapter mExercisesAdapter;
@@ -32,7 +32,7 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_exercises, container, false);
+        View view = inflater.inflate(R.layout.fragment_exercise_types, container, false);
 
         ButterKnife.bind(this, view);
 
@@ -70,7 +70,7 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
         // TODO
     }
 
-    @OnItemClick(R.id.exercises_list)
+    @OnItemClick(R.id.exercise_types_list)
     void onExerciseClick(int position) {
         getPresenter().onExerciseTypeClick(mExercisesAdapter.getItem(position));
     }

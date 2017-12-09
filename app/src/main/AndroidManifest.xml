@@ -13,13 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.DeviceActivity" />
-        <activity android:name=".activities.DeviceLeActivity" />
-        <activity android:name=".activities.Feather52Activity"/>
-        <activity android:name=".activities.EncoderActivity"/>
-        <activity android:name=".activities.MyServiceActivity"/>
-
 
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
@@ -31,9 +24,7 @@
         <activity android:name=".ui.register.RegisterActivity"/>
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.training.TrainingActivity"/>
-
-        <service android:name=".services.BluetoothLeService" />
-        <service android:name=".services.Feather52Service" />
+        <activity android:name=".ui.history.HistoryActivity"/>
     </application>
 
 </manifest>
