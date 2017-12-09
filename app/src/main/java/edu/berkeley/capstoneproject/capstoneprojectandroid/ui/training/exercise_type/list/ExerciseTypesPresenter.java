@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list;
 
 import javax.inject.Inject;
 
@@ -15,17 +15,17 @@ import timber.log.Timber;
  * Created by Alex on 08/11/2017.
  */
 
-public class ExerciseTypePresenter<V extends ExerciseTypeContract.View, I extends ExerciseTypeContract.Interactor>
-        extends BasePresenter<V, I> implements ExerciseTypeContract.Presenter<V, I> {
+public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I extends ExerciseTypesContract.Interactor>
+        extends BasePresenter<V, I> implements ExerciseTypesContract.Presenter<V, I> {
 
-    private static final String TAG = ExerciseTypePresenter.class.getSimpleName();
+    private static final String TAG = ExerciseTypesPresenter.class.getSimpleName();
 
     private IExerciseTypeRepository mRepository;
 
     @Inject
-    public ExerciseTypePresenter(I interactor,
-                                 ISchedulerProvider schedulerProvider,
-                                 CompositeDisposable compositeDisposable) {
+    public ExerciseTypesPresenter(I interactor,
+                                  ISchedulerProvider schedulerProvider,
+                                  CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
@@ -61,7 +61,12 @@ public class ExerciseTypePresenter<V extends ExerciseTypeContract.View, I extend
     }
 
     @Override
-    public void onExerciseTypeClick(ExerciseType exerciseType) {
-        getView().onExerciseTypeSelected(exerciseType);
+    public void onExerciseTypeMoreClick(ExerciseType exerciseType) {
+        getView().onExerciseTypeMore(exerciseType);
+    }
+
+    @Override
+    public void onExerciseTypeStartClick(ExerciseType exerciseType) {
+        getView().onExerciseTypeStart(exerciseType);
     }
 }

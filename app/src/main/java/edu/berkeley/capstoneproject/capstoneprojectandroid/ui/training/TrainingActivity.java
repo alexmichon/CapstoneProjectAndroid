@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
@@ -13,7 +11,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
 /**
@@ -52,17 +51,33 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
         fragment.setListener(this);
 
         setFragment(fragment);
+        setTitle("Bluetooth device");
     }
 
     @Override
     public void showExerciseTypesFragment() {
-        ExerciseTypeFragment fragment = new ExerciseTypeFragment();
-        fragment.setListener(new ExerciseTypeFragment.ExerciseTypesFragmentListener() {
+        ExerciseTypesFragment fragment = new ExerciseTypesFragment();
+        fragment.setListener(new ExerciseTypesFragment.ExerciseTypesFragmentListener() {
             @Override
-            public void onExerciseTypeSelected(ExerciseType exerciseType) {
+            public void onExerciseTypeStart(ExerciseType exerciseType) {
                 showExerciseFragment(exerciseType);
             }
+
+            @Override
+            public void onExerciseTypeMore(ExerciseType exerciseType) {
+                showExerciseTypeFragment(exerciseType);
+            }
         });
+
+        setFragment(fragment);
+        setTitle("Exercise types");
+    }
+
+    private void showExerciseTypeFragment(ExerciseType exerciseType) {
+        ExerciseTypeFragment fragment = new ExerciseTypeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ExerciseTypeFragment.EXERCISE_TYPE_KEY, exerciseType);
+        fragment.setArguments(bundle);
 
         setFragment(fragment);
     }
@@ -75,6 +90,7 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
         fragment.setArguments(bundle);
 
         setFragment(fragment);
+        setTitle(exerciseType.getName());
     }
 
     @Override

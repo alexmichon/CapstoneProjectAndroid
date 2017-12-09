@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list;
 
 import javax.inject.Inject;
 
@@ -12,12 +12,12 @@ import io.reactivex.Observable;
  * Created by Alex on 10/11/2017.
  */
 
-public class ExerciseTypeInteractor extends BaseInteractor implements ExerciseTypeContract.Interactor {
+public class ExerciseTypesInteractor extends BaseInteractor implements ExerciseTypesContract.Interactor {
 
     private final IExerciseTypeRepository mExerciseTypeRepository;
 
     @Inject
-    public ExerciseTypeInteractor(IDataManager dataManager, IExerciseTypeRepository exerciseTypeRepository) {
+    public ExerciseTypesInteractor(IDataManager dataManager, IExerciseTypeRepository exerciseTypeRepository) {
         super(dataManager);
         mExerciseTypeRepository = exerciseTypeRepository;
     }

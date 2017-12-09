@@ -4,21 +4,14 @@ import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeContract;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -30,10 +23,11 @@ public interface ActivityComponent {
 
     MainContract.Presenter<MainContract.View, MainContract.Interactor> mainPresenter();
     BluetoothListContract.Presenter<BluetoothListContract.View,BluetoothListContract.Interactor> bluetoothListPresenter();
-    ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> exerciseTypePresenter();
+    ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> exerciseTypesPresenter();
     LoginContract.Presenter<LoginContract.View,LoginContract.Interactor> loginPresenter();
     RegisterContract.Presenter<RegisterContract.View,RegisterContract.Interactor> registerPresenter();
     SplashContract.Presenter<SplashContract.View,SplashContract.Interactor> splashPresenter();
     TrainingContract.Presenter<TrainingContract.View,TrainingContract.Interactor> trainingPresenter();
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
+    ExerciseTypeContract.Presenter<ExerciseTypeContract.View,ExerciseTypeContract.Interactor> exerciseTypePresenter();
 }

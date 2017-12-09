@@ -50,10 +50,6 @@ import timber.log.Timber;
 
 public class ExerciseFragment extends BaseFragment<ExerciseContract.View, ExerciseContract.Presenter<ExerciseContract.View, ExerciseContract.Interactor>> implements ExerciseContract.View {
 
-    private static final String TAG = ExerciseFragment.class.getSimpleName();
-
-    private static final String TITLE = "Exercise";
-
     public static final String EXTRA_EXERCISE_TYPE = "ExerciseType";
 
 
@@ -111,11 +107,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public ExerciseContract.Presenter<ExerciseContract.View, ExerciseContract.Interactor> createPresenter() {
         return getActivityComponent().exercisePresenter();
-    }
-
-    @Override
-    public String getTitle() {
-        return TITLE;
     }
 
     @Override

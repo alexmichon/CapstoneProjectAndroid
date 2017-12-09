@@ -37,7 +37,7 @@ public abstract class CapstoneProjectAndroidApplication extends Application {
             Timber.plant(new Timber.DebugTree() {
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
-                    return element.getClassName() + ":" + element.getLineNumber();
+                    return element.getClass().getSimpleName() + ":" + element.getLineNumber();
                 }
             });
             Log.i("Timber", Timber.asTree().toString());

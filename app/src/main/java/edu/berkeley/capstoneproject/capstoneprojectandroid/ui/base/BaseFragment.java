@@ -145,6 +145,4 @@ public abstract class BaseFragment<V extends IBaseView, P extends IBasePresenter
         }
         super.onDestroy();
     }
-
-    public abstract String getTitle();
 }

@@ -17,20 +17,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
 public class HomeFragment extends BaseFragment<HomeContract.View, HomeContract.Presenter<HomeContract.View, HomeContract.Interactor>> implements HomeContract.View {
 
-    private static final String TAG = HomeFragment.class.getSimpleName();
-
-    private static final String TITLE = "Home";
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // TODO
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public String getTitle() {
-        return TITLE;
     }
 
     @Override

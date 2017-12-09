@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -24,13 +26,13 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class ExerciseTypePresenterTest {
 
-    private ExerciseTypePresenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> mPresenter;
+    private ExerciseTypesPresenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> mPresenter;
 
     @Mock
-    private ExerciseTypeContract.View mView;
+    private ExerciseTypesContract.View mView;
 
     @Mock
-    private ExerciseTypeContract.Interactor mInteractor;
+    private ExerciseTypesContract.Interactor mInteractor;
 
     private TestScheduler mTestScheduler;
 
@@ -40,7 +42,7 @@ public class ExerciseTypePresenterTest {
         mTestScheduler = new TestScheduler();
         TestSchedulerProvider provider = new TestSchedulerProvider(mTestScheduler);
 
-        mPresenter = Mockito.spy(new ExerciseTypePresenter<>(mInteractor, provider, compositeDisposable));
+        mPresenter = Mockito.spy(new ExerciseTypesPresenter<>(mInteractor, provider, compositeDisposable));
         mPresenter.attachView(mView);
     }
 
