@@ -12,6 +12,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.Toolb
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
@@ -74,12 +75,12 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     private void showExerciseTypeFragment(ExerciseType exerciseType) {
-        ExerciseTypeFragment fragment = new ExerciseTypeFragment();
+        ExerciseTypeDialog fragment = new ExerciseTypeDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExerciseTypeFragment.EXERCISE_TYPE_KEY, exerciseType);
         fragment.setArguments(bundle);
 
-        setFragment(fragment);
+        showDialog(fragment);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,6 +14,8 @@ public class ExerciseType implements Parcelable {
 
     private final String mName;
     private final String mDescription;
+
+    private Uri mVideoUri;
 
     public ExerciseType(int id, String name, String description) {
         mId = id;
@@ -66,5 +69,13 @@ public class ExerciseType implements Parcelable {
         parcel.writeInt(mId);
         parcel.writeString(mName);
         parcel.writeString(mDescription);
+    }
+
+    public Uri getVideoUri() {
+        return mVideoUri;
+    }
+
+    public void setVideoUri(Uri videoUri) {
+        mVideoUri = videoUri;
     }
 }

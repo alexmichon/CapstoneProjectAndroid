@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model;
 
+import android.net.Uri;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 
 /**
@@ -17,6 +19,7 @@ public class ExerciseTypeFactory {
     public static class Builder {
         private String mName;
         private String mDescription;
+        private Uri mVideoUri;
 
         public Builder withName(String name) {
             mName = name;
@@ -28,8 +31,16 @@ public class ExerciseTypeFactory {
             return this;
         }
 
+        public Builder withVideo(Uri videoUri) {
+            mVideoUri = videoUri;
+            return this;
+        }
+
         public ExerciseType build() {
-            return new ExerciseType(ID++, mName, mDescription);
+            ExerciseType exerciseType = new ExerciseType(ID++, mName, mDescription);
+            exerciseType.setVideoUri(mVideoUri);
+
+            return exerciseType;
         }
     }
 }

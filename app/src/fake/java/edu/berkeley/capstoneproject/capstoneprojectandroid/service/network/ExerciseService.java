@@ -1,22 +1,17 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.Context;
+import android.net.Uri;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.ExerciseTypeFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import timber.log.Timber;
-
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeRepository.ID_TEST_EXERCISE;
 
 /**
  * Created by Alex on 28/11/2017.
@@ -24,11 +19,11 @@ import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exe
 
 public class ExerciseService implements IExerciseService {
 
-    private static int ID = 1;
+    private final Context mContext;
 
     @Inject
-    public ExerciseService() {
-
+    public ExerciseService(Context context) {
+        mContext = context;
     }
 
     @Override
@@ -50,14 +45,24 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Observable<ExerciseType> getExerciseTypes() {
         return Observable.just(
-            ExerciseTypeFactory.builder()
-                .withName("Test Exercise Type 1")
-                .withDescription("This is a test exercise")
-                .build(),
-            ExerciseTypeFactory.builder()
-                .withName("Test Exercise Type 2")
-                .withDescription("This is a" + new String(new char[100]).replace("\0", " very ") + "long description")
-                .build()
+                ExerciseTypeFactory.builder()
+                        .withName("Test Exercise Type 1")
+                        .withDescription("This is a test exercise")
+                        .build(),
+                ExerciseTypeFactory.builder()
+                        .withName("Test Exercise Type 2")
+                        .withDescription("This is a" + new String(new char[500]).replace("\0", " very ") + "long description")
+                        .build(),
+                ExerciseTypeFactory.builder()
+                        .withName("Vulcan salute")
+                        .withDescription("Live long and prosper !")
+                        .withVideo(Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.vulcan))
+                        .build(),
+                ExerciseTypeFactory.builder()
+                        .withName("Shoulder abduction")
+                        .withDescription("This is how you do it !")
+                        .withVideo(Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.shoulder))
+                        .build()
         );
     }
 }

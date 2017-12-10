@@ -28,6 +28,7 @@ public class FakeApplication extends CapstoneProjectAndroidApplication {
                 .build();
 
         NetworkComponent networkComponent = DaggerFakeNetworkComponent.builder()
+                .appModule(appModule)
                 .fakeNetworkModule(new FakeNetworkModule())
                 .build();
 

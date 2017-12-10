@@ -13,7 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExer
  * Created by Alex on 05/12/2017.
  */
 
-@Module
+@Module(includes = AppModule.class)
 public class FakeNetworkModule {
 
     @Provides
