@@ -62,6 +62,10 @@ public class ExerciseService implements IExerciseService {
                         .withName("Shoulder abduction")
                         .withDescription("This is how you do it !")
                         .withVideo(Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.shoulder))
+                        .build(),
+                ExerciseTypeFactory.builder()
+                        .withName("Youtube test")
+                        .withYoutubeVideo("HHjKzr6tLz0")
                         .build()
         );
     }

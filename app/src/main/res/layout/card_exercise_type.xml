@@ -18,6 +18,7 @@
             android:id="@+id/card_exercise_type_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:padding="10dp"
             android:textSize="20sp"
             android:textColor="@android:color/black"/>
@@ -35,16 +36,15 @@
         <android.support.v7.widget.ButtonBarLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_marginEnd="10dp"
+            android:layout_gravity="end"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/card_exercise_type_more_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"
+                android:layout_gravity="end|center_vertical"
                 android:text="More"
                 style="?android:attr/buttonBarButtonStyle"/>
 
@@ -52,8 +52,7 @@
                 android:id="@+id/card_exercise_type_start_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"
+                android:layout_gravity="end|center_vertical"
                 android:text="Start"
                 style="?android:attr/buttonBarButtonStyle"/>
 

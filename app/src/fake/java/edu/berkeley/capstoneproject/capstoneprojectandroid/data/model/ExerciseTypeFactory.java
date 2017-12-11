@@ -20,6 +20,7 @@ public class ExerciseTypeFactory {
         private String mName;
         private String mDescription;
         private Uri mVideoUri;
+        private String mYoutubeId;
 
         public Builder withName(String name) {
             mName = name;
@@ -36,9 +37,15 @@ public class ExerciseTypeFactory {
             return this;
         }
 
+        public Builder withYoutubeVideo(String videoId) {
+            mYoutubeId = videoId;
+            return this;
+        }
+
         public ExerciseType build() {
             ExerciseType exerciseType = new ExerciseType(ID++, mName, mDescription);
             exerciseType.setVideoUri(mVideoUri);
+            exerciseType.setYoutubeVideo(mYoutubeId);
 
             return exerciseType;
         }

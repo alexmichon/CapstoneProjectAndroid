@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
@@ -20,7 +21,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
  * Created by Alex on 17/11/2017.
  */
 
-public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>> implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener {
+public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>> implements TrainingContract.View {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -46,27 +47,30 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
 
-    @Override
-    public void showBluetoothListFragment() {
+    private void showBluetoothListFragment() {
         BluetoothListFragment fragment = new BluetoothListFragment();
-        fragment.setListener(this);
+        fragment.setListener(new BluetoothListFragment.BluetoothListFragmentListener() {
+            @Override
+            public void onDeviceSelected(Rx2BleDevice device) {
+                getPresenter().onDeviceSelected(device);
+            }
+        });
 
         setFragment(fragment);
         setTitle("Bluetooth device");
     }
 
-    @Override
-    public void showExerciseTypesFragment() {
+    private void showExerciseTypesFragment() {
         ExerciseTypesFragment fragment = new ExerciseTypesFragment();
         fragment.setListener(new ExerciseTypesFragment.ExerciseTypesFragmentListener() {
             @Override
             public void onExerciseTypeStart(ExerciseType exerciseType) {
-                showExerciseFragment(exerciseType);
+                getPresenter().onExerciseTypeStart(exerciseType);
             }
 
             @Override
             public void onExerciseTypeMore(ExerciseType exerciseType) {
-                showExerciseTypeFragment(exerciseType);
+                showExerciseTypeDialog(exerciseType);
             }
         });
 
@@ -74,17 +78,22 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
         setTitle("Exercise types");
     }
 
-    private void showExerciseTypeFragment(ExerciseType exerciseType) {
+    private void showExerciseTypeDialog(ExerciseType exerciseType) {
         ExerciseTypeDialog fragment = new ExerciseTypeDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExerciseTypeFragment.EXERCISE_TYPE_KEY, exerciseType);
         fragment.setArguments(bundle);
+        fragment.setListener(new ExerciseTypeDialog.ExerciseTypeDialogListener() {
+            @Override
+            public void onExerciseTypeStart(ExerciseType exerciseType) {
+                getPresenter().onExerciseTypeStart(exerciseType);
+            }
+        });
 
         showDialog(fragment);
     }
 
-    @Override
-    public void showExerciseFragment(ExerciseType exerciseType) {
+    private void showExerciseFragment(ExerciseType exerciseType) {
         ExerciseFragment fragment = new ExerciseFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExerciseFragment.EXTRA_EXERCISE_TYPE, exerciseType);
@@ -102,7 +111,7 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     @Override
-    public void onDeviceSelected(Rx2BleDevice device) {
-        getPresenter().onDeviceSelected(device);
+    public void startExerciseType(ExerciseType exerciseType) {
+        showExerciseFragment(exerciseType);
     }
 }

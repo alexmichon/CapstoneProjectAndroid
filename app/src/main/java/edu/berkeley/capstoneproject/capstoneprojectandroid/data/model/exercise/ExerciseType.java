@@ -16,6 +16,7 @@ public class ExerciseType implements Parcelable {
     private final String mDescription;
 
     private Uri mVideoUri;
+    private String mYoutubeVideo;
 
     public ExerciseType(int id, String name, String description) {
         mId = id;
@@ -77,5 +78,13 @@ public class ExerciseType implements Parcelable {
 
     public void setVideoUri(Uri videoUri) {
         mVideoUri = videoUri;
+    }
+
+    public String getYoutubeVideo() {
+        return mYoutubeVideo;
+    }
+
+    public void setYoutubeVideo(String youtubeVideo) {
+        mYoutubeVideo = youtubeVideo;
     }
 }

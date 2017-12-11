@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
@@ -11,7 +12,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 public interface ExerciseTypeContract {
 
     interface View extends IBaseView {
-
+        void onStartExerciseType(ExerciseType exerciseType);
     }
 
     interface Interactor extends IBaseInteractor {
@@ -19,6 +20,8 @@ public interface ExerciseTypeContract {
     }
 
     interface Presenter<V extends IBaseView, I extends IBaseInteractor> extends IBasePresenter<V, I> {
-
+        ExerciseType getExerciseType();
+        void setExerciseType(ExerciseType exerciseType);
+        void onStartClick();
     }
 }

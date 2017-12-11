@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
@@ -46,10 +47,6 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
 
     @Override
     public void onDeviceSelected(Rx2BleDevice device) {
-        //CapstoneProjectAndroidApplication.getInstance().getFeather52().setBluetoothDevice(device.getBluetoothDevice());
-        //getView().startTrainingActivity(device);
-        final Rx2BleDevice.ConnectionState connectionState;
-
         getView().showLoading();
 
         getCompositeDisposable().add(getInteractor()
@@ -75,8 +72,7 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
 
     }
 
-    @Override
-    public void onDeviceConnected() {
+    private void onDeviceConnected() {
         getView().showMessage("Connected");
         getCompositeDisposable().add(getInteractor()
                 .doValidateDevice()
@@ -97,5 +93,12 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
                     }
                 })
         );
+    }
+
+    @Override
+    public void onExerciseTypeStart(ExerciseType exerciseType) {
+        if (isViewAttached()) {
+            getView().startExerciseType(exerciseType);
+        }
     }
 }

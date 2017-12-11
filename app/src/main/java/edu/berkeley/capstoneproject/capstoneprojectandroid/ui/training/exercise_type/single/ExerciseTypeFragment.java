@@ -25,13 +25,13 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
 
     private ExerciseType mExerciseType;
 
-    @BindView(R.id.exercise_type_description)
+    @BindView(R.id.dialog_exercise_type_description)
     TextView mDescriptionView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercise_type, container, false);
+        View view = inflater.inflate(R.layout.dialog_exercise_type, container, false);
 
         setUnbinder(ButterKnife.bind(this, view));
 
@@ -51,5 +51,10 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
     @Override
     public ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> createPresenter() {
         return getActivityComponent().exerciseTypePresenter();
+    }
+
+    @Override
+    public void onStartExerciseType(ExerciseType exerciseType) {
+
     }
 }
