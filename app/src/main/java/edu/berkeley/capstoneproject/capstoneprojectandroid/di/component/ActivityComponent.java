@@ -3,21 +3,14 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.di.component;
 import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register.RegisterContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
 
 /**
@@ -36,4 +29,5 @@ public interface ActivityComponent {
     SplashContract.Presenter<SplashContract.View,SplashContract.Interactor> splashPresenter();
     TrainingContract.Presenter<TrainingContract.View,TrainingContract.Interactor> trainingPresenter();
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
+    AuthenticationContract.Presenter<AuthenticationContract.View,AuthenticationContract.Interactor> authenticationPresenter();
 }

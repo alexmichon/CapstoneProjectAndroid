@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.AuthenticationFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.UserFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiError;
@@ -28,6 +29,11 @@ public class AuthService implements IAuthService {
 
     @Override
     public Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName) {
-        return Single.just(new User(email, firstName, lastName));
+        User user = new User(email, firstName, lastName);
+        user.setAuthentication(
+                AuthenticationFactory.defaultBuilder()
+                    .build()
+        );
+        return Single.just(user);
     }
 }

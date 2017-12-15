@@ -1,9 +1,11 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register;
 
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -13,7 +15,7 @@ import io.reactivex.functions.Consumer;
  */
 
 public class RegisterPresenter<V extends RegisterContract.View, I extends RegisterContract.Interactor>
-        extends BasePresenter<V, I> implements RegisterContract.Presenter<V, I> {
+        extends AuthenticationFragmentPresenter<V, I> implements RegisterContract.Presenter<V, I> {
 
 
     @Inject
@@ -25,7 +27,15 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
 
     @Override
     public void onRegisterClick(final String email, final String password, String passwordConfirmation, final String firstName, final String lastName) {
-        getView().showLoading();
+        if (isViewAttached()) {
+            getView().onAuthenticationStart(new IBaseView.OnCancelListener() {
+                @Override
+                public void onCancel() {
+                    onAuthenticationCancel();
+                }
+            });
+        }
+
         getCompositeDisposable().add(getInteractor()
                 .doRegisterApiCall(email, password, passwordConfirmation, firstName, lastName)
                 .subscribeOn(getSchedulerProvider().io())
@@ -33,20 +43,14 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
                 .subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
-                        getView().hideLoading();
-                        getView().onRegisterSuccess(user);
+                        onAuthenticationSuccess(user);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        getView().showError("Couldn't doRegisterApiCall");
+                        onAuthenticationFailure(throwable);
                     }
                 })
         );
-    }
-
-    @Override
-    public void onRegisterCancel() {
-        getCompositeDisposable().dispose();
     }
 }

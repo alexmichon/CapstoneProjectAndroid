@@ -14,15 +14,20 @@ public class AuthenticationFactory {
 
     public static Authentication admin() {
         if (mAdminAuth == null) {
-            mAdminAuth = new AuthenticationBuilder()
-                    .withAccessToken("123456789")
-                    .withClient("client")
-                    .withExpiry("123456789")
-                    .withTokenType("token")
+            mAdminAuth = defaultBuilder()
                     .withUid("admin@admin.com")
                     .build();
         }
         return mAdminAuth;
+    }
+
+    public static AuthenticationBuilder defaultBuilder() {
+        return new AuthenticationBuilder()
+                .withAccessToken("access-token")
+                .withClient("client")
+                .withExpiry("expiry")
+                .withTokenType("token-type")
+                .withUid("uid");
     }
 
 

@@ -67,6 +67,12 @@
             android:hint="Password Confirmation"/>
     </android.support.design.widget.TextInputLayout>
 
+    <CheckBox
+        android:id="@+id/register_remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember me"/>
+
     <Button
         android:id="@+id/register_button"
         android:layout_width="wrap_content"
@@ -75,5 +81,14 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="Register"/>
+
+    <TextView
+        android:id="@+id/register_login_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Already have an account ? Login !"/>
 
 </LinearLayout>

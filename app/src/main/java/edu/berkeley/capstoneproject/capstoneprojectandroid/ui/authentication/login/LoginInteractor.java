@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login;
 
 import javax.inject.Inject;
 

@@ -7,13 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -62,7 +60,7 @@ public class SplashActivity extends BaseActivity<SplashContract.View, SplashCont
 
     @Override
     public void done() {
-        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+        Intent intent = new Intent(SplashActivity.this, AuthenticationActivity.class);
         startActivity(intent);
         finish();
     }
