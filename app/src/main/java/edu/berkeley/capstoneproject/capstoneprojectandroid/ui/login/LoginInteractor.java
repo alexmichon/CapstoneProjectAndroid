@@ -17,8 +17,6 @@ import timber.log.Timber;
 
 public class LoginInteractor extends BaseInteractor implements LoginContract.Interactor {
 
-    private static final String TAG = LoginInteractor.class.getSimpleName();
-
     @Inject
     public LoginInteractor(IDataManager dataManager) {
         super(dataManager);
@@ -39,6 +37,6 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
 
     private void updateApiHeader(User user) {
         Timber.d("Updating api header");
-        // TODO
+        getDataManager().getApiHelper().getApiHeader().setAuthentication(user.getAuthentication());
     }
 }

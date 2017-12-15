@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.UserFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiError;
 import io.reactivex.Single;
 
@@ -20,7 +21,7 @@ public class AuthService implements IAuthService {
     @Override
     public Single<User> doLogin(String email, String password) {
         if (email.equals("admin") && password.equals("admin")) {
-            return Single.just(new User("admin@admin.com", "admin", "admin"));
+            return Single.just(UserFactory.admin());
         }
         return Single.error(new ApiError(ApiError.ERROR_UNAUTHORIZED, "Login failed"));
     }
