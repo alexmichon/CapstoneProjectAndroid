@@ -7,6 +7,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -25,12 +26,14 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
 
     @Override
     public void onLoginClick(final String email, final String password) {
-        getView().onLoginStart(new IBaseView.OnCancelListener() {
-            @Override
-            public void onCancel() {
-                onLoginCancel();
-            }
-        });
+        if (isViewAttached()) {
+            getView().onLoginStart(new IBaseView.OnCancelListener() {
+                @Override
+                public void onCancel() {
+                    onLoginCancel();
+                }
+            });
+        }
 
         getCompositeDisposable().add(
                 getInteractor().doLoginCall(email, password)
@@ -39,21 +42,42 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
                         .subscribe(new Consumer<User>() {
                             @Override
                             public void accept(User user) throws Exception {
-                                getView().onLoginSuccess(user);
-                                getView().startMainActivity();
+                                onLoginSuccess(user);
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                getView().onLoginFailure(throwable);
-                                handleApiError(throwable);
+                                onLoginFailure(throwable);
                             }
                         })
         );
     }
 
-    @Override
-    public void onLoginCancel() {
+    protected void onLoginSuccess(final User user) {
+        if (isViewAttached()) {
+            getView().onLoginSuccess(user);
+            boolean remember = getView().isRememberChecked();
+            if (remember) {
+                getInteractor().doRemember(user);
+            }
+            onLoginDone(user);
+        }
+    }
+
+    protected void onLoginDone(User user) {
+        if (isViewAttached()) {
+            getView().startMainActivity();
+        }
+    }
+
+    protected void onLoginFailure(Throwable throwable) {
+        if (isViewAttached()) {
+            getView().onLoginFailure(throwable);
+        }
+        handleApiError(throwable);
+    }
+
+    protected void onLoginCancel() {
         getCompositeDisposable().dispose();
     }
 }

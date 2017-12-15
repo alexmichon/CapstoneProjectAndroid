@@ -6,9 +6,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 /**
@@ -32,6 +30,11 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
                         updateApiHeader(user);
                     }
                 });
+    }
+
+    @Override
+    public void doRemember(User user) {
+        getDataManager().getPreferencesHelper().setAuthentication(user.getAuthentication());
     }
 
 

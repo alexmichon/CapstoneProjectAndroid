@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -30,6 +31,9 @@ public class LoginActivity extends ToolbarActivity<LoginContract.View, LoginCont
 
     @BindView(R.id.login_password)
     EditText mPasswordEdit;
+
+    @BindView(R.id.login_remember)
+    CheckBox mRememberCheckBox;
 
     @BindView(R.id.login_register_link)
     TextView mRegisterLink;
@@ -93,6 +97,11 @@ public class LoginActivity extends ToolbarActivity<LoginContract.View, LoginCont
     public void onLoginFailure(String message) {
         hideLoading();
         showError(message);
+    }
+
+    @Override
+    public boolean isRememberChecked() {
+        return mRememberCheckBox.isChecked();
     }
 
     @Override
