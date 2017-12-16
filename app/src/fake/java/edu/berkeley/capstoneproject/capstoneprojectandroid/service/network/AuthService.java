@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.AuthenticationFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.UserFactory;
@@ -35,5 +36,14 @@ public class AuthService implements IAuthService {
                     .build()
         );
         return Single.just(user);
+    }
+
+    @Override
+    public Single<User> doRestoreAuthentication(Authentication authentication) {
+        return Single.just(UserFactory.builder()
+                .withAuthentication(authentication)
+                .withEmail(authentication.getUid())
+                .build()
+        );
     }
 }

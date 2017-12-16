@@ -10,8 +10,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -61,6 +63,24 @@ public class SplashActivity extends BaseActivity<SplashContract.View, SplashCont
     @Override
     public void done() {
         Intent intent = new Intent(SplashActivity.this, AuthenticationActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void moveToAuthenticationActivity(Authentication authentication) {
+        Intent intent = new Intent(SplashActivity.this, AuthenticationActivity.class);
+        if (authentication != null) {
+            intent.putExtra(AuthenticationActivity.EXTRA_UID, authentication.getUid());
+        }
+
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void moveToMainActivity() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

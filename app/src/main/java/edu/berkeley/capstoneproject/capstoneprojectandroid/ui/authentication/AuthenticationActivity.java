@@ -19,6 +19,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 public class AuthenticationActivity extends ToolbarActivity<AuthenticationContract.View, AuthenticationContract.Presenter<AuthenticationContract.View, AuthenticationContract.Interactor>>
     implements AuthenticationContract.View, AuthenticationFragment.Listener {
 
+    public static final String EXTRA_UID = "EXTRA_UID";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

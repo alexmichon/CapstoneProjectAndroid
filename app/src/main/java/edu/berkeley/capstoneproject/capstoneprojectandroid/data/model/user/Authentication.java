@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -68,5 +69,20 @@ public class Authentication {
 
     public void setUid(String uid) {
         mUid = uid;
+    }
+
+
+
+    public boolean isValid() {
+        if ((mAccessToken == null) ||
+                (mClient == null) ||
+                (mExpiry == null) ||
+                (mTokenType == null) ||
+                (mUid == null)){
+            return false;
+        }
+
+        long expiry = Long.valueOf(mExpiry);
+        return new Date(expiry).after(new Date());
     }
 }
