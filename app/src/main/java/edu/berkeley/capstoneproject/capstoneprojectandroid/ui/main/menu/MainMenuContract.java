@@ -16,7 +16,7 @@ public interface MainMenuContract {
 
         void setUser(User user);
 
-        void setMainMenuItem(MainMenuItem item);
+        void setSelectedItem(String title);
     }
 
     interface Interactor extends IBaseInteractor {

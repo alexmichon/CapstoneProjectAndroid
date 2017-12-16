@@ -12,6 +12,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 15/12/2017.
@@ -21,7 +22,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
 
     private final List<MainMenuItem> mMainMenuItems;
     private MainMenuAdapterListener mListener;
-    private MainMenuItem mSelectedItem;
+    private String mSelectedItem;
 
     public MainMenuAdapter(List<MainMenuItem> mainMenuItems) {
         mMainMenuItems = mainMenuItems;
@@ -50,7 +51,11 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
     }
 
     public void setSelectedItem(MainMenuItem item) {
-        mSelectedItem = item;
+        mSelectedItem = item.getTitle();
+    }
+
+    public void setSelectedItem(String title) {
+        mSelectedItem = title;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -70,7 +75,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
         public void bind(final MainMenuItem mainMenuItem) {
             mMainMenuItem = mainMenuItem;
 
-            if (mainMenuItem == mSelectedItem) {
+            if (mainMenuItem.getTitle().equals(mSelectedItem)) {
                 itemView.setBackgroundResource(R.color.colorLight);
             }
 
@@ -89,6 +94,6 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
     }
 
     public interface MainMenuAdapterListener {
-        void onMainMenuItemClick(MainMenuItem mainMenuItem);
+        void onMainMenuItemClick(MainMenuItem item);
     }
 }
