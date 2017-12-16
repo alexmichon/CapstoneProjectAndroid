@@ -11,82 +11,81 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
-public class MainActivity extends ToolbarActivity<MainContract.View, MainContract.Presenter<MainContract.View, MainContract.Interactor>> implements MainContract.View {
+public class MainActivity extends ToolbarActivity<MainContract.View, MainContract.Presenter<MainContract.View, MainContract.Interactor>> implements MainContract.View, MainMenuFragment.MainMenuItemListener, HomeFragment.HomeFragmentListener {
 
     @BindView(R.id.main_drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    @BindView(R.id.main_text_hello)
-    TextView mHelloView;
-
-    @BindView(R.id.main_button_start_training)
-    Button mStartTrainingButton;
-
-    @BindView(R.id.main_button_view_results)
-    Button mViewResultsButton;
-
-    private ActionBarDrawerToggle drawerToggle;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private MainMenuFragment mMainMenuFragment;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUnbinder(ButterKnife.bind(this));
 
-        // TODO
-        //setNavigationDrawerMenu(R.menu.main_navigation, getPresenter().getNavigationListener());
-        //initNavigationDrawer();
+        mMainMenuFragment = (MainMenuFragment) getSupportFragmentManager().findFragmentById(R.id.main_menu_fragment);
+        mMainMenuFragment.setListener(this);
 
-        drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, getToolbar(), R.string.drawer_open,
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, getToolbar(), R.string.drawer_open,
                 R.string.drawer_close);
-        mDrawerLayout.addDrawerListener(drawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        if (savedInstanceState == null) {
+            showHomeFragment();
+        }
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+        mDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @OnClick(R.id.main_button_start_training)
-    void onStartExerciseClick() {
-        getPresenter().onStartTrainingClick();
-    }
-
-
-    @Override
-    public void showError(String message) {
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+    protected void setFragment(BaseFragment fragment) {
+        setFragment(R.id.main_container, fragment);
     }
 
     @Override
-    public void startTrainingActivity() {
-        Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
-        startActivity(intent);
+    public void showHomeFragment() {
+        setFragment(HomeFragment.newInstance(this));
     }
 
     @NonNull
     @Override
     public MainContract.Presenter<MainContract.View, MainContract.Interactor> createPresenter() {
         return getActivityComponent().mainPresenter();
+    }
+
+    @Override
+    public void onMainMenuItemClick(MainMenuItem item) {
+        getPresenter().onMainMenuItemClick(item);
+    }
+
+    @Override
+    public void onStartTrainingActivity() {
+        Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
+        startActivity(intent);
     }
 }

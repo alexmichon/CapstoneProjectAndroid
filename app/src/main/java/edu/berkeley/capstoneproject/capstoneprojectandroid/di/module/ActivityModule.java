@@ -19,6 +19,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.Exer
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomeInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;
@@ -113,6 +116,22 @@ public class ActivityModule {
     @PerActivity
     MainMenuContract.Presenter<MainMenuContract.View, MainMenuContract.Interactor>
     provideMainMenuPresenter(MainMenuPresenter<MainMenuContract.View, MainMenuContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+
+    @Provides
+    @PerActivity
+    HomeContract.Interactor provideHomeInteractor(HomeInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    HomeContract.Presenter<HomeContract.View, HomeContract.Interactor>
+    provideHomePresenter(HomePresenter<HomeContract.View, HomeContract.Interactor> presenter) {
         return presenter;
     }
 

@@ -13,6 +13,7 @@ public interface HomeContract {
 
     interface View extends IBaseView {
 
+        void startTrainingActivity();
     }
 
     interface Interactor extends IBaseInteractor {
@@ -21,6 +22,8 @@ public interface HomeContract {
 
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
+        void onStartTrainingClick();
 
+        void onViewResultsClick();
     }
 }

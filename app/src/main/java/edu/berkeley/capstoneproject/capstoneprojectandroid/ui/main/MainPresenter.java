@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -25,28 +26,15 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
-    @Override
-    public void onStartTrainingClick() {
-        getView().startTrainingActivity();
-    }
 
     @Override
-    public void onViewResultsClick() {
-        getView().showError("Not implemented yet !");
-    }
-
-    @Override
-    public NavigationView.OnNavigationItemSelectedListener getNavigationListener() {
-        return new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        getView().showMessage("You're already here !");
-                        return true;
+    public void onMainMenuItemClick(MainMenuItem item) {
+        switch (item.getTitle()) {
+            case MainMenuItem.HOME_TITLE:
+                if (isViewAttached()) {
+                    getView().showHomeFragment();
                 }
-                return false;
-            }
-        };
+                break;
+        }
     }
 }

@@ -21,6 +21,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
 
     private final List<MainMenuItem> mMainMenuItems;
     private MainMenuAdapterListener mListener;
+    private MainMenuItem mSelectedItem;
 
     public MainMenuAdapter(List<MainMenuItem> mainMenuItems) {
         mMainMenuItems = mainMenuItems;
@@ -48,6 +49,10 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
         return mMainMenuItems.size();
     }
 
+    public void setSelectedItem(MainMenuItem item) {
+        mSelectedItem = item;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.main_menu_item_title)
         TextView mTitleView;
@@ -64,6 +69,10 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.ViewHo
 
         public void bind(final MainMenuItem mainMenuItem) {
             mMainMenuItem = mainMenuItem;
+
+            if (mainMenuItem == mSelectedItem) {
+                itemView.setBackgroundResource(R.color.colorLight);
+            }
 
             mTitleView.setText(mainMenuItem.getTitle());
             mIconView.setImageResource(mainMenuItem.getIcon());

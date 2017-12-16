@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,7 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
     RecyclerView mListView;
 
     private MainMenuAdapter mAdapter;
-
+    private MainMenuItemListener mListener;
 
     @Override
     public String getTitle() {
@@ -45,6 +46,12 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
         return new MainMenuFragment();
     }
 
+    public static MainMenuFragment newInstance(MainMenuItemListener listener) {
+        MainMenuFragment fragment = new MainMenuFragment();
+        fragment.setListener(listener);
+        return fragment;
+    }
+
 
     @Nullable
     @Override
@@ -54,7 +61,7 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
         setUnbinder(ButterKnife.bind(this, view));
 
         mAdapter = new MainMenuAdapter(Arrays.asList(
-           new MainMenuItem("Home", R.drawable.ic_home)
+           new MainMenuItem(MainMenuItem.HOME_TITLE, MainMenuItem.HOME_ICON)
         ), this);
 
         mListView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -75,6 +82,7 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
         mNameView.setText(user.getFirstName() + " " + user.getLastName());
     }
 
+    @NonNull
     @Override
     public MainMenuContract.Presenter<MainMenuContract.View, MainMenuContract.Interactor> createPresenter() {
         return getActivityComponent().mainMenuPresenter();
@@ -82,6 +90,26 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
 
     @Override
     public void onMainMenuItemClick(MainMenuItem mainMenuItem) {
+        if (mListener != null) {
+            mListener.onMainMenuItemClick(mainMenuItem);
+        }
+    }
 
+
+
+    @Override
+    public void setMainMenuItem(MainMenuItem item) {
+        mAdapter.setSelectedItem(item);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+
+    public void setListener(MainMenuItemListener listener) {
+        mListener = listener;
+    }
+
+    public interface MainMenuItemListener {
+        void onMainMenuItemClick(MainMenuItem item);
     }
 }

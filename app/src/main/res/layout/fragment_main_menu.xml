@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:scaleType="centerCrop"
-        android:src="@android:drawable/dark_header"
         android:clickable="true"
+        android:background="@color/colorPrimary"
         />
 
     <TextView
@@ -24,7 +24,6 @@
         android:layout_alignBottom="@+id/main_menu_header_background"
         android:textSize="16sp"
         android:textColor="@android:color/white"
-        tools:text="ted@mosby.com"
         />
 
     <TextView

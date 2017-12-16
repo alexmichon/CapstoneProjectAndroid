@@ -15,6 +15,8 @@ public interface MainMenuContract {
     interface View extends IBaseView {
 
         void setUser(User user);
+
+        void setMainMenuItem(MainMenuItem item);
     }
 
     interface Interactor extends IBaseInteractor {
