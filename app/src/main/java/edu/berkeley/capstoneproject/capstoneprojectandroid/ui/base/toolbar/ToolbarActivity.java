@@ -18,7 +18,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 
 public abstract class ToolbarActivity<V extends IBaseView, P extends IBasePresenter<V, ?>> extends BaseActivity<V, P> {
 
-    protected Toolbar mToolbar;
+    private Toolbar mToolbar;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -28,6 +28,10 @@ public abstract class ToolbarActivity<V extends IBaseView, P extends IBasePresen
         LayoutInflater.from(this).inflate(layoutResID, container, true);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+    }
+
+    protected Toolbar getToolbar() {
+        return mToolbar;
     }
 
     public void showToolbar() {

@@ -31,11 +31,15 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
                 .doLogin(email, password).doOnSuccess(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
+                        setCurrentUser(user);
                         updateApiHeader(user);
                     }
                 });
     }
 
+    private void setCurrentUser(User user) {
+        getDataManager().getSessionHelper().setCurrentUser(user);
+    }
 
     private void updateApiHeader(User user) {
         Timber.d("Updating api header");

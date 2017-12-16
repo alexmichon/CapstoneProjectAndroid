@@ -13,6 +13,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.session.ISessionHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.session.SessionHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.DeviceService;
@@ -67,5 +69,11 @@ public class AppModule {
     @Singleton
     IBluetoothHelper provideBluetoothHelper(BluetoothHelper bluetoothHelper) {
         return bluetoothHelper;
+    }
+
+    @Provides
+    @Singleton
+    ISessionHelper provideSessionHelper(SessionHelper sessionHelper) {
+        return sessionHelper;
     }
 }

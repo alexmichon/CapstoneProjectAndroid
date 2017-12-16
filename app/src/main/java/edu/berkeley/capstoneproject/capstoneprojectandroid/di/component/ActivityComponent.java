@@ -13,6 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivit
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashActivity;
@@ -36,4 +37,5 @@ public interface ActivityComponent {
     SplashContract.Presenter<SplashContract.View,SplashContract.Interactor> splashPresenter();
     TrainingContract.Presenter<TrainingContract.View,TrainingContract.Interactor> trainingPresenter();
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
+    MainMenuContract.Presenter<MainMenuContract.View,MainMenuContract.Interactor> mainMenuPresenter();
 }

@@ -27,6 +27,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterInteractor;
@@ -97,6 +100,22 @@ public class ActivityModule {
     provideMainPresenter(MainPresenter<MainContract.View, MainContract.Interactor> presenter) {
         return presenter;
     }
+
+
+
+    @Provides
+    @PerActivity
+    MainMenuContract.Interactor provideMainMenuInteractor(MainMenuInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    MainMenuContract.Presenter<MainMenuContract.View, MainMenuContract.Interactor>
+    provideMainMenuPresenter(MainMenuPresenter<MainMenuContract.View, MainMenuContract.Interactor> presenter) {
+        return presenter;
+    }
+
 
 
 

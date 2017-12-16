@@ -8,6 +8,4 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 
 public interface IBaseInteractor {
 
-    public IDataManager getDataManager();
-
 }
