@@ -29,8 +29,4 @@ public class RegisterInteractor extends AuthenticationFragmentInteractor impleme
                     }
                 });
     }
-
-    private void updateApiHeader(User user) {
-        // TODO
-    }
 }

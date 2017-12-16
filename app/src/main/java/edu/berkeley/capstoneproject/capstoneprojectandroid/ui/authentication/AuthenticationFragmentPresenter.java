@@ -23,6 +23,9 @@ public abstract class AuthenticationFragmentPresenter<V extends AuthenticationFr
             if (getView().remember()) {
                 getInteractor().doRemember(user);
             }
+            else {
+                getInteractor().dontRemember();
+            }
 
             getView().onAuthenticationSuccess(user);
         }

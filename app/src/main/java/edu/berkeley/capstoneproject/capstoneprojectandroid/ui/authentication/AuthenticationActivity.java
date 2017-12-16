@@ -21,10 +21,14 @@ public class AuthenticationActivity extends ToolbarActivity<AuthenticationContra
 
     public static final String EXTRA_UID = "EXTRA_UID";
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+
+        String uid = getIntent().getStringExtra(EXTRA_UID);
+
         if (savedInstanceState == null) {
             setFragment(new LoginFragment());
         }

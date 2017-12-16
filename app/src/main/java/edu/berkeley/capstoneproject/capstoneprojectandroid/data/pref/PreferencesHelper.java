@@ -46,13 +46,24 @@ public class PreferencesHelper implements IPreferencesHelper {
     }
 
     @Override
-    public void setAuthentication(final Authentication authentication) {
+    public void setAuthentication(Authentication authentication) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(PREF_KEY_ACCESS_TOKEN, authentication.getAccessToken());
         editor.putString(PREF_KEY_CLIENT,       authentication.getClient());
         editor.putString(PREF_KEY_EXPIRY,       authentication.getExpiry());
         editor.putString(PREF_KEY_TOKEN_TYPE,   authentication.getTokenType());
         editor.putString(PREF_KEY_UID,          authentication.getUid());
+        editor.apply();
+    }
+
+    @Override
+    public void removeAuthentication() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(PREF_KEY_ACCESS_TOKEN);
+        editor.remove(PREF_KEY_CLIENT);
+        editor.remove(PREF_KEY_EXPIRY);
+        editor.remove(PREF_KEY_TOKEN_TYPE);
+        editor.remove(PREF_KEY_UID);
         editor.apply();
     }
 }

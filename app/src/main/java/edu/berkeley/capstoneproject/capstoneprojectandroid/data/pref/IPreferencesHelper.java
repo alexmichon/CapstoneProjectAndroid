@@ -10,4 +10,6 @@ public interface IPreferencesHelper {
 
     Authentication getAuthentication();
     void setAuthentication(Authentication authentication);
+
+    void removeAuthentication();
 }

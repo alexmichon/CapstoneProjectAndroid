@@ -20,6 +20,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.Aut
 
 public class LoginFragment extends AuthenticationFragment<LoginContract.View, LoginContract.Presenter<LoginContract.View, LoginContract.Interactor>> implements LoginContract.View {
 
+    public static final String EXTRA_UID = "EXTRA_UID";
+
+
+
     @BindView(R.id.login_email)
     EditText mEmailEdit;
 
@@ -30,12 +34,36 @@ public class LoginFragment extends AuthenticationFragment<LoginContract.View, Lo
     CheckBox mRememberCheckBox;
 
 
+
+    public static LoginFragment newInstance() {
+        LoginFragment loginFragment = new LoginFragment();
+        return loginFragment;
+    }
+
+    public static LoginFragment newInstance(String uid) {
+        LoginFragment loginFragment = new LoginFragment();
+
+        Bundle args = new Bundle();
+        args.putString(EXTRA_UID, uid);
+        loginFragment.setArguments(args);
+
+        return loginFragment;
+    }
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         setUnbinder(ButterKnife.bind(this, view));
+
+        Bundle args = getArguments();
+        String uid = args.getString(EXTRA_UID);
+        if (uid != null) {
+            mEmailEdit.setText(uid);
+        }
 
         return view;
     }
