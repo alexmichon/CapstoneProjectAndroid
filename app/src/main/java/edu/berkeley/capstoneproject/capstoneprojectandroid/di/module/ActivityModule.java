@@ -19,9 +19,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.Exer
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypePresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomeInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;

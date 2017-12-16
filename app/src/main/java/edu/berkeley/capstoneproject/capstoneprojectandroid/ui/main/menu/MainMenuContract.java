@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu;
 
+import java.util.List;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
@@ -26,5 +28,9 @@ public interface MainMenuContract {
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void onResume();
+
+        List<MainMenuItem> getMenuItems();
+
+        MainMenuItem getHomeItem();
     }
 }

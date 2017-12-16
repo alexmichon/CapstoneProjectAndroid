@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,10 +40,6 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
     private MainMenuAdapter mAdapter;
     private MainMenuItemListener mListener;
 
-    private MainMenuItem mMainMenuItemList[] = {
-            new MainMenuItem(MainMenuItem.HOME_TITLE, MainMenuItem.HOME_ICON)
-    };
-
     @Override
     public String getTitle() {
         return null;
@@ -67,7 +64,8 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
 
         setUnbinder(ButterKnife.bind(this, view));
 
-        mAdapter = new MainMenuAdapter(Arrays.asList(mMainMenuItemList), this);
+        List<MainMenuItem> mainMenuItemList = getPresenter().getMenuItems();
+        mAdapter = new MainMenuAdapter(mainMenuItemList, this);
 
         mListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mListView.setAdapter(mAdapter);

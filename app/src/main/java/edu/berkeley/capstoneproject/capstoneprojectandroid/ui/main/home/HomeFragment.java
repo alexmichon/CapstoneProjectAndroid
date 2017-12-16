@@ -1,24 +1,16 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.support.AndroidSupportInjection;
-import dagger.android.support.AndroidSupportInjectionModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 
 /**
  * Created by Alex on 10/11/2017.

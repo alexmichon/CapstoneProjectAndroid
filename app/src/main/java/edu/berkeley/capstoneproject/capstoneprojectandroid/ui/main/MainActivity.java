@@ -1,32 +1,19 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import javax.inject.Inject;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home.HomeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
-import timber.log.Timber;
 
 /**
  * Created by Alex on 08/11/2017.

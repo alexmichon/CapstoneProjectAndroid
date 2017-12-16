@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;

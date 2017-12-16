@@ -1,5 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
@@ -13,6 +16,8 @@ import io.reactivex.functions.Consumer;
  */
 
 public class MainMenuPresenter<V extends MainMenuContract.View, I extends MainMenuContract.Interactor> extends BasePresenter<V, I> implements MainMenuContract.Presenter<V, I> {
+
+    private MainMenuItem mHomeItem = new MainMenuItem(MainMenuItem.HOME_TITLE, MainMenuItem.HOME_ICON);
 
     @Inject
     public MainMenuPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -33,5 +38,19 @@ public class MainMenuPresenter<V extends MainMenuContract.View, I extends MainMe
                     }
                 })
         );
+    }
+
+    @Override
+    public List<MainMenuItem> getMenuItems() {
+        List<MainMenuItem> menuItems = new ArrayList<>();
+
+        menuItems.add(mHomeItem);
+
+        return menuItems;
+    }
+
+    @Override
+    public MainMenuItem getHomeItem() {
+        return mHomeItem;
     }
 }
