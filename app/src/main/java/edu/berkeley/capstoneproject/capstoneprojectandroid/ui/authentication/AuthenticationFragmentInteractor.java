@@ -29,4 +29,8 @@ public abstract class AuthenticationFragmentInteractor extends BaseInteractor im
         Timber.d("Updating api header");
         getDataManager().getApiHelper().getApiHeader().setAuthentication(user.getAuthentication());
     }
+
+    protected void setCurrentUser(User user) {
+        getDataManager().getSessionHelper().setCurrentUser(user);
+    }
 }

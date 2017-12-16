@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.home;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home;
 
 import javax.inject.Inject;
 

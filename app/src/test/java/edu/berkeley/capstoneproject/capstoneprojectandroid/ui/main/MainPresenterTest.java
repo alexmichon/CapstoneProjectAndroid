@@ -10,10 +10,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.TestScheduler;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -45,30 +47,15 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void startExerciseClickShouldNavigateToExerciseView() {
-        // when
-        mPresenter.onStartTrainingClick();
-
-        // then
-        verify(mView).startTrainingActivity();
-    }
-
-    @Test
-    public void viewResultClickShouldNavigateToResultView() {
-        // when
-        mPresenter.onViewResultsClick();
-
-        // then
-        // TODO
-    }
-
-    @Test
-    public void navigationListenerShouldOpenHomeOnClick() {
+    public void homeMainMenuClickShouldShowHomeFragment() {
         // given
-        NavigationView.OnNavigationItemSelectedListener navigationListener = mPresenter.getNavigationListener();
+        doNothing().when(mView).showHomeFragment();
 
         // when
-        // TODO
+        mPresenter.onMainMenuItemClick(new MainMenuItem(MainMenuItem.HOME_TITLE, MainMenuItem.HOME_ICON));
+
+        // then
+        verify(mView).showHomeFragment();
     }
 
     @After

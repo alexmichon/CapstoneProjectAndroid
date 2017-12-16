@@ -27,6 +27,7 @@ public class LoginInteractor extends AuthenticationFragmentInteractor implements
                 .doLogin(email, password).doOnSuccess(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
+                        setCurrentUser(user);
                         updateApiHeader(user);
                     }
                 });

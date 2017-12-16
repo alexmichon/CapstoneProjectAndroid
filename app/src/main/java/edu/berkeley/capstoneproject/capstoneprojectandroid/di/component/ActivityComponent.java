@@ -10,6 +10,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.Blu
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
 
@@ -30,4 +32,6 @@ public interface ActivityComponent {
     TrainingContract.Presenter<TrainingContract.View,TrainingContract.Interactor> trainingPresenter();
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
     AuthenticationContract.Presenter<AuthenticationContract.View,AuthenticationContract.Interactor> authenticationPresenter();
+    MainMenuContract.Presenter<MainMenuContract.View,MainMenuContract.Interactor> mainMenuPresenter();
+    HomeContract.Presenter<HomeContract.View,HomeContract.Interactor> homePresenter();
 }
