@@ -1,5 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,7 +16,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Met
  * Created by Alex on 09/11/2017.
  */
 
-public class Exercise {
+public class Exercise implements Parcelable {
 
     public enum State {
         UNSTARTED, STARTED, ENDED
@@ -78,5 +81,39 @@ public class Exercise {
 
     public int getId() {
         return mId;
+    }
+
+
+
+
+
+
+
+    protected Exercise(Parcel in) {
+        mId = in.readInt();
+        mType = in.readParcelable(ExerciseType.class.getClassLoader());
+    }
+
+    public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
+        @Override
+        public Exercise createFromParcel(Parcel in) {
+            return new Exercise(in);
+        }
+
+        @Override
+        public Exercise[] newArray(int size) {
+            return new Exercise[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeParcelable(mType, i);
     }
 }

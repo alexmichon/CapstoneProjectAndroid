@@ -13,7 +13,6 @@ public class Metric {
 
     private final Sensor mSensor;
     private final String mName;
-    private final List<Measurement> mMeasurements = new ArrayList<>();
 
     private final int mID;
 
@@ -29,10 +28,6 @@ public class Metric {
 
     public String getName() {
         return mName;
-    }
-
-    public List<Measurement> getMeasurements() {
-        return mMeasurements;
     }
 
     public int getId() {
