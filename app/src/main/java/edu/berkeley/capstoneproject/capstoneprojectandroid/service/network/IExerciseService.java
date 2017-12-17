@@ -6,6 +6,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -24,4 +25,6 @@ public interface IExerciseService {
     Single<ExerciseGoal> doGetExerciseGoal(ExerciseType exerciseType);
 
     Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
+
+    Observable<ExerciseType> doGetExerciseTypes();
 }

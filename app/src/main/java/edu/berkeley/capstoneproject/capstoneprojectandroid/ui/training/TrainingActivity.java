@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
@@ -13,9 +11,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
 /**
@@ -49,35 +49,55 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
 
-    @Override
-    public void showBluetoothListFragment() {
+    private void showBluetoothListFragment() {
         BluetoothListFragment fragment = new BluetoothListFragment();
         fragment.setListener(this);
 
         setFragment(fragment);
+        setTitle("Bluetooth device");
     }
 
-    @Override
-    public void showExerciseTypesFragment() {
-        ExerciseTypeFragment fragment = new ExerciseTypeFragment();
-        fragment.setListener(new ExerciseTypeFragment.ExerciseTypesFragmentListener() {
+    private void showExerciseTypesFragment() {
+        ExerciseTypesFragment fragment = new ExerciseTypesFragment();
+        fragment.setListener(new ExerciseTypesFragment.ExerciseTypesFragmentListener() {
             @Override
-            public void onExerciseTypeSelected(ExerciseType exerciseType) {
-                showExerciseFragment(exerciseType);
+            public void onExerciseTypeStart(ExerciseType exerciseType) {
+                getPresenter().onExerciseTypeStart(exerciseType);
+            }
+
+            @Override
+            public void onExerciseTypeMore(ExerciseType exerciseType) {
+                showExerciseTypeDialog(exerciseType);
             }
         });
 
         setFragment(fragment);
+        setTitle("Exercise types");
     }
 
-    @Override
-    public void showExerciseFragment(ExerciseType exerciseType) {
+    private void showExerciseTypeDialog(ExerciseType exerciseType) {
+        ExerciseTypeDialog fragment = new ExerciseTypeDialog();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ExerciseTypeFragment.EXERCISE_TYPE_KEY, exerciseType);
+        fragment.setArguments(bundle);
+        fragment.setListener(new ExerciseTypeDialog.ExerciseTypeDialogListener() {
+            @Override
+            public void onExerciseTypeStart(ExerciseType exerciseType) {
+                getPresenter().onExerciseTypeStart(exerciseType);
+            }
+        });
+
+        showDialog(fragment);
+    }
+
+    private void showExerciseFragment(ExerciseType exerciseType) {
         ExerciseFragment fragment = new ExerciseFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExerciseFragment.EXTRA_EXERCISE_TYPE, exerciseType);
         fragment.setArguments(bundle);
 
         setFragment(fragment);
+        setTitle(exerciseType.getName());
     }
 
     @Override
@@ -90,6 +110,10 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     @Override
     public void onBluetoothDeviceSelected(Rx2BleDevice device) {
         getPresenter().onDeviceSelected(device);
+    }
+
+    public void startExerciseType(ExerciseType exerciseType) {
+        showExerciseFragment(exerciseType);
     }
 
     @Override

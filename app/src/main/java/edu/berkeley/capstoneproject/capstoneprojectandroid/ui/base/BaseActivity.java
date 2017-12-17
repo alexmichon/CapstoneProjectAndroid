@@ -123,8 +123,11 @@ public abstract class BaseActivity<V extends IBaseView, P extends IBasePresenter
     public void setFragment(@IdRes int containerViewId, BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(containerViewId, fragment).commit();
+    }
 
-        setTitle(fragment.getTitle());
+    public void showDialog(BaseDialog dialog) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        dialog.show(fragmentManager, "Dialog");
     }
 
     public void setUnbinder(Unbinder unBinder) {

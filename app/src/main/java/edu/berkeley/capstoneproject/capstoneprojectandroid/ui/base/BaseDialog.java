@@ -1,29 +1,106 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegate;
+import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegateImpl;
+import com.hannesdorfmann.mosby3.mvp.delegate.MvpDelegateCallback;
 
 import butterknife.Unbinder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 
 /**
- * Created by Alex on 10/11/2017.
+ * Created by Alex on 09/12/2017.
  */
 
-public abstract class BaseFragment<V extends IBaseView, P extends IBasePresenter<V, ?>> extends MvpFragment<V, P> implements IBaseView {
+public abstract class BaseDialog<V extends IBaseView, P extends IBasePresenter<V, ?>> extends DialogFragment implements MvpDelegateCallback<V, P>, IBaseView {
 
     private BaseActivity mActivity;
     private Unbinder mUnbinder;
+    private P mPresenter;
+
+    private FragmentMvpDelegate<V, P> delegate =
+            new FragmentMvpDelegateImpl<>(this, this, true, true);
+
+    @Override
+    public P getPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    public void setPresenter(P presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public V getMvpView() {
+        return (V) this;
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof BaseActivity) {
             mActivity = (BaseActivity) context;
+            delegate.onAttach(mActivity);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        delegate.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        delegate.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        delegate.onStop();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        delegate.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        delegate.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        delegate.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        delegate.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        delegate.onViewCreated(view, savedInstanceState);
     }
 
     public BaseActivity getBaseActivity() {
@@ -131,6 +208,7 @@ public abstract class BaseFragment<V extends IBaseView, P extends IBasePresenter
     @Override
     public void onDetach() {
         mActivity = null;
+        delegate.onDetach();
         super.onDetach();
     }
 
@@ -144,5 +222,11 @@ public abstract class BaseFragment<V extends IBaseView, P extends IBasePresenter
             mUnbinder.unbind();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        delegate.onDestroyView();
     }
 }

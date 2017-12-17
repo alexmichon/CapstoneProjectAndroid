@@ -20,13 +20,8 @@ import io.reactivex.Single;
 public interface TrainingContract {
 
     interface View extends IBaseView {
-        void showBluetoothListFragment();
-
-        void showExerciseTypesFragment();
-
-        void showExerciseFragment(ExerciseType exerciseType);
-
         void onDeviceConnected();
+        void startExerciseType(ExerciseType exerciseType);
     }
 
     interface Interactor extends IBaseInteractor {
@@ -42,9 +37,7 @@ public interface TrainingContract {
         NavigationView.OnNavigationItemSelectedListener getNavigationListener();
 
         void onDeviceSelected(Rx2BleDevice device);
-
-        void onDeviceConnected();
-
         void setExerciseGoal(ExerciseGoal exerciseGoal);
+        void onExerciseTypeStart(ExerciseType exerciseType);
     }
 }

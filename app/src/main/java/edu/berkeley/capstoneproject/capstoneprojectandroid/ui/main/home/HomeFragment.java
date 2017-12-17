@@ -46,11 +46,6 @@ public class HomeFragment extends BaseFragment<HomeContract.View, HomeContract.P
         return view;
     }
 
-    @Override
-    public String getTitle() {
-        return TITLE;
-    }
-
     @NonNull
     @Override
     public HomeContract.Presenter<HomeContract.View, HomeContract.Interactor> createPresenter() {

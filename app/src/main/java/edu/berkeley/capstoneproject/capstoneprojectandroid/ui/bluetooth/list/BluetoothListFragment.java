@@ -24,8 +24,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 
 public class BluetoothListFragment extends BaseFragment<BluetoothListContract.View, BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor>> implements BluetoothListContract.View {
 
-    private static final String TITLE = "Bluetooth Devices";
-
     private static final int REQUEST_ENABLE_BT = 0;
 
     @BindView(R.id.bluetooth_list_scanned)
@@ -117,11 +115,6 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     @Override
     public void showError(String message) {
         Toast.makeText(getBaseActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public String getTitle() {
-        return TITLE;
     }
 
     @OnItemClick(R.id.bluetooth_list_scanned)
