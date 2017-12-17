@@ -16,7 +16,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IEx
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMeasurementService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import io.reactivex.Completable;
 import io.reactivex.Observable;

@@ -1,7 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
@@ -10,7 +9,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresente
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**

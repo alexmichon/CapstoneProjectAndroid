@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricMeasurementList;
 
 /**
  * Created by Alex on 09/11/2017.
@@ -30,7 +31,7 @@ public class Exercise implements Parcelable {
 
     private State mState = State.UNSTARTED;
 
-    private final Map<Metric, List<Measurement>> mMeasurements = new HashMap<>();
+    private final List<MetricMeasurementList> mMetricMeasurementLists = new ArrayList<>();
 
     public Exercise(int id, ExerciseType type) {
         mId = id;
@@ -55,16 +56,25 @@ public class Exercise implements Parcelable {
         return mState;
     }
 
-    public void addMeasurement(Measurement measurement) {
-        if (!mMeasurements.containsKey(measurement.getMetric())) {
-            mMeasurements.put(measurement.getMetric(), new ArrayList<Measurement>());
+    public MetricMeasurementList getMetricMeasurementList(Metric metric) {
+        for (MetricMeasurementList m: mMetricMeasurementLists) {
+            if (m.getMetric() == metric) {
+                return m;
+            }
         }
 
-        mMeasurements.get(measurement.getMetric()).add(measurement);
+        return null;
     }
 
-    public Map<Metric, List<Measurement>> getMeasurements() {
-        return mMeasurements;
+    public void addMeasurement(Measurement measurement) {
+        MetricMeasurementList metricMeasurementList = getMetricMeasurementList(measurement.getMetric());
+        if (metricMeasurementList != null) {
+            metricMeasurementList.addMeasurement(measurement);
+        }
+    }
+
+    public List<MetricMeasurementList> getMetricMeasurementLists() {
+        return mMetricMeasurementLists;
     }
 
     public int getId() {

@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import timber.log.Timber;
 
@@ -23,9 +24,8 @@ import timber.log.Timber;
 
 public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View, ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>> implements ExerciseGoalContract.View {
 
-    private static final String KEY_EXERCISE_GOAL = "KEY_EXERCISE_GOAL";
+    private static final String KEY_EXERCISE_TYPE = "KEY_EXERCISE_TYPE";
 
-    private ExerciseGoal mExerciseGoal;
     private ExerciseGoalAdapter mAdapter;
 
     private ExerciseGoalFragmentListener mListener;
@@ -33,11 +33,13 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
     @BindView(R.id.exercise_goal_recycler)
     RecyclerView mRecyclerView;
 
-    public static ExerciseGoalFragment newInstance(ExerciseGoal exerciseGoal, ExerciseGoalFragmentListener listener) {
+    private ExerciseType mExerciseType;
+
+    public static ExerciseGoalFragment newInstance(ExerciseType exerciseType, ExerciseGoalFragmentListener listener) {
         ExerciseGoalFragment fragment = new ExerciseGoalFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(KEY_EXERCISE_GOAL, exerciseGoal);
+        args.putParcelable(KEY_EXERCISE_TYPE, exerciseType);
         fragment.setArguments(args);
 
         fragment.setListener(listener);
@@ -49,17 +51,17 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
         mListener = listener;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        mExerciseGoal = args.getParcelable(KEY_EXERCISE_GOAL);
-        if (mExerciseGoal == null) {
-            Timber.e("Exercise goal can't be null");
+        mExerciseType = args.getParcelable(KEY_EXERCISE_TYPE);
+        if (mExerciseType == null) {
+            Timber.e("Exercise type can't be null");
         }
     }
-
 
     @Nullable
     @Override
@@ -67,17 +69,21 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
         View view = inflater.inflate(R.layout.fragment_exercise_goal, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
-
-        mAdapter = new ExerciseGoalAdapter(mExerciseGoal);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter);
+        getPresenter().loadExerciseGoal(mExerciseType);
 
         return view;
     }
 
+    @Override
+    public void onExerciseGoalLoaded(ExerciseGoal exerciseGoal) {
+        mAdapter = new ExerciseGoalAdapter(exerciseGoal);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     @OnClick(R.id.exercise_goal_ok)
     public void onClick(View v) {
-        getPresenter().onOkClick(mExerciseGoal);
+        getPresenter().onOkClick();
     }
 
     @Override

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -17,36 +18,47 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Met
 
 public class ExerciseGoal implements Parcelable {
 
-    private final Exercise mExercise;
-    private Map<Metric, Float> mMetricsGoals;
+    private final int mId;
+    private List<MetricGoal> mMetricGoals;
 
-    public ExerciseGoal(Exercise exercise) {
-        mExercise = exercise;
-        mMetricsGoals = new HashMap<>();
+    public ExerciseGoal(int id) {
+        mId = id;
+        mMetricGoals = new ArrayList<>();
+    }
 
-        Map<Metric, List<Measurement>> measurements = exercise.getMeasurements();
-        for (Metric m: measurements.keySet()) {
-            List<Measurement> list = measurements.get(m);
-            Measurement max = list.get(0);
-            for (Measurement measurement: list) {
-                if (measurement.getValue() > max.getValue()) {
-                    max = measurement;
-                }
+    public ExerciseGoal(int id, List<MetricGoal> metricGoals) {
+        mId = id;
+        mMetricGoals = metricGoals;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public List<MetricGoal> getMetricGoals() {
+        return mMetricGoals;
+    }
+
+    public MetricGoal getMetricGoal(int index) {
+        return mMetricGoals.get(index);
+    }
+
+    public MetricGoal getMetricGoal(Metric metric) {
+        for (MetricGoal m: mMetricGoals) {
+            if (m.getMetric() == metric) {
+                return m;
             }
-            mMetricsGoals.put(m, max.getValue());
         }
+
+        return null;
     }
 
-    public float getGoal(Metric m) {
-        return mMetricsGoals.get(m);
+    public void addMetricGoal(MetricGoal metricGoal) {
+        mMetricGoals.add(metricGoal);
     }
 
-    public Metric getMetric(int index) {
-        return new ArrayList<>(mMetricsGoals.keySet()).get(index);
-    }
-
-    public Map<Metric, Float> getGoals() {
-        return mMetricsGoals;
+    public void removeMetricGoal(MetricGoal metricGoal) {
+        mMetricGoals.remove(metricGoal);
     }
 
     @Override
@@ -56,13 +68,13 @@ public class ExerciseGoal implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelable(mExercise, PARCELABLE_WRITE_RETURN_VALUE);
-        parcel.writeMap(mMetricsGoals);
+        parcel.writeInt(mId);
+        parcel.writeList(mMetricGoals);
     }
 
     protected ExerciseGoal(Parcel in) {
-        mExercise = in.readParcelable(Exercise.class.getClassLoader());
-        in.readMap(mMetricsGoals, HashMap.class.getClassLoader());
+        mId = in.readInt();
+        in.readList(mMetricGoals, ArrayList.class.getClassLoader());
     }
 
     public static final Creator<ExerciseGoal> CREATOR = new Creator<ExerciseGoal>() {

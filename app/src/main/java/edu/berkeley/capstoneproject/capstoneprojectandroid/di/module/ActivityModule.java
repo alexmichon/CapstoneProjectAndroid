@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
@@ -19,6 +20,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseP
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_result.ExerciseResultContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_result.ExerciseResultInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_result.ExerciseResultPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
@@ -299,6 +303,24 @@ public class ActivityModule {
     @PerActivity
     ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>
     provideExerciseGoalPresenter(ExerciseGoalPresenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseResultContract.Interactor provideExerciseResultInteractor(ExerciseResultInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseResultContract.Presenter<ExerciseResultContract.View, ExerciseResultContract.Interactor>
+    provideExerciseResultPresenter(ExerciseResultPresenter<ExerciseResultContract.View, ExerciseResultContract.Interactor> presenter) {
         return presenter;
     }
 }

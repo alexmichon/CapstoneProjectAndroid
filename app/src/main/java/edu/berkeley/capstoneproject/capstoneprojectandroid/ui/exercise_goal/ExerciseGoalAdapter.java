@@ -11,7 +11,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -33,15 +34,14 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        Metric metric = mExerciseGoal.getMetric(i);
-        float goal = mExerciseGoal.getGoal(metric);
+        MetricGoal metricGoal = mExerciseGoal.getMetricGoal(i);
 
-        viewHolder.bind(metric, goal);
+        viewHolder.bind(metricGoal);
     }
 
     @Override
     public int getItemCount() {
-        return mExerciseGoal.getGoals().size();
+        return mExerciseGoal.getMetricGoals().size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,17 +52,18 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
         @BindView(R.id.metric_goal_value)
         EditText mValueView;
 
-        private Metric mMetric;
-        private float mGoal;
+        private MetricGoal mMetricGoal;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Metric metric, float goal) {
-            mMetric = metric;
-            mGoal = goal;
+        public void bind(MetricGoal metricGoal) {
+            mMetricGoal = metricGoal;
+
+            Metric metric = metricGoal.getMetric();
+            float goal = metricGoal.getGoal();
 
             mLabelView.setText(metric.getName());
             mValueView.setText(String.valueOf(goal));

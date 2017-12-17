@@ -1,36 +1,16 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model;
 
-import org.hamcrest.FeatureMatcher;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.beans.HasPropertyWithValue;
-import org.hamcrest.core.Every;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.util.collections.ArrayUtils;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.TestBytes;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement.*;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer.ID_ACC_X;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer.ID_ACC_Y;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer.ID_ACC_Z;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Encoder.ID_ANGLE;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope.ID_GYR_X;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope.ID_GYR_Y;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope.ID_GYR_Z;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

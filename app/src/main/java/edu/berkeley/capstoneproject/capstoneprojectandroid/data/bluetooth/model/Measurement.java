@@ -7,7 +7,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Encoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Gyroscope;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Sensor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
