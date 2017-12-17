@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -84,5 +85,18 @@ public class Authentication {
 
         long expiry = Long.valueOf(mExpiry);
         return new Date(expiry).after(new Date());
+    }
+
+
+
+    public Map<String, String> toMap() {
+        Map<String, String> map = new HashMap<>(5);
+        map.put("access-token", mAccessToken);
+        map.put("client", mClient);
+        map.put("expiry", mExpiry);
+        map.put("token-type", mTokenType);
+        map.put("uid", mUid);
+
+        return map;
     }
 }
