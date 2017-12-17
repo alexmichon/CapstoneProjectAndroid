@@ -60,6 +60,10 @@ public class Exercise {
         mMeasurements.get(measurement.getMetric()).add(measurement);
     }
 
+    public Map<Metric, List<Measurement>> getMeasurements() {
+        return mMeasurements;
+    }
+
     public int getId() {
         return mId;
     }
