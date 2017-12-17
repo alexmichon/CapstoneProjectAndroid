@@ -3,6 +3,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 import com.androidnetworking.error.ANError;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * Created by Alex on 09/11/2017.
  */

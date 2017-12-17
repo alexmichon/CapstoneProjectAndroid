@@ -22,8 +22,6 @@ import timber.log.Timber;
 
 public abstract class BasePresenter<V extends IBaseView, I extends IBaseInteractor> implements IBasePresenter<V, I> {
 
-    private static final String TAG = BasePresenter.class.getSimpleName();
-
     private final ISchedulerProvider mSchedulerProvider;
 
     private V mView;

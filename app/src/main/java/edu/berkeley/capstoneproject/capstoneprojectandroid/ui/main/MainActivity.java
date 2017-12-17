@@ -4,65 +4,63 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.Gravity;
 
-import javax.inject.Inject;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 
 /**
  * Created by Alex on 08/11/2017.
  */
 
-public class MainActivity extends DrawerActivity<MainContract.View, MainContract.Presenter<MainContract.View, MainContract.Interactor>> implements MainContract.View {
+public class MainActivity extends DrawerActivity<MainContract.View, MainContract.Presenter<MainContract.View, MainContract.Interactor>> implements MainContract.View, MainMenuFragment.MainMenuItemListener, HomeFragment.HomeFragmentListener {
 
-    @BindView(R.id.main_text_hello)
-    TextView mHelloView;
-
-    @BindView(R.id.main_button_start_training)
-    Button mStartTrainingButton;
-
-    @BindView(R.id.main_button_view_results)
-    Button mViewResultsButton;
+    private MainMenuFragment mMainMenuFragment;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUnbinder(ButterKnife.bind(this));
 
-        // TODO
-        setNavigationDrawerMenu(R.menu.main_navigation, getPresenter().getNavigationListener());
-        initNavigationDrawer();
+        mMainMenuFragment = MainMenuFragment.newInstance(this);
+        setDrawerFragment(mMainMenuFragment);
+
+        if (savedInstanceState == null) {
+            showHomeFragment();
+        }
     }
 
-
-    @OnClick(R.id.main_button_start_training)
-    void onStartExerciseClick() {
-        getPresenter().onStartTrainingClick();
-    }
-
-
-    @Override
-    public void showError(String message) {
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+    protected void setFragment(BaseFragment fragment) {
+        setFragment(R.id.main_container, fragment);
     }
 
     @Override
-    public void startTrainingActivity() {
-        Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
-        startActivity(intent);
+    public void showHomeFragment() {
+        setFragment(HomeFragment.newInstance(this));
+        mMainMenuFragment.setSelectedItem(MainMenuItem.HOME_TITLE);
+        getDrawerLayout().closeDrawer(Gravity.START);
     }
 
     @NonNull
     @Override
     public MainContract.Presenter<MainContract.View, MainContract.Interactor> createPresenter() {
         return getActivityComponent().mainPresenter();
+    }
+
+    @Override
+    public void onMainMenuItemClick(MainMenuItem item) {
+        getPresenter().onMainMenuItemClick(item);
+    }
+
+    @Override
+    public void onStartTrainingActivity() {
+        Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
+        startActivity(intent);
     }
 }

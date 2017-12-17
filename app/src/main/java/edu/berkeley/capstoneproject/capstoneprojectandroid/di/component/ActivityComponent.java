@@ -8,6 +8,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseC
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
@@ -30,4 +32,6 @@ public interface ActivityComponent {
     TrainingContract.Presenter<TrainingContract.View,TrainingContract.Interactor> trainingPresenter();
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
     ExerciseTypeContract.Presenter<ExerciseTypeContract.View,ExerciseTypeContract.Interactor> exerciseTypePresenter();
+    MainMenuContract.Presenter<MainMenuContract.View,MainMenuContract.Interactor> mainMenuPresenter();
+    HomeContract.Presenter<HomeContract.View,HomeContract.Interactor> homePresenter();
 }
