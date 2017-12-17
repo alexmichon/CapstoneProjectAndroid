@@ -11,6 +11,9 @@ public class MainMenuItem {
     public static final String HOME_TITLE = "Home";
     public static final int HOME_ICON = R.drawable.ic_home;
 
+    public static final String LOGOUT_TITLE = "Log Out";
+    public static final int LOGOUT_ICON = R.drawable.ic_logout;
+
     private String mTitle;
     private int mIcon;
 

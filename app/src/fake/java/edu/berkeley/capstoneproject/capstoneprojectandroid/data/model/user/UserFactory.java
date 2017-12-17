@@ -18,7 +18,7 @@ public class UserFactory {
             mAdmin = new UserBuilder()
                     .withEmail("admin@admin.com")
                     .withFirstName("admin")
-                    .withLastName("admin")
+                    .withLastName("")
                     .withAuthentication(authentication)
                     .build();
         }

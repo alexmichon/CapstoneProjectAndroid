@@ -46,6 +46,10 @@ public class User {
         return mAuthentication;
     }
 
+    public boolean isAuthenticated() {
+        return mAuthentication != null && mAuthentication.isValid();
+    }
+
     public void setAuthentication(Authentication authentication) {
         mAuthentication = authentication;
     }

@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -14,4 +15,6 @@ public interface IAuthService {
     Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName);
 
     Single<User> doRestoreAuthentication(Authentication authentication);
+
+    Completable doLogout(User user);
 }

@@ -34,7 +34,7 @@ public abstract class AuthenticationFragmentPresenter<V extends AuthenticationFr
     @Override
     public void onAuthenticationFailure(Throwable throwable) {
         if (isViewAttached()) {
-            onAuthenticationFailure(throwable);
+            getView().onAuthenticationFailure(throwable);
         }
     }
 

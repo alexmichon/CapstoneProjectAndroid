@@ -7,6 +7,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authe
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.UserFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiError;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -45,5 +46,10 @@ public class AuthService implements IAuthService {
                 .withEmail(authentication.getUid())
                 .build()
         );
+    }
+
+    @Override
+    public Completable doLogout(User user) {
+        return Completable.complete();
     }
 }

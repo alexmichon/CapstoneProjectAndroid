@@ -30,7 +30,7 @@ public class AuthenticationActivity extends ToolbarActivity<AuthenticationContra
         String uid = getIntent().getStringExtra(EXTRA_UID);
 
         if (savedInstanceState == null) {
-            setFragment(new LoginFragment());
+            setFragment(LoginFragment.newInstance());
         }
     }
 

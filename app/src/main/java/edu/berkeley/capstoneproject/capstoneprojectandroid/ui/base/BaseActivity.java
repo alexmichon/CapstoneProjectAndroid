@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -129,5 +130,10 @@ public abstract class BaseActivity<V extends IBaseView, P extends IBasePresenter
 
     public void setUnbinder(Unbinder unBinder) {
         mUnbinder = unBinder;
+    }
+
+    public void moveToActivity(Intent intent) {
+        startActivity(intent);
+        finish();
     }
 }

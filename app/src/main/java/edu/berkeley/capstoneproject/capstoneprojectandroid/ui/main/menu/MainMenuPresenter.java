@@ -18,6 +18,7 @@ import io.reactivex.functions.Consumer;
 public class MainMenuPresenter<V extends MainMenuContract.View, I extends MainMenuContract.Interactor> extends BasePresenter<V, I> implements MainMenuContract.Presenter<V, I> {
 
     private MainMenuItem mHomeItem = new MainMenuItem(MainMenuItem.HOME_TITLE, MainMenuItem.HOME_ICON);
+    private MainMenuItem mLogOutItem = new MainMenuItem(MainMenuItem.LOGOUT_TITLE, MainMenuItem.LOGOUT_ICON);
 
     @Inject
     public MainMenuPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -45,6 +46,7 @@ public class MainMenuPresenter<V extends MainMenuContract.View, I extends MainMe
         List<MainMenuItem> menuItems = new ArrayList<>();
 
         menuItems.add(mHomeItem);
+        menuItems.add(mLogOutItem);
 
         return menuItems;
     }
@@ -52,5 +54,10 @@ public class MainMenuPresenter<V extends MainMenuContract.View, I extends MainMe
     @Override
     public MainMenuItem getHomeItem() {
         return mHomeItem;
+    }
+
+    @Override
+    public MainMenuItem getLogOutItem() {
+        return mLogOutItem;
     }
 }

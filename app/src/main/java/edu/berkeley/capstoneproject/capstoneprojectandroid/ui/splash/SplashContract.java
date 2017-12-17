@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash;
 
+import android.net.NetworkInfo;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
@@ -26,9 +28,13 @@ public interface SplashContract {
 
     interface Interactor extends IBaseInteractor {
 
+        Single<NetworkInfo> doCheckNetworkState();
+
         Single<Authentication> doGetStoredAuthentication();
 
         Single<User> doRestoreAuthentication(Authentication authentication);
+
+        void setCurrentUser(User user);
     }
 
     @PerActivity

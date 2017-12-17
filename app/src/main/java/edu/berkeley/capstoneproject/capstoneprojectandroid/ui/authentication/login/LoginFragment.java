@@ -37,6 +37,7 @@ public class LoginFragment extends AuthenticationFragment<LoginContract.View, Lo
 
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
+        loginFragment.setArguments(new Bundle());
         return loginFragment;
     }
 
@@ -60,7 +61,7 @@ public class LoginFragment extends AuthenticationFragment<LoginContract.View, Lo
         setUnbinder(ButterKnife.bind(this, view));
 
         Bundle args = getArguments();
-        String uid = args.getString(EXTRA_UID);
+        String uid = args.getString(EXTRA_UID, null);
         if (uid != null) {
             mEmailEdit.setText(uid);
         }

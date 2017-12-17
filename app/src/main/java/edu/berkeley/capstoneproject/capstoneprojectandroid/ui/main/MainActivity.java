@@ -8,6 +8,7 @@ import android.view.Gravity;
 
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeFragment;
@@ -45,6 +46,12 @@ public class MainActivity extends DrawerActivity<MainContract.View, MainContract
         setFragment(HomeFragment.newInstance(this));
         mMainMenuFragment.setSelectedItem(MainMenuItem.HOME_TITLE);
         getDrawerLayout().closeDrawer(Gravity.START);
+    }
+
+    @Override
+    public void moveToAuthenticationActivity() {
+        Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
+        moveToActivity(intent);
     }
 
     @NonNull

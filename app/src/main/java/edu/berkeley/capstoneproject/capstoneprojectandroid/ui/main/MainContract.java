@@ -7,6 +7,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteract
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
+import io.reactivex.Completable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -16,10 +18,13 @@ public interface MainContract {
 
     interface View extends IBaseView {
         void showHomeFragment();
+
+        void moveToAuthenticationActivity();
     }
 
     interface Interactor extends IBaseInteractor {
 
+        Completable doLogout();
     }
 
     @PerActivity
