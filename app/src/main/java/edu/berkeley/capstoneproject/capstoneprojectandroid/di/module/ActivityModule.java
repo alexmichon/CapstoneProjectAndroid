@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
@@ -15,6 +16,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.Blu
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExercisePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
@@ -280,6 +284,21 @@ public class ActivityModule {
     @PerActivity
     TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>
     provideTrainingPresenter(TrainingPresenter<TrainingContract.View, TrainingContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseGoalContract.Interactor provideExerciseGoalInteractor(ExerciseGoalInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>
+    provideExerciseGoalPresenter(ExerciseGoalPresenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor> presenter) {
         return presenter;
     }
 }

@@ -11,13 +11,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
@@ -132,7 +129,7 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
         Rx2BleDevice device = mScannedAdapter.getItem(position);
         getPresenter().onDeviceSelected(device);
         if (mListener != null) {
-            mListener.onDeviceSelected(device);
+            mListener.onBluetoothDeviceSelected(device);
         }
     };
 
@@ -143,6 +140,6 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     public interface BluetoothListFragmentListener {
-        void onDeviceSelected(Rx2BleDevice device);
+        void onBluetoothDeviceSelected(Rx2BleDevice device);
     }
 }

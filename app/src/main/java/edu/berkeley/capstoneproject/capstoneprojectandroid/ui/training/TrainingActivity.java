@@ -8,11 +8,13 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
@@ -20,7 +22,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
  * Created by Alex on 17/11/2017.
  */
 
-public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>> implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener {
+public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>>
+        implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener, ExerciseGoalFragment.ExerciseGoalFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -85,7 +88,12 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     @Override
-    public void onDeviceSelected(Rx2BleDevice device) {
+    public void onBluetoothDeviceSelected(Rx2BleDevice device) {
         getPresenter().onDeviceSelected(device);
+    }
+
+    @Override
+    public void onExerciseGoalDone(ExerciseGoal exerciseGoal) {
+        getPresenter().setExerciseGoal(exerciseGoal);
     }
 }

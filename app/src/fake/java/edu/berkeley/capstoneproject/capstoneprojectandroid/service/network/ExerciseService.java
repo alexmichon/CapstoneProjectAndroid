@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import io.reactivex.Single;
 import timber.log.Timber;
@@ -43,5 +44,10 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Single<Measurement> getMaxMeasurement() {
         return Single.never();
+    }
+
+    @Override
+    public Single<ExerciseGoal> doSaveExerciseGoal(ExerciseGoal exerciseGoal) {
+        return Single.just(exerciseGoal);
     }
 }

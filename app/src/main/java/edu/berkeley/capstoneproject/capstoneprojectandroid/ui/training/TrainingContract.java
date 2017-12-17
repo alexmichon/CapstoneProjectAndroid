@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training;
 
 import android.support.design.widget.NavigationView;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
@@ -43,5 +44,7 @@ public interface TrainingContract {
         void onDeviceSelected(Rx2BleDevice device);
 
         void onDeviceConnected();
+
+        void setExerciseGoal(ExerciseGoal exerciseGoal);
     }
 }

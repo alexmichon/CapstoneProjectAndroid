@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
@@ -97,5 +98,10 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
                     }
                 })
         );
+    }
+
+    @Override
+    public void setExerciseGoal(ExerciseGoal exerciseGoal) {
+
     }
 }

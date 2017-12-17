@@ -5,6 +5,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityMod
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_goal.ExerciseGoalContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
@@ -32,4 +33,5 @@ public interface ActivityComponent {
     ExerciseContract.Presenter<ExerciseContract.View,ExerciseContract.Interactor> exercisePresenter();
     MainMenuContract.Presenter<MainMenuContract.View,MainMenuContract.Interactor> mainMenuPresenter();
     HomeContract.Presenter<HomeContract.View,HomeContract.Interactor> homePresenter();
+    ExerciseGoalContract.Presenter<ExerciseGoalContract.View,ExerciseGoalContract.Interactor> exerciseGoalPresenter();
 }
