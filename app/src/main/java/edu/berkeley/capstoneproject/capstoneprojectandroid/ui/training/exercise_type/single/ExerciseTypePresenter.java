@@ -4,8 +4,6 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -33,9 +31,11 @@ public class ExerciseTypePresenter<V extends ExerciseTypeContract.View, I extend
     }
 
     @Override
-    public void onStartClick() {
+    public void onExerciseTypeSelect() {
+        getInteractor().doSelectExerciseType(mExerciseType);
+
         if (isViewAttached()) {
-            getView().onStartExerciseType(mExerciseType);
+            getView().onExerciseTypeSelect(mExerciseType);
         }
     }
 }

@@ -1,6 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.session;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 
 /**
  * Created by Alex on 15/12/2017.
@@ -8,6 +10,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 
 public interface ISessionHelper {
 
-    User getCurrentUser();
-    void setCurrentUser(User user);
+    IUserService getUserService();
+    IExerciseService getExerciseService();
 }

@@ -6,7 +6,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.functions.Action;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -14,16 +16,23 @@ import io.reactivex.Observable;
 
 public class ExerciseTypesInteractor extends BaseInteractor implements ExerciseTypesContract.Interactor {
 
-    private final IExerciseTypeRepository mExerciseTypeRepository;
-
     @Inject
-    public ExerciseTypesInteractor(IDataManager dataManager, IExerciseTypeRepository exerciseTypeRepository) {
+    public ExerciseTypesInteractor(IDataManager dataManager) {
         super(dataManager);
-        mExerciseTypeRepository = exerciseTypeRepository;
     }
 
     @Override
     public Observable<ExerciseType> doLoadExerciseTypes() {
         return getDataManager().getApiHelper().getExerciseService().doGetExerciseTypes();
+    }
+
+    @Override
+    public Completable doSelectExerciseType(final ExerciseType exerciseType) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                getDataManager().getSessionHelper().getExerciseService().setCurrentExerciseType(exerciseType);
+            }
+        });
     }
 }

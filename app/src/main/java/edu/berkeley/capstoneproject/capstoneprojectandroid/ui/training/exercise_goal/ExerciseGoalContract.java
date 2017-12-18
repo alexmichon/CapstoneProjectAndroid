@@ -23,11 +23,11 @@ public interface ExerciseGoalContract {
     interface Interactor extends IBaseInteractor {
         Completable doSaveExerciseGoal(ExerciseGoal exerciseGoal);
 
-        Single<ExerciseGoal> doGetExerciseGoal(ExerciseType exerciseType);
+        Single<ExerciseGoal> doGetExerciseGoal();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void loadExerciseGoal(ExerciseType exerciseType);
+        void loadExerciseGoal();
 
         void onOkClick();
     }

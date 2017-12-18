@@ -7,7 +7,26 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
 public class MetricGoal {
 
     public enum Type {
-        MIN, MAX, MEAN
+        MIN("Min"), MAX("Max"), MEAN("Mean");
+
+        private final String mName;
+
+        Type(String name) {
+            mName = name;
+        }
+
+        String getName() {
+            return mName;
+        }
+
+        static Type find(String name) {
+            for (Type t: values()) {
+                if (t.getName().equals(name)) {
+                    return t;
+                }
+            }
+            return null;
+        }
     }
 
     private final Metric mMetric;

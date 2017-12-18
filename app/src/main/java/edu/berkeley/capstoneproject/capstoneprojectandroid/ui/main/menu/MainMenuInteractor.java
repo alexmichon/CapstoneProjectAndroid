@@ -20,6 +20,6 @@ public class MainMenuInteractor extends BaseInteractor implements MainMenuContra
 
     @Override
     public Single<User> doGetCurrentUser() {
-        return Single.just(getDataManager().getSessionHelper().getCurrentUser());
+        return Single.just(getDataManager().getSessionHelper().getUserService().getCurrentUser());
     }
 }

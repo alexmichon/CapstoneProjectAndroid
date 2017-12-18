@@ -19,16 +19,19 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
 
 public class Exercise implements Parcelable {
 
-    public enum State {
-        UNSTARTED, STARTED, ENDED
-    }
+    private ExerciseGoal mExerciseGoal;
 
+
+
+    public enum State {
+        UNSTARTED, STARTED, ENDED;
+    }
     private final int mId;
 
     private final ExerciseType mType;
+
     private Date mStartDate;
     private Date mEndDate;
-
     private State mState = State.UNSTARTED;
 
     private final List<MetricMeasurementList> mMetricMeasurementLists = new ArrayList<>();
@@ -81,6 +84,14 @@ public class Exercise implements Parcelable {
         return mId;
     }
 
+    public void setExerciseGoal(ExerciseGoal exerciseGoal) {
+        mExerciseGoal = exerciseGoal;
+    }
+
+    public ExerciseGoal getExerciseGoal() {
+        return mExerciseGoal;
+    }
+
 
 
 
@@ -110,5 +121,31 @@ public class Exercise implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mId);
         parcel.writeParcelable(mType, i);
+    }
+
+
+
+
+    public static class Builder {
+        private int mId;
+
+        private ExerciseType mExerciseType;
+        private ExerciseGoal mExerciseGoal;
+
+        public Builder withExerciseType(ExerciseType exerciseType) {
+            mExerciseType = exerciseType;
+            return this;
+        }
+
+        public Builder withExerciseGoal(ExerciseGoal exerciseGoal) {
+            mExerciseGoal = exerciseGoal;
+            return this;
+        }
+
+        public Exercise build() {
+            Exercise exercise = new Exercise(mId, mExerciseType);
+            exercise.setExerciseGoal(mExerciseGoal);
+            return exercise;
+        }
     }
 }

@@ -26,7 +26,8 @@ public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGo
     }
 
     @Override
-    public Single<ExerciseGoal> doGetExerciseGoal(ExerciseType exerciseType) {
+    public Single<ExerciseGoal> doGetExerciseGoal() {
+        ExerciseType exerciseType = getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseType();
         return getDataManager().getApiHelper().getExerciseService().doGetExerciseGoal(exerciseType);
     }
 }

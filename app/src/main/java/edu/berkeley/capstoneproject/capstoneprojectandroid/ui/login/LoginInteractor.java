@@ -38,7 +38,7 @@ public class LoginInteractor extends BaseInteractor implements LoginContract.Int
     }
 
     private void setCurrentUser(User user) {
-        getDataManager().getSessionHelper().setCurrentUser(user);
+        getDataManager().getSessionHelper().getUserService().setCurrentUser(user);
     }
 
     private void updateApiHeader(User user) {

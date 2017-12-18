@@ -27,6 +27,13 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
 
     @BindView(R.id.dialog_exercise_type_description)
     TextView mDescriptionView;
+    private ExerciseTypeFragmentListener mListener;
+
+    public static ExerciseTypeFragment newInstance(ExerciseTypeFragmentListener listener) {
+        ExerciseTypeFragment fragment = new ExerciseTypeFragment();
+        fragment.setListener(listener);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -54,7 +61,18 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
     }
 
     @Override
-    public void onStartExerciseType(ExerciseType exerciseType) {
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
+        if (mListener != null) {
+            mListener.onExerciseTypeSelect(exerciseType);
+        }
+    }
 
+
+    public void setListener(ExerciseTypeFragmentListener listener) {
+        mListener = listener;
+    }
+
+    public interface ExerciseTypeFragmentListener {
+        void onExerciseTypeSelect(ExerciseType exerciseType);
     }
 }

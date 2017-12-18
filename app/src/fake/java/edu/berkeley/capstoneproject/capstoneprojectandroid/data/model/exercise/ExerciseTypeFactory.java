@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
 import android.net.Uri;
 
@@ -12,8 +12,21 @@ public class ExerciseTypeFactory {
 
     private static int ID = 0;
 
+    private static ExerciseType mTest;
+
     public static Builder builder() {
         return new Builder();
+    }
+
+    public static ExerciseType test() {
+        if (mTest == null) {
+            mTest = new Builder()
+                    .withName("Test Exercise Type")
+                    .withDescription("This is a test exercise")
+                    .withYoutubeVideo("HHjKzr6tLz0")
+                    .build();
+        }
+        return mTest;
     }
 
     public static class Builder {

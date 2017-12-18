@@ -7,13 +7,19 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.ExerciseTypeFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResultFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricComparator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoalFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -54,6 +60,13 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Single<ExerciseGoal> doGetExerciseGoal(ExerciseType exerciseType) {
         return Single.just(ExerciseGoalFactory.builder()
+                .addMetricGoal(MetricGoalFactory.builder()
+                        .withMetric(SensorManager.find(SensorManager.ID_ACCELEROMETER).getMetric(Accelerometer.ID_ACC_X))
+                        .withGoal(1.0f)
+                        .withType(MetricGoal.Type.MAX)
+                        .withComparator(new MetricComparator(MetricComparator.Type.GT))
+                        .build()
+                )
                 .build()
         );
     }
@@ -68,28 +81,7 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Observable<ExerciseType> doGetExerciseTypes() {
         return Observable.just(
-                ExerciseTypeFactory.builder()
-                        .withName("Test Exercise Type 1")
-                        .withDescription("This is a test exercise")
-                        .build(),
-                ExerciseTypeFactory.builder()
-                        .withName("Test Exercise Type 2")
-                        .withDescription("This is a" + new String(new char[500]).replace("\0", " very ") + "long description")
-                        .build(),
-                ExerciseTypeFactory.builder()
-                        .withName("Vulcan salute")
-                        .withDescription("Live long and prosper !")
-                        .withVideo(Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.vulcan))
-                        .build(),
-                ExerciseTypeFactory.builder()
-                        .withName("Shoulder abduction")
-                        .withDescription("This is how you do it !")
-                        .withVideo(Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.shoulder))
-                        .build(),
-                ExerciseTypeFactory.builder()
-                        .withName("Youtube test")
-                        .withYoutubeVideo("HHjKzr6tLz0")
-                        .build()
+                ExerciseTypeFactory.test()
         );
     }
 }

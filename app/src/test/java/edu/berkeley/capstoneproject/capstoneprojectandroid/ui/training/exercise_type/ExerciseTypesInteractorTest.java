@@ -29,7 +29,7 @@ public class ExerciseTypesInteractorTest {
 
     @Before
     public void setup() {
-        mInteractor = new ExerciseTypesInteractor(mDataManager, mRepository);
+        mInteractor = new ExerciseTypesInteractor(mDataManager);
     }
 
     @Test

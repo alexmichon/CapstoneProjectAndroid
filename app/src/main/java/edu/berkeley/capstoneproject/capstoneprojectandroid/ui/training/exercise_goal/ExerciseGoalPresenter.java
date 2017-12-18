@@ -25,12 +25,12 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
     }
 
     @Override
-    public void loadExerciseGoal(ExerciseType exerciseType) {
+    public void loadExerciseGoal() {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        getCompositeDisposable().add(getInteractor().doGetExerciseGoal(exerciseType)
+        getCompositeDisposable().add(getInteractor().doGetExerciseGoal()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<ExerciseGoal>() {

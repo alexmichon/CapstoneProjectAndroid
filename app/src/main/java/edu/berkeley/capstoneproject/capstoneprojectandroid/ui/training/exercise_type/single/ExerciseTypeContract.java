@@ -4,6 +4,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
+import io.reactivex.Completable;
 
 /**
  * Created by Alex on 09/12/2017.
@@ -12,16 +13,17 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 public interface ExerciseTypeContract {
 
     interface View extends IBaseView {
-        void onStartExerciseType(ExerciseType exerciseType);
+        void onExerciseTypeSelect(ExerciseType exerciseType);
     }
 
     interface Interactor extends IBaseInteractor {
 
+        Completable doSelectExerciseType(ExerciseType exerciseType);
     }
 
     interface Presenter<V extends IBaseView, I extends IBaseInteractor> extends IBasePresenter<V, I> {
         ExerciseType getExerciseType();
         void setExerciseType(ExerciseType exerciseType);
-        void onStartClick();
+        void onExerciseTypeSelect();
     }
 }

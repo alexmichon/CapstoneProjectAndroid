@@ -1,13 +1,10 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +122,7 @@ public class ExerciseTypeDialog extends BaseDialog<ExerciseTypeContract.View, Ex
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getPresenter().onStartClick();
+                getPresenter().onExerciseTypeSelect();
             }
         });
 
@@ -159,14 +156,14 @@ public class ExerciseTypeDialog extends BaseDialog<ExerciseTypeContract.View, Ex
     }
 
     @Override
-    public void onStartExerciseType(ExerciseType exerciseType) {
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
         dismiss();
         if (mListener != null) {
-            mListener.onExerciseTypeStart(exerciseType);
+            mListener.onExerciseTypeSelect(exerciseType);
         }
     }
 
     public interface ExerciseTypeDialogListener {
-        void onExerciseTypeStart(ExerciseType exerciseType);
+        void onExerciseTypeSelect(ExerciseType exerciseType);
     }
 }

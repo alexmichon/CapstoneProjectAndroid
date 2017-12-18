@@ -23,7 +23,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
  */
 
 public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>>
-        implements TrainingContract.View, BluetoothListFragment.BluetoothListFragmentListener, ExerciseGoalFragment.ExerciseGoalFragmentListener {
+        implements TrainingContract.View,
+        BluetoothListFragment.BluetoothListFragmentListener,
+        ExerciseTypesFragment.ExerciseTypesFragmentListener,
+        ExerciseTypeDialog.ExerciseTypeDialogListener,
+        ExerciseGoalFragment.ExerciseGoalFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -49,7 +53,9 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
 
-    private void showBluetoothListFragment() {
+    @Override
+    public void showBluetoothListFragment() {
+        // TODO User newInstance
         BluetoothListFragment fragment = new BluetoothListFragment();
         fragment.setListener(this);
 
@@ -57,40 +63,36 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
         setTitle("Bluetooth device");
     }
 
-    private void showExerciseTypesFragment() {
+    @Override
+    public void showExerciseTypesFragment() {
+        // TODO User newInstance
         ExerciseTypesFragment fragment = new ExerciseTypesFragment();
-        fragment.setListener(new ExerciseTypesFragment.ExerciseTypesFragmentListener() {
-            @Override
-            public void onExerciseTypeStart(ExerciseType exerciseType) {
-                getPresenter().onExerciseTypeStart(exerciseType);
-            }
-
-            @Override
-            public void onExerciseTypeMore(ExerciseType exerciseType) {
-                showExerciseTypeDialog(exerciseType);
-            }
-        });
+        fragment.setListener(this);
 
         setFragment(fragment);
         setTitle("Exercise types");
     }
 
-    private void showExerciseTypeDialog(ExerciseType exerciseType) {
+    @Override
+    public void showExerciseTypeDialog(ExerciseType exerciseType) {
+        // TODO User newInstance
         ExerciseTypeDialog fragment = new ExerciseTypeDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExerciseTypeFragment.EXERCISE_TYPE_KEY, exerciseType);
         fragment.setArguments(bundle);
-        fragment.setListener(new ExerciseTypeDialog.ExerciseTypeDialogListener() {
-            @Override
-            public void onExerciseTypeStart(ExerciseType exerciseType) {
-                getPresenter().onExerciseTypeStart(exerciseType);
-            }
-        });
-
+        fragment.setListener(this);
         showDialog(fragment);
     }
 
-    private void showExerciseFragment(ExerciseType exerciseType) {
+    @Override
+    public void showExerciseGoalFragment() {
+        ExerciseGoalFragment fragment = ExerciseGoalFragment.newInstance(this);
+        setFragment(fragment);
+    }
+
+    @Override
+    public void showExerciseFragment(ExerciseType exerciseType) {
+        // TODO User newInstance
         ExerciseFragment fragment = new ExerciseFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExerciseFragment.EXTRA_EXERCISE_TYPE, exerciseType);
@@ -109,15 +111,27 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
 
     @Override
     public void onBluetoothDeviceSelected(Rx2BleDevice device) {
-        getPresenter().onDeviceSelected(device);
-    }
-
-    public void startExerciseType(ExerciseType exerciseType) {
-        showExerciseFragment(exerciseType);
+        getPresenter().onDeviceSelect(device);
     }
 
     @Override
     public void onExerciseGoalDone(ExerciseGoal exerciseGoal) {
-        getPresenter().setExerciseGoal(exerciseGoal);
+        getPresenter().onExerciseGoalSelect(exerciseGoal);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getPresenter().onDestroy();
+    }
+
+    @Override
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
+        getPresenter().onExerciseTypeSelect(exerciseType);
+    }
+
+    @Override
+    public void onExerciseTypeMore(ExerciseType exerciseType) {
+        getPresenter().onExerciseTypeMore(exerciseType);
     }
 }

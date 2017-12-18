@@ -65,11 +65,6 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     }
 
     @Override
-    public void startExerciseTypeActivity(ExerciseType exerciseType) {
-        // TODO
-    }
-
-    @Override
     public void onExerciseTypeMore(ExerciseType exerciseType) {
         if (mListener != null) {
             mListener.onExerciseTypeMore(exerciseType);
@@ -77,9 +72,9 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     }
 
     @Override
-    public void onExerciseTypeStart(ExerciseType exerciseType) {
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
         if (mListener != null) {
-            mListener.onExerciseTypeStart(exerciseType);
+            mListener.onExerciseTypeSelect(exerciseType);
         }
     }
 
@@ -99,17 +94,17 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     }
 
     @Override
-    public void onMoreClick(ExerciseType exerciseType) {
-        getPresenter().onExerciseTypeMoreClick(exerciseType);
+    public void onExerciseTypeMoreClick(ExerciseType exerciseType) {
+        getPresenter().onExerciseTypeMore(exerciseType);
     }
 
     @Override
-    public void onStartClick(ExerciseType exerciseType) {
-        getPresenter().onExerciseTypeStartClick(exerciseType);
+    public void onExerciseTypeSelectClick(ExerciseType exerciseType) {
+        getPresenter().onExerciseTypeSelect(exerciseType);
     }
 
     public interface ExerciseTypesFragmentListener {
-        void onExerciseTypeStart(ExerciseType exerciseType);
+        void onExerciseTypeSelect(ExerciseType exerciseType);
         void onExerciseTypeMore(ExerciseType exerciseType);
     }
 }

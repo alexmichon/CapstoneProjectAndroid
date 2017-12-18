@@ -30,24 +30,9 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
-    @Override
-    public NavigationView.OnNavigationItemSelectedListener getNavigationListener() {
-        return new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_training_bluetooth_device:
-                        getView().showMessage("You're already here !");
-                        return true;
-                }
-                return false;
-            }
-        };
-    }
-
 
     @Override
-    public void onDeviceSelected(Rx2BleDevice device) {
+    public void onDeviceSelect(Rx2BleDevice device) {
         getView().showLoading();
 
         getCompositeDisposable().add(getInteractor()
@@ -97,13 +82,27 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     }
 
     @Override
-    public void setExerciseGoal(ExerciseGoal exerciseGoal) {
-
+    public void onExerciseGoalSelect(ExerciseGoal exerciseGoal) {
+        getInteractor().doSelectExerciseGoal(exerciseGoal);
     }
 
-    public void onExerciseTypeStart(ExerciseType exerciseType) {
+    @Override
+    public void onExerciseTypeMore(ExerciseType exerciseType) {
         if (isViewAttached()) {
-            getView().startExerciseType(exerciseType);
+            getView().showExerciseTypeDialog(exerciseType);
         }
+    }
+
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
+        getInteractor().doSelectExerciseType(exerciseType);
+
+        if (isViewAttached()) {
+            getView().showExerciseGoalFragment();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        getInteractor().doClearExerciseSession();
     }
 }

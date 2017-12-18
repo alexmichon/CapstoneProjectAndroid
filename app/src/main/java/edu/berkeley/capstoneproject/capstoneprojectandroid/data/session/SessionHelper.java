@@ -4,6 +4,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 
 /**
  * Created by Alex on 15/12/2017.
@@ -12,20 +14,22 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 @Singleton
 public class SessionHelper implements ISessionHelper {
 
-    private User mCurrentUser;
+    private IUserService mUserService;
+    private IExerciseService mExerciseService;
 
     @Inject
-    public SessionHelper() {
-
+    public SessionHelper(IUserService userService, IExerciseService exerciseService) {
+        mUserService = userService;
+        mExerciseService = exerciseService;
     }
 
     @Override
-    public User getCurrentUser() {
-        return mCurrentUser;
+    public IUserService getUserService() {
+        return mUserService;
     }
 
     @Override
-    public void setCurrentUser(User user) {
-        mCurrentUser = user;
+    public IExerciseService getExerciseService() {
+        return mExerciseService;
     }
 }

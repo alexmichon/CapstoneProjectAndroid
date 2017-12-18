@@ -7,7 +7,27 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
 public class MetricComparator {
 
     public enum Type {
-        EQ, NEQ, GT, GTE, LT, LTE
+        EQ("=="), NEQ("!="), GT(">"), GTE(">="), LT("<"), LTE("<=");
+        
+        private final String mSymbol;
+
+        Type(String symbol) {
+            mSymbol = symbol;
+        }
+
+        String getSymbol() {
+            return mSymbol;
+        }
+
+        Type find(String symbol) {
+            for (Type t: values()) {
+                if (t.getSymbol().equals(symbol)) {
+                    return t;
+                }
+            }
+
+            return null;
+        }
     }
 
     private final Type mType;

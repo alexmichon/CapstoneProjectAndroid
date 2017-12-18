@@ -24,8 +24,6 @@ import timber.log.Timber;
 
 public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View, ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>> implements ExerciseGoalContract.View {
 
-    private static final String KEY_EXERCISE_TYPE = "KEY_EXERCISE_TYPE";
-
     private ExerciseGoalAdapter mAdapter;
 
     private ExerciseGoalFragmentListener mListener;
@@ -33,14 +31,8 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
     @BindView(R.id.exercise_goal_recycler)
     RecyclerView mRecyclerView;
 
-    private ExerciseType mExerciseType;
-
-    public static ExerciseGoalFragment newInstance(ExerciseType exerciseType, ExerciseGoalFragmentListener listener) {
+    public static ExerciseGoalFragment newInstance(ExerciseGoalFragmentListener listener) {
         ExerciseGoalFragment fragment = new ExerciseGoalFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelable(KEY_EXERCISE_TYPE, exerciseType);
-        fragment.setArguments(args);
 
         fragment.setListener(listener);
 
@@ -51,25 +43,13 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
         mListener = listener;
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        mExerciseType = args.getParcelable(KEY_EXERCISE_TYPE);
-        if (mExerciseType == null) {
-            Timber.e("Exercise type can't be null");
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_goal, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
-        getPresenter().loadExerciseGoal(mExerciseType);
+        getPresenter().loadExerciseGoal();
 
         return view;
     }
@@ -79,6 +59,7 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
         mAdapter = new ExerciseGoalAdapter(exerciseGoal);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.exercise_goal_ok)

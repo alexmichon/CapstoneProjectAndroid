@@ -79,7 +79,7 @@ public class ExerciseTypesAdapter extends RecyclerView.Adapter<ExerciseTypesAdap
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onMoreClick(exerciseType);
+                        mListener.onExerciseTypeMoreClick(exerciseType);
                     }
                 }
             });
@@ -88,7 +88,7 @@ public class ExerciseTypesAdapter extends RecyclerView.Adapter<ExerciseTypesAdap
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onStartClick(exerciseType);
+                        mListener.onExerciseTypeSelectClick(exerciseType);
                     }
                 }
             });
@@ -96,7 +96,7 @@ public class ExerciseTypesAdapter extends RecyclerView.Adapter<ExerciseTypesAdap
     }
 
     public interface ExerciseTypesAdapterListener {
-        void onMoreClick(ExerciseType exerciseType);
-        void onStartClick(ExerciseType exerciseType);
+        void onExerciseTypeMoreClick(ExerciseType exerciseType);
+        void onExerciseTypeSelectClick(ExerciseType exerciseType);
     }
 }
