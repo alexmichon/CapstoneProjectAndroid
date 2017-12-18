@@ -20,12 +20,18 @@ public class ExerciseResultPresenter<V extends ExerciseResultContract.View, I ex
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
-    public void loadExerciseResult(Exercise exercise) {
+    @Override
+    public void onOkClick(ExerciseResult exerciseResult) {
+
+    }
+
+    @Override
+    public void loadExerciseResult() {
         if (isViewAttached()) {
-            getView().showLoading();
+            getView().onExerciseResultLoading();
         }
 
-        getCompositeDisposable().add(getInteractor().doGetExerciseResult(exercise)
+        getCompositeDisposable().add(getInteractor().doGetExerciseResult()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<ExerciseResult>() {
@@ -39,16 +45,10 @@ public class ExerciseResultPresenter<V extends ExerciseResultContract.View, I ex
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         if (isViewAttached()) {
-                            getView().hideLoading();
-                            getView().showError(throwable);
+                            getView().onExerciseResultError(throwable);
                         }
                     }
                 })
         );
-    }
-
-    @Override
-    public void onOkClick(ExerciseResult exerciseResult) {
-
     }
 }

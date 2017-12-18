@@ -20,7 +20,8 @@ public class ExerciseResultInteractor extends BaseInteractor implements Exercise
     }
 
     @Override
-    public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
+    public Single<ExerciseResult> doGetExerciseResult() {
+        Exercise exercise = getDataManager().getSessionHelper().getExerciseService().getCurrentExercise();
         return getDataManager().getApiHelper().getExerciseService().doGetExerciseResult(exercise);
     }
 }

@@ -16,14 +16,20 @@ public interface ExerciseResultContract {
     interface View extends IBaseView {
 
         void onExerciseResultLoaded(ExerciseResult exerciseResult);
+
+        void onExerciseResultError(Throwable throwable);
+
+        void onExerciseResultLoading();
     }
 
     interface Interactor extends IBaseInteractor {
 
-        Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
+        Single<ExerciseResult> doGetExerciseResult();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void onOkClick(ExerciseResult exerciseResult);
+
+        void loadExerciseResult();
     }
 }

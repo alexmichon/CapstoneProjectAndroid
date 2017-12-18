@@ -28,39 +28,22 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
     @BindView(R.id.exercise_result_recycler)
     RecyclerView mRecyclerView;
 
-    private static final String KEY_EXERCISE = "KEY_EXERCISE";
-
     private Exercise mExercise;
     private ExerciseResult mExerciseResult;
     private ExerciseResultAdapter mAdapter;
 
-    private ExerciseGoalFragment.ExerciseGoalFragmentListener mListener;
+    private ExerciseResultFragment.ExerciseResultFragmentListener mListener;
 
-    public static ExerciseGoalFragment newInstance(Exercise exercise, ExerciseGoalFragment.ExerciseGoalFragmentListener listener) {
-        ExerciseGoalFragment fragment = new ExerciseGoalFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelable(KEY_EXERCISE, exercise);
-        fragment.setArguments(args);
+    public static ExerciseResultFragment newInstance(ExerciseResultFragment.ExerciseResultFragmentListener listener) {
+        ExerciseResultFragment fragment = new ExerciseResultFragment();
 
         fragment.setListener(listener);
 
         return fragment;
     }
 
-    public void setListener(ExerciseGoalFragment.ExerciseGoalFragmentListener listener) {
+    public void setListener(ExerciseResultFragment.ExerciseResultFragmentListener listener) {
         mListener = listener;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        mExerciseResult = args.getParcelable(KEY_EXERCISE);
-        if (mExerciseResult == null) {
-            Timber.e("Exercise goal can't be null");
-        }
     }
 
 
@@ -70,14 +53,28 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
         View view = inflater.inflate(R.layout.fragment_exercise_goal, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
+        getPresenter().loadExerciseResult();
+
         return view;
     }
 
     @Override
     public void onExerciseResultLoaded(ExerciseResult exerciseResult) {
+        hideLoading();
         mAdapter = new ExerciseResultAdapter(exerciseResult);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onExerciseResultError(Throwable throwable) {
+        hideLoading();
+        showError(throwable);
+    }
+
+    @Override
+    public void onExerciseResultLoading() {
+        showLoading("Please wait while we process your results...");
     }
 
     @OnClick(R.id.exercise_goal_ok)
@@ -89,5 +86,8 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
     @Override
     public ExerciseResultContract.Presenter<ExerciseResultContract.View, ExerciseResultContract.Interactor> createPresenter() {
         return getActivityComponent().exerciseResultPresenter();
+    }
+
+    public interface ExerciseResultFragmentListener {
     }
 }

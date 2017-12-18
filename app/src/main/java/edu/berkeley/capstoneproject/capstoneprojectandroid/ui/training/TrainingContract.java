@@ -22,9 +22,11 @@ public interface TrainingContract {
     interface View extends IBaseView {
         void showBluetoothListFragment();
         void showExerciseTypesFragment();
-        void showExerciseTypeDialog(ExerciseType exerciseType);
         void showExerciseGoalFragment();
-        void showExerciseFragment(ExerciseType exerciseType);
+        void showExerciseSummaryFragment();
+        void showExerciseFragment();
+
+        void showExerciseTypeDialog(ExerciseType exerciseType);
 
         void onDeviceConnected();
     }
@@ -47,6 +49,7 @@ public interface TrainingContract {
         void onExerciseGoalSelect(ExerciseGoal exerciseGoal);
         void onExerciseTypeMore(ExerciseType exerciseType);
         void onExerciseTypeSelect(ExerciseType exerciseType);
+        void onExerciseSummaryStart();
 
         void onDestroy();
     }

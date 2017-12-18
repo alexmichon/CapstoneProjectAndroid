@@ -8,7 +8,7 @@ public class MetricComparator {
 
     public enum Type {
         EQ("=="), NEQ("!="), GT(">"), GTE(">="), LT("<"), LTE("<=");
-        
+
         private final String mSymbol;
 
         Type(String symbol) {

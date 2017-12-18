@@ -21,6 +21,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesInteractor;
@@ -335,6 +338,21 @@ public class ActivityModule {
     @PerActivity
     ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor>
     provideExerciseTypePresenter(ExerciseTypePresenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseSummaryContract.Interactor provideExerciseSummaryInteractor(ExerciseSummaryInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseSummaryContract.Presenter<ExerciseSummaryContract.View, ExerciseSummaryContract.Interactor>
+    provideExerciseSummaryPresenter(ExerciseSummaryPresenter<ExerciseSummaryContract.View, ExerciseSummaryContract.Interactor> presenter) {
         return presenter;
     }
 }

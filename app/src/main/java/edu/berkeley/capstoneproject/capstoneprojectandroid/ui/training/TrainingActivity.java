@@ -13,6 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.Toolb
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
@@ -27,7 +28,8 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
         BluetoothListFragment.BluetoothListFragmentListener,
         ExerciseTypesFragment.ExerciseTypesFragmentListener,
         ExerciseTypeDialog.ExerciseTypeDialogListener,
-        ExerciseGoalFragment.ExerciseGoalFragmentListener {
+        ExerciseGoalFragment.ExerciseGoalFragmentListener,
+        ExerciseSummaryFragment.ExerciseSummaryFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -91,15 +93,16 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     @Override
-    public void showExerciseFragment(ExerciseType exerciseType) {
+    public void showExerciseSummaryFragment() {
+        ExerciseSummaryFragment fragment = ExerciseSummaryFragment.newInstance(this);
+        setFragment(fragment);
+    }
+
+    @Override
+    public void showExerciseFragment() {
         // TODO User newInstance
         ExerciseFragment fragment = new ExerciseFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ExerciseFragment.EXTRA_EXERCISE_TYPE, exerciseType);
-        fragment.setArguments(bundle);
-
         setFragment(fragment);
-        setTitle(exerciseType.getName());
     }
 
     @Override
@@ -133,5 +136,10 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     @Override
     public void onExerciseTypeMore(ExerciseType exerciseType) {
         getPresenter().onExerciseTypeMore(exerciseType);
+    }
+
+    @Override
+    public void onExerciseSummaryStart() {
+        getPresenter().onExerciseSummaryStart();
     }
 }
