@@ -113,6 +113,13 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     }
 
     @Override
+    public void onExerciseDone() {
+        if (isViewAttached()) {
+            getView().showExerciseResultFragment();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         getInteractor().doClearExerciseSession();
     }

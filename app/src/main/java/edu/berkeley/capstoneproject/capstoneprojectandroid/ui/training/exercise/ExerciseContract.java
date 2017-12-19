@@ -18,8 +18,6 @@ import io.reactivex.Single;
 public interface ExerciseContract {
 
     interface View extends IBaseView {
-        ExerciseType getExerciseType();
-
         void onExerciseCreated(Exercise exercise);
         void onExerciseStarted(Exercise exercise);
         void onExerciseStopped(Exercise exercise);
@@ -34,7 +32,7 @@ public interface ExerciseContract {
 
     interface Interactor extends IBaseInteractor {
 
-        Single<Exercise> doCreateExercise(ExerciseType exerciseType);
+        Single<Exercise> doCreateExercise();
 
         Completable doStartExercise(Exercise exercise);
 

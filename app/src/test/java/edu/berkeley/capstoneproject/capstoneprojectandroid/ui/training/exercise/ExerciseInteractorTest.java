@@ -81,7 +81,7 @@ public class ExerciseInteractorTest {
         doReturn(Single.never()).when(mApiExerciseService).doCreateExercise(mExerciseType);
 
         // when
-        mInteractor.doCreateExercise(mExerciseType);
+        mInteractor.doCreateExercise();
 
         // then
         verify(mApiExerciseService).doCreateExercise(mExerciseType);
@@ -93,7 +93,7 @@ public class ExerciseInteractorTest {
         doReturn(Single.just(mExercise)).when(mApiExerciseService).doCreateExercise(mExerciseType);
 
         // when
-        Exercise exercise = mInteractor.doCreateExercise(mExerciseType).blockingGet();
+        Exercise exercise = mInteractor.doCreateExercise().blockingGet();
 
         // then
         assertEquals(exercise, mExercise);

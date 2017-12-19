@@ -54,8 +54,7 @@ public class ExercisePresenterTest {
         mExercise = Mockito.mock(Exercise.class);
         mExerciseType = Mockito.mock(ExerciseType.class);
 
-        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
-        doReturn(mExerciseType).when(mView).getExerciseType();
+        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise();
 
         mPresenter = Mockito.spy(new ExercisePresenter<>(mInteractor, provider, compositeDisposable));
         mPresenter.attachView(mView);
@@ -73,13 +72,13 @@ public class ExercisePresenterTest {
     public void onStartClickShouldCallInteractor() {
         // given
         Single single = Single.just(mExercise);
-        doReturn(single).when(mInteractor).doCreateExercise(mExerciseType);
+        doReturn(single).when(mInteractor).doCreateExercise();
 
         // when
         mPresenter.onStartClick();
 
         // then
-        verify(mInteractor).doCreateExercise(mExerciseType);
+        verify(mInteractor).doCreateExercise();
         single.test().assertSubscribed();
     }
 
@@ -87,7 +86,7 @@ public class ExercisePresenterTest {
     @Test
     public void onStartClickShouldUpdateView() {
         // given
-        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
+        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise();
 
         // when
         mPresenter.onStartClick();
@@ -99,7 +98,7 @@ public class ExercisePresenterTest {
     @Test
     public void onStartClickShouldStartExerciseOnComplete() {
         // given
-        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
+        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise();
         doNothing().when(mPresenter).startExercise(any(Exercise.class));
 
         // when
@@ -113,7 +112,7 @@ public class ExercisePresenterTest {
     @Test
     public void onStartClickShouldUpdateViewOnComplete() {
         // given
-        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
+        doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise();
         doNothing().when(mPresenter).startExercise(any(Exercise.class));
 
         // when
@@ -128,7 +127,7 @@ public class ExercisePresenterTest {
     public void onStartClickShouldUpdateViewOnError() {
         // given
         Error error = new Error();
-        doReturn(Single.error(error)).when(mInteractor).doCreateExercise(mExerciseType);
+        doReturn(Single.error(error)).when(mInteractor).doCreateExercise();
 
         // when
         mPresenter.onStartClick();

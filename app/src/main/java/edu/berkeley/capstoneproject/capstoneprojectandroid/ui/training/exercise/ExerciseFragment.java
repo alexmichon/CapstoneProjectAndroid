@@ -44,9 +44,6 @@ import timber.log.Timber;
 
 public class ExerciseFragment extends BaseFragment<ExerciseContract.View, ExerciseContract.Presenter<ExerciseContract.View, ExerciseContract.Interactor>> implements ExerciseContract.View {
 
-    public static final String EXTRA_EXERCISE_TYPE = "ExerciseType";
-
-
     @BindView(R.id.exercise_linechart_acc)
     LineChart mAccView;
     @BindView(R.id.exercise_linechart_gyr)
@@ -63,7 +60,16 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
             ColorTemplate.LIBERTY_COLORS[2],
     };
 
-    private ExerciseType mExerciseType;
+    private ExerciseFragmentListener mListener;
+
+
+    public static ExerciseFragment newInstance(ExerciseFragmentListener listener) {
+        ExerciseFragment fragment = new ExerciseFragment();
+        fragment.setListener(listener);
+        return fragment;
+    }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,13 +81,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_exercise, container, false);
-
-        Bundle data = getArguments();
-        mExerciseType = (ExerciseType) data.getParcelable(EXTRA_EXERCISE_TYPE);
-        if (mExerciseType == null) {
-            Timber.e("Exercise type can't be null");
-            return null;
-        }
 
         ButterKnife.bind(this, view);
 
@@ -122,11 +121,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public ExerciseType getExerciseType() {
-        return mExerciseType;
     }
 
     @Override
@@ -325,5 +319,15 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         pieChart.invalidate();
     }
 
+
+
+
+    public void setListener(ExerciseFragmentListener listener) {
+        mListener = listener;
+    }
+
+    public interface ExerciseFragmentListener {
+        void onExerciseDone();
+    }
 
 }

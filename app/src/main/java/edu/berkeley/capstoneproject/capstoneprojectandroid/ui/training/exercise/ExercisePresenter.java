@@ -24,17 +24,10 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     private boolean mStarted = false;
 
     private Exercise mExercise;
-    private ExerciseType mExerciseType;
 
     @Inject
     public ExercisePresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
-    }
-
-    @Override
-    public void attachView(@NonNull V view) {
-        super.attachView(view);
-        mExerciseType = view.getExerciseType();
     }
 
     @Override
@@ -49,7 +42,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
             getView().onCreatingExercise();
         }
 
-        getCompositeDisposable().add(getInteractor().doCreateExercise(mExerciseType)
+        getCompositeDisposable().add(getInteractor().doCreateExercise()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<Exercise>() {

@@ -25,6 +25,7 @@ public interface TrainingContract {
         void showExerciseGoalFragment();
         void showExerciseSummaryFragment();
         void showExerciseFragment();
+        void showExerciseResultFragment();
 
         void showExerciseTypeDialog(ExerciseType exerciseType);
 
@@ -50,6 +51,7 @@ public interface TrainingContract {
         void onExerciseTypeMore(ExerciseType exerciseType);
         void onExerciseTypeSelect(ExerciseType exerciseType);
         void onExerciseSummaryStart();
+        void onExerciseDone();
 
         void onDestroy();
     }

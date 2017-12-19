@@ -13,6 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.Toolb
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
@@ -29,7 +30,8 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
         ExerciseTypesFragment.ExerciseTypesFragmentListener,
         ExerciseTypeDialog.ExerciseTypeDialogListener,
         ExerciseGoalFragment.ExerciseGoalFragmentListener,
-        ExerciseSummaryFragment.ExerciseSummaryFragmentListener {
+        ExerciseSummaryFragment.ExerciseSummaryFragmentListener,
+        ExerciseFragment.ExerciseFragmentListener, ExerciseResultFragment.ExerciseResultFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -100,8 +102,13 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
 
     @Override
     public void showExerciseFragment() {
-        // TODO User newInstance
-        ExerciseFragment fragment = new ExerciseFragment();
+        ExerciseFragment fragment = ExerciseFragment.newInstance(this);
+        setFragment(fragment);
+    }
+
+    @Override
+    public void showExerciseResultFragment() {
+        ExerciseResultFragment fragment = ExerciseResultFragment.newInstance(this);
         setFragment(fragment);
     }
 
@@ -141,5 +148,10 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     @Override
     public void onExerciseSummaryStart() {
         getPresenter().onExerciseSummaryStart();
+    }
+
+    @Override
+    public void onExerciseDone() {
+        getPresenter().onExerciseDone();
     }
 }

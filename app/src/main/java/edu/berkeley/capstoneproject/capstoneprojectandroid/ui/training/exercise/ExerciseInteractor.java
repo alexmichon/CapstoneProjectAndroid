@@ -37,7 +37,8 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
-    public Single<Exercise> doCreateExercise(final ExerciseType exerciseType) {
+    public Single<Exercise> doCreateExercise() {
+        ExerciseType exerciseType = getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseType();
         return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseType);
     }
 
