@@ -2,12 +2,18 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
+import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -67,10 +73,61 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
 
     @Override
     public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        getInteractor().doSelectExerciseType(exerciseType);
+        selectExerciseType(exerciseType);
+    }
 
+    @Override
+    public void onExerciseTypeDialogBack() {
         if (isViewAttached()) {
-            getView().selectExerciseType(exerciseType);
+            getView().dismissExerciseTypeDialog();
         }
+    }
+
+    @Override
+    public void onExerciseTypeDialogSelect(ExerciseType exerciseType) {
+        selectExerciseType(exerciseType);
+    }
+
+    protected Completable getSetExerciseTypeCompletable(ExerciseType exerciseType) {
+        return getInteractor().doSetExerciseType(exerciseType);
+    }
+
+    protected Completable getLoadExerciseGoalCompletable(ExerciseType exerciseType) {
+        return getInteractor().doLoadExerciseGoal(exerciseType)
+                .flatMapCompletable(new Function<ExerciseGoal, CompletableSource>() {
+                    @Override
+                    public CompletableSource apply(@NonNull ExerciseGoal exerciseGoal) throws Exception {
+                        return getInteractor().doSetExerciseGoal(exerciseGoal);
+                    }
+                });
+    }
+
+
+    private void selectExerciseType(final ExerciseType exerciseType) {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+
+        getCompositeDisposable().add(getSetExerciseTypeCompletable(exerciseType)
+                .andThen(getLoadExerciseGoalCompletable(exerciseType))
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (isViewAttached()) {
+                            getView().selectExerciseType(exerciseType);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                            getView().showError(throwable);
+                        }
+                    }
+                })
+        );
     }
 }

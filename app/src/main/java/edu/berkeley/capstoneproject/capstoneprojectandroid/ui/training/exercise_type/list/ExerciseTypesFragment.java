@@ -34,6 +34,8 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     private ExerciseTypesAdapter mExercisesAdapter;
     private ExerciseTypesFragmentListener mListener;
 
+    private ExerciseTypeDialog mExerciseTypeDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,6 +71,10 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
 
     @Override
     public void selectExerciseType(ExerciseType exerciseType) {
+        if (mExerciseTypeDialog != null) {
+            mExerciseTypeDialog.dismiss();
+        }
+
         if (mListener != null) {
             mListener.onExerciseTypeSelect(exerciseType);
         }
@@ -91,8 +97,15 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
 
     @Override
     public void showExerciseTypeDialog(ExerciseType exerciseType) {
-        ExerciseTypeDialog dialog = ExerciseTypeDialog.newInstance(exerciseType, this);
-        showDialog(dialog, "Exercise Type");
+        mExerciseTypeDialog = ExerciseTypeDialog.newInstance(exerciseType, this);
+        showDialog(mExerciseTypeDialog, "Exercise Type");
+    }
+
+    @Override
+    public void dismissExerciseTypeDialog() {
+        if (mExerciseTypeDialog != null) {
+            mExerciseTypeDialog.dismiss();
+        }
     }
 
     @Override
@@ -106,8 +119,13 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     }
 
     @Override
+    public void onExerciseTypeDialogBack() {
+        getPresenter().onExerciseTypeDialogBack();
+    }
+
+    @Override
     public void onExerciseTypeDialogSelect(ExerciseType exerciseType) {
-        getPresenter().onExerciseTypeSelect(exerciseType);
+        getPresenter().onExerciseTypeDialogSelect(exerciseType);
     }
 
     public interface ExerciseTypesFragmentListener {

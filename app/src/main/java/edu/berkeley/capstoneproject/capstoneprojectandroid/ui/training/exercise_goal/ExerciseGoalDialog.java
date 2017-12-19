@@ -8,12 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseDialog;
 
 /**
@@ -22,12 +28,17 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseDialog;
 
 public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>> implements ExerciseGoalContract.View {
 
-    private ExerciseGoalAdapter mAdapter;
-
-    private ExerciseGoalFragmentListener mListener;
+    @BindView(R.id.exercise_goal_type)
+    Spinner mTypeView;
+    ArrayAdapter<String> mTypeAdapter;
 
     @BindView(R.id.exercise_goal_recycler)
     RecyclerView mRecyclerView;
+
+    private ExerciseGoalAdapter mRecyclerAdapter;
+    private ExerciseGoalFragmentListener mListener;
+
+    private List<MetricGoal> mMetricGoals = new ArrayList<>();
 
     public static ExerciseGoalDialog newInstance(ExerciseGoalFragmentListener listener) {
         ExerciseGoalDialog fragment = new ExerciseGoalDialog();
@@ -47,22 +58,26 @@ public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, Ex
         View view = inflater.inflate(R.layout.fragment_exercise_goal, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
-        getPresenter().loadExerciseGoal();
+        mTypeAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ExerciseGoal.Type.nameList());
+        mTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mTypeView.setAdapter(mTypeAdapter);
+
+        getPresenter().loadExerciseDefaultGoal();
 
         return view;
     }
 
     @Override
     public void onExerciseGoalLoaded(ExerciseGoal exerciseGoal) {
-        mAdapter = new ExerciseGoalAdapter(exerciseGoal);
+        mRecyclerAdapter = new ExerciseGoalAdapter(exerciseGoal.getMetricGoals());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mRecyclerAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.exercise_goal_ok)
     public void onClick(View v) {
-        getPresenter().onOkClick();
+        getPresenter().onSaveExerciseGoal();
     }
 
     @NonNull
@@ -72,13 +87,34 @@ public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, Ex
     }
 
     @Override
-    public void onDone(ExerciseGoal exerciseGoal) {
+    public void onExerciseGoalEditDone(ExerciseGoal exerciseGoal) {
         if (mListener != null) {
-            mListener.onExerciseGoalDone(exerciseGoal);
+            mListener.onExerciseGoalEditDone(exerciseGoal);
         }
     }
 
+
+
+
+    @Override
+    public void setType(ExerciseGoal.Type t) {
+        int position = mTypeAdapter.getPosition(t.getName());
+        mTypeView.setSelection(position);
+    }
+
+    @Override
+    public ExerciseGoal.Type getExerciseGoalType() {
+        int position = mTypeView.getSelectedItemPosition();
+        return ExerciseGoal.Type.find(mTypeAdapter.getItem(position));
+    }
+
+    @Override
+    public List<MetricGoal> getMetricGoals() {
+        return mRecyclerAdapter.getMetricGoals();
+    }
+
+
     public interface ExerciseGoalFragmentListener {
-        void onExerciseGoalDone(ExerciseGoal exerciseGoal);
+        void onExerciseGoalEditDone(ExerciseGoal exerciseGoal);
     }
 }

@@ -16,9 +16,11 @@ import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.ENCODER_OBSERVABLE;
 import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.IMU_OBSERVABLE;
@@ -38,8 +40,13 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public Single<Exercise> doCreateExercise() {
-        ExerciseType exerciseType = getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseType();
-        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseType);
+        return getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseType()
+                .flatMap(new Function<ExerciseType, SingleSource<? extends Exercise>>() {
+                    @Override
+                    public SingleSource<? extends Exercise> apply(@NonNull ExerciseType exerciseType) throws Exception {
+                        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseType);
+                    }
+                });
     }
 
     @Override

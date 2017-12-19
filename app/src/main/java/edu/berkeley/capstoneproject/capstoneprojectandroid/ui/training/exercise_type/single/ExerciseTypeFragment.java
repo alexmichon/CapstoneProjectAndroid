@@ -38,7 +38,7 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_exercise_type, container, false);
+        View view = inflater.inflate(R.layout.fragment_exercise_type, container, false);
 
         setUnbinder(ButterKnife.bind(this, view));
 

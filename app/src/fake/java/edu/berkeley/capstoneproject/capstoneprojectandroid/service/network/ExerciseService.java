@@ -1,11 +1,11 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import android.content.Context;
-import android.net.Uri;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
@@ -14,7 +14,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResultFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricComparator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoalFactory;

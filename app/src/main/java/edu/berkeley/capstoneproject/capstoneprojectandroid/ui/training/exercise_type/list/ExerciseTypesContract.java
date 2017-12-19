@@ -1,12 +1,15 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -23,12 +26,17 @@ public interface ExerciseTypesContract {
         void onExerciseTypesDoneLoading();
 
         void showExerciseTypeDialog(ExerciseType exerciseType);
+        void dismissExerciseTypeDialog();
     }
 
     interface Interactor extends IBaseInteractor {
         Observable<ExerciseType> doLoadExerciseTypes();
 
-        Completable doSelectExerciseType(ExerciseType exerciseType);
+        Completable doSetExerciseType(ExerciseType exerciseType);
+
+        Single<ExerciseGoal> doLoadExerciseGoal(ExerciseType exerciseType);
+
+        CompletableSource doSetExerciseGoal(ExerciseGoal exerciseGoal);
     }
 
     @PerActivity
@@ -37,5 +45,8 @@ public interface ExerciseTypesContract {
         void onExerciseTypeMore(ExerciseType exerciseType);
 
         void onExerciseTypeSelect(ExerciseType exerciseType);
+
+        void onExerciseTypeDialogBack();
+        void onExerciseTypeDialogSelect(ExerciseType exerciseType);
     }
 }

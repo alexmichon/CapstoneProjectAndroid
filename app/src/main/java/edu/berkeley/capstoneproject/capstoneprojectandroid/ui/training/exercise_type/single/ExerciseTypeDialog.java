@@ -87,7 +87,7 @@ public class ExerciseTypeDialog extends BaseDialog<ExerciseTypeContract.View, Ex
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.dialog_exercise_type, container, false);
+        final View view = inflater.inflate(R.layout.fragment_exercise_type, container, false);
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -172,13 +172,13 @@ public class ExerciseTypeDialog extends BaseDialog<ExerciseTypeContract.View, Ex
 
     @Override
     public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        dismiss();
         if (mListener != null) {
             mListener.onExerciseTypeDialogSelect(exerciseType);
         }
     }
 
     public interface ExerciseTypeDialogListener {
+        void onExerciseTypeDialogBack();
         void onExerciseTypeDialogSelect(ExerciseType exerciseType);
     }
 }

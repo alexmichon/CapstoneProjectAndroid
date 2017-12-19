@@ -5,6 +5,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteract
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.Optional;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 
@@ -20,12 +21,18 @@ public interface ExerciseSummaryContract {
 
         void moveBack();
 
-        void setExerciseGoalType(String type);
+        void showExerciseGoalEditDialog();
+
+        void setExerciseGoalType(ExerciseGoal.Type type);
+
+        void dismissExerciseGoalEditDialog();
     }
 
     interface Interactor extends IBaseInteractor {
 
-        Single<Optional<ExerciseGoal>> doGetCurrentExerciseGoal();
+        Single<ExerciseGoal> doGetCurrentExerciseGoal();
+
+        Completable doSetExerciseGoal(ExerciseGoal exerciseGoal);
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
@@ -35,5 +42,8 @@ public interface ExerciseSummaryContract {
         void onBackClick();
 
         void loadExerciseSummary();
+
+        void onExerciseGoalEdit();
+        void onExerciseGoalDone(ExerciseGoal exerciseGoal);
     }
 }

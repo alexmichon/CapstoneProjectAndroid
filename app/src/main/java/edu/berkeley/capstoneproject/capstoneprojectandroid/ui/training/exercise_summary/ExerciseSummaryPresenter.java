@@ -53,16 +53,11 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
                         }
                     }
                 })
-                .subscribe(new Consumer<Optional<ExerciseGoal>>() {
+                .subscribe(new Consumer<ExerciseGoal>() {
                     @Override
-                    public void accept(Optional<ExerciseGoal> optional) throws Exception {
+                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
                         if (isViewAttached()) {
-                            if (optional.isEmpty()) {
-                                getView().setExerciseGoalType("Default");
-                            }
-                            else {
-                                getView().setExerciseGoalType("Custom");
-                            }
+                            getView().setExerciseGoalType(ExerciseGoal.Type.DEFAULT);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -74,5 +69,20 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
                     }
                 })
         );
+    }
+
+    @Override
+    public void onExerciseGoalEdit() {
+        if (isViewAttached()) {
+            getView().showExerciseGoalEditDialog();
+        }
+    }
+
+    @Override
+    public void onExerciseGoalDone(ExerciseGoal exerciseGoal) {
+        getInteractor().doSetExerciseGoal(exerciseGoal);
+        if (isViewAttached()) {
+            getView().dismissExerciseGoalEditDialog();
+        }
     }
 }

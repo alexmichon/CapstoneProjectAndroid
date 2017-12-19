@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.Optional;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -20,7 +20,12 @@ public class ExerciseSummaryInteractor extends BaseInteractor implements Exercis
     }
 
     @Override
-    public Single<Optional<ExerciseGoal>> doGetCurrentExerciseGoal() {
-        return Single.just(new Optional<>(getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseGoal()));
+    public Single<ExerciseGoal> doGetCurrentExerciseGoal() {
+        return getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseGoal();
+    }
+
+    @Override
+    public Completable doSetExerciseGoal(ExerciseGoal exerciseGoal) {
+        return getDataManager().getSessionHelper().getExerciseService().setCurrentExerciseGoal(exerciseGoal);
     }
 }

@@ -6,6 +6,9 @@ import javax.inject.Singleton;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import io.reactivex.Completable;
+import io.reactivex.Single;
+import io.reactivex.functions.Action;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -24,39 +27,59 @@ public class ExerciseService implements IExerciseService {
     }
 
     @Override
-    public Exercise getCurrentExercise() {
-        return mExercise;
+    public Single<Exercise> getCurrentExercise() {
+        return Single.just(mExercise);
     }
 
     @Override
-    public void setCurrentExercise(Exercise exercise) {
-        mExercise = exercise;
+    public Completable setCurrentExercise(final Exercise exercise) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mExercise = exercise;
+            }
+        });
     }
 
     @Override
-    public ExerciseType getCurrentExerciseType() {
-        return mExerciseType;
+    public Single<ExerciseType> getCurrentExerciseType() {
+        return Single.just(mExerciseType);
     }
 
     @Override
-    public void setCurrentExerciseType(ExerciseType exerciseType) {
-        mExerciseType = exerciseType;
+    public Completable setCurrentExerciseType(final ExerciseType exerciseType) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mExerciseType = exerciseType;
+            }
+        });
     }
 
     @Override
-    public ExerciseGoal getCurrentExerciseGoal() {
-        return mExerciseGoal;
+    public Single<ExerciseGoal> getCurrentExerciseGoal() {
+        return Single.just(mExerciseGoal);
     }
 
     @Override
-    public void setCurrentExerciseGoal(ExerciseGoal exerciseGoal) {
-        mExerciseGoal = exerciseGoal;
+    public Completable setCurrentExerciseGoal(final ExerciseGoal exerciseGoal) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mExerciseGoal = exerciseGoal;
+            }
+        });
     }
 
     @Override
-    public void clear() {
-        mExercise = null;
-        mExerciseGoal = null;
-        mExerciseType = null;
+    public Completable clear() {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mExercise = null;
+                mExerciseGoal = null;
+                mExerciseType = null;
+            }
+        });
     }
 }

@@ -18,6 +18,39 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
 
 public class ExerciseGoal {
 
+    public enum Type {
+        NONE("None"), DEFAULT("Default"), CUSTOM("Custom");
+
+        private final String mName;
+
+        Type(String name) {
+            mName = name;
+        }
+
+        public static List<String> nameList() {
+            List<String> names = new ArrayList<>();
+            for (Type t: values()) {
+                names.add(t.getName());
+            }
+
+            return names;
+        }
+
+        public static Type find(String name) {
+            for (Type t: values()) {
+                if (t.getName().equals(name)) {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        public String getName() {
+            return mName;
+        }
+    }
+
     private final int mId;
     private List<MetricGoal> mMetricGoals;
 
@@ -37,6 +70,10 @@ public class ExerciseGoal {
 
     public List<MetricGoal> getMetricGoals() {
         return mMetricGoals;
+    }
+
+    public void setMetricGoals(List<MetricGoal> metricGoals) {
+        mMetricGoals = metricGoals;
     }
 
     public MetricGoal getMetricGoal(int index) {

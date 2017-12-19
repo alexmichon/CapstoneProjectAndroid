@@ -29,10 +29,9 @@ public class MetricGoal {
         }
     }
 
-    private final Metric mMetric;
-    private final Type mType;
-    private final MetricComparator mComparator;
-
+    private Metric mMetric;
+    private Type mType;
+    private MetricComparator mComparator;
     private float mGoal;
 
     public MetricGoal(Metric metric, float goal, Type type, MetricComparator comparator) {
@@ -46,12 +45,24 @@ public class MetricGoal {
         return mMetric;
     }
 
+    public void setMetric(Metric metric) {
+        mMetric = metric;
+    }
+
     public Type getType() {
         return mType;
     }
 
+    public void setType(Type type) {
+        mType = type;
+    }
+
     public MetricComparator getComparator() {
         return mComparator;
+    }
+
+    public void setComparator(MetricComparator comparator) {
+        mComparator = comparator;
     }
 
     public float getGoal() {
@@ -60,5 +71,15 @@ public class MetricGoal {
 
     public void setGoal(float goal) {
         mGoal = goal;
+    }
+
+    public MetricGoal clone() throws CloneNotSupportedException {
+        MetricGoal metricGoal = (MetricGoal) super.clone();
+        metricGoal.setMetric(mMetric);
+        metricGoal.setGoal(mGoal);
+        metricGoal.setType(mType);
+        metricGoal.setComparator(mComparator);
+
+        return metricGoal;
     }
 }
