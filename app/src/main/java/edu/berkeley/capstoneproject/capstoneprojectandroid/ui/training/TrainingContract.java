@@ -22,12 +22,9 @@ public interface TrainingContract {
     interface View extends IBaseView {
         void showBluetoothListFragment();
         void showExerciseTypesFragment();
-        void showExerciseGoalFragment();
         void showExerciseSummaryFragment();
         void showExerciseFragment();
         void showExerciseResultFragment();
-
-        void showExerciseTypeDialog(ExerciseType exerciseType);
 
         void onDeviceConnected();
     }
@@ -39,7 +36,6 @@ public interface TrainingContract {
         Completable doValidateDevice();
         void doDisconnect();
         void doSelectExerciseType(ExerciseType exerciseType);
-        void doSelectExerciseGoal(ExerciseGoal exerciseGoal);
 
         void doClearExerciseSession();
     }
@@ -47,10 +43,9 @@ public interface TrainingContract {
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V,I> {
         void onDeviceSelect(Rx2BleDevice device);
-        void onExerciseGoalSelect(ExerciseGoal exerciseGoal);
-        void onExerciseTypeMore(ExerciseType exerciseType);
         void onExerciseTypeSelect(ExerciseType exerciseType);
         void onExerciseSummaryStart();
+        void onExerciseSummaryBack();
         void onExerciseDone();
 
         void onDestroy();

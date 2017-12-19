@@ -16,7 +16,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
  * Created by Alex on 17/12/2017.
  */
 
-public class ExerciseGoal implements Parcelable {
+public class ExerciseGoal {
 
     private final int mId;
     private List<MetricGoal> mMetricGoals;
@@ -60,32 +60,4 @@ public class ExerciseGoal implements Parcelable {
     public void removeMetricGoal(MetricGoal metricGoal) {
         mMetricGoals.remove(metricGoal);
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mId);
-        parcel.writeList(mMetricGoals);
-    }
-
-    protected ExerciseGoal(Parcel in) {
-        mId = in.readInt();
-        in.readList(mMetricGoals, ArrayList.class.getClassLoader());
-    }
-
-    public static final Creator<ExerciseGoal> CREATOR = new Creator<ExerciseGoal>() {
-        @Override
-        public ExerciseGoal createFromParcel(Parcel in) {
-            return new ExerciseGoal(in);
-        }
-
-        @Override
-        public ExerciseGoal[] newArray(int size) {
-            return new ExerciseGoal[size];
-        }
-    };
 }

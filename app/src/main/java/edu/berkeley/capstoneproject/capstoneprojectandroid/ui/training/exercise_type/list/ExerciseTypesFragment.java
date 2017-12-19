@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,12 +18,14 @@ import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
 
 /**
  * Created by Alex on 17/11/2017.
  */
 
-public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.View, ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor>> implements ExerciseTypesContract.View, ExerciseTypesAdapter.ExerciseTypesAdapterListener {
+public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.View, ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor>> implements ExerciseTypesContract.View, ExerciseTypesAdapter.ExerciseTypesAdapterListener, ExerciseTypeDialog.ExerciseTypeDialogListener {
 
     @BindView(R.id.exercise_types_recycler)
     RecyclerView mExerciseTypesView;
@@ -65,14 +68,7 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     }
 
     @Override
-    public void onExerciseTypeMore(ExerciseType exerciseType) {
-        if (mListener != null) {
-            mListener.onExerciseTypeMore(exerciseType);
-        }
-    }
-
-    @Override
-    public void onExerciseTypeSelect(ExerciseType exerciseType) {
+    public void selectExerciseType(ExerciseType exerciseType) {
         if (mListener != null) {
             mListener.onExerciseTypeSelect(exerciseType);
         }
@@ -94,6 +90,12 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     }
 
     @Override
+    public void showExerciseTypeDialog(ExerciseType exerciseType) {
+        ExerciseTypeDialog dialog = ExerciseTypeDialog.newInstance(exerciseType, this);
+        showDialog(dialog, "Exercise Type");
+    }
+
+    @Override
     public void onExerciseTypeMoreClick(ExerciseType exerciseType) {
         getPresenter().onExerciseTypeMore(exerciseType);
     }
@@ -103,8 +105,12 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
         getPresenter().onExerciseTypeSelect(exerciseType);
     }
 
+    @Override
+    public void onExerciseTypeDialogSelect(ExerciseType exerciseType) {
+        getPresenter().onExerciseTypeSelect(exerciseType);
+    }
+
     public interface ExerciseTypesFragmentListener {
         void onExerciseTypeSelect(ExerciseType exerciseType);
-        void onExerciseTypeMore(ExerciseType exerciseType);
     }
 }

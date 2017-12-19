@@ -81,9 +81,8 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
         );
     }
 
-    @Override
-    public void onExerciseGoalSelect(ExerciseGoal exerciseGoal) {
-        getInteractor().doSelectExerciseGoal(exerciseGoal);
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
+        getInteractor().doSelectExerciseType(exerciseType);
 
         if (isViewAttached()) {
             getView().showExerciseSummaryFragment();
@@ -91,24 +90,16 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     }
 
     @Override
-    public void onExerciseTypeMore(ExerciseType exerciseType) {
+    public void onExerciseSummaryStart() {
         if (isViewAttached()) {
-            getView().showExerciseTypeDialog(exerciseType);
-        }
-    }
-
-    public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        getInteractor().doSelectExerciseType(exerciseType);
-
-        if (isViewAttached()) {
-            getView().showExerciseGoalFragment();
+            getView().showExerciseFragment();
         }
     }
 
     @Override
-    public void onExerciseSummaryStart() {
+    public void onExerciseSummaryBack() {
         if (isViewAttached()) {
-            getView().showExerciseFragment();
+            getView().showExerciseTypesFragment();
         }
     }
 

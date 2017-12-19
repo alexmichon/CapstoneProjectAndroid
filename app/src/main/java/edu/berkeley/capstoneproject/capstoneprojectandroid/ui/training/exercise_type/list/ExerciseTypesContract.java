@@ -17,11 +17,12 @@ public interface ExerciseTypesContract {
     interface View extends IBaseView {
         void addExerciseType(ExerciseType exerciseType);
 
-        void onExerciseTypeMore(ExerciseType exerciseType);
-        void onExerciseTypeSelect(ExerciseType exerciseType);
+        void selectExerciseType(ExerciseType exerciseType);
 
         void onExerciseTypesLoading();
         void onExerciseTypesDoneLoading();
+
+        void showExerciseTypeDialog(ExerciseType exerciseType);
     }
 
     interface Interactor extends IBaseInteractor {

@@ -62,7 +62,7 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
 
     @Override
     public void onExerciseTypeMore(ExerciseType exerciseType) {
-        getView().onExerciseTypeMore(exerciseType);
+        getView().showExerciseTypeDialog(exerciseType);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
         getInteractor().doSelectExerciseType(exerciseType);
 
         if (isViewAttached()) {
-            getView().onExerciseTypeSelect(exerciseType);
+            getView().selectExerciseType(exerciseType);
         }
     }
 }

@@ -56,6 +56,21 @@ public class ExerciseTypeDialog extends BaseDialog<ExerciseTypeContract.View, Ex
     @BindView(R.id.dialog_exercise_type_start_button)
     Button mStartButton;
 
+
+    public static ExerciseTypeDialog newInstance(ExerciseType exerciseType, ExerciseTypeDialogListener listener) {
+        ExerciseTypeDialog dialog = new ExerciseTypeDialog();
+
+        Bundle args = new Bundle();
+        args.putParcelable(EXERCISE_TYPE_KEY, exerciseType);
+        dialog.setArguments(args);
+
+        dialog.setListener(listener);
+
+        return dialog;
+    }
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,11 +174,11 @@ public class ExerciseTypeDialog extends BaseDialog<ExerciseTypeContract.View, Ex
     public void onExerciseTypeSelect(ExerciseType exerciseType) {
         dismiss();
         if (mListener != null) {
-            mListener.onExerciseTypeSelect(exerciseType);
+            mListener.onExerciseTypeDialogSelect(exerciseType);
         }
     }
 
     public interface ExerciseTypeDialogListener {
-        void onExerciseTypeSelect(ExerciseType exerciseType);
+        void onExerciseTypeDialogSelect(ExerciseType exerciseType);
     }
 }

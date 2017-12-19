@@ -19,8 +19,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
 public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContract.View, ExerciseSummaryContract.Presenter<ExerciseSummaryContract.View, ExerciseSummaryContract.Interactor>> implements ExerciseSummaryContract.View {
 
-    @BindView(R.id.exercise_summary_title)
-    TextView mTitleView;
+    @BindView(R.id.exercise_summary_goal)
+    TextView mExerciseGoalView;
 
     private ExerciseSummaryFragmentListener mListener;
 
@@ -46,14 +46,21 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
         return getActivityComponent().exerciseSummaryPresenter();
     }
 
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter().loadExerciseSummary();
+    }
 
     @OnClick(R.id.exercise_summary_start)
     public void onStartClick(View v) {
         getPresenter().onStartClick();
     }
 
+    @OnClick(R.id.exercise_summary_back)
+    public void onBackClick(View v) {
+        getPresenter().onBackClick();
+    }
 
 
     public void setListener(ExerciseSummaryFragmentListener listener) {
@@ -67,8 +74,21 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
         }
     }
 
+    @Override
+    public void moveBack() {
+        if (mListener != null) {
+            mListener.onExerciseSummaryBack();
+        }
+    }
+
+    @Override
+    public void setExerciseGoalType(String type) {
+        mExerciseGoalView.setText(type);
+    }
+
     public interface ExerciseSummaryFragmentListener {
 
         void onExerciseSummaryStart();
+        void onExerciseSummaryBack();
     }
 }

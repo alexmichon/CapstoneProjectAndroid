@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
@@ -126,6 +127,11 @@ public abstract class BaseFragment<V extends IBaseView, P extends IBasePresenter
         if (mActivity != null) {
             mActivity.showMessage(stringRes);
         }
+    }
+
+    public void showDialog(BaseDialog dialog, String tag) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        dialog.show(fragmentManager, tag);
     }
 
     @Override

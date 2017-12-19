@@ -58,11 +58,6 @@ public class TrainingInteractor extends BaseInteractor implements TrainingContra
     }
 
     @Override
-    public void doSelectExerciseGoal(ExerciseGoal exerciseGoal) {
-        getDataManager().getSessionHelper().getExerciseService().setCurrentExerciseGoal(exerciseGoal);
-    }
-
-    @Override
     public void doClearExerciseSession() {
         getDataManager().getSessionHelper().getExerciseService().clear();
     }

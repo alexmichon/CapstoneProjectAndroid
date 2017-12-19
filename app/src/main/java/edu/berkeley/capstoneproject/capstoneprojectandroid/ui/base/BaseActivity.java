@@ -125,9 +125,9 @@ public abstract class BaseActivity<V extends IBaseView, P extends IBasePresenter
         fragmentManager.beginTransaction().replace(containerViewId, fragment).commit();
     }
 
-    public void showDialog(BaseDialog dialog) {
+    public void showDialog(BaseDialog dialog, String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        dialog.show(fragmentManager, "Dialog");
+        dialog.show(fragmentManager, tag);
     }
 
     public void setUnbinder(Unbinder unBinder) {

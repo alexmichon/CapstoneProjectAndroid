@@ -14,15 +14,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
-import timber.log.Timber;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseDialog;
 
 /**
  * Created by Alex on 17/12/2017.
  */
 
-public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View, ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>> implements ExerciseGoalContract.View {
+public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>> implements ExerciseGoalContract.View {
 
     private ExerciseGoalAdapter mAdapter;
 
@@ -31,8 +29,8 @@ public class ExerciseGoalFragment extends BaseFragment<ExerciseGoalContract.View
     @BindView(R.id.exercise_goal_recycler)
     RecyclerView mRecyclerView;
 
-    public static ExerciseGoalFragment newInstance(ExerciseGoalFragmentListener listener) {
-        ExerciseGoalFragment fragment = new ExerciseGoalFragment();
+    public static ExerciseGoalDialog newInstance(ExerciseGoalFragmentListener listener) {
+        ExerciseGoalDialog fragment = new ExerciseGoalDialog();
 
         fragment.setListener(listener);
 
