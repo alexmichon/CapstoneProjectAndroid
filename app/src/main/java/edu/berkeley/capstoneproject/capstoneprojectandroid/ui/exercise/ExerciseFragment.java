@@ -9,10 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -21,16 +21,12 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +36,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import timber.log.Timber;
 
@@ -79,6 +74,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        getPresenter().onCreate();
     }
 
     @Nullable
@@ -121,8 +117,8 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_exercise, menu);
-        menu.findItem(R.id.exercise_menu_start).setVisible(!getPresenter().isStarted());
-        menu.findItem(R.id.exercise_menu_stop).setVisible(getPresenter().isStarted());
+        menu.findItem(R.id.exercise_menu_start).setVisible(!getPresenter().isRecording());
+        menu.findItem(R.id.exercise_menu_stop).setVisible(getPresenter().isRecording());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -150,10 +146,9 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     }
 
     @Override
-    public void onExerciseStarted(Exercise exercise) {
+    public void onExerciseReady(Exercise exercise) {
         getActivity().invalidateOptionsMenu();
         hideLoading();
-        showMessage("Let's go !");
     }
 
     @Override
@@ -165,6 +160,11 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     public void onExerciseError(Throwable throwable) {
         hideLoading();
         showError(throwable);
+    }
+
+    @Override
+    public void onExerciseFinished() {
+
     }
 
     @Override
@@ -190,12 +190,17 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onCreatingExercise() {
-        showLoading("Wait...");
+        showLoading("Wait...", false);
     }
 
     @Override
     public void onStartingExercise() {
 
+    }
+
+    @Override
+    public void onStartRecording() {
+        getActivity().invalidateOptionsMenu();
     }
 
     private void addMeasurement(LineChart chart, Measurement measurement) {
@@ -340,5 +345,23 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         pieChart.invalidate();
     }
 
+
+
+    @Override
+    public void showCountdown(int countdown) {
+        Toast.makeText(getContext(), String.valueOf(countdown), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showDuration(int duration) {
+        Toast.makeText(getContext(), String.valueOf(duration), Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onCountdownFinished() {
+        Toast.makeText(getContext(), "GO !", Toast.LENGTH_SHORT).show();
+        getPresenter().onStartRecording();
+    }
 
 }

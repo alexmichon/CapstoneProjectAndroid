@@ -25,6 +25,8 @@ public class Exercise {
     private Date mStartDate;
     private Date mEndDate;
 
+    private int mDuration;
+
     private State mState = State.UNSTARTED;
 
     private final Map<Metric, List<Measurement>> mMeasurements = new HashMap<>();
@@ -62,5 +64,13 @@ public class Exercise {
 
     public int getId() {
         return mId;
+    }
+
+    public int getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(int duration) {
+        mDuration = duration;
     }
 }

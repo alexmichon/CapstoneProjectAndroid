@@ -2,6 +2,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise;
 
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
@@ -9,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -21,7 +24,9 @@ import timber.log.Timber;
 public class ExercisePresenter<V extends ExerciseContract.View, I extends ExerciseContract.Interactor>
     extends BasePresenter<V, I> implements ExerciseContract.Presenter<V, I> {
 
-    private boolean mStarted = false;
+    private static final int COUNTDOWN = 3;
+
+    private boolean mRecording = false;
 
     private Exercise mExercise;
     private ExerciseType mExerciseType;
@@ -38,13 +43,13 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     }
 
     @Override
-    public boolean isStarted() {
-        return mStarted;
+    public boolean isRecording() {
+        return mRecording;
     }
 
 
     @Override
-    public void onStartClick() {
+    public void onCreate() {
         if (isViewAttached()) {
             getView().onCreatingExercise();
         }
@@ -87,10 +92,8 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                     public void run() throws Exception {
                         Timber.d("Exercise started");
 
-                        mStarted = true;
-
                         if (isViewAttached()) {
-                            getView().onExerciseStarted(exercise);
+                            getView().onExerciseReady(exercise);
                         }
 
                         startListening(exercise);
@@ -100,7 +103,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Timber.e(throwable, "Error while starting exercise");
-                        mStarted = false;
+                        mRecording = false;
 
                         if (isViewAttached()) {
                             getView().onExerciseError(throwable);
@@ -133,9 +136,37 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         );
     }
 
+    protected void startCountdown() {
+        if (isViewAttached()) {
+
+        }
+
+        getCompositeDisposable().add(Observable.interval(1, TimeUnit.SECONDS)
+                .take(COUNTDOWN)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (isViewAttached()) {
+                            getView().onCountdownFinished();
+                        }
+                    }
+                })
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (isViewAttached()) {
+                            getView().showCountdown(COUNTDOWN - aLong.intValue());
+                        }
+                    }
+                })
+        );
+    }
+
     @Override
     public void onStopClick() {
-        mStarted = false;
+        mRecording = false;
         getInteractor().doStopExercise();
         getCompositeDisposable().clear();
 
@@ -145,8 +176,44 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     }
 
     @Override
+    public void onStartRecording() {
+        mRecording = true;
+        if (isViewAttached()) {
+            getView().onStartRecording();
+        }
+
+        getCompositeDisposable().add(Observable.interval(1, TimeUnit.SECONDS)
+                .take(mExercise.getDuration())
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mRecording = false;
+                        if (isViewAttached()) {
+                            getView().onExerciseFinished();
+                        }
+                    }
+                })
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (isViewAttached()) {
+                            getView().showDuration(aLong.intValue());
+                        }
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void onStopRecording() {
+        mRecording = false;
+    }
+
+    @Override
     public void onPause() {
-        mStarted = false;
+        mRecording = false;
         getInteractor().doStopExercise();
 
         if (isViewAttached()) {
@@ -154,27 +221,34 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         }
     }
 
+    @Override
+    public void onStartClick() {
+        startCountdown();
+    }
+
     protected void onReceiveMeasurement(Exercise exercise, Measurement measurement) {
-        measurement.setExercise(exercise);
+        if (mRecording) {
+            measurement.setExercise(exercise);
 
-        if (isViewAttached()) {
-            getView().addMeasurement(measurement);
+            if (isViewAttached()) {
+                getView().addMeasurement(measurement);
+            }
+
+            getCompositeDisposable().add(getInteractor().doSaveMeasurement(exercise, measurement)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Action() {
+                        @Override
+                        public void run() throws Exception {
+
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            handleApiError(throwable);
+                        }
+                    })
+            );
         }
-
-        getCompositeDisposable().add(getInteractor().doSaveMeasurement(exercise, measurement)
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Action() {
-                    @Override
-                    public void run() throws Exception {
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        handleApiError(throwable);
-                    }
-                })
-        );
     }
 }

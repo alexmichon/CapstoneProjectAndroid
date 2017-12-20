@@ -76,7 +76,7 @@ public class ExercisePresenterTest {
         doReturn(single).when(mInteractor).doCreateExercise(mExerciseType);
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
 
         // then
         verify(mInteractor).doCreateExercise(mExerciseType);
@@ -90,7 +90,7 @@ public class ExercisePresenterTest {
         doReturn(Single.just(mExercise)).when(mInteractor).doCreateExercise(mExerciseType);
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
 
         // then
         verify(mView).onCreatingExercise();
@@ -103,7 +103,7 @@ public class ExercisePresenterTest {
         doNothing().when(mPresenter).startExercise(any(Exercise.class));
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
         mTestScheduler.triggerActions();
 
         // then
@@ -117,7 +117,7 @@ public class ExercisePresenterTest {
         doNothing().when(mPresenter).startExercise(any(Exercise.class));
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
         mTestScheduler.triggerActions();
 
         // then
@@ -131,7 +131,7 @@ public class ExercisePresenterTest {
         doReturn(Single.error(error)).when(mInteractor).doCreateExercise(mExerciseType);
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
         mTestScheduler.triggerActions();
 
         // then
@@ -182,7 +182,7 @@ public class ExercisePresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).onExerciseStarted(mExercise);
+        verify(mView).onExerciseReady(mExercise);
     }
 
     @Test
@@ -195,7 +195,7 @@ public class ExercisePresenterTest {
                 .doListenMeasurements();
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
         mTestScheduler.triggerActions();
 
         // then
@@ -210,7 +210,7 @@ public class ExercisePresenterTest {
                 .doStartExercise(any(Exercise.class));
 
         // when
-        mPresenter.onStartClick();
+        mPresenter.onCreate();
         mTestScheduler.triggerActions();
 
         // then

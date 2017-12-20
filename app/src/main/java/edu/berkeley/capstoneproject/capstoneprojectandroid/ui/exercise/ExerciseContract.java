@@ -23,15 +23,22 @@ public interface ExerciseContract {
         ExerciseType getExerciseType();
 
         void onExerciseCreated(Exercise exercise);
-        void onExerciseStarted(Exercise exercise);
+        void onExerciseReady(Exercise exercise);
         void onExerciseStopped(Exercise exercise);
-
-        void addMeasurement(Measurement measurement);
+        void onExerciseError(Throwable throwable);
+        void onExerciseFinished();
 
         void onCreatingExercise();
         void onStartingExercise();
 
-        void onExerciseError(Throwable throwable);
+        void onStartRecording();
+
+        void addMeasurement(Measurement measurement);
+
+        void showCountdown(int countdown);
+        void showDuration(int duration);
+
+        void onCountdownFinished();
     }
 
     interface Interactor extends IBaseInteractor {
@@ -54,12 +61,17 @@ public interface ExerciseContract {
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
 
-        boolean isStarted();
+        boolean isRecording();
 
-        void onStartClick();
+        void onCreate();
 
-        void onStopClick();
+        void onStopRecording();
 
         void onPause();
+
+        void onStartClick();
+        void onStopClick();
+
+        void onStartRecording();
     }
 }
