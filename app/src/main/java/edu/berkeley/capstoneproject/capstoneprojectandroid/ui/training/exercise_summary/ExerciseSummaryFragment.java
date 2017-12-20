@@ -8,11 +8,15 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalDialog;
 
@@ -119,8 +123,8 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
     }
 
     @Override
-    public void onExerciseGoalEditDone(ExerciseGoal exerciseGoal) {
-        getPresenter().onExerciseGoalDone(exerciseGoal);
+    public void onExerciseGoalEditDone() {
+        getPresenter().onExerciseGoalDone();
     }
 
     public interface ExerciseSummaryFragmentListener {

@@ -52,20 +52,25 @@ public class ExerciseGoal {
     }
 
     private final int mId;
+    private Type mType;
     private List<MetricGoal> mMetricGoals;
 
-    public ExerciseGoal(int id) {
+    public ExerciseGoal(int id, Type type, List<MetricGoal> metricGoals) {
         mId = id;
-        mMetricGoals = new ArrayList<>();
-    }
-
-    public ExerciseGoal(int id, List<MetricGoal> metricGoals) {
-        mId = id;
+        mType = type;
         mMetricGoals = metricGoals;
     }
 
     public int getId() {
         return mId;
+    }
+
+    public Type getType() {
+        return mType;
+    }
+
+    public void setType(Type type) {
+        mType = type;
     }
 
     public List<MetricGoal> getMetricGoals() {

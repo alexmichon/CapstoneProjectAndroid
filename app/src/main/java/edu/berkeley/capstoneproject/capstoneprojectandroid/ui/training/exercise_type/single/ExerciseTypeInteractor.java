@@ -18,14 +18,4 @@ public class ExerciseTypeInteractor extends BaseInteractor implements ExerciseTy
     public ExerciseTypeInteractor(IDataManager dataManager) {
         super(dataManager);
     }
-
-    @Override
-    public Completable doSelectExerciseType(final ExerciseType exerciseType) {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                getDataManager().getSessionHelper().getExerciseService().setCurrentExerciseType(exerciseType);
-            }
-        });
-    }
 }

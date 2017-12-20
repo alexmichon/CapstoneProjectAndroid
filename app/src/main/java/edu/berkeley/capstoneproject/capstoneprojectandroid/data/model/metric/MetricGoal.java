@@ -4,7 +4,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
  * Created by Alex on 17/12/2017.
  */
 
-public class MetricGoal {
+public class MetricGoal implements Cloneable {
 
     public enum Type {
         MIN("Min"), MAX("Max"), MEAN("Mean");

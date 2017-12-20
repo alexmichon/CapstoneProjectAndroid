@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -61,22 +62,53 @@ public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, Ex
         mTypeAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ExerciseGoal.Type.nameList());
         mTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTypeView.setAdapter(mTypeAdapter);
+        mTypeView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ExerciseGoal.Type type = ExerciseGoal.Type.find(adapterView.getItemAtPosition(i).toString());
+                updateExerciseGoalType(type);
+            }
 
-        getPresenter().loadExerciseDefaultGoal();
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        getPresenter().loadCurrentExerciseGoal();
 
         return view;
     }
 
     @Override
-    public void onExerciseGoalLoaded(ExerciseGoal exerciseGoal) {
+    public void onCurrentExerciseGoalLoaded(ExerciseGoal exerciseGoal) {
         mRecyclerAdapter = new ExerciseGoalAdapter(exerciseGoal.getMetricGoals());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mRecyclerAdapter.notifyDataSetChanged();
+
+        setExerciseGoalType(exerciseGoal.getType());
+    }
+
+    @Override
+    public void onDefaultExerciseGoalLoaded(ExerciseGoal exerciseGoal) {
+        if (getExerciseGoalType() == ExerciseGoal.Type.DEFAULT) {
+            mRecyclerAdapter = new ExerciseGoalAdapter(exerciseGoal.getMetricGoals());
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+            mRecyclerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onExerciseGoalEditDone() {
+        if (mListener != null) {
+            mListener.onExerciseGoalEditDone();
+        }
     }
 
     @OnClick(R.id.exercise_goal_ok)
-    public void onClick(View v) {
+    public void onOkClick(View v) {
         getPresenter().onSaveExerciseGoal();
     }
 
@@ -86,20 +118,35 @@ public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, Ex
         return getActivityComponent().exerciseGoalPresenter();
     }
 
+
+
+
     @Override
-    public void onExerciseGoalEditDone(ExerciseGoal exerciseGoal) {
-        if (mListener != null) {
-            mListener.onExerciseGoalEditDone(exerciseGoal);
+    public void setExerciseGoalType(ExerciseGoal.Type type) {
+        int position = mTypeAdapter.getPosition(type.getName());
+        mTypeView.setSelection(position);
+    }
+
+    public void updateExerciseGoalType(ExerciseGoal.Type type) {
+        switch (type) {
+            case NONE:
+                mRecyclerView.setVisibility(View.GONE);
+                break;
+            case CUSTOM:
+                mRecyclerView.setVisibility(View.VISIBLE);
+                setEditable(true);
+                break;
+            case DEFAULT:
+                getPresenter().loadDefaultExerciseGoal();
+                mRecyclerView.setVisibility(View.VISIBLE);
+                setEditable(false);
+                break;
         }
     }
 
-
-
-
-    @Override
-    public void setType(ExerciseGoal.Type t) {
-        int position = mTypeAdapter.getPosition(t.getName());
-        mTypeView.setSelection(position);
+    protected void setEditable(boolean editable) {
+        mRecyclerAdapter.setEditable(editable);
+        mRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -113,8 +160,16 @@ public class ExerciseGoalDialog extends BaseDialog<ExerciseGoalContract.View, Ex
         return mRecyclerAdapter.getMetricGoals();
     }
 
+    @Override
+    public void setMetricGoals(List<MetricGoal> metricGoals) {
+        mRecyclerAdapter = new ExerciseGoalAdapter(metricGoals);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mRecyclerAdapter.notifyDataSetChanged();
+    }
+
 
     public interface ExerciseGoalFragmentListener {
-        void onExerciseGoalEditDone(ExerciseGoal exerciseGoal);
+        void onExerciseGoalEditDone();
     }
 }

@@ -1,8 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.component;
 
-import javax.inject.Singleton;
-
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseCreatorService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 
 /**
@@ -11,5 +9,5 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUser
 
 public interface SessionComponent {
     IUserService userService();
-    IExerciseService exerciseService();
+    IExerciseCreatorService exerciseService();
 }

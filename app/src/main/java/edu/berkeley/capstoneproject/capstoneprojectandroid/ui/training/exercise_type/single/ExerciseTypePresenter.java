@@ -32,8 +32,6 @@ public class ExerciseTypePresenter<V extends ExerciseTypeContract.View, I extend
 
     @Override
     public void onExerciseTypeSelect() {
-        getInteractor().doSelectExerciseType(mExerciseType);
-
         if (isViewAttached()) {
             getView().onExerciseTypeSelect(mExerciseType);
         }

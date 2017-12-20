@@ -35,9 +35,8 @@ public interface TrainingContract {
         Single<Rx2BleConnection> doConnect(Rx2BleDevice device);
         Completable doValidateDevice();
         void doDisconnect();
-        void doSelectExerciseType(ExerciseType exerciseType);
 
-        void doClearExerciseSession();
+        Completable doClearExerciseSession();
     }
 
     @PerActivity

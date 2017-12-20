@@ -1,15 +1,16 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -24,20 +25,44 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
     }
 
     @Override
-    public void loadExerciseDefaultGoal() {
+    public void loadCurrentExerciseGoal() {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        getCompositeDisposable().add(getInteractor().doGetExerciseGoal()
+        getCompositeDisposable().add(getInteractor().doLoadCurrentExerciseGoal()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<ExerciseGoal>() {
+                .subscribe(new Consumer<ExerciseGoalCreator>() {
                     @Override
-                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
+                    public void accept(ExerciseGoalCreator exerciseGoalCreator) throws Exception {
                         if (isViewAttached()) {
-                            getView().onExerciseGoalLoaded(exerciseGoal);
-                            getView().setType(ExerciseGoal.Type.DEFAULT);
+                            getView().hideLoading();
+                            getView().setExerciseGoalType(exerciseGoalCreator.getType());
+                            getView().setMetricGoals(exerciseGoalCreator.getMetricGoals());
+                        }
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void loadDefaultExerciseGoal() {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+
+        getCompositeDisposable().add(getInteractor().doLoadDefaultExerciseGoal()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<ExerciseGoalCreator>() {
+                    @Override
+                    public void accept(ExerciseGoalCreator exerciseGoalCreator) throws Exception {
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                            if (getView().getExerciseGoalType() == ExerciseGoal.Type.DEFAULT) {
+                                getView().setMetricGoals(exerciseGoalCreator.getMetricGoals());
+                            }
                         }
                     }
                 })
@@ -50,23 +75,18 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
             return;
         }
 
+        ExerciseGoal.Type type = getView().getExerciseGoalType();
         List<MetricGoal> metricGoals = getView().getMetricGoals();
 
-        getCompositeDisposable().add(getInteractor().doUpdateExerciseGoal(metricGoals)
+        getCompositeDisposable().add(getInteractor().doUpdateExerciseGoal(type, metricGoals)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .doOnSuccess(new Consumer<ExerciseGoal>() {
+                .subscribe(new Action() {
                     @Override
-                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
-                        getInteractor().doSetExerciseGoal(exerciseGoal);
-                    }
-                })
-                .subscribe(new Consumer<ExerciseGoal>() {
-                    @Override
-                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
+                    public void run() throws Exception {
                         if (isViewAttached()) {
                             getView().hideLoading();
-                            getView().onExerciseGoalEditDone(exerciseGoal);
+                            getView().onExerciseGoalEditDone();
                         }
                     }
                 }, new Consumer<Throwable>() {

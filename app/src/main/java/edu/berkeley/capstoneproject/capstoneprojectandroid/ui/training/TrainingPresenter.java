@@ -82,8 +82,6 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     }
 
     public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        getInteractor().doSelectExerciseType(exerciseType);
-
         if (isViewAttached()) {
             getView().showExerciseSummaryFragment();
         }

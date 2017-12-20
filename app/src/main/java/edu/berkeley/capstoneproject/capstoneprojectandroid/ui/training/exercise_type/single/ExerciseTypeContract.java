@@ -17,8 +17,6 @@ public interface ExerciseTypeContract {
     }
 
     interface Interactor extends IBaseInteractor {
-
-        Completable doSelectExerciseType(ExerciseType exerciseType);
     }
 
     interface Presenter<V extends IBaseView, I extends IBaseInteractor> extends IBasePresenter<V, I> {

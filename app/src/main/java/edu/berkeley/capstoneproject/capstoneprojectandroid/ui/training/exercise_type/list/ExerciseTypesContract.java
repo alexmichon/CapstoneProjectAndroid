@@ -31,12 +31,7 @@ public interface ExerciseTypesContract {
 
     interface Interactor extends IBaseInteractor {
         Observable<ExerciseType> doLoadExerciseTypes();
-
         Completable doSetExerciseType(ExerciseType exerciseType);
-
-        Single<ExerciseGoal> doLoadExerciseGoal(ExerciseType exerciseType);
-
-        CompletableSource doSetExerciseGoal(ExerciseGoal exerciseGoal);
     }
 
     @PerActivity

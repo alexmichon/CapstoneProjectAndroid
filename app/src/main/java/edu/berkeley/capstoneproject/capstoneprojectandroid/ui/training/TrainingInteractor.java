@@ -3,8 +3,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
@@ -53,12 +51,7 @@ public class TrainingInteractor extends BaseInteractor implements TrainingContra
     }
 
     @Override
-    public void doSelectExerciseType(ExerciseType exerciseType) {
-        getDataManager().getSessionHelper().getExerciseService().setCurrentExerciseType(exerciseType);
-    }
-
-    @Override
-    public void doClearExerciseSession() {
-        getDataManager().getSessionHelper().getExerciseService().clear();
+    public Completable doClearExerciseSession() {
+        return getDataManager().getSessionHelper().getExerciseCreatorService().resetExerciseCreator();
     }
 }

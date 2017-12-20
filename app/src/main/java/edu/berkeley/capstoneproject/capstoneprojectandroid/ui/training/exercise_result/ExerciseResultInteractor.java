@@ -24,7 +24,7 @@ public class ExerciseResultInteractor extends BaseInteractor implements Exercise
 
     @Override
     public Single<ExerciseResult> doGetExerciseResult() {
-        return getDataManager().getSessionHelper().getExerciseService().getCurrentExercise()
+        return getDataManager().getSessionHelper().getTrainingService().getExercise()
                 .flatMap(new Function<Exercise, SingleSource<? extends ExerciseResult>>() {
                     @Override
                     public SingleSource<? extends ExerciseResult> apply(@NonNull Exercise exercise) throws Exception {

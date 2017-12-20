@@ -2,11 +2,12 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import android.content.Context;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
@@ -36,8 +37,11 @@ public class ExerciseService implements IExerciseService {
     }
 
     @Override
-    public Single<Exercise> doCreateExercise(ExerciseType exerciseType) {
-        return Single.just(new Exercise(0, exerciseType));
+    public Single<Exercise> doCreateExercise(ExerciseCreator exerciseCreator) {
+        return Single.just(ExerciseFactory.builder()
+                .withExerciseType(exerciseCreator.getExerciseType())
+                .build()
+        );
     }
 
     @Override
@@ -52,13 +56,18 @@ public class ExerciseService implements IExerciseService {
     }
 
     @Override
-    public Single<ExerciseGoal> doUpdateExerciseGoal(ExerciseGoal exerciseGoal) {
-        return Single.just(exerciseGoal);
+    public Single<ExerciseGoal> doCreateExerciseGoal(ExerciseGoalCreator exerciseGoalCreator) {
+        return Single.just(ExerciseGoalFactory.builder()
+                .withType(exerciseGoalCreator.getType())
+                .withMetricGoals(exerciseGoalCreator.getMetricGoals())
+                .build()
+        );
     }
 
     @Override
-    public Single<ExerciseGoal> doGetExerciseGoal(ExerciseType exerciseType) {
+    public Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType) {
         return Single.just(ExerciseGoalFactory.builder()
+                .withType(ExerciseGoal.Type.DEFAULT)
                 .addMetricGoal(MetricGoalFactory.builder()
                         .withMetric(SensorManager.find(SensorManager.ID_ACCELEROMETER).getMetric(Accelerometer.ID_ACC_X))
                         .withGoal(1.0f)
@@ -66,7 +75,7 @@ public class ExerciseService implements IExerciseService {
                         .withComparator(new MetricComparator(MetricComparator.Type.GT))
                         .build()
                 )
-                .build()
+                .creator()
         );
     }
 

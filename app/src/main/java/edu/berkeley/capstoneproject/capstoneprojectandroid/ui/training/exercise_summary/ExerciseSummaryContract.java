@@ -1,13 +1,15 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary;
 
+import java.util.List;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.Optional;
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Alex on 18/12/2017.
@@ -30,9 +32,7 @@ public interface ExerciseSummaryContract {
 
     interface Interactor extends IBaseInteractor {
 
-        Single<ExerciseGoal> doGetCurrentExerciseGoal();
-
-        Completable doSetExerciseGoal(ExerciseGoal exerciseGoal);
+        Single<ExerciseGoalCreator> doGetCurrentExerciseGoal();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
@@ -44,6 +44,6 @@ public interface ExerciseSummaryContract {
         void loadExerciseSummary();
 
         void onExerciseGoalEdit();
-        void onExerciseGoalDone(ExerciseGoal exerciseGoal);
+        void onExerciseGoalDone();
     }
 }

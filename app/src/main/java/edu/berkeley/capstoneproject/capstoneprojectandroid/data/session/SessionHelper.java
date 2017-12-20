@@ -3,8 +3,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.session;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseCreatorService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.ITrainingService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 
 /**
@@ -15,10 +15,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUser
 public class SessionHelper implements ISessionHelper {
 
     private IUserService mUserService;
-    private IExerciseService mExerciseService;
+    private IExerciseCreatorService mExerciseService;
 
     @Inject
-    public SessionHelper(IUserService userService, IExerciseService exerciseService) {
+    public SessionHelper(IUserService userService, IExerciseCreatorService exerciseService) {
         mUserService = userService;
         mExerciseService = exerciseService;
     }
@@ -29,7 +29,12 @@ public class SessionHelper implements ISessionHelper {
     }
 
     @Override
-    public IExerciseService getExerciseService() {
+    public IExerciseCreatorService getExerciseCreatorService() {
         return mExerciseService;
+    }
+
+    @Override
+    public ITrainingService getTrainingService() {
+        return null;
     }
 }

@@ -4,8 +4,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.ExerciseService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.ExerciseCreatorService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseCreatorService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.UserService;
 
@@ -25,7 +25,7 @@ public class FakeSessionModule {
 
     @Provides
     @Singleton
-    IExerciseService provideExerciseService(ExerciseService service) {
+    IExerciseCreatorService provideExerciseService(ExerciseCreatorService service) {
         return service;
     }
 }

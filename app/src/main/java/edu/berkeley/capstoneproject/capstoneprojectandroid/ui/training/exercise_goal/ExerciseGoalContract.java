@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
@@ -18,26 +19,30 @@ import io.reactivex.Single;
 public interface ExerciseGoalContract {
 
     interface View extends IBaseView {
-        void onExerciseGoalLoaded(ExerciseGoal exerciseGoal);
+        void onCurrentExerciseGoalLoaded(ExerciseGoal exerciseGoal);
 
-        void onExerciseGoalEditDone(ExerciseGoal exerciseGoal);
+        void onDefaultExerciseGoalLoaded(ExerciseGoal exerciseGoal);
 
-        void setType(ExerciseGoal.Type t);
+        void setMetricGoals(List<MetricGoal> metricGoals);
+
+        void onExerciseGoalEditDone();
+
+        void setExerciseGoalType(ExerciseGoal.Type t);
         ExerciseGoal.Type getExerciseGoalType();
 
         List<MetricGoal> getMetricGoals();
     }
 
     interface Interactor extends IBaseInteractor {
-        Single<ExerciseGoal> doUpdateExerciseGoal(List<MetricGoal> metricGoals);
+        Single<ExerciseGoalCreator> doLoadDefaultExerciseGoal();
+        Single<ExerciseGoalCreator> doLoadCurrentExerciseGoal();
 
-        Single<ExerciseGoal> doGetExerciseGoal();
-
-        Completable doSetExerciseGoal(ExerciseGoal exerciseGoal);
+        Completable doUpdateExerciseGoal(ExerciseGoal.Type type, List<MetricGoal> metricGoals);
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void loadExerciseDefaultGoal();
+        void loadCurrentExerciseGoal();
+        void loadDefaultExerciseGoal();
 
         void onSaveExerciseGoal();
     }

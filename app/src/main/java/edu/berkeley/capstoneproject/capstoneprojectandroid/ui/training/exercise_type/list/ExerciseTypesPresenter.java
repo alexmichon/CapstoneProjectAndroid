@@ -88,28 +88,13 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
         selectExerciseType(exerciseType);
     }
 
-    protected Completable getSetExerciseTypeCompletable(ExerciseType exerciseType) {
-        return getInteractor().doSetExerciseType(exerciseType);
-    }
-
-    protected Completable getLoadExerciseGoalCompletable(ExerciseType exerciseType) {
-        return getInteractor().doLoadExerciseGoal(exerciseType)
-                .flatMapCompletable(new Function<ExerciseGoal, CompletableSource>() {
-                    @Override
-                    public CompletableSource apply(@NonNull ExerciseGoal exerciseGoal) throws Exception {
-                        return getInteractor().doSetExerciseGoal(exerciseGoal);
-                    }
-                });
-    }
-
 
     private void selectExerciseType(final ExerciseType exerciseType) {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        getCompositeDisposable().add(getSetExerciseTypeCompletable(exerciseType)
-                .andThen(getLoadExerciseGoalCompletable(exerciseType))
+        getCompositeDisposable().add(getInteractor().doSetExerciseType(exerciseType)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Action() {

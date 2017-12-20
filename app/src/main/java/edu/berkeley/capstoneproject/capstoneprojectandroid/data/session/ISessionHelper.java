@@ -1,7 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.session;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseCreatorService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.ITrainingService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 
 /**
@@ -11,5 +11,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUser
 public interface ISessionHelper {
 
     IUserService getUserService();
-    IExerciseService getExerciseService();
+    IExerciseCreatorService getExerciseCreatorService();
+    ITrainingService getTrainingService();
 }

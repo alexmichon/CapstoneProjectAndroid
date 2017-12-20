@@ -1,14 +1,12 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
-import java.util.List;
-
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -18,14 +16,14 @@ import io.reactivex.Single;
 
 public interface IExerciseService {
 
-    Single<Exercise> doCreateExercise(ExerciseType exerciseType);
+    Single<Exercise> doCreateExercise(ExerciseCreator exerciseCreator);
     Single<Measurement> doSaveMeasurement(Measurement measurement);
 
     Single<Measurement> getMaxMeasurement();
 
-    Single<ExerciseGoal> doUpdateExerciseGoal(ExerciseGoal exerciseGoal);
+    Single<ExerciseGoal> doCreateExerciseGoal(ExerciseGoalCreator exerciseGoalCreator);
 
-    Single<ExerciseGoal> doGetExerciseGoal(ExerciseType exerciseType);
+    Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType);
 
     Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
 

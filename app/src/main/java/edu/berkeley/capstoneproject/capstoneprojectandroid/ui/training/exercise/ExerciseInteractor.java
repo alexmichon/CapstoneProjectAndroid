@@ -7,7 +7,9 @@ import javax.inject.Inject;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
@@ -39,12 +41,23 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
-    public Single<Exercise> doCreateExercise() {
-        return getDataManager().getSessionHelper().getExerciseService().getCurrentExerciseType()
-                .flatMap(new Function<ExerciseType, SingleSource<? extends Exercise>>() {
+    public Single<ExerciseGoal> doCreateExerciseGoal() {
+        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
+                .flatMap(new Function<ExerciseGoalCreator, SingleSource<? extends ExerciseGoal>>() {
                     @Override
-                    public SingleSource<? extends Exercise> apply(@NonNull ExerciseType exerciseType) throws Exception {
-                        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseType);
+                    public SingleSource<? extends ExerciseGoal> apply(@NonNull ExerciseGoalCreator exerciseGoalCreator) throws Exception {
+                        return getDataManager().getApiHelper().getExerciseService().doCreateExerciseGoal(exerciseGoalCreator);
+                    }
+                });
+    }
+
+    @Override
+    public Single<Exercise> doCreateExercise() {
+        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
+                .flatMap(new Function<ExerciseCreator, SingleSource<? extends Exercise>>() {
+                    @Override
+                    public SingleSource<? extends Exercise> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {
+                        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseCreator);
                     }
                 });
     }

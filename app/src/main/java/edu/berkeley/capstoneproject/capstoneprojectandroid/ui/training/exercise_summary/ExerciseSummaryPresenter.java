@@ -2,11 +2,9 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.Optional;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -45,25 +43,19 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
         getCompositeDisposable().add(getInteractor().doGetCurrentExerciseGoal()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .doFinally(new Action() {
+                .subscribe(new Consumer<ExerciseGoalCreator>() {
                     @Override
-                    public void run() throws Exception {
+                    public void accept(ExerciseGoalCreator exerciseGoalCreator) throws Exception {
                         if (isViewAttached()) {
                             getView().hideLoading();
-                        }
-                    }
-                })
-                .subscribe(new Consumer<ExerciseGoal>() {
-                    @Override
-                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
-                        if (isViewAttached()) {
-                            getView().setExerciseGoalType(ExerciseGoal.Type.DEFAULT);
+                            getView().setExerciseGoalType(exerciseGoalCreator.getType());
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         if (isViewAttached()) {
+                            getView().hideLoading();
                             getView().showError(throwable);
                         }
                     }
@@ -79,8 +71,7 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
     }
 
     @Override
-    public void onExerciseGoalDone(ExerciseGoal exerciseGoal) {
-        getInteractor().doSetExerciseGoal(exerciseGoal);
+    public void onExerciseGoalDone() {
         if (isViewAttached()) {
             getView().dismissExerciseGoalEditDialog();
         }

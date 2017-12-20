@@ -21,6 +21,7 @@ public class ExerciseGoalFactory {
 
     public static class Builder {
 
+        private ExerciseGoal.Type mType;
         private List<MetricGoal> mMetricGoals = new ArrayList<>();
 
         public Builder addMetricGoal(MetricGoal metricGoal) {
@@ -28,9 +29,27 @@ public class ExerciseGoalFactory {
             return this;
         }
 
+        public Builder withMetricGoals(List<MetricGoal> metricGoals) {
+            mMetricGoals = metricGoals;
+            return this;
+        }
+
+        public Builder withType(ExerciseGoal.Type type) {
+            mType = type;
+            return this;
+        }
+
         public ExerciseGoal build() {
-            ExerciseGoal exerciseGoal = new ExerciseGoal(ID++, mMetricGoals);
+            ExerciseGoal exerciseGoal = new ExerciseGoal(ID++, mType, mMetricGoals);
             return exerciseGoal;
+        }
+
+        public ExerciseGoalCreator creator() {
+            ExerciseGoalCreator creator = new ExerciseGoalCreator();
+            creator.setMetricGoals(mMetricGoals);
+            creator.setType(mType);
+
+            return creator;
         }
     }
 }

@@ -27,6 +27,7 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
 
     private final List<MetricGoal> mMetricGoals = new ArrayList<>();
 
+    private boolean mEditable = false;
 
     public ExerciseGoalAdapter(List<MetricGoal> metricGoals) {
         try {
@@ -36,6 +37,10 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
         } catch (CloneNotSupportedException e) {
             Timber.e(e);
         }
+    }
+
+    public void setEditable(boolean editable) {
+        mEditable = editable;
     }
 
     @Override
@@ -88,6 +93,7 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
 
             mLabelView.setText(metric.getName());
             mGoalView.setText(String.valueOf(goal));
+            mGoalView.setEnabled(mEditable);
         }
     }
 
