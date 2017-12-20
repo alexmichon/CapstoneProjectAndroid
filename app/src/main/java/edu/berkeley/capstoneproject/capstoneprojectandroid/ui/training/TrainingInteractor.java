@@ -52,6 +52,6 @@ public class TrainingInteractor extends BaseInteractor implements TrainingContra
 
     @Override
     public Completable doClearExerciseSession() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().resetExerciseCreator();
+        return getDataManager().getSessionHelper().getExerciseCreatorService().clear();
     }
 }

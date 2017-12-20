@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 
 import java.util.List;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
@@ -10,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresente
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Alex on 18/12/2017.
@@ -19,7 +21,7 @@ public interface ExerciseSummaryContract {
 
     interface View extends IBaseView {
 
-        void onStartExercise();
+        void startExercise();
 
         void moveBack();
 

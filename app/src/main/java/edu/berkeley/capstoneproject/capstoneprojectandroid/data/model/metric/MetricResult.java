@@ -10,24 +10,36 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.
 
 public class MetricResult {
 
-    private final MetricMeasurementList mMetricMeasurementList;
     private final MetricGoal mMetricGoal;
+    private final float mActual;
+    private final boolean mResult;
 
-    public MetricResult(MetricMeasurementList metricMeasurementList, MetricGoal metricGoal) {
-        mMetricMeasurementList = metricMeasurementList;
+    private String mComment;
+
+    public MetricResult(MetricGoal metricGoal, float actual, boolean result) {
         mMetricGoal = metricGoal;
+        mActual = actual;
+        mResult = result;
+        createComment();
     }
 
-    public MetricMeasurementList getMetricMeasurementList() {
-        return mMetricMeasurementList;
+    public MetricResult(MetricGoal metricGoal, float actual, boolean result, String comment) {
+        mMetricGoal = metricGoal;
+        mActual = actual;
+        mResult = result;
+        mComment = comment;
     }
 
     public MetricGoal getMetricGoal() {
         return mMetricGoal;
     }
 
+    public Metric getMetric() {
+        return mMetricGoal.getMetric();
+    }
+
     public boolean getResult() {
-        return mMetricGoal.getComparator().compare(getActualValue(), getExpectedValue());
+        return mResult;
     }
 
     public float getExpectedValue() {
@@ -35,8 +47,23 @@ public class MetricResult {
     }
 
     public float getActualValue() {
-        // TODO
+        return mActual;
+    }
 
-        return -Float.MAX_VALUE;
+    public String getComment() {
+        return mComment;
+    }
+
+    public void setComment(String comment) {
+        mComment = comment;
+    }
+
+    protected void createComment() {
+        if (mResult) {
+            mComment = "Good job !";
+        }
+        else {
+            mComment = "You'll do better next time";
+        }
     }
 }

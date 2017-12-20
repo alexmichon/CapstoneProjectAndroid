@@ -43,7 +43,7 @@ public interface ExerciseContract {
 
         Flowable<Measurement> doListenImu();
 
-        void doStopExercise();
+        Completable doStopExercise();
 
         Flowable<Measurement> doListenMeasurements();
 

@@ -27,6 +27,13 @@ public class ExerciseResult {
         mMetricResults = new ArrayList<>();
     }
 
+    public ExerciseResult(Exercise exercise, ExerciseGoal exerciseGoal, List<MetricResult> metricResults) {
+        mExercise = exercise;
+        mExerciseGoal = exerciseGoal;
+
+        mMetricResults = metricResults;
+    }
+
     public Exercise getExercise() {
         return mExercise;
     }
@@ -41,6 +48,10 @@ public class ExerciseResult {
 
     public MetricResult getMetricResult(int index) {
         return mMetricResults.get(index);
+    }
+
+    public void addMetricResult(MetricResult metricResult) {
+        mMetricResults.add(metricResult);
     }
 
     public int getSize() {

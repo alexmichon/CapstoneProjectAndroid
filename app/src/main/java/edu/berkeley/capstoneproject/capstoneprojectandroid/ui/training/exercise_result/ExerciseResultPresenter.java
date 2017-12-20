@@ -2,12 +2,12 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -21,8 +21,17 @@ public class ExerciseResultPresenter<V extends ExerciseResultContract.View, I ex
     }
 
     @Override
-    public void onOkClick(ExerciseResult exerciseResult) {
+    public void onMenuClick() {
+        if (isViewAttached()) {
+            getView().menu();
+        }
+    }
 
+    @Override
+    public void onRetryClick() {
+        if (isViewAttached()) {
+            getView().retry();
+        }
     }
 
     @Override
@@ -44,6 +53,7 @@ public class ExerciseResultPresenter<V extends ExerciseResultContract.View, I ex
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        Timber.e(throwable);
                         if (isViewAttached()) {
                             getView().onExerciseResultError(throwable);
                         }

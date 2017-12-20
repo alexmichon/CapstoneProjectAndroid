@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise;
 
+import org.reactivestreams.Subscriber;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -21,6 +23,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -53,11 +56,36 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public Single<Exercise> doCreateExercise() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
+        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
+                .flatMap(new Function<ExerciseGoalCreator, SingleSource<? extends ExerciseGoal>>() {
+                    @Override
+                    public SingleSource<? extends ExerciseGoal> apply(@NonNull ExerciseGoalCreator exerciseGoalCreator) throws Exception {
+                        return getDataManager().getApiHelper().getExerciseService().doCreateExerciseGoal(exerciseGoalCreator);
+                    }
+                })
+                .flatMap(new Function<ExerciseGoal, SingleSource<? extends ExerciseCreator>>() {
+                    @Override
+                    public SingleSource<? extends ExerciseCreator> apply(@NonNull final ExerciseGoal exerciseGoal) throws Exception {
+                        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
+                                .flatMap(new Function<ExerciseCreator, SingleSource<? extends ExerciseCreator>>() {
+                                    @Override
+                                    public SingleSource<? extends ExerciseCreator> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {
+                                        exerciseCreator.setExerciseGoal(exerciseGoal);
+                                        return Single.just(exerciseCreator);
+                                    }
+                                });
+                    }
+                })
                 .flatMap(new Function<ExerciseCreator, SingleSource<? extends Exercise>>() {
                     @Override
                     public SingleSource<? extends Exercise> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {
                         return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseCreator);
+                    }
+                })
+                .flatMap(new Function<Exercise, SingleSource<? extends Exercise>>() {
+                    @Override
+                    public SingleSource<? extends Exercise> apply(@NonNull Exercise exercise) throws Exception {
+                        return getDataManager().getSessionHelper().getTrainingService().setExercise(exercise).toSingleDefault(exercise);
                     }
                 });
     }
@@ -88,10 +116,15 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
-    public void doStopExercise() {
-        if (mNotificationDisposable != null) {
-            mNotificationDisposable.dispose();
-        }
+    public Completable doStopExercise() {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                if (mNotificationDisposable != null) {
+                    mNotificationDisposable.dispose();
+                }
+            }
+        });
     }
 
     @Override

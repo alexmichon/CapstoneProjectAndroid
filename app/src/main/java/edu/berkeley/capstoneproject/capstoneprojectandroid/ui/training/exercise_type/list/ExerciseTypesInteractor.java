@@ -31,17 +31,7 @@ public class ExerciseTypesInteractor extends BaseInteractor implements ExerciseT
 
     @Override
     public Completable doSetExerciseType(final ExerciseType exerciseType) {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator().
-                flatMapCompletable(new Function<ExerciseCreator, CompletableSource>() {
-                    @Override
-                    public CompletableSource apply(@NonNull final ExerciseCreator exerciseCreator) throws Exception {
-                        return Completable.fromAction(new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                exerciseCreator.setExerciseType(exerciseType);
-                            }
-                        });
-                    }
-                });
+        return getDataManager().getSessionHelper().getExerciseCreatorService().newExerciseCreator(exerciseType)
+                .andThen(getDataManager().getSessionHelper().getExerciseCreatorService().newExerciseGoalCreator(exerciseType));
     }
 }

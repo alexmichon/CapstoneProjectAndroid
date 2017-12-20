@@ -13,7 +13,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
@@ -26,8 +25,6 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
     @BindView(R.id.exercise_result_recycler)
     RecyclerView mRecyclerView;
 
-    private Exercise mExercise;
-    private ExerciseResult mExerciseResult;
     private ExerciseResultAdapter mAdapter;
 
     private ExerciseResultFragment.ExerciseResultFragmentListener mListener;
@@ -48,7 +45,7 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercise_goal, container, false);
+        View view = inflater.inflate(R.layout.fragment_exercise_result, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
         getPresenter().loadExerciseResult();
@@ -75,9 +72,28 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
         showLoading("Please wait while we process your results...");
     }
 
-    @OnClick(R.id.exercise_goal_ok)
-    public void onClick(View v) {
-        getPresenter().onOkClick(mExerciseResult);
+    @OnClick(R.id.exercise_result_menu)
+    public void onMenuClick(View v) {
+        getPresenter().onMenuClick();
+    }
+
+    @OnClick(R.id.exercise_result_retry)
+    public void onRetryClick(View v) {
+        getPresenter().onRetryClick();
+    }
+
+    @Override
+    public void menu() {
+        if (mListener != null) {
+            mListener.onExerciseResultMenu();
+        }
+    }
+
+    @Override
+    public void retry() {
+        if (mListener != null) {
+            mListener.onExerciseResultRetry();
+        }
     }
 
     @NonNull
@@ -87,5 +103,7 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
     }
 
     public interface ExerciseResultFragmentListener {
+        void onExerciseResultMenu();
+        void onExerciseResultRetry();
     }
 }

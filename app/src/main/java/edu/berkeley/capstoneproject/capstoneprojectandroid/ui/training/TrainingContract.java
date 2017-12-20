@@ -27,6 +27,8 @@ public interface TrainingContract {
         void showExerciseResultFragment();
 
         void onDeviceConnected();
+
+        void moveToMainActivity();
     }
 
     interface Interactor extends IBaseInteractor {
@@ -46,6 +48,9 @@ public interface TrainingContract {
         void onExerciseSummaryStart();
         void onExerciseSummaryBack();
         void onExerciseDone();
+
+        void onExerciseResultMenu();
+        void onExerciseResultRetry();
 
         void onDestroy();
     }

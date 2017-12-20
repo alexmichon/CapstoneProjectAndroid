@@ -129,18 +129,37 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     @Override
     public void onStopClick() {
         mStarted = false;
-        getInteractor().doStopExercise();
-        getCompositeDisposable().clear();
 
         if (isViewAttached()) {
-            getView().onExerciseStopped(mExercise);
+            getView().showLoading();
         }
+
+        getCompositeDisposable().add(getInteractor().doStopExercise()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                            getView().onExerciseStopped(mExercise);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                            getView().showError(throwable);
+                        }
+                    }
+                })
+        );
     }
 
     @Override
     public void onPause() {
         mStarted = false;
-        getInteractor().doStopExercise();
 
         if (isViewAttached()) {
             getView().onExerciseStopped(mExercise);

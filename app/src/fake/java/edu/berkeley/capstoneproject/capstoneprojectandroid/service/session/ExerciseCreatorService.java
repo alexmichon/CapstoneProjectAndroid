@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.functions.Action;
@@ -21,8 +22,6 @@ public class ExerciseCreatorService implements IExerciseCreatorService {
 
     @Inject
     public ExerciseCreatorService() {
-        mExerciseCreator = new ExerciseCreator();
-        mExerciseGoalCreator = new ExerciseGoalCreator();
     }
 
     public Single<ExerciseCreator> getExerciseCreator() {
@@ -30,11 +29,11 @@ public class ExerciseCreatorService implements IExerciseCreatorService {
     }
 
     @Override
-    public Completable resetExerciseCreator() {
+    public Completable newExerciseCreator(final ExerciseType exerciseType) {
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                mExerciseCreator = new ExerciseCreator();
+                mExerciseCreator = new ExerciseCreator(exerciseType);
             }
         });
     }
@@ -44,11 +43,22 @@ public class ExerciseCreatorService implements IExerciseCreatorService {
     }
 
     @Override
-    public Completable resetExerciseGoalCreator() {
+    public Completable newExerciseGoalCreator(final ExerciseType exerciseType) {
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                mExerciseGoalCreator = new ExerciseGoalCreator();
+                mExerciseGoalCreator = new ExerciseGoalCreator(exerciseType);
+            }
+        });
+    }
+
+    @Override
+    public Completable clear() {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mExerciseCreator = null;
+                mExerciseGoalCreator = null;
             }
         });
     }

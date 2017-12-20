@@ -84,7 +84,7 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
     }
 
     @Override
-    public void onStartExercise() {
+    public void startExercise() {
         if (mListener != null) {
             mListener.onExerciseSummaryStart();
         }

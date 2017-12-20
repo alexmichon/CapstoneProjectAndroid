@@ -4,12 +4,6 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/exercise_result_recycler"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-
     <android.support.v7.widget.ButtonBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,14 +11,29 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/exercise_result_ok"
+            android:id="@+id/exercise_result_retry"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
-            android:text="OK"
+            android:text="Retry"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:id="@+id/exercise_result_menu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="Menu"
             style="?android:attr/buttonBarButtonStyle"/>
 
     </android.support.v7.widget.ButtonBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/exercise_result_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

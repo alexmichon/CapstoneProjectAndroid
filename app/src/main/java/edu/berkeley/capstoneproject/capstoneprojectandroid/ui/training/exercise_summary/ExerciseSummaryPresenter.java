@@ -6,7 +6,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -23,7 +22,7 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
     @Override
     public void onStartClick() {
         if (isViewAttached()) {
-            getView().onStartExercise();
+            getView().startExercise();
         }
     }
 

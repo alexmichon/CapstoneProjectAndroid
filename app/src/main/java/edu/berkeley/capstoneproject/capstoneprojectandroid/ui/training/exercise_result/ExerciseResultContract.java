@@ -20,6 +20,10 @@ public interface ExerciseResultContract {
         void onExerciseResultError(Throwable throwable);
 
         void onExerciseResultLoading();
+
+        void menu();
+
+        void retry();
     }
 
     interface Interactor extends IBaseInteractor {
@@ -28,8 +32,9 @@ public interface ExerciseResultContract {
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void onOkClick(ExerciseResult exerciseResult);
-
         void loadExerciseResult();
+
+        void onMenuClick();
+        void onRetryClick();
     }
 }

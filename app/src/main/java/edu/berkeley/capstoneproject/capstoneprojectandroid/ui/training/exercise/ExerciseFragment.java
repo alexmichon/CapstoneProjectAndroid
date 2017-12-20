@@ -138,6 +138,9 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public void onExerciseStopped(Exercise exercise) {
         getActivity().invalidateOptionsMenu();
+        if (mListener != null) {
+            mListener.onExerciseDone();
+        }
     }
 
     @Override

@@ -109,6 +109,20 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     }
 
     @Override
+    public void onExerciseResultMenu() {
+        if (isViewAttached()) {
+            getView().moveToMainActivity();
+        }
+    }
+
+    @Override
+    public void onExerciseResultRetry() {
+        if (isViewAttached()) {
+            getView().showExerciseFragment();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         getInteractor().doClearExerciseSession();
     }

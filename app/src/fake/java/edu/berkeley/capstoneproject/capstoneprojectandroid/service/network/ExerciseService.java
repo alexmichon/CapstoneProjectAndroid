@@ -2,6 +2,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import android.content.Context;
 
+import java.util.Random;
+
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
@@ -18,6 +20,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricComparator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoalFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Accelerometer;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 import io.reactivex.Observable;
@@ -40,6 +43,7 @@ public class ExerciseService implements IExerciseService {
     public Single<Exercise> doCreateExercise(ExerciseCreator exerciseCreator) {
         return Single.just(ExerciseFactory.builder()
                 .withExerciseType(exerciseCreator.getExerciseType())
+                .withExerciseGoal(exerciseCreator.getExerciseGoal())
                 .build()
         );
     }
@@ -58,6 +62,7 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Single<ExerciseGoal> doCreateExerciseGoal(ExerciseGoalCreator exerciseGoalCreator) {
         return Single.just(ExerciseGoalFactory.builder()
+                .withExerciseType(exerciseGoalCreator.getExerciseType())
                 .withType(exerciseGoalCreator.getType())
                 .withMetricGoals(exerciseGoalCreator.getMetricGoals())
                 .build()
@@ -81,9 +86,11 @@ public class ExerciseService implements IExerciseService {
 
     @Override
     public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
-        return Single.just(ExerciseResultFactory.builder()
-                .build()
-        );
+        ExerciseResultFactory.Builder builder = ExerciseResultFactory.builder();
+        for (MetricGoal metricGoal: exercise.getExerciseGoal().getMetricGoals()) {
+            builder.addMetricResult(new MetricResult(metricGoal, new Random().nextFloat(), true));
+        }
+        return Single.just(builder.build());
     }
 
     @Override

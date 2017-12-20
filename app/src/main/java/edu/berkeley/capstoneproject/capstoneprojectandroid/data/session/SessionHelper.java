@@ -14,13 +14,15 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUser
 @Singleton
 public class SessionHelper implements ISessionHelper {
 
-    private IUserService mUserService;
-    private IExerciseCreatorService mExerciseService;
+    private final IUserService mUserService;
+    private final IExerciseCreatorService mExerciseService;
+    private final ITrainingService mTrainingService;
 
     @Inject
-    public SessionHelper(IUserService userService, IExerciseCreatorService exerciseService) {
+    public SessionHelper(IUserService userService, IExerciseCreatorService exerciseService, ITrainingService trainingService) {
         mUserService = userService;
         mExerciseService = exerciseService;
+        mTrainingService = trainingService;
     }
 
     @Override
@@ -35,6 +37,6 @@ public class SessionHelper implements ISessionHelper {
 
     @Override
     public ITrainingService getTrainingService() {
-        return null;
+        return mTrainingService;
     }
 }

@@ -6,19 +6,15 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
 public class ExerciseCreator {
 
-    private ExerciseType mExerciseType;
+    private final ExerciseType mExerciseType;
     private ExerciseGoal mExerciseGoal;
 
-    public ExerciseCreator() {
-
+    public ExerciseCreator(ExerciseType exerciseType) {
+        mExerciseType = exerciseType;
     }
 
     public ExerciseType getExerciseType() {
         return mExerciseType;
-    }
-
-    public void setExerciseType(ExerciseType exerciseType) {
-        mExerciseType = exerciseType;
     }
 
     public ExerciseGoal getExerciseGoal() {
