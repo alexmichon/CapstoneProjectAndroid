@@ -55,7 +55,9 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        getView().showError(e);
+                        if (isViewAttached()) {
+                            getView().onExerciseTypesError(e);
+                        }
                     }
 
                     @Override

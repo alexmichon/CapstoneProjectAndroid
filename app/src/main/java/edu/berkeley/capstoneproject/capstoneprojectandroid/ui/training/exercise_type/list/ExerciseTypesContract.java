@@ -27,6 +27,8 @@ public interface ExerciseTypesContract {
 
         void showExerciseTypeDialog(ExerciseType exerciseType);
         void dismissExerciseTypeDialog();
+
+        void onExerciseTypesError(Throwable e);
     }
 
     interface Interactor extends IBaseInteractor {

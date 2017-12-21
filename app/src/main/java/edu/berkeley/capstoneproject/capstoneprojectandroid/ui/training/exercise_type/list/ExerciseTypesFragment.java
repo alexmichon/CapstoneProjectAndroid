@@ -90,10 +90,12 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
         hideLoading();
     }
 
-
-    public void setListener(ExerciseTypesFragmentListener listener) {
-        mListener = listener;
+    @Override
+    public void onExerciseTypesError(Throwable e) {
+        hideLoading();
+        showError(e);
     }
+
 
     @Override
     public void showExerciseTypeDialog(ExerciseType exerciseType) {
@@ -126,6 +128,12 @@ public class ExerciseTypesFragment extends BaseFragment<ExerciseTypesContract.Vi
     @Override
     public void onExerciseTypeDialogSelect(ExerciseType exerciseType) {
         getPresenter().onExerciseTypeDialogSelect(exerciseType);
+    }
+
+
+
+    public void setListener(ExerciseTypesFragmentListener listener) {
+        mListener = listener;
     }
 
     public interface ExerciseTypesFragmentListener {

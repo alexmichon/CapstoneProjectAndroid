@@ -80,7 +80,7 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, ExerciseGoalCreator exerciseGoalCreator) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
-                .addHeaders(mApiHeader)
+                .addHeaders(mApiHeader.getMap())
                 .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
                 .addBodyParameter(new ExerciseGoalRequest(exerciseGoalCreator))
                 .build()
@@ -107,7 +107,7 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Observable<ExerciseType> doGetExerciseTypes() {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPES)
-                .addHeaders(mApiHeader)
+                .addHeaders(mApiHeader.getMap())
                 .build()
                 .getObjectListObservable(ExerciseTypeResponse.class)
                 .flatMap(new Function<List<ExerciseTypeResponse>, ObservableSource<ExerciseTypeResponse>>() {

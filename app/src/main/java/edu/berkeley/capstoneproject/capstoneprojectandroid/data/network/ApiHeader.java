@@ -1,5 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
@@ -10,123 +13,72 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 
 public class ApiHeader {
 
-    private String mAccessToken;
-    private String mClient;
-    private String mExpiry;
-    private String mTokenType;
-    private String mUid;
+    public static final String KEY_ACCESS_TOKEN = "access-token";
+    public static final String KEY_CLIENT = "client";
+    public static final String KEY_EXPIRY = "expiry";
+    public static final String KEY_TOKEN_TYPE = "token-type";
+    public static final String KEY_UID = "uid";
+
+    public static final String KEY_ACCEPT = "Accept";
+    public static final String KEY_CONTENT_TYPE = "Content-Type";
+
+    private final Map<String, String> mMap = new HashMap<>();
 
     @Inject
     public ApiHeader() {
-
+        mMap.put(KEY_ACCEPT, "application/json");
+        mMap.put(KEY_CONTENT_TYPE, "application/json");
     }
 
     public String getAccessToken() {
-        return mAccessToken;
+        return mMap.get(KEY_ACCESS_TOKEN);
     }
 
     public void setAccessToken(String accessToken) {
-        mAccessToken = accessToken;
+        mMap.put(KEY_ACCESS_TOKEN, accessToken);
     }
 
     public String getClient() {
-        return mClient;
+        return mMap.get(KEY_CLIENT);
     }
 
     public void setClient(String client) {
-        mClient = client;
+        mMap.put(KEY_CLIENT, client);
     }
 
     public String getExpiry() {
-        return mExpiry;
+        return mMap.get(KEY_EXPIRY);
     }
 
     public void setExpiry(String expiry) {
-        mExpiry = expiry;
+        mMap.put(KEY_EXPIRY, expiry);
     }
 
     public String getTokenType() {
-        return mTokenType;
+        return mMap.get(KEY_TOKEN_TYPE);
     }
 
     public void setTokenType(String tokenType) {
-        mTokenType = tokenType;
+        mMap.put(KEY_TOKEN_TYPE, tokenType);
     }
 
     public String getUid() {
-        return mUid;
+        return mMap.get(KEY_UID);
     }
 
     public void setUid(String uid) {
-        mUid = uid;
+        mMap.put(KEY_UID, uid);
     }
 
-
-    public Builder rebuild() {
-        return new Builder(this);
+    public Map<String, String> getMap() {
+        return mMap;
     }
 
-    public class Builder {
+    public void addHeader(String key, String value) {
+        mMap.put(key, value);
+    }
 
-        private ApiHeader mApiHeader;
-
-        private String mAccessToken;
-        private String mClient;
-        private String mExpiry;
-        private String mTokenType;
-        private String mUid;
-
-        public Builder() {
-
-        }
-
-        public Builder(ApiHeader apiHeader) {
-            mApiHeader = apiHeader;
-            mAccessToken = apiHeader.getAccessToken();
-            mClient = apiHeader.getClient();
-            mExpiry = apiHeader.getExpiry();
-            mTokenType = apiHeader.getTokenType();
-            mUid = apiHeader.getUid();
-        }
-
-        public Builder accessToken(String accessToken) {
-            mAccessToken = accessToken;
-            return this;
-        }
-
-        public Builder client(String client) {
-            mClient = client;
-            return this;
-        }
-
-        public Builder expiry(String expiry) {
-            mExpiry = expiry;
-            return this;
-        }
-
-        public Builder tokenType(String tokenType) {
-            mTokenType = tokenType;
-            return this;
-        }
-
-        public Builder uid(String uid) {
-            mUid = uid;
-            return this;
-        }
-
-        public ApiHeader build() {
-            if (mApiHeader == null) {
-                mApiHeader = new ApiHeader();
-            }
-
-            mApiHeader.setAccessToken(mAccessToken);
-            mApiHeader.setClient(mClient);
-            mApiHeader.setExpiry(mExpiry);
-            mApiHeader.setTokenType(mTokenType);
-            mApiHeader.setUid(mUid);
-
-            return mApiHeader;
-        }
-
+    public String getHeader(String key) {
+        return mMap.get(key);
     }
 }
