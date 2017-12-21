@@ -34,11 +34,21 @@ android {
             testInstrumentationRunner "edu.berkeley.capstoneproject.capstoneprojectandroid.FakeTestRunner"
         }
 
+        fakeBluetooth {
+            applicationIdSuffix ".fake.bluetooth"
+            versionNameSuffix "-fake.bluetooth"
+        }
+
+        fakeNetwork {
+            applicationIdSuffix ".fake.network"
+            versionNameSuffix "-fake.network"
+        }
+
         full {
             applicationIdSuffix ".full"
             versionNameSuffix "-full"
 
-            testInstrumentationRunner "edu.berkeley.capstoneproject.capstoneprojectandroid.FullTestRunner"
+            //testInstrumentationRunner "edu.berkeley.capstoneproject.capstoneprojectandroid.FullTestRunner"
         }
     }
 
@@ -51,15 +61,24 @@ android {
         instrumentTest.setRoot('src/androidTest/')
 
         fake {
-            java.srcDirs = ['src/main/java', 'src/fake/java']
-            manifest.srcFile 'src/fake/AndroidManifest.xml'
-            instrumentTest.setRoot('src/androidTestFake')
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fakeBluetooth/java', 'src/fakeNetwork/java']
+            //manifest.srcFile 'src/fakeAll/AndroidManifest.xml'
+        }
+
+        fakeBluetooth {
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fakeBluetooth/java', 'src/fullNetwork/java']
+            //manifest.srcFile 'src/fakeBluetooth/AndroidManifest.xml'
+        }
+
+        fakeNetwork {
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fullBluetooth/java', 'src/fakeNetwork/java']
+            //manifest.srcFile 'src/fakeNetwork/AndroidManifest.xml'
         }
 
         full {
-            java.srcDirs = ['src/main/java', 'src/full/java/']
-            manifest.srcFile 'src/full/AndroidManifest.xml'
-            instrumentTest.setRoot('src/androidTestFull')
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fullBluetooth/java/', 'src/fullNetwork/java']
+            //manifest.srcFile 'src/full/AndroidManifest.xml'
+            //instrumentTest.setRoot('src/androidTestFull')
         }
 
         test {
@@ -113,6 +132,7 @@ dependencies {
     compile "com.github.akarnokd:rxjava2-interop:0.10.7"
 
     compile 'com.polidea.rxandroidble:rxandroidble:1.4.3'
+    fakeBluetoothCompile "com.polidea.rxandroidble:mockclient:1.4.3"
     fakeCompile "com.polidea.rxandroidble:mockclient:1.4.3"
 
     compile 'com.google.dagger:dagger:2.13'
