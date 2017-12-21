@@ -48,34 +48,21 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
         return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
                 .flatMap(new Function<ExerciseGoalCreator, SingleSource<? extends ExerciseGoal>>() {
                     @Override
-                    public SingleSource<? extends ExerciseGoal> apply(@NonNull ExerciseGoalCreator exerciseGoalCreator) throws Exception {
-                        return getDataManager().getApiHelper().getExerciseService().doCreateExerciseGoal(exerciseGoalCreator);
+                    public SingleSource<? extends ExerciseGoal> apply(@NonNull final ExerciseGoalCreator exerciseGoalCreator) throws Exception {
+                        return getDataManager().getSessionHelper().getTrainingService().getExercise()
+                                .flatMap(new Function<Exercise, SingleSource<? extends ExerciseGoal>>() {
+                                    @Override
+                                    public SingleSource<? extends ExerciseGoal> apply(@NonNull Exercise exercise) throws Exception {
+                                        return getDataManager().getApiHelper().getExerciseService().doCreateExerciseGoal(exercise, exerciseGoalCreator);
+                                    }
+                                });
                     }
                 });
     }
 
     @Override
     public Single<Exercise> doCreateExercise() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
-                .flatMap(new Function<ExerciseGoalCreator, SingleSource<? extends ExerciseGoal>>() {
-                    @Override
-                    public SingleSource<? extends ExerciseGoal> apply(@NonNull ExerciseGoalCreator exerciseGoalCreator) throws Exception {
-                        return getDataManager().getApiHelper().getExerciseService().doCreateExerciseGoal(exerciseGoalCreator);
-                    }
-                })
-                .flatMap(new Function<ExerciseGoal, SingleSource<? extends ExerciseCreator>>() {
-                    @Override
-                    public SingleSource<? extends ExerciseCreator> apply(@NonNull final ExerciseGoal exerciseGoal) throws Exception {
-                        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
-                                .flatMap(new Function<ExerciseCreator, SingleSource<? extends ExerciseCreator>>() {
-                                    @Override
-                                    public SingleSource<? extends ExerciseCreator> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {
-                                        exerciseCreator.setExerciseGoal(exerciseGoal);
-                                        return Single.just(exerciseCreator);
-                                    }
-                                });
-                    }
-                })
+        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
                 .flatMap(new Function<ExerciseCreator, SingleSource<? extends Exercise>>() {
                     @Override
                     public SingleSource<? extends Exercise> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {

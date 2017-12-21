@@ -6,12 +6,15 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAc
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerFullBluetoothComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerFullNetworkComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerFullSessionComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.NetworkComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.SessionComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FullAppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FullBluetoothModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FullNetworkModule;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FullSessionModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 
 /**
@@ -35,12 +38,17 @@ public class FullApplication extends CapstoneProjectAndroidApplication {
                 .fullNetworkModule(new FullNetworkModule())
                 .build();
 
+        SessionComponent sessionComponent = DaggerFullSessionComponent.builder()
+                .fullSessionModule(new FullSessionModule())
+                .build();
+
         mAppComponent = DaggerAppComponent
                 .builder()
                 .application(this)
                 .appModule(appModule)
                 .bluetoothComponent(bluetoothComponent)
                 .networkComponent(networkComponent)
+                .sessionComponent(sessionComponent)
                 .build();
         mAppComponent.inject(this);
     }

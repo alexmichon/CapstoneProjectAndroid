@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 
 /**
@@ -36,11 +37,11 @@ public class ExerciseResponse {
         mExerciseTypeId = exerciseTypeId;
     }
 
-    public Exercise getExercise(ExerciseType exerciseType) {
-        if (mExerciseTypeId != exerciseType.getId()) {
+    public Exercise getExercise(ExerciseCreator exerciseCreator) {
+        if (mExerciseTypeId != exerciseCreator.getExerciseType().getId()) {
             return null;
         }
 
-        return new Exercise(mId, exerciseType);
+        return new Exercise(mId, exerciseCreator.getExerciseType());
     }
 }

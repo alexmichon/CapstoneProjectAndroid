@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 
 /**
@@ -15,8 +16,8 @@ public class ExerciseRequest {
     @Expose
     private final int mExerciseTypeId;
 
-    public ExerciseRequest(ExerciseType exerciseType) {
-        mExerciseTypeId = exerciseType.getId();
+    public ExerciseRequest(ExerciseCreator exerciseCreator) {
+        mExerciseTypeId = exerciseCreator.getExerciseType().getId();
     }
 
     @Override

@@ -19,9 +19,7 @@ public interface IExerciseService {
     Single<Exercise> doCreateExercise(ExerciseCreator exerciseCreator);
     Single<Measurement> doSaveMeasurement(Measurement measurement);
 
-    Single<Measurement> getMaxMeasurement();
-
-    Single<ExerciseGoal> doCreateExerciseGoal(ExerciseGoalCreator exerciseGoalCreator);
+    Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, ExerciseGoalCreator exerciseGoalCreator);
 
     Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType);
 
