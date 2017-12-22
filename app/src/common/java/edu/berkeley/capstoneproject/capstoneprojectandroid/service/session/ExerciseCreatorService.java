@@ -47,7 +47,7 @@ public class ExerciseCreatorService implements IExerciseCreatorService {
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                mExerciseGoalCreator = new ExerciseGoalCreator(exerciseType);
+                mExerciseGoalCreator = new ExerciseGoalCreator();
             }
         });
     }

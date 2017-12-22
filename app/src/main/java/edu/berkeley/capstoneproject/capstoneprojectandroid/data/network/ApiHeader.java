@@ -70,7 +70,7 @@ public class ApiHeader {
         mMap.put(KEY_UID, uid);
     }
 
-    public Map<String, String> getMap() {
+    public Map<String, String> getHeaders() {
         return mMap;
     }
 

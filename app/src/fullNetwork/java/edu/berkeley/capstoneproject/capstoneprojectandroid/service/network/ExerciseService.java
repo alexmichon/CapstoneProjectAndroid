@@ -20,6 +20,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseGoalResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResultResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseTypeResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementResponse;
@@ -80,7 +81,7 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, ExerciseGoalCreator exerciseGoalCreator) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
-                .addHeaders(mApiHeader.getMap())
+                .addHeaders(mApiHeader.getHeaders())
                 .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
                 .addBodyParameter(new ExerciseGoalRequest(exerciseGoalCreator))
                 .build()
@@ -96,18 +97,40 @@ public class ExerciseService implements IExerciseService {
 
     @Override
     public Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType) {
-        return null;
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPE_DEFAULT_GOAL)
+                .addHeaders(mApiHeader.getHeaders())
+                .addPathParameter("exercise_type_id", String.valueOf(exerciseType.getId()))
+                .build()
+                .getObjectObservable(ExerciseGoalResponse.class)
+                .singleOrError()
+                .map(new Function<ExerciseGoalResponse, ExerciseGoalCreator>() {
+                    @Override
+                    public ExerciseGoalCreator apply(@NonNull ExerciseGoalResponse exerciseGoalResponse) throws Exception {
+                        return exerciseGoalResponse.toCreator();
+                    }
+                });
     }
 
     @Override
     public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
-        return null;
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_RESULT)
+                .addHeaders(mApiHeader.getHeaders())
+                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
+                .build()
+                .getObjectObservable(ExerciseResultResponse.class)
+                .singleOrError()
+                .map(new Function<ExerciseResultResponse, ExerciseResult>() {
+                    @Override
+                    public ExerciseResult apply(@NonNull ExerciseResultResponse exerciseResultResponse) throws Exception {
+                        return exerciseResultResponse.get();
+                    }
+                });
     }
 
     @Override
     public Observable<ExerciseType> doGetExerciseTypes() {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPES)
-                .addHeaders(mApiHeader.getMap())
+                .addHeaders(mApiHeader.getHeaders())
                 .build()
                 .getObjectListObservable(ExerciseTypeResponse.class)
                 .flatMap(new Function<List<ExerciseTypeResponse>, ObservableSource<ExerciseTypeResponse>>() {

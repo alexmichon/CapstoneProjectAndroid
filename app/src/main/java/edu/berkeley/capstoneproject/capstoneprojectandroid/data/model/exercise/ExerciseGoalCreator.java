@@ -13,12 +13,10 @@ public class ExerciseGoalCreator {
 
     private List<MetricGoal> mMetricGoals;
     private ExerciseGoal.Type mType;
-    private ExerciseType mExerciseType;
 
-    public ExerciseGoalCreator(ExerciseType exerciseType) {
+    public ExerciseGoalCreator() {
         mType = ExerciseGoal.Type.DEFAULT;
         mMetricGoals = new ArrayList<>();
-        mExerciseType = exerciseType;
     }
 
     public List<MetricGoal> getMetricGoals() {
@@ -35,9 +33,5 @@ public class ExerciseGoalCreator {
 
     public void setType(ExerciseGoal.Type type) {
         mType = type;
-    }
-
-    public ExerciseType getExerciseType() {
-        return mExerciseType;
     }
 }

@@ -28,7 +28,7 @@ public class ExerciseGoalFactory {
 
     public static ExerciseGoal def(ExerciseType exerciseType) {
         if (!mDefaults.containsKey(exerciseType)) {
-            mDefaults.put(exerciseType, new ExerciseGoal(ID++, exerciseType, ExerciseGoal.Type.DEFAULT, Arrays.asList(
+            mDefaults.put(exerciseType, new ExerciseGoal(ID++, ExerciseGoal.Type.DEFAULT, Arrays.asList(
                     MetricGoalFactory.builder()
                             .withMetric(SensorManager.find(SensorManager.ID_ACCELEROMETER).getMetric(Accelerometer.ID_ACC_X))
                             .withGoal(1.0f)
@@ -69,7 +69,7 @@ public class ExerciseGoalFactory {
         }
 
         public ExerciseGoal build() {
-            ExerciseGoal exerciseGoal = new ExerciseGoal(ID++, mExerciseType, mType, mMetricGoals);
+            ExerciseGoal exerciseGoal = new ExerciseGoal(ID++, mType, mMetricGoals);
 
             switch (mType) {
                 case DEFAULT:
@@ -85,7 +85,7 @@ public class ExerciseGoalFactory {
         }
 
         public ExerciseGoalCreator creator() {
-            ExerciseGoalCreator creator = new ExerciseGoalCreator(mExerciseType);
+            ExerciseGoalCreator creator = new ExerciseGoalCreator();
             creator.setType(mType);
             creator.setMetricGoals(mMetricGoals);
 

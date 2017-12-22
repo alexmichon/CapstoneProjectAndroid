@@ -52,23 +52,17 @@ public class ExerciseGoal {
     }
 
     private final int mId;
-    private final ExerciseType mExerciseType;
     private Type mType;
     private List<MetricGoal> mMetricGoals;
 
-    public ExerciseGoal(int id, ExerciseType exerciseType, Type type, List<MetricGoal> metricGoals) {
+    public ExerciseGoal(int id, Type type, List<MetricGoal> metricGoals) {
         mId = id;
-        mExerciseType = exerciseType;
         mType = type;
         mMetricGoals = metricGoals;
     }
 
     public int getId() {
         return mId;
-    }
-
-    public ExerciseType getExerciseType() {
-        return mExerciseType;
     }
 
     public Type getType() {

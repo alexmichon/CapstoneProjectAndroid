@@ -25,4 +25,10 @@ public class ApiEndPoint {
 
     public static final String ENDPOINT_EXERCISE_TYPES = ApiConstants.API_URL
             + "/exercise_types";
+
+    public static final String ENDPOINT_EXERCISE_TYPE_DEFAULT_GOAL = ApiConstants.API_URL
+            + "/exercise_types/{exercise_type_id}/default_goal";
+
+    public static final String ENDPOINT_EXERCISE_RESULT = ApiConstants.API_URL
+            + "/exercises/{exercise_id}/exercise_result";
 }
