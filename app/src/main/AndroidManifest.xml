@@ -29,8 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.login.LoginActivity"/>
-        <activity android:name=".ui.register.RegisterActivity"/>
+        <activity android:name=".ui.authentication.AuthenticationActivity"/>
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.training.TrainingActivity"/>
     </application>

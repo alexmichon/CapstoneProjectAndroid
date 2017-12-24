@@ -32,5 +32,7 @@ public interface MainMenuContract {
         List<MainMenuItem> getMenuItems();
 
         MainMenuItem getHomeItem();
+
+        MainMenuItem getLogOutItem();
     }
 }

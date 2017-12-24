@@ -1,7 +1,10 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login;
 
+import android.app.Instrumentation;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.FragmentManager;
 
 
 import org.junit.Before;
@@ -12,6 +15,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseEspressoTest;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -35,12 +40,26 @@ public class LoginActivityTest extends BaseEspressoTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Rule
-    public final ActivityTestRule<LoginActivity> login =
-                new ActivityTestRule<>(LoginActivity.class, true, true);
+    public final ActivityTestRule<AuthenticationActivity> mAuthenticationTestRule =
+                new ActivityTestRule<>(AuthenticationActivity.class, true, true);
+
+    private LoginFragment mLoginFragment;
 
     @Before
     public void setup() {
-        unlockScreen(login.getActivity());
+        unlockScreen(mAuthenticationTestRule.getActivity());
+        setupFragment();
+    }
+
+    public void setupFragment() {
+        mLoginFragment = new LoginFragment();
+        FragmentManager fragmentManager = mAuthenticationTestRule.getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.authentication_container, mLoginFragment)
+                .commit();
+
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        instrumentation.waitForIdleSync();
     }
 
     @Test
@@ -63,7 +82,7 @@ public class LoginActivityTest extends BaseEspressoTest {
         String email = "email";
         String password = "password";
 
-        doNothing().when(login.getActivity().getPresenter()).onLoginClick(anyString(), anyString());
+        doNothing().when(mLoginFragment.getPresenter()).onLoginClick(anyString(), anyString());
 
         onView(withId(R.id.login_email))
                 .perform(typeText(email))
@@ -76,6 +95,6 @@ public class LoginActivityTest extends BaseEspressoTest {
         onView(withId(R.id.login_button))
                 .perform(click());
 
-        verify(login.getActivity().getPresenter()).onLoginClick(email, password);
+        verify(mLoginFragment.getPresenter()).onLoginClick(email, password);
     }
 }

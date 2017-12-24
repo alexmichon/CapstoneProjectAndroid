@@ -1,20 +1,18 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register;
 
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentInteractor;
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Alex on 10/11/2017.
  */
 
-public class RegisterInteractor extends BaseInteractor implements RegisterContract.Interactor {
+public class RegisterInteractor extends AuthenticationFragmentInteractor implements RegisterContract.Interactor {
 
     @Inject
     public RegisterInteractor(IDataManager dataManager) {
@@ -30,9 +28,5 @@ public class RegisterInteractor extends BaseInteractor implements RegisterContra
                         updateApiHeader(user);
                     }
                 });
-    }
-
-    private void updateApiHeader(User user) {
-        // TODO
     }
 }

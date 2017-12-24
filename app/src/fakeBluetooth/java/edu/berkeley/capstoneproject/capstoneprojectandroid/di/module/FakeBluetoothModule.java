@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.ApplicationContext;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.DeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService;
@@ -75,7 +76,7 @@ public class FakeBluetoothModule {
 
     @Provides
     @Singleton
-    SensorManager provideSensorManager(Context context) {
+    SensorManager provideSensorManager(@ApplicationContext Context context) {
         return (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 

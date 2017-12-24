@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import java.util.Map;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 
 /**
@@ -74,6 +75,9 @@ public class LoginResponse {
     }
 
     public User getUser() {
-        return mUserResponse.getUser();
+        User user = mUserResponse.getUser();
+        Authentication authentication = new Authentication(mAccessToken, mClient, mExpiry, mTokenType, mUid);
+        user.setAuthentication(authentication);
+        return user;
     }
 }

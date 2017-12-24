@@ -7,4 +7,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants;
 public final class AppConstants {
 
     public static final String YOUTUBE_API_KEY = "AIzaSyCaS1z5vUpeYDeZ_zZLI9zUiRXVNa2eIaA";
+
+    public static final String PREFERENCES_NAME = "capstoneprojectandroid_prefs";
 }

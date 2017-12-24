@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.ApplicationContext;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.DeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService;
@@ -26,7 +27,7 @@ public class FullBluetoothModule {
 
     @Provides
     @Singleton
-    RxBleClient provideRxBleClient(Context context) {
+    RxBleClient provideRxBleClient(@ApplicationContext Context context) {
         return RxBleClient.create(context);
     }
 

@@ -8,7 +8,17 @@ import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register.RegisterContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register.RegisterInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register.RegisterPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListPresenter;
@@ -31,10 +41,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomePresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainInteractor;
@@ -42,10 +48,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainPresenter
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterActivity;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.register.RegisterPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashInteractor;
@@ -210,12 +212,20 @@ public class ActivityModule {
 
 
 
+    @Provides
+    @PerActivity
+    AuthenticationContract.Interactor provideAuthenticationInteractor(AuthenticationInteractor interactor) {
+        return interactor;
+    }
 
     @Provides
     @PerActivity
-    LoginContract.View provideLoginView(LoginActivity loginActivity) {
-        return loginActivity;
+    AuthenticationContract.Presenter<AuthenticationContract.View, AuthenticationContract.Interactor>
+    provideAuthenticationPresenter(AuthenticationPresenter<AuthenticationContract.View, AuthenticationContract.Interactor> presenter) {
+        return presenter;
     }
+
+
 
     @Provides
     @PerActivity
@@ -232,12 +242,6 @@ public class ActivityModule {
 
 
 
-
-    @Provides
-    @PerActivity
-    RegisterContract.View provideRegisterView(RegisterActivity activity) {
-        return activity;
-    }
 
     @Provides
     @PerActivity
