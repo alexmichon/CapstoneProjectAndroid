@@ -34,8 +34,8 @@ public class MetricResult {
         return mMetricGoal;
     }
 
-    public Metric getMetric() {
-        return mMetricGoal.getMetric();
+    public String getMetricName() {
+        return mMetricGoal.getMetricName();
     }
 
     public boolean getResult() {

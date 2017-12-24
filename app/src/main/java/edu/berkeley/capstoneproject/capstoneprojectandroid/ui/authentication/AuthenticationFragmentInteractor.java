@@ -31,6 +31,6 @@ public abstract class AuthenticationFragmentInteractor extends BaseInteractor im
     }
 
     protected void setCurrentUser(User user) {
-        getDataManager().getSessionHelper().setCurrentUser(user);
+        getDataManager().getSessionHelper().getUserService().setCurrentUser(user);
     }
 }

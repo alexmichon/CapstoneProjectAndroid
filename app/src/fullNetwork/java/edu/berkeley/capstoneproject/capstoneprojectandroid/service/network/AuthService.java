@@ -22,6 +22,7 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 /**
@@ -29,11 +30,11 @@ import okhttp3.Response;
  */
 
 @Singleton
-public class AuthService implements IAuthService {
+public class AuthService extends NetworkService implements IAuthService {
 
     @Inject
-    public AuthService() {
-
+    public AuthService(OkHttpClient okHttpClient) {
+        super(okHttpClient);
     }
 
 
@@ -44,6 +45,7 @@ public class AuthService implements IAuthService {
             public void subscribe(@NonNull final SingleEmitter<User> e) throws Exception {
                 Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_LOGIN)
                         .addBodyParameter(new LoginRequest(email, password))
+                        .setOkHttpClient(getOkHttpClient())
                         .build()
                         .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
                             @Override
@@ -67,6 +69,7 @@ public class AuthService implements IAuthService {
     public Single<User> doRegister(final String email, final String password, final String passwordConfirmation, final String firstName, final String lastName) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_REGISTER)
                 .addBodyParameter(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
+                .setOkHttpClient(getOkHttpClient())
                 .build()
                 .getObjectObservable(RegisterResponse.class)
                 .singleOrError()
@@ -84,7 +87,7 @@ public class AuthService implements IAuthService {
             @Override
             public void subscribe(@NonNull final SingleEmitter<User> singleEmitter) throws Exception {
                 Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_VALIDATE_TOKEN)
-                        .addHeaders(authentication.toMap())
+                        .setOkHttpClient(getOkHttpClient())
                         .build()
                         .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
                             @Override
@@ -110,7 +113,7 @@ public class AuthService implements IAuthService {
             @Override
             public void run() throws Exception {
                 Rx2AndroidNetworking.delete(ApiEndPoint.ENDPOINT_LOGOUT)
-                        .addHeaders(user.getAuthentication().toMap())
+                        .setOkHttpClient(getOkHttpClient())
                         .build()
                         .getAsOkHttpResponse(new OkHttpResponseListener() {
                             @Override

@@ -1,17 +1,25 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
+import okhttp3.Headers;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Alex on 20/11/2017.
  */
 
-public class ApiHeader {
+@Singleton
+public class ApiHeader implements IApiHeader {
 
     public static final String KEY_ACCESS_TOKEN = "access-token";
     public static final String KEY_CLIENT = "client";
@@ -70,18 +78,27 @@ public class ApiHeader {
         addHeader(KEY_UID, uid);
     }
 
+    @Override
+    public void addHeaders(Map<String, String> headers) {
+        mHeaders.putAll(headers);
+    }
+
+    @Override
     public Map<String, String> getHeaders() {
         return mHeaders;
     }
 
+    @Override
     public void addHeader(String key, String value) {
         mHeaders.put(key, value);
     }
 
+    @Override
     public String getHeader(String key) {
         return mHeaders.get(key);
     }
 
+    @Override
     public Authentication getAuthentication() {
         return new Authentication(
                 getAccessToken(),
@@ -92,11 +109,39 @@ public class ApiHeader {
         );
     }
 
+    @Override
     public void setAuthentication(Authentication authentication) {
         setAccessToken(authentication.getAccessToken());
         setClient(authentication.getClient());
         setExpiry(authentication.getExpiry());
         setTokenType(authentication.getTokenType());
         setUid(authentication.getUid());
+    }
+
+    @Override
+    public OkHttpClient okHttpClient() {
+        return new OkHttpClient.Builder()
+                .addNetworkInterceptor(interceptor())
+                .build();
+    }
+
+    @Override
+    public Interceptor interceptor() {
+        return new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request newRequest = chain.request().newBuilder()
+                        .headers(Headers.of(getHeaders()))
+                        .build();
+
+                Response response = chain.proceed(newRequest);
+
+                for (String key: new String[]{KEY_ACCESS_TOKEN, KEY_CLIENT, KEY_EXPIRY, KEY_TOKEN_TYPE, KEY_UID}) {
+
+                }
+
+                return response;
+            }
+        };
     }
 }

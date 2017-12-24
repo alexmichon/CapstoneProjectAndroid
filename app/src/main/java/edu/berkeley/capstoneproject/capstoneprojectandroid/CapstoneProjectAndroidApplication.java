@@ -50,8 +50,7 @@ public class CapstoneProjectAndroidApplication extends Application {
             Timber.plant(new Timber.DebugTree() {
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
-                    String packages[] = element.getClassName().split("\\.");
-                    return packages[packages.length-1] + ":" + element.getLineNumber();
+                    return String.format("[%s#%s:%s]", super.createStackElementTag(element), element.getMethodName(), element.getLineNumber());
                 }
             });
         }

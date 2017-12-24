@@ -37,11 +37,11 @@ public class PreferencesHelper implements IPreferencesHelper {
     @Override
     public Authentication getAuthentication() {
         return new Authentication(
-                mSharedPreferences.getString(PREF_KEY_ACCESS_TOKEN, null),
-                mSharedPreferences.getString(PREF_KEY_CLIENT, null),
-                mSharedPreferences.getString(PREF_KEY_EXPIRY, null),
-                mSharedPreferences.getString(PREF_KEY_TOKEN_TYPE, null),
-                mSharedPreferences.getString(PREF_KEY_UID, null)
+                mSharedPreferences.getString(PREF_KEY_ACCESS_TOKEN, ""),
+                mSharedPreferences.getString(PREF_KEY_CLIENT, ""),
+                mSharedPreferences.getString(PREF_KEY_EXPIRY, ""),
+                mSharedPreferences.getString(PREF_KEY_TOKEN_TYPE, ""),
+                mSharedPreferences.getString(PREF_KEY_UID, "")
         );
     }
 

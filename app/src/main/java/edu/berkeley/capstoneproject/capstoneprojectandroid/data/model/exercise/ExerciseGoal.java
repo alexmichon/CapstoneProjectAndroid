@@ -87,7 +87,7 @@ public class ExerciseGoal {
 
     public MetricGoal getMetricGoal(Metric metric) {
         for (MetricGoal m: mMetricGoals) {
-            if (m.getMetric() == metric) {
+            if (m.getMetricId() == metric.getId()) {
                 return m;
             }
         }

@@ -12,6 +12,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerPr
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -63,6 +64,14 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
                             if (getView().getExerciseGoalType() == ExerciseGoal.Type.DEFAULT) {
                                 getView().setMetricGoals(exerciseGoalCreator.getMetricGoals());
                             }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Timber.e(throwable);
+                        if (isViewAttached()) {
+                            getView().hideLoading();
                         }
                     }
                 })

@@ -6,62 +6,52 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
 
 public class MetricGoal implements Cloneable {
 
-    public enum Type {
-        MIN("Min"), MAX("Max"), MEAN("Mean");
-
-        private final String mName;
-
-        Type(String name) {
-            mName = name;
-        }
-
-        String getName() {
-            return mName;
-        }
-
-        static Type find(String name) {
-            for (Type t: values()) {
-                if (t.getName().equals(name)) {
-                    return t;
-                }
-            }
-            return null;
-        }
-    }
-
-    private Metric mMetric;
-    private Type mType;
-    private MetricComparator mComparator;
+    private int mMetricId;
+    private String mMetricName;
+    private String mAggregator;
+    private String mComparator;
     private float mGoal;
 
-    public MetricGoal(Metric metric, float goal, Type type, MetricComparator comparator) {
-        mMetric = metric;
-        mType = type;
+    public MetricGoal(int metricId, float goal, String type, String comparator) {
+        mMetricId = metricId;
+        mAggregator = type;
         mComparator = comparator;
         mGoal = goal;
     }
 
-    public Metric getMetric() {
-        return mMetric;
+    public int getMetricId() {
+        return mMetricId;
     }
 
     public void setMetric(Metric metric) {
-        mMetric = metric;
+        mMetricId = metric.getId();
     }
 
-    public Type getType() {
-        return mType;
+    public void setMetricId(int metricId) {
+        mMetricId = metricId;
     }
 
-    public void setType(Type type) {
-        mType = type;
+    public String getMetricName() {
+        return mMetricName;
     }
 
-    public MetricComparator getComparator() {
+    public void setMetricName(String metricName) {
+        mMetricName = metricName;
+    }
+
+    public String getAggregator() {
+        return mAggregator;
+    }
+
+    public void setAggregator(String aggregator) {
+        mAggregator = aggregator;
+    }
+
+    public String getComparator() {
         return mComparator;
     }
 
-    public void setComparator(MetricComparator comparator) {
+    public void setComparator(String comparator) {
         mComparator = comparator;
     }
 
@@ -75,9 +65,9 @@ public class MetricGoal implements Cloneable {
 
     public MetricGoal clone() throws CloneNotSupportedException {
         MetricGoal metricGoal = (MetricGoal) super.clone();
-        metricGoal.setMetric(mMetric);
+        metricGoal.setMetricId(mMetricId);
         metricGoal.setGoal(mGoal);
-        metricGoal.setType(mType);
+        metricGoal.setAggregator(mAggregator);
         metricGoal.setComparator(mComparator);
 
         return metricGoal;

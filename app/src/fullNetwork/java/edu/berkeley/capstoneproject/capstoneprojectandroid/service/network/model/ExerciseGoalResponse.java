@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
@@ -13,7 +14,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
  * Created by Alex on 21/12/2017.
  */
 
-public class ExerciseGoalResponse {
+public class ExerciseGoalResponse extends BaseResponse<ExerciseGoalCreator> {
 
     @Expose
     @SerializedName("id")
@@ -21,16 +22,19 @@ public class ExerciseGoalResponse {
 
     @Expose
     @SerializedName("metric_goals")
-    private List<MetricGoal> mMetricGoals;
+    private List<MetricGoalResponse> mMetricGoalResponses;
 
-    public ExerciseGoal toExerciseGoal() {
-        return new ExerciseGoal(mId, ExerciseGoal.Type.DEFAULT, mMetricGoals);
-    }
-
-    public ExerciseGoalCreator toCreator() {
+    @Override
+    public ExerciseGoalCreator get() {
         ExerciseGoalCreator creator = new ExerciseGoalCreator();
         creator.setType(ExerciseGoal.Type.DEFAULT);
-        creator.setMetricGoals(mMetricGoals);
+
+        List<MetricGoal> metricGoals = new ArrayList<>();
+        for (MetricGoalResponse m: mMetricGoalResponses) {
+            metricGoals.add(m.get());
+        }
+        creator.setMetricGoals(metricGoals);
+
         return creator;
     }
 }

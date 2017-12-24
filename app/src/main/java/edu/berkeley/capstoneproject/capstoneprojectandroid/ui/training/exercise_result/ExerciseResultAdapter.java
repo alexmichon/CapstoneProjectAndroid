@@ -61,7 +61,7 @@ public class ExerciseResultAdapter extends RecyclerView.Adapter<ExerciseResultAd
         }
 
         public void bind(MetricResult metricResult) {
-            mLabelView.setText(metricResult.getMetric().getName());
+            mLabelView.setText(metricResult.getMetricName());
             mActualView.setText(String.valueOf(metricResult.getActualValue()));
             mExpectedView.setText(String.valueOf(metricResult.getExpectedValue()));
             mCommentView.setText(metricResult.getComment());

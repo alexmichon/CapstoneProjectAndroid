@@ -43,6 +43,6 @@ public class SplashInteractor extends BaseInteractor implements SplashContract.I
 
     @Override
     public void setCurrentUser(User user) {
-        getDataManager().getSessionHelper().setCurrentUser(user);
+        getDataManager().getSessionHelper().getUserService().setCurrentUser(user);
     }
 }

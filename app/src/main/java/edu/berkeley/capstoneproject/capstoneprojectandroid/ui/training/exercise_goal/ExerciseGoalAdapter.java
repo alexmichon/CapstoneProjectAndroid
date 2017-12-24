@@ -88,10 +88,9 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
         public void bind(MetricGoal metricGoal) {
             mMetricGoal = metricGoal;
 
-            Metric metric = metricGoal.getMetric();
             float goal = metricGoal.getGoal();
 
-            mLabelView.setText(metric.getName());
+            mLabelView.setText(metricGoal.getMetricName());
             mGoalView.setText(String.valueOf(goal));
             mGoalView.setEnabled(mEditable);
         }

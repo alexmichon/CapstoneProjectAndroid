@@ -32,8 +32,8 @@ public class ExerciseGoalFactory {
                     MetricGoalFactory.builder()
                             .withMetric(SensorManager.find(SensorManager.ID_ACCELEROMETER).getMetric(Accelerometer.ID_ACC_X))
                             .withGoal(1.0f)
-                            .withType(MetricGoal.Type.MAX)
-                            .withComparator(new MetricComparator(MetricComparator.Type.GT))
+                            .withType("max")
+                            .withComparator(">=")
                             .build())
             ));
         }

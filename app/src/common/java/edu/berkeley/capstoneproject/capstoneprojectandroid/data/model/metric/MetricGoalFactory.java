@@ -12,13 +12,18 @@ public class MetricGoalFactory {
 
     public static class Builder {
 
-        private Metric mMetric;
+        private int mMetricId;
         private float mGoal;
-        private MetricGoal.Type mType;
-        private MetricComparator mComparator;
+        private String mType;
+        private String mComparator;
 
         public Builder withMetric(Metric metric) {
-            mMetric = metric;
+            mMetricId = metric.getId();
+            return this;
+        }
+
+        public Builder withMetricId(int metricId) {
+            mMetricId = metricId;
             return this;
         }
 
@@ -27,18 +32,18 @@ public class MetricGoalFactory {
             return this;
         }
 
-        public Builder withType(MetricGoal.Type type) {
+        public Builder withType(String type) {
             mType = type;
             return this;
         }
 
-        public Builder withComparator(MetricComparator comparator) {
+        public Builder withComparator(String comparator) {
             mComparator = comparator;
             return this;
         }
 
         public MetricGoal build() {
-            MetricGoal metricGoal = new MetricGoal(mMetric, mGoal, mType, mComparator);
+            MetricGoal metricGoal = new MetricGoal(mMetricId, mGoal, mType, mComparator);
             return metricGoal;
         }
     }

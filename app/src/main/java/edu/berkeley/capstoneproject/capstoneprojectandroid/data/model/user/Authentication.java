@@ -10,11 +10,11 @@ import java.util.Map;
 
 public class Authentication {
 
-    private String mAccessToken;
-    private String mClient;
-    private String mExpiry;
-    private String mTokenType;
-    private String mUid;
+    private String mAccessToken = "";
+    private String mClient = "";
+    private String mExpiry = "";
+    private String mTokenType = "";
+    private String mUid = "";
 
     public Authentication(String accessToken, String client, String expiry, String tokenType, String uid) {
         mAccessToken = accessToken;
@@ -89,7 +89,7 @@ public class Authentication {
 
 
 
-    public Map<String, String> toMap() {
+    public Map<String, String> getHeaders() {
         Map<String, String> map = new HashMap<>(5);
         map.put("access-token", mAccessToken);
         map.put("client", mClient);

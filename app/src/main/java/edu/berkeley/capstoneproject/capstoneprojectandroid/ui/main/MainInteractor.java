@@ -20,7 +20,7 @@ public class MainInteractor extends BaseInteractor implements MainContract.Inter
 
     @Override
     public Completable doLogout() {
-        User user = getDataManager().getSessionHelper().getCurrentUser();
+        User user = getDataManager().getSessionHelper().getUserService().getCurrentUser();
         getDataManager().getPreferencesHelper().removeAuthentication();
         return getDataManager().getApiHelper().getAuthService().doLogout(user);
     }
