@@ -5,9 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
@@ -19,16 +17,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
 
 public class Exercise implements Parcelable {
 
-    private ExerciseGoal mExerciseGoal;
-
-
-
     public enum State {
         UNSTARTED, STARTED, ENDED;
     }
+
     private final int mId;
 
-    private final ExerciseType mType;
+    private final int mExerciseTypeId;
 
     private Date mStartDate;
     private Date mEndDate;
@@ -36,13 +31,18 @@ public class Exercise implements Parcelable {
 
     private final List<MetricMeasurementList> mMetricMeasurementLists = new ArrayList<>();
 
-    public Exercise(int id, ExerciseType type) {
+    public Exercise(int id, int exerciseTypeId) {
         mId = id;
-        mType = type;
+        mExerciseTypeId = exerciseTypeId;
     }
 
-    public ExerciseType getType() {
-        return mType;
+    public Exercise(int id, ExerciseType exerciseType) {
+        mId = id;
+        mExerciseTypeId = exerciseType.getId();
+    }
+
+    public int getExerciseTypeId() {
+        return mExerciseTypeId;
     }
 
     public void start() {
@@ -84,20 +84,12 @@ public class Exercise implements Parcelable {
         return mId;
     }
 
-    public void setExerciseGoal(ExerciseGoal exerciseGoal) {
-        mExerciseGoal = exerciseGoal;
-    }
-
-    public ExerciseGoal getExerciseGoal() {
-        return mExerciseGoal;
-    }
-
 
 
 
     protected Exercise(Parcel in) {
         mId = in.readInt();
-        mType = in.readParcelable(ExerciseType.class.getClassLoader());
+        mExerciseTypeId = in.readParcelable(ExerciseType.class.getClassLoader());
     }
 
     public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
@@ -120,7 +112,7 @@ public class Exercise implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mId);
-        parcel.writeParcelable(mType, i);
+        parcel.writeInt(mExerciseTypeId);
     }
 
 
@@ -129,22 +121,20 @@ public class Exercise implements Parcelable {
     public static class Builder {
         private int mId;
 
-        private ExerciseType mExerciseType;
-        private ExerciseGoal mExerciseGoal;
+        private int mExerciseTypeId;
 
         public Builder withExerciseType(ExerciseType exerciseType) {
-            mExerciseType = exerciseType;
+            mExerciseTypeId = exerciseType.getId();
             return this;
         }
 
-        public Builder withExerciseGoal(ExerciseGoal exerciseGoal) {
-            mExerciseGoal = exerciseGoal;
+        public Builder withExerciseTypeId(int exerciseTypeId) {
+            mExerciseTypeId = exerciseTypeId;
             return this;
         }
 
         public Exercise build() {
-            Exercise exercise = new Exercise(mId, mExerciseType);
-            exercise.setExerciseGoal(mExerciseGoal);
+            Exercise exercise = new Exercise(mId, mExerciseTypeId);
             return exercise;
         }
     }

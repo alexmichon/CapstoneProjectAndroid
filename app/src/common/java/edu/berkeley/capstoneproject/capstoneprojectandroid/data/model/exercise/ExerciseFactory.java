@@ -1,7 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
-import dagger.Component;
-
 /**
  * Created by Alex on 20/12/2017.
  */
@@ -15,27 +13,24 @@ public class ExerciseFactory {
     }
 
     public static class Builder {
-        private ExerciseType mExerciseType;
-        private ExerciseGoal mExerciseGoal;
+        private int mExerciseTypeId;
 
         public Builder() {
 
         }
 
         public Builder withExerciseType(ExerciseType exerciseType) {
-            mExerciseType = exerciseType;
+            mExerciseTypeId = exerciseType.getId();
             return this;
         }
 
-        public Builder withExerciseGoal(ExerciseGoal exerciseGoal) {
-            mExerciseGoal = exerciseGoal;
+        public Builder withExerciseTypeId(int exerciseTypeId) {
+            mExerciseTypeId = exerciseTypeId;
             return this;
         }
 
         public Exercise build() {
-            Exercise exercise = new Exercise(ID++, mExerciseType);
-            exercise.setExerciseGoal(mExerciseGoal);
-
+            Exercise exercise = new Exercise(ID++, mExerciseTypeId);
             return exercise;
         }
 
