@@ -35,10 +35,14 @@ public interface ExerciseContract {
 
         void addMeasurement(Measurement measurement);
 
-        void showCountdown(int countdown);
-        void showDuration(int duration);
-
+        void onCountdownStart();
+        void onCountdownUpdate(int count);
         void onCountdownFinished();
+
+        void setTimerMax(float timerMax);
+        void onTimerStart();
+        void onTimerUpdate(float time);
+        void onTimerFinished();
     }
 
     interface Interactor extends IBaseInteractor {

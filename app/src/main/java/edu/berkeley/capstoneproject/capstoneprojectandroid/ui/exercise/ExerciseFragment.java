@@ -9,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,6 +27,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +56,18 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     public static final String EXTRA_EXERCISE_TYPE = "ExerciseType";
 
 
+    private NumberFormat mTimerFormatter;
+
+    @BindView(R.id.exercise_countdown)
+    TextView mCountdownView;
+    @BindView(R.id.exercise_timer)
+    TextView mTimerView;
+    @BindView(R.id.exercise_timer_max)
+    TextView mTimerMaxView;
+
+    @BindView(R.id.exercise_layout)
+    LinearLayout mExerciseLayout;
+
     @BindView(R.id.exercise_linechart_acc)
     LineChart mAccView;
     @BindView(R.id.exercise_linechart_gyr)
@@ -75,6 +91,8 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         getPresenter().onCreate();
+
+        mTimerFormatter = new DecimalFormat("00.00");
     }
 
     @Nullable
@@ -94,6 +112,9 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         initLineChart(mAccView, -2, 2);
         initLineChart(mGyrView, -2, 2);
         initPieChart(mEncoderView);
+
+        mExerciseLayout.setVisibility(View.GONE);
+        mCountdownView.setVisibility(View.GONE);
 
         return view;
     }
@@ -142,7 +163,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onExerciseCreated(Exercise exercise) {
-
+        setTimerMax(exercise.getDuration());
     }
 
     @Override
@@ -150,6 +171,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         getActivity().invalidateOptionsMenu();
         hideLoading();
     }
+
 
     @Override
     public void onExerciseStopped(Exercise exercise) {
@@ -164,7 +186,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onExerciseFinished() {
-
+        onTimerFinished();
     }
 
     @Override
@@ -201,6 +223,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public void onStartRecording() {
         getActivity().invalidateOptionsMenu();
+        onTimerStart();
     }
 
     private void addMeasurement(LineChart chart, Measurement measurement) {
@@ -348,20 +371,44 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
 
     @Override
-    public void showCountdown(int countdown) {
-        Toast.makeText(getContext(), String.valueOf(countdown), Toast.LENGTH_SHORT).show();
+    public void onCountdownStart() {
+        mCountdownView.setVisibility(View.VISIBLE);
+        mExerciseLayout.setVisibility(View.GONE);
+        mCountdownView.setText("Ready ?");
     }
 
     @Override
-    public void showDuration(int duration) {
-        Toast.makeText(getContext(), String.valueOf(duration), Toast.LENGTH_SHORT).show();
+    public void onCountdownUpdate(int count) {
+        mCountdownView.setText(String.valueOf(count));
     }
-
 
     @Override
     public void onCountdownFinished() {
-        Toast.makeText(getContext(), "GO !", Toast.LENGTH_SHORT).show();
         getPresenter().onStartRecording();
+        mCountdownView.setVisibility(View.GONE);
     }
 
+
+
+
+    @Override
+    public void setTimerMax(float timerMax) {
+        mTimerMaxView.setText(mTimerFormatter.format(timerMax));
+    }
+
+    @Override
+    public void onTimerStart() {
+        mExerciseLayout.setVisibility(View.VISIBLE);
+        onTimerUpdate(0);
+    }
+
+    @Override
+    public void onTimerUpdate(float time) {
+        mTimerView.setText(mTimerFormatter.format(time));
+    }
+
+    @Override
+    public void onTimerFinished() {
+        mTimerView.setText(mTimerMaxView.getText());
+    }
 }

@@ -31,7 +31,9 @@ public class ExerciseService implements IExerciseService {
 
     @Override
     public Single<Exercise> doCreateExercise(ExerciseType exerciseType) {
-        return Single.just(new Exercise(0, exerciseType));
+        Exercise exercise = new Exercise(0, exerciseType);
+        exercise.setDuration(10);
+        return Single.just(exercise);
     }
 
     @Override

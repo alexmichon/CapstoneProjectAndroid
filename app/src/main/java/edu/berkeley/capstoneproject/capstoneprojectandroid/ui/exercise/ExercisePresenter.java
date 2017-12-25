@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Timed;
 import timber.log.Timber;
 
 /**
@@ -138,11 +139,11 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
 
     protected void startCountdown() {
         if (isViewAttached()) {
-
+            getView().onCountdownStart();
         }
 
         getCompositeDisposable().add(Observable.interval(1, TimeUnit.SECONDS)
-                .take(COUNTDOWN)
+                .take(COUNTDOWN + 1, TimeUnit.SECONDS)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .doOnComplete(new Action() {
@@ -157,7 +158,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                     @Override
                     public void accept(Long aLong) throws Exception {
                         if (isViewAttached()) {
-                            getView().showCountdown(COUNTDOWN - aLong.intValue());
+                            getView().onCountdownUpdate(COUNTDOWN - aLong.intValue());
                         }
                     }
                 })
@@ -182,8 +183,9 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
             getView().onStartRecording();
         }
 
-        getCompositeDisposable().add(Observable.interval(1, TimeUnit.SECONDS)
-                .take(mExercise.getDuration())
+        getCompositeDisposable().add(Observable.interval(10, TimeUnit.MILLISECONDS)
+                .timeInterval(TimeUnit.MILLISECONDS)
+                .take(mExercise.getDuration(), TimeUnit.SECONDS)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .doOnComplete(new Action() {
@@ -195,11 +197,11 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                         }
                     }
                 })
-                .subscribe(new Consumer<Long>() {
+                .subscribe(new Consumer<Timed<Long>>() {
                     @Override
-                    public void accept(Long aLong) throws Exception {
+                    public void accept(Timed<Long> aLong) throws Exception {
                         if (isViewAttached()) {
-                            getView().showDuration(aLong.intValue());
+                            getView().onTimerUpdate((float)aLong.value() / 100);
                         }
                     }
                 })
