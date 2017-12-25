@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Single;
@@ -84,7 +86,7 @@ public class LoginPresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).onLoginStart(any(IBaseView.OnCancelListener.class));
+        verify(mView).onAuthenticationStart(any(IBaseView.OnCancelListener.class));
     }
 
     @Test
@@ -101,7 +103,7 @@ public class LoginPresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).onLoginSuccess(user);
+        verify(mView).onAuthenticationSuccess(user);
     }
 
     @Test
@@ -119,7 +121,7 @@ public class LoginPresenterTest {
         mTestScheduler.triggerActions();
 
         // then
-        verify(mView).onLoginFailure(error);
+        verify(mView).onAuthenticationFailure(error);
     }
 
 
@@ -127,7 +129,7 @@ public class LoginPresenterTest {
     @Test
     public void onLoginCancel() {
         // when
-        mPresenter.onLoginCancel();
+        mPresenter.onAuthenticationCancel();
 
         // then
         assertTrue(mPresenter.getCompositeDisposable().isDisposed());

@@ -3,8 +3,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data;
 import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.IPreferencesHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.session.ISessionHelper;
 
 /**
@@ -16,6 +16,6 @@ public interface IDataManager {
 
     IApiHelper getApiHelper();
     IBluetoothHelper getBluetoothHelper();
-
+    IPreferencesHelper getPreferencesHelper();
     ISessionHelper getSessionHelper();
 }

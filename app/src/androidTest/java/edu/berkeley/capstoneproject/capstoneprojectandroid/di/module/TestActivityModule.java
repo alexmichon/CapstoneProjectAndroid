@@ -4,8 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.mockito.Mockito;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.login.LoginPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginPresenter;
 
 /**
  * Created by Alex on 25/11/2017.

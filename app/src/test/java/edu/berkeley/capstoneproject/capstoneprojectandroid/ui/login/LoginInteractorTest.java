@@ -11,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.login.LoginInteractor;
 import io.reactivex.Single;
 
 import static org.mockito.Mockito.doReturn;
