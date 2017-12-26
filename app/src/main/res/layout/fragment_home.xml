@@ -15,26 +15,43 @@
     <android.support.v7.widget.ButtonBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/main_button_start_training"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
-            android:text="Start training"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/main_button_view_results"
+            <Button
+                android:id="@+id/main_button_start_training"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:text="Start training"
+                style="@style/RoundButton"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
-            android:text="View results"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/main_button_view_results"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:text="View results"
+                style="@style/RoundButton"/>
+
+        </LinearLayout>
 
     </android.support.v7.widget.ButtonBarLayout>
 

@@ -17,4 +17,10 @@
         <item name="actionMenuTextColor">@color/textPrimary</item>
     </style>
 
+    <style name="RoundButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/round_button</item>
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

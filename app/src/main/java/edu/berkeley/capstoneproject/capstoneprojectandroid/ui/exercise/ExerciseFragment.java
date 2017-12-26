@@ -4,14 +4,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -34,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
@@ -57,6 +55,9 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
 
     private NumberFormat mTimerFormatter;
+
+    @BindView(R.id.exercise_start_button)
+    Button mStartButton;
 
     @BindView(R.id.exercise_countdown)
     TextView mCountdownView;
@@ -89,7 +90,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         getPresenter().onCreate();
 
         mTimerFormatter = new DecimalFormat("00.00");
@@ -113,16 +113,11 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         initLineChart(mGyrView, -2, 2);
         initPieChart(mEncoderView);
 
+        mStartButton.setVisibility(View.GONE);
         mExerciseLayout.setVisibility(View.GONE);
         mCountdownView.setVisibility(View.GONE);
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -135,26 +130,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         return TITLE;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_exercise, menu);
-        menu.findItem(R.id.exercise_menu_start).setVisible(!getPresenter().isRecording());
-        menu.findItem(R.id.exercise_menu_stop).setVisible(getPresenter().isRecording());
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.exercise_menu_start:
-                getPresenter().onStartClick();
-                return true;
-            case R.id.exercise_menu_stop:
-                getPresenter().onStopClick();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public ExerciseType getExerciseType() {
@@ -168,14 +143,14 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onExerciseReady(Exercise exercise) {
-        getActivity().invalidateOptionsMenu();
         hideLoading();
+        showStartButton();
     }
 
 
     @Override
     public void onExerciseStopped(Exercise exercise) {
-        getActivity().invalidateOptionsMenu();
+
     }
 
     @Override
@@ -188,6 +163,14 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     public void onExerciseFinished() {
         onTimerFinished();
     }
+
+
+    @OnClick(R.id.exercise_start_button)
+    public void onStartClick(View v) {
+        getPresenter().onStartClick();
+    }
+
+
 
     @Override
     public void addMeasurement(Measurement measurement) {
@@ -222,7 +205,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onStartRecording() {
-        getActivity().invalidateOptionsMenu();
+        showExerciseLayout();
         onTimerStart();
     }
 
@@ -372,8 +355,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onCountdownStart() {
-        mCountdownView.setVisibility(View.VISIBLE);
-        mExerciseLayout.setVisibility(View.GONE);
+        showCountdown();
         mCountdownView.setText("Ready ?");
     }
 
@@ -385,7 +367,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public void onCountdownFinished() {
         getPresenter().onStartRecording();
-        mCountdownView.setVisibility(View.GONE);
     }
 
 
@@ -398,7 +379,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
 
     @Override
     public void onTimerStart() {
-        mExerciseLayout.setVisibility(View.VISIBLE);
         onTimerUpdate(0);
     }
 
@@ -410,5 +390,27 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     @Override
     public void onTimerFinished() {
         mTimerView.setText(mTimerMaxView.getText());
+    }
+
+
+
+
+
+    private void showStartButton() {
+        mStartButton.setVisibility(View.VISIBLE);
+        mExerciseLayout.setVisibility(View.GONE);
+        mCountdownView.setVisibility(View.GONE);
+    }
+
+    private void showCountdown() {
+        mStartButton.setVisibility(View.GONE);
+        mExerciseLayout.setVisibility(View.GONE);
+        mCountdownView.setVisibility(View.VISIBLE);
+    }
+
+    private void showExerciseLayout() {
+        mStartButton.setVisibility(View.GONE);
+        mExerciseLayout.setVisibility(View.VISIBLE);
+        mCountdownView.setVisibility(View.GONE);
     }
 }
