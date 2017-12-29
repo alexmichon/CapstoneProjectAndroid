@@ -10,23 +10,35 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
  * Created by Alex on 19/11/2017.
  */
 
-public class ExerciseRequest {
+public class ExerciseRequest extends BaseRequest {
 
-    @SerializedName("exercise_type_id")
+    @SerializedName("exercise")
     @Expose
-    private final int mExerciseTypeId;
+    private final ExerciseNestedRequest mExerciseNestedRequest;
 
     public ExerciseRequest(ExerciseCreator exerciseCreator) {
-        mExerciseTypeId = exerciseCreator.getExerciseType().getId();
+        mExerciseNestedRequest = new ExerciseNestedRequest(exerciseCreator);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
 
-        ExerciseRequest that = (ExerciseRequest) obj;
+    private static class ExerciseNestedRequest {
 
-        return this.mExerciseTypeId == that.mExerciseTypeId;
+        @SerializedName("exercise_type_id")
+        @Expose
+        private final int mExerciseTypeId;
+
+        public ExerciseNestedRequest(ExerciseCreator exerciseCreator) {
+            mExerciseTypeId = exerciseCreator.getExerciseType().getId();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+
+            ExerciseNestedRequest that = (ExerciseNestedRequest) obj;
+
+            return this.mExerciseTypeId == that.mExerciseTypeId;
+        }
     }
 }
