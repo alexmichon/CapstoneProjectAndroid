@@ -97,7 +97,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
     }
 
     protected Completable getAuthenticationCompletable() {
-        return getStoredAuthenticationSingle()
+        return getInteractor.restore()
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
@@ -106,50 +106,20 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
                         }
                     }
                 })
-                .flatMap(new Function<Authentication, SingleSource<User>>() {
+                .doOnError(new Consumer<Throwable>() {
                     @Override
-                    public SingleSource<User> apply(@NonNull Authentication authentication) throws Exception {
-                        mAuthentication = authentication;
-                        return getRestoreAuthenticationSingle(authentication)
-                                .onErrorReturnItem(new GuestUser())
-                                .doOnError(new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        mIsLoggedIn = false;
-                                    }
-                                });
+                    public void accept(Throwable throwable) throws Exception {
+                        mIsLoggedIn = false;
                     }
-                }).flatMapCompletable(new Function<User, CompletableSource>() {
+                })
+                .doOnSuccess(new Consumer<User>() {
                     @Override
-                    public CompletableSource apply(@NonNull final User user) throws Exception {
-                        return Completable.fromAction(new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                if (!user.isAuthenticated()) {
-                                    mIsLoggedIn = false;
-                                    return;
-                                }
-                                mIsLoggedIn = true;
-                                getInteractor().setCurrentUser(user);
-                            }
-                        });
+                    public void accept(User user) throws Exception {
+                        mIsLoggedIn = user.isAuthenticated();
                     }
                 });
     }
 
-
-
-    protected Single<Authentication> getStoredAuthenticationSingle() {
-        return getInteractor().doGetStoredAuthentication()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui());
-    }
-
-    protected Single<User> getRestoreAuthenticationSingle(Authentication authentication) {
-        return getInteractor().doRestoreAuthentication(authentication)
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui());
-    }
 
     protected void onStartDone() {
         if (isViewAttached()) {

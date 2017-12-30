@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Completable;
@@ -19,11 +20,13 @@ import io.reactivex.Single;
 public class SplashInteractor extends BaseInteractor implements SplashContract.Interactor {
 
     private final ConnectivityManager mConnectivityManager;
+    private final IAuthManager mAuthManager;
 
     @Inject
-    public SplashInteractor(IDataManager dataManager, ConnectivityManager connectivityManager) {
+    public SplashInteractor(IDataManager dataManager, ConnectivityManager connectivityManager, IAuthManager authManager) {
         super(dataManager);
         mConnectivityManager = connectivityManager;
+        mAuthManager = authManager;
     }
 
     @Override
@@ -32,17 +35,7 @@ public class SplashInteractor extends BaseInteractor implements SplashContract.I
     }
 
     @Override
-    public Single<Authentication> doGetStoredAuthentication() {
-        return Single.just(getDataManager().getPreferencesHelper().getAuthentication());
-    }
-
-    @Override
-    public Single<User> doRestoreAuthentication(Authentication authentication) {
-        return getDataManager().getApiHelper().getAuthService().doRestoreAuthentication(authentication);
-    }
-
-    @Override
-    public void setCurrentUser(User user) {
-        getDataManager().getSessionHelper().getUserService().setCurrentUser(user);
+    public Single<User> restore() {
+        return mAuthManager.restore();
     }
 }

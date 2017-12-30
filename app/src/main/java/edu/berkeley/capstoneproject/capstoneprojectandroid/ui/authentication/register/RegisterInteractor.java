@@ -15,18 +15,12 @@ import io.reactivex.functions.Consumer;
 public class RegisterInteractor extends AuthenticationFragmentInteractor implements RegisterContract.Interactor {
 
     @Inject
-    public RegisterInteractor(IDataManager dataManager) {
-        super(dataManager);
+    public RegisterInteractor(IDataManager dataManager, AuthManager authManager) {
+        super(dataManager, authManager);
     }
 
     @Override
     public Single<User> doRegisterApiCall(String email, String password, String passwordConfirmation, String firstName, String lastName) {
-        return getDataManager().getApiHelper().getAuthService()
-                .doRegister(email, password, passwordConfirmation, firstName, lastName).doOnSuccess(new Consumer<User>() {
-                    @Override
-                    public void accept(User user) throws Exception {
-                        updateApiHeader(user);
-                    }
-                });
+        return getAuthManager().register(email, password, passwordConfirmation, firstName, lastName);
     }
 }

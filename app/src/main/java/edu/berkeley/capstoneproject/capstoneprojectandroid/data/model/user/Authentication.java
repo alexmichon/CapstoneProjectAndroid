@@ -24,14 +24,6 @@ public class Authentication {
         mUid = uid;
     }
 
-    public Authentication(Map<String, String> headers) {
-        mAccessToken = headers.get("access-token");
-        mClient = headers.get("client");
-        mExpiry = headers.get("expiry");
-        mTokenType = headers.get("token-type");
-        mUid = headers.get("uid");
-    }
-
     public String getAccessToken() {
         return mAccessToken;
     }
@@ -85,18 +77,5 @@ public class Authentication {
 
         long expiry = Long.valueOf(mExpiry);
         return new Date(expiry).after(new Date());
-    }
-
-
-
-    public Map<String, String> getHeaders() {
-        Map<String, String> map = new HashMap<>(5);
-        map.put("access-token", mAccessToken);
-        map.put("client", mClient);
-        map.put("expiry", mExpiry);
-        map.put("token-type", mTokenType);
-        map.put("uid", mUid);
-
-        return map;
     }
 }

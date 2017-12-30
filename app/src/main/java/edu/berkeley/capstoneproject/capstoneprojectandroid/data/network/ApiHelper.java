@@ -13,7 +13,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExer
 @Singleton
 public class ApiHelper implements IApiHelper {
 
-    private final IApiHeader mApiHeader;
+    private final OkHttpClient mOkHttpClient;
 
     private final IAuthService mAuthService;
     private final IExerciseService mExerciseService;
@@ -36,7 +36,7 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
-    public IApiHeader getApiHeader() {
-        return mApiHeader;
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
     }
 }

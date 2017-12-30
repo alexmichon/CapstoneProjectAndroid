@@ -15,5 +15,5 @@ public interface IApiHelper {
     IAuthService getAuthService();
     IExerciseService getExerciseService();
 
-    IApiHeader getApiHeader();
+    OkHttpClient getOkHttpClient();
 }

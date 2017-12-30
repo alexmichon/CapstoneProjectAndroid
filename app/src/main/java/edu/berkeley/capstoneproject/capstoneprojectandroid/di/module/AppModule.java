@@ -81,4 +81,10 @@ public class AppModule {
     ISessionHelper provideSessionHelper(SessionHelper sessionHelper) {
         return sessionHelper;
     }
+
+    @Provides
+    @Singleton
+    IAuthManager provideAuthManager(AuthManager authManager) {
+        return authManager;
+    }
 }

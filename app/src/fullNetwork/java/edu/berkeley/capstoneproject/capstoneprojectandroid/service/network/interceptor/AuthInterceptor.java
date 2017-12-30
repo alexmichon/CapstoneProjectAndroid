@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -17,7 +18,7 @@ import okhttp3.Response;
  */
 
 @Singleton
-public class AuthInterceptor implements Interceptor {
+public class AuthInterceptor implements Interceptor, IAuthInterceptor {
 
     private static final String KEY_ACCESS_TOKEN = "access-token";
     private static final String KEY_CLIENT = "client";
@@ -25,59 +26,69 @@ public class AuthInterceptor implements Interceptor {
     private static final String KEY_TOKEN_TYPE = "token-type";
     private static final String KEY_UID = "uid";
 
-    private String mAccessToken;
-    private String mClient;
-    private String mExpiry;
-    private String mTokenType;
-    private String mUid;
+    private Authentication mAuthentication;
+    private Listener mListener;
 
     @Inject
     public AuthInterceptor() {
-        mAccessToken = "";
-        mClient = "";
-        mExpiry = "";
-        mTokenType = "";
-        mUid = "";
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request newRequest = chain.request().newBuilder()
-                .addHeader(KEY_ACCESS_TOKEN, mAccessToken)
-                .addHeader(KEY_CLIENT, mClient)
-                .addHeader(KEY_EXPIRY, mExpiry)
-                .addHeader(KEY_TOKEN_TYPE, mTokenType)
-                .addHeader(KEY_UID, mUid)
+                .addHeader(KEY_ACCESS_TOKEN, mAuthentication.getAccessToken())
+                .addHeader(KEY_CLIENT, mAuthentication.getClient())
+                .addHeader(KEY_EXPIRY, mAuthentication.getExpiry())
+                .addHeader(KEY_TOKEN_TYPE, mAuthentication.getTokenType())
+                .addHeader(KEY_UID, mAuthentication.getUid())
                 .build();
 
         Response response = chain.proceed(newRequest);
 
         String accessToken = response.header(KEY_ACCESS_TOKEN);
-        if (accessToken != null) {
-            mAccessToken = accessToken;
-        }
-
         String client = response.header(KEY_CLIENT);
-        if (client != null) {
-            mClient = client;
-        }
-
         String expiry = response.header(KEY_EXPIRY);
-        if (expiry != null) {
-            mExpiry = expiry;
-        }
-
         String tokenType = response.header(KEY_TOKEN_TYPE);
-        if (tokenType != null) {
-            mTokenType = tokenType;
-        }
-
         String uid = response.header(KEY_UID);
-        if (uid != null) {
-            mUid = uid;
+
+        if ((accessToken != null) &&
+                (client != null) &&
+                (expiry != null) &&
+                (tokenType != null) &&
+                (uid != null)) {
+
+            if (mAuthentication == null) {
+                mAuthentication = new Authentication(accessToken, client, expiry, tokenType, uid);
+            }
+            else {
+                mAuthentication.setAccessToken(accessToken);
+                mAuthentication.setClient(client);
+                mAuthentication.setExpiry(expiry);
+                mAuthentication.setTokenType(tokenType);
+                mAuthentication.setUid(uid);
+            }
+
+            if (mListener != null) {
+                mListener.onAuthUpdate(mAuthentication);
+            }
         }
 
         return response;
     }
 
+
+    @Override
+    public Authentication getAuthentication() {
+        return mAuthentication;
+    }
+
+    @Override
+    public void setAuthentication(Authentication auth) {
+        mAuthentication = auth;
+    }
+
+    @Override
+    public void setListener(Listener listener) {
+        mListener = listener;
+    }
 }

@@ -6,8 +6,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
+import io.reactivex.CompletableSource;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 /**
@@ -17,19 +19,12 @@ import timber.log.Timber;
 public class LoginInteractor extends AuthenticationFragmentInteractor implements LoginContract.Interactor {
 
     @Inject
-    public LoginInteractor(IDataManager dataManager) {
-        super(dataManager);
+    public LoginInteractor(IDataManager dataManager, AuthManager authManager) {
+        super(dataManager, authManager);
     }
     
     @Override
     public Single<User> doLoginCall(String email, String password) {
-        return getDataManager().getApiHelper().getAuthService()
-                .doLogin(email, password).doOnSuccess(new Consumer<User>() {
-                    @Override
-                    public void accept(User user) throws Exception {
-                        setCurrentUser(user);
-                        updateApiHeader(user);
-                    }
-                });
+        return getAuthManager().login(email, password);
     }
 }
