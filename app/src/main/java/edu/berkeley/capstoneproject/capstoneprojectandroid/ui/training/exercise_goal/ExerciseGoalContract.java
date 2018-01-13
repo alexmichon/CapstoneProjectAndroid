@@ -34,7 +34,7 @@ public interface ExerciseGoalContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Single<ExerciseGoalCreator> doLoadDefaultExerciseGoal();
+        //Single<ExerciseGoalCreator> doLoadDefaultExerciseGoal();
         Single<ExerciseGoalCreator> doLoadCurrentExerciseGoal();
 
         Completable doUpdateExerciseGoal(ExerciseGoal.Type type, List<MetricGoal> metricGoals);

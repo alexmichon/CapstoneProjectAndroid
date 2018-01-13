@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

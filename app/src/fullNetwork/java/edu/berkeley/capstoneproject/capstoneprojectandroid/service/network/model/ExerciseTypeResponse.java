@@ -25,7 +25,13 @@ public class ExerciseTypeResponse {
     @SerializedName("description")
     private String mDescription;
 
+    @Expose
+    @SerializedName("video_url")
+    private String mVideoUrl;
+
     public ExerciseType getExerciseType() {
-        return new ExerciseType(mId, mName, mDescription);
+        ExerciseType exerciseType = new ExerciseType(mId, mName, mDescription);
+        exerciseType.setYoutubeVideo(mVideoUrl);
+        return exerciseType;
     }
 }

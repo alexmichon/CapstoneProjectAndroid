@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.lo
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
@@ -19,7 +20,7 @@ import timber.log.Timber;
 public class LoginInteractor extends AuthenticationFragmentInteractor implements LoginContract.Interactor {
 
     @Inject
-    public LoginInteractor(IDataManager dataManager, AuthManager authManager) {
+    public LoginInteractor(IDataManager dataManager, IAuthManager authManager) {
         super(dataManager, authManager);
     }
     

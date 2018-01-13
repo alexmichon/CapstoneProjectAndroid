@@ -20,8 +20,9 @@ import io.reactivex.Single;
 public interface TrainingContract {
 
     interface View extends IBaseView {
+        void showExerciseBuilderFragment();
+
         void showBluetoothListFragment();
-        void showExerciseTypesFragment();
         void showExerciseSummaryFragment();
         void showExerciseFragment();
         void showExerciseResultFragment();
@@ -49,7 +50,9 @@ public interface TrainingContract {
         void onExerciseSummaryBack();
         void onExerciseDone();
 
+        void onExerciseBuilt();
         void onExerciseResultMenu();
+
         void onExerciseResultRetry();
 
         void onDestroy();

@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu;
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Single;
@@ -13,13 +14,16 @@ import io.reactivex.Single;
 
 public class MainMenuInteractor extends BaseInteractor implements MainMenuContract.Interactor {
 
+    private final IAuthManager mAuthManager;
+
     @Inject
-    public MainMenuInteractor(IDataManager dataManager) {
+    public MainMenuInteractor(IDataManager dataManager, IAuthManager authManager) {
         super(dataManager);
+        mAuthManager = authManager;
     }
 
     @Override
-    public Single<User> doGetCurrentUser() {
-        return Single.just(getDataManager().getSessionHelper().getUserService().getCurrentUser());
+    public User getCurrentUser() {
+        return mAuthManager.getCurrentUser();
     }
 }

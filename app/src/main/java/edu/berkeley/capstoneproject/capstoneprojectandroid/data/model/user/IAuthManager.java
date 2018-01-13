@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**

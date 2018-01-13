@@ -12,6 +12,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
@@ -36,14 +38,17 @@ import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.blueto
 
 public class ExerciseInteractor extends BaseInteractor implements ExerciseContract.Interactor {
 
-    private Disposable mNotificationDisposable;
+    private final IExerciseManager mExerciseManager;
+    private final IMeasurementManager mMeasurementManager;
 
     @Inject
-    public ExerciseInteractor(IDataManager dataManager) {
+    public ExerciseInteractor(IDataManager dataManager, IExerciseManager exerciseManager, IMeasurementManager measurementManager) {
         super(dataManager);
+        mExerciseManager = exerciseManager;
+        mMeasurementManager = measurementManager;
     }
 
-    @Override
+    /*@Override
     public Single<ExerciseGoal> doCreateExerciseGoal() {
         return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
                 .flatMap(new Function<ExerciseGoalCreator, SingleSource<? extends ExerciseGoal>>() {
@@ -58,9 +63,10 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
                                 });
                     }
                 });
-    }
+    }*/
 
-    @Override
+
+    /*@Override
     public Single<Exercise> doCreateExercise() {
         return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
                 .flatMap(new Function<ExerciseCreator, SingleSource<? extends Exercise>>() {
@@ -75,66 +81,31 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
                         return getDataManager().getSessionHelper().getTrainingService().setExercise(exercise).toSingleDefault(exercise);
                     }
                 });
+    }*/
+
+    @Override
+    public Exercise getExercise() {
+        return mExerciseManager.getCurrentExercise();
     }
 
     @Override
-    public Completable doStartExercise(final Exercise exercise) {
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
-                mNotificationDisposable = getDataManager().getBluetoothHelper().getExerciseService().startExercise()
-                        .subscribe(new Consumer<Map<String, Observable<byte[]>>>() {
-                            @Override
-                            public void accept(Map<String, Observable<byte[]>> map) throws Exception {
-                                getDataManager().getBluetoothHelper().getMeasurementService()
-                                        .setEncoderObservable(map.get(ENCODER_OBSERVABLE));
-                                getDataManager().getBluetoothHelper().getMeasurementService()
-                                        .setImuObservable(map.get(IMU_OBSERVABLE));
-                                e.onComplete();
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                e.onError(throwable);
-                            }
-                        });
-            }
-        });
+    public Completable doStartExercise() {
+        return mExerciseManager.start();
     }
 
     @Override
     public Completable doStopExercise() {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                if (mNotificationDisposable != null) {
-                    mNotificationDisposable.dispose();
-                }
-            }
-        });
-    }
-
-    @Override
-    public Flowable<Measurement> doListenEncoder() {
-        return getDataManager().getBluetoothHelper().getMeasurementService()
-                .getEncoderObservable().toFlowable(BackpressureStrategy.BUFFER);
-    }
-
-    @Override
-    public Flowable<Measurement> doListenImu() {
-        return getDataManager().getBluetoothHelper().getMeasurementService()
-                .getImuObservable().toFlowable(BackpressureStrategy.BUFFER);
+        return mExerciseManager.stop();
     }
 
 
     @Override
     public Flowable<Measurement> doListenMeasurements() {
-        return Flowable.merge(doListenEncoder(), doListenImu());
+        return mExerciseManager.listen();
     }
 
     @Override
     public Completable doSaveMeasurement(final Exercise exercise, final Measurement measurement) {
-        return Completable.fromSingle(getDataManager().getApiHelper().getExerciseService()
-                .doSaveMeasurement(measurement));
+        return mMeasurementManager.save(measurement);
     }
 }

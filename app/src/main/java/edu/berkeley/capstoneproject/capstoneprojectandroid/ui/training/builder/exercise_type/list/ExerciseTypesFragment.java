@@ -1,9 +1,8 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,8 +17,7 @@ import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single.ExerciseTypeDialog;
 
 /**
  * Created by Alex on 17/11/2017.

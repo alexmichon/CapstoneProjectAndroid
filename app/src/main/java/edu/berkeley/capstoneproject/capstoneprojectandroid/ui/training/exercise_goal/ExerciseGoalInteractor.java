@@ -30,6 +30,7 @@ public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGo
         super(dataManager);
     }
 
+    /*
     @Override
     public Single<ExerciseGoalCreator> doLoadDefaultExerciseGoal() {
         return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator().flatMap(new Function<ExerciseCreator, SingleSource<? extends ExerciseType>>() {
@@ -43,7 +44,7 @@ public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGo
                         return getDataManager().getApiHelper().getExerciseService().doGetDefaultExerciseGoal(exerciseType);
                 }
         });
-    }
+    }*/
 
     @Override
     public Single<ExerciseGoalCreator> doLoadCurrentExerciseGoal() {

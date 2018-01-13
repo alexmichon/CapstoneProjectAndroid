@@ -53,7 +53,7 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
             getView().showLoading();
         }
 
-        getCompositeDisposable().add(getInteractor().doLoadDefaultExerciseGoal()
+        /*getCompositeDisposable().add(getInteractor().doLoadDefaultExerciseGoal()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<ExerciseGoalCreator>() {
@@ -75,7 +75,7 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
                         }
                     }
                 })
-        );
+        );*/
     }
 
     @Override

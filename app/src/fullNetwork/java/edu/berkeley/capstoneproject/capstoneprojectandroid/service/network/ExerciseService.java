@@ -43,9 +43,9 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     }
 
     @Override
-    public Single<Exercise> doCreateExercise(final ExerciseCreator exerciseCreator) {
+    public Single<Exercise> doCreateExercise(final Exercise.Builder builder) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISES)
-                .addBodyParameter(new ExerciseRequest(exerciseCreator))
+                .addBodyParameter(new ExerciseRequest(builder))
                 .setOkHttpClient(getOkHttpClient())
                 .build()
                 .getObjectObservable(ExerciseResponse.class)
@@ -53,7 +53,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                 .map(new Function<ExerciseResponse, Exercise>() {
                     @Override
                     public Exercise apply(@NonNull ExerciseResponse exerciseResponse) throws Exception {
-                        return exerciseResponse.getExercise(exerciseCreator);
+                        return exerciseResponse.getExercise(builder);
                     }
                 });
     }
@@ -76,7 +76,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                 });
     }
 
-    @Override
+    /*@Override
     public Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, ExerciseGoalCreator exerciseGoalCreator) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
                 .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
@@ -91,9 +91,9 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                         return null;
                     }
                 });
-    }
+    }*/
 
-    @Override
+    /*@Override
     public Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType) {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPE_DEFAULT_GOAL)
                 .addPathParameter("exercise_type_id", String.valueOf(exerciseType.getId()))
@@ -107,7 +107,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                         return exerciseGoalResponse.get();
                     }
                 });
-    }
+    }*/
 
     @Override
     public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {

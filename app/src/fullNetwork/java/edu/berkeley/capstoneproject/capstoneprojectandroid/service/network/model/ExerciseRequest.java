@@ -3,6 +3,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 
@@ -16,8 +17,8 @@ public class ExerciseRequest extends BaseRequest {
     @Expose
     private final ExerciseNestedRequest mExerciseNestedRequest;
 
-    public ExerciseRequest(ExerciseCreator exerciseCreator) {
-        mExerciseNestedRequest = new ExerciseNestedRequest(exerciseCreator);
+    public ExerciseRequest(Exercise.Builder builder) {
+        mExerciseNestedRequest = new ExerciseNestedRequest(builder);
     }
 
 
@@ -27,8 +28,8 @@ public class ExerciseRequest extends BaseRequest {
         @Expose
         private final int mExerciseTypeId;
 
-        public ExerciseNestedRequest(ExerciseCreator exerciseCreator) {
-            mExerciseTypeId = exerciseCreator.getExerciseType().getId();
+        public ExerciseNestedRequest(Exercise.Builder builder) {
+            mExerciseTypeId = builder.getExerciseTypeId();
         }
 
         @Override

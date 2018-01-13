@@ -36,10 +36,10 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
     @Override
     public void loadExerciseSummary() {
         if (isViewAttached()) {
-            getView().showLoading();
+            //getView().showLoading();
         }
 
-        getCompositeDisposable().add(getInteractor().doGetCurrentExerciseGoal()
+        /*getCompositeDisposable().add(getInteractor().doGetCurrentExerciseGoal()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<ExerciseGoalCreator>() {
@@ -59,7 +59,7 @@ public class ExerciseSummaryPresenter<V extends ExerciseSummaryContract.View, I 
                         }
                     }
                 })
-        );
+        );*/
     }
 
     @Override

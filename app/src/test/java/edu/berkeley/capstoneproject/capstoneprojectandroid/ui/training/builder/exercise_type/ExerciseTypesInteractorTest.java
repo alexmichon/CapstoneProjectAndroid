@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesInteractor;
 
 import static org.mockito.Mockito.verify;
 

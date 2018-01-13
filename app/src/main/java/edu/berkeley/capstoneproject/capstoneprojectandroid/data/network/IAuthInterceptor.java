@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.network;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
+
 /**
  * Created by Alex on 30/12/2017.
  */

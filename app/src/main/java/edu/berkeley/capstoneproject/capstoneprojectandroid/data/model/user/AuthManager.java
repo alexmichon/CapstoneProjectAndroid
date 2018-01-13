@@ -2,12 +2,20 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.IPreferencesHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.interceptor.AuthInterceptor;
+import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**
@@ -20,11 +28,15 @@ public class AuthManager implements IAuthManager {
     private final IApiHelper mApiHelper;
     private final IPreferencesHelper mPreferencesHelper;
 
+    private final IAuthInterceptor mAuthInterceptor;
+
     private User mCurrentUser;
 
     @Inject
-    public AuthManager(IApiHelper apiHelper, IPreferencesHelper preferencesHelper) {
+    public AuthManager(IApiHelper apiHelper, IPreferencesHelper preferencesHelper, IAuthInterceptor authInterceptor) {
         mApiHelper = apiHelper;
+        mPreferencesHelper = preferencesHelper;
+        mAuthInterceptor = authInterceptor;
     }
 
     @Override
@@ -49,7 +61,7 @@ public class AuthManager implements IAuthManager {
     }
 
     private void onSuccess(User user) {
-        user.setAuthentication(mApiHelper.getAuthInterceptor().getAuthentication());
+        user.setAuthentication(mAuthInterceptor.getAuthentication());
         mCurrentUser = user;
     }
 
@@ -58,7 +70,7 @@ public class AuthManager implements IAuthManager {
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                mApiHelper.getAuthInterceptor().setAuthentication(null);
+                mAuthInterceptor.setAuthentication(null);
                 mPreferencesHelper.removeAuthentication();
                 remember(false);
                 mCurrentUser = null;
@@ -73,15 +85,15 @@ public class AuthManager implements IAuthManager {
 
     @Override
     public Single<User> restore() {
-        return Single.fromCallable(new Callable<User>() {
+        return Single.fromCallable(new Callable<Authentication>() {
             @Override
-            public User call() throws Exception {
-                return mPreferencesHelper.getAuthentication()
+            public Authentication call() throws Exception {
+                return mPreferencesHelper.getAuthentication();
             }
         }).flatMap(new Function<Authentication, SingleSource<User>>() {
             @Override
             public SingleSource<User> apply(@NonNull Authentication authentication) throws Exception {
-                mApiHelper.getAuthService().doRestoreAuthentication(authentication)
+                return mApiHelper.getAuthService().doRestoreAuthentication(authentication);
             }
         }).doOnSuccess(new Consumer<User>() {
             @Override
@@ -99,7 +111,7 @@ public class AuthManager implements IAuthManager {
     @Override
     public void remember(boolean enabled) {
         if (enabled) {
-            mApiHelper.getAuthInterceptor().setListener(new AuthInterceptor.Listener() {
+            mAuthInterceptor.setListener(new AuthInterceptor.Listener() {
                 @Override
                 public void onAuthUpdate(Authentication auth) {
                     save(auth);
@@ -107,7 +119,8 @@ public class AuthManager implements IAuthManager {
             });
         }
         else {
-            mApiHelper.getAuthInterceptor().setListener(null);
+            mPreferencesHelper.removeAuthentication();
+            mAuthInterceptor.setListener(null);
         }
     }
 }

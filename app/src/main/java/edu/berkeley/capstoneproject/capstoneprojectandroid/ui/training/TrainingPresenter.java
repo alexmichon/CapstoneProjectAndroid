@@ -97,7 +97,7 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     @Override
     public void onExerciseSummaryBack() {
         if (isViewAttached()) {
-            getView().showExerciseTypesFragment();
+            getView().showExerciseBuilderFragment();
         }
     }
 
@@ -105,6 +105,13 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
     public void onExerciseDone() {
         if (isViewAttached()) {
             getView().showExerciseResultFragment();
+        }
+    }
+
+    @Override
+    public void onExerciseBuilt() {
+        if (isViewAttached()) {
+            getView().showExerciseSummaryFragment();
         }
     }
 

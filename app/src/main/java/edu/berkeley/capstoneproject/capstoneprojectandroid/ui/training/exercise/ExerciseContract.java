@@ -33,15 +33,13 @@ public interface ExerciseContract {
 
     interface Interactor extends IBaseInteractor {
 
-        Single<ExerciseGoal> doCreateExerciseGoal();
+        //Single<ExerciseGoal> doCreateExerciseGoal();
 
-        Single<Exercise> doCreateExercise();
+        //Single<Exercise> doCreateExercise();
 
-        Completable doStartExercise(Exercise exercise);
+        Exercise getExercise();
 
-        Flowable<Measurement> doListenEncoder();
-
-        Flowable<Measurement> doListenImu();
+        Completable doStartExercise();
 
         Completable doStopExercise();
 

@@ -37,11 +37,11 @@ public class ExerciseResponse {
         mExerciseTypeId = exerciseTypeId;
     }
 
-    public Exercise getExercise(ExerciseCreator exerciseCreator) {
-        if (mExerciseTypeId != exerciseCreator.getExerciseType().getId()) {
+    public Exercise getExercise(Exercise.Builder exerciseCreator) {
+        if (mExerciseTypeId != exerciseCreator.getExerciseTypeId()) {
             return null;
         }
 
-        return new Exercise(mId, exerciseCreator.getExerciseType());
+        return new Exercise(mId, exerciseCreator.getExerciseTypeId());
     }
 }

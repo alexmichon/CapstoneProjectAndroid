@@ -7,19 +7,16 @@ import android.support.annotation.Nullable;
 
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalDialog;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeDialog;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
 /**
@@ -29,10 +26,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>>
         implements TrainingContract.View,
         BluetoothListFragment.BluetoothListFragmentListener,
-        ExerciseTypesFragment.ExerciseTypesFragmentListener,
         ExerciseSummaryFragment.ExerciseSummaryFragmentListener,
         ExerciseFragment.ExerciseFragmentListener,
-        ExerciseResultFragment.ExerciseResultFragmentListener {
+        ExerciseResultFragment.ExerciseResultFragmentListener, ExerciseBuilderFragment.ExerciseBuilderFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -58,6 +54,14 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
 
+
+    @Override
+    public void showExerciseBuilderFragment() {
+        ExerciseBuilderFragment fragment = ExerciseBuilderFragment.newInstance(this);
+        setFragment(fragment);
+    }
+
+
     @Override
     public void showBluetoothListFragment() {
         // TODO User newInstance
@@ -66,16 +70,6 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
 
         setFragment(fragment);
         setTitle("Bluetooth device");
-    }
-
-    @Override
-    public void showExerciseTypesFragment() {
-        // TODO User newInstance
-        ExerciseTypesFragment fragment = new ExerciseTypesFragment();
-        fragment.setListener(this);
-
-        setFragment(fragment);
-        setTitle("Exercise types");
     }
 
     @Override
@@ -100,7 +94,8 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     public void onDeviceConnected() {
         hideLoading();
         showMessage("Device validated");
-        showExerciseTypesFragment();
+        //showExerciseTypesFragment();
+        showExerciseBuilderFragment();
     }
 
     @Override
@@ -119,11 +114,6 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     protected void onDestroy() {
         super.onDestroy();
         getPresenter().onDestroy();
-    }
-
-    @Override
-    public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        getPresenter().onExerciseTypeSelect(exerciseType);
     }
 
     @Override
@@ -149,5 +139,10 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     @Override
     public void onExerciseResultRetry() {
         getPresenter().onExerciseResultRetry();
+    }
+
+    @Override
+    public void onExerciseBuilt() {
+        getPresenter().onExerciseBuilt();
     }
 }

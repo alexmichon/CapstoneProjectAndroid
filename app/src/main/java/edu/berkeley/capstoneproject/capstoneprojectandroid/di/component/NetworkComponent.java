@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.component;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHeader;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
 
@@ -14,4 +15,5 @@ public interface NetworkComponent {
     IAuthService authService();
     IExerciseService exerciseService();
 
+    IAuthInterceptor authInterceptor();
 }

@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,8 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list.ExerciseTypesPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;

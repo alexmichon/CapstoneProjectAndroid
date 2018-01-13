@@ -38,56 +38,35 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
 
     @Override
     public void onStartClick() {
-        if (isViewAttached()) {
-            getView().onCreatingExercise();
-        }
-
-        getCompositeDisposable().add(getInteractor().doCreateExercise()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<Exercise>() {
-                    @Override
-                    public void accept(Exercise exercise) throws Exception {
-                        Timber.d("Exercise created");
-                        mExercise = exercise;
-
-                        if (isViewAttached()) {
-                            getView().onExerciseCreated(exercise);
-                        }
-                        startExercise(exercise);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Timber.e(throwable);
-                        if (isViewAttached()) {
-                            getView().onExerciseError(throwable);
-                        }
-                    }
-                })
-        );
+        startExercise();
     }
 
-    protected void startExercise(final Exercise exercise) {
+    protected void startExercise() {
         if (isViewAttached()) {
             getView().onStartingExercise();
         }
 
-        getCompositeDisposable().add(getInteractor().doStartExercise(exercise)
+        getCompositeDisposable().add(getInteractor().doStartExercise()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mStarted = true;
+
+                        if (isViewAttached()) {
+                            getView().onExerciseStarted(getInteractor().getExercise());
+                        }
+
+                        startListening(getInteractor().getExercise());
+                    }
+                })
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
                         Timber.d("Exercise started");
 
-                        mStarted = true;
 
-                        if (isViewAttached()) {
-                            getView().onExerciseStarted(exercise);
-                        }
-
-                        startListening(exercise);
 
                     }
                 }, new Consumer<Throwable>() {

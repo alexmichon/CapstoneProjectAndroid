@@ -10,6 +10,7 @@ import java.util.List;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricMeasurementList;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResponse;
 
 /**
  * Created by Alex on 09/11/2017.
@@ -136,6 +137,10 @@ public class Exercise implements Parcelable {
         public Exercise build() {
             Exercise exercise = new Exercise(mId, mExerciseTypeId);
             return exercise;
+        }
+
+        public int getExerciseTypeId() {
+            return mExerciseTypeId;
         }
     }
 }

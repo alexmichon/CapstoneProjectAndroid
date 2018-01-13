@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.single;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single;
 
 import android.media.MediaPlayer;
 import android.net.Uri;

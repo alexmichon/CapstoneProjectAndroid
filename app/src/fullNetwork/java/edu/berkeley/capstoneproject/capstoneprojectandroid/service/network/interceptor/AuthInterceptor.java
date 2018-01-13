@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -35,13 +36,16 @@ public class AuthInterceptor implements Interceptor, IAuthInterceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request newRequest = chain.request().newBuilder()
-                .addHeader(KEY_ACCESS_TOKEN, mAuthentication.getAccessToken())
-                .addHeader(KEY_CLIENT, mAuthentication.getClient())
-                .addHeader(KEY_EXPIRY, mAuthentication.getExpiry())
-                .addHeader(KEY_TOKEN_TYPE, mAuthentication.getTokenType())
-                .addHeader(KEY_UID, mAuthentication.getUid())
-                .build();
+        Request newRequest = chain.request();
+        if (mAuthentication != null) {
+             newRequest = chain.request().newBuilder()
+                    .addHeader(KEY_ACCESS_TOKEN, mAuthentication.getAccessToken())
+                    .addHeader(KEY_CLIENT, mAuthentication.getClient())
+                    .addHeader(KEY_EXPIRY, mAuthentication.getExpiry())
+                    .addHeader(KEY_TOKEN_TYPE, mAuthentication.getTokenType())
+                    .addHeader(KEY_UID, mAuthentication.getUid())
+                    .build();
+        }
 
         Response response = chain.proceed(newRequest);
 

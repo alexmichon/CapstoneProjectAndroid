@@ -16,12 +16,11 @@ import io.reactivex.Single;
 
 public interface IExerciseService {
 
-    Single<Exercise> doCreateExercise(ExerciseCreator exerciseCreator);
+    Single<Exercise> doCreateExercise(Exercise.Builder builder);
     Single<Measurement> doSaveMeasurement(Measurement measurement);
 
-    Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, ExerciseGoalCreator exerciseGoalCreator);
-
-    Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType);
+    //Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, Exercise.Builder builder);
+    //Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType);
 
     Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
 

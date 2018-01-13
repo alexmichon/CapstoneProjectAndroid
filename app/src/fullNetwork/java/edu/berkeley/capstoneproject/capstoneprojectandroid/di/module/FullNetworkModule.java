@@ -1,17 +1,20 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.module;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHeader;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.AuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.ExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.interceptor.ApiInterceptor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.interceptor.AuthInterceptor;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
 /**
@@ -23,7 +26,7 @@ public class FullNetworkModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(ApiInterceptor apiInterceptor, AuthInterceptor authInterceptor) {
+    OkHttpClient provideOkHttpClient(@Named("apiInterceptor") Interceptor apiInterceptor, @Named("authInterceptor") Interceptor authInterceptor) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(apiInterceptor)
                 .addNetworkInterceptor(authInterceptor)
@@ -47,5 +50,25 @@ public class FullNetworkModule {
     @Singleton
     IExerciseService provideNetworkExerciseService(ExerciseService exerciseService) {
         return exerciseService;
+    }
+
+    @Provides
+    @Singleton
+    IAuthInterceptor provideAuthInterceptor(AuthInterceptor authInterceptor) {
+        return authInterceptor;
+    }
+
+    @Provides
+    @Singleton
+    @Named("authInterceptor")
+    Interceptor provideOkAuthInterceptor(AuthInterceptor authInterceptor) {
+        return authInterceptor;
+    }
+
+    @Provides
+    @Singleton
+    @Named("apiInterceptor")
+    Interceptor provideOkApiInterceptor(ApiInterceptor apiInterceptor) {
+        return apiInterceptor;
     }
 }

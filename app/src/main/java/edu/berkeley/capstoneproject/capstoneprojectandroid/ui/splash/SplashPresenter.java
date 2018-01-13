@@ -59,6 +59,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Timber.e(throwable);
+                        onStartDone();
                     }
                 })
         );
@@ -97,7 +98,8 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
     }
 
     protected Completable getAuthenticationCompletable() {
-        return getInteractor.restore()
+        //TODO Failed connection to server --> exit app
+        return getInteractor().restoreAuthentication()
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
@@ -117,7 +119,8 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
                     public void accept(User user) throws Exception {
                         mIsLoggedIn = user.isAuthenticated();
                     }
-                });
+                })
+                .toCompletable();
     }
 
 

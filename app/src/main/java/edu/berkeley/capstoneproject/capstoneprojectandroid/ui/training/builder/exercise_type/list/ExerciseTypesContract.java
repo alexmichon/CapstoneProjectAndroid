@@ -1,15 +1,11 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.list;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
-import io.reactivex.Completable;
-import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -33,7 +29,6 @@ public interface ExerciseTypesContract {
 
     interface Interactor extends IBaseInteractor {
         Observable<ExerciseType> doLoadExerciseTypes();
-        Completable doSetExerciseType(ExerciseType exerciseType);
     }
 
     @PerActivity
