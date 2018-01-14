@@ -113,6 +113,19 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     @Override
+    public void onDeviceConnecting() {
+        showLoading();
+    }
+
+    @Override
+    public void onDeviceConnected() {
+        hideLoading();
+        if (mListener != null) {
+            mListener.onBluetoothDeviceSelected();
+        }
+    }
+
+    @Override
     public void showError(String message) {
         Toast.makeText(getBaseActivity(), message, Toast.LENGTH_SHORT).show();
     }
@@ -121,9 +134,6 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     void OnDeviceClickListener(int position) {
         Rx2BleDevice device = mScannedAdapter.getItem(position);
         getPresenter().onDeviceSelected(device);
-        if (mListener != null) {
-            mListener.onBluetoothDeviceSelected(device);
-        }
     };
 
 
@@ -133,6 +143,6 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     public interface BluetoothListFragmentListener {
-        void onBluetoothDeviceSelected(Rx2BleDevice device);
+        void onBluetoothDeviceSelected();
     }
 }

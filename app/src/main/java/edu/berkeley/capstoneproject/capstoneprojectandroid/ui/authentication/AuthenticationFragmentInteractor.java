@@ -1,6 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
@@ -14,8 +13,7 @@ public abstract class AuthenticationFragmentInteractor extends BaseInteractor im
 
     private final IAuthManager mAuthManager;
 
-    public AuthenticationFragmentInteractor(IDataManager dataManager, IAuthManager authManager) {
-        super(dataManager);
+    public AuthenticationFragmentInteractor(IAuthManager authManager) {
         mAuthManager = authManager;
     }
 

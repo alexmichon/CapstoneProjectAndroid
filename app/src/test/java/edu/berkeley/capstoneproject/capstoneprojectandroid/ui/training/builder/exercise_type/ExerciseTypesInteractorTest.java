@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesInteractor;
 
@@ -22,14 +22,14 @@ public class ExerciseTypesInteractorTest {
     private ExerciseTypesInteractor mInteractor;
 
     @Mock
-    private IDataManager mDataManager;
+    private IExerciseTypeManager mExerciseTypeManager;
 
     @Mock
     private IExerciseTypeRepository mRepository;
 
     @Before
     public void setup() {
-        mInteractor = new ExerciseTypesInteractor(mDataManager);
+        mInteractor = new ExerciseTypesInteractor(mExerciseTypeManager);
     }
 
     @Test

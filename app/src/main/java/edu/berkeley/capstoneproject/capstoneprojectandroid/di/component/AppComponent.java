@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 import dagger.BindsInstance;
 import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
@@ -33,7 +32,6 @@ public interface AppComponent {
 
     void inject(CapstoneProjectAndroidApplication app);
 
-    IDataManager dataManager();
     IAuthManager authManager();
     IExerciseTypeManager exerciseTypeManager();
     IExerciseManager exerciseManager();

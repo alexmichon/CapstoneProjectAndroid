@@ -5,7 +5,6 @@ import android.net.NetworkInfo;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
@@ -23,8 +22,7 @@ public class SplashInteractor extends BaseInteractor implements SplashContract.I
     private final IAuthManager mAuthManager;
 
     @Inject
-    public SplashInteractor(IDataManager dataManager, ConnectivityManager connectivityManager, IAuthManager authManager) {
-        super(dataManager);
+    public SplashInteractor(ConnectivityManager connectivityManager, IAuthManager authManager) {
         mConnectivityManager = connectivityManager;
         mAuthManager = authManager;
     }

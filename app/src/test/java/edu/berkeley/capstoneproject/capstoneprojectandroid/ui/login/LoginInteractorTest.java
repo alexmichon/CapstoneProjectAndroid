@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
@@ -28,7 +28,7 @@ public class LoginInteractorTest {
     private LoginInteractor mInteractor;
 
     @Mock
-    private IDataManager mDataManager;
+    private IAuthManager mAuthManager;
 
     @Mock
     private IApiHelper mApiHelper;
@@ -41,11 +41,7 @@ public class LoginInteractorTest {
 
     @Before
     public void before() {
-        doReturn(mApiHelper).when(mDataManager).getApiHelper();
-        doReturn(mAuthService).when(mApiHelper).getAuthService();
-        doReturn(mApiHeader).when(mApiHelper).getApiHeader();
-
-        mInteractor = new LoginInteractor(mDataManager);
+        mInteractor = new LoginInteractor(mAuthManager);
     }
 
     private User getFakeUser() {

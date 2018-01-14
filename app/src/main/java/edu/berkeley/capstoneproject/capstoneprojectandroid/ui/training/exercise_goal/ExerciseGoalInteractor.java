@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
@@ -26,8 +25,7 @@ import io.reactivex.functions.Function;
 public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGoalContract.Interactor {
 
     @Inject
-    public ExerciseGoalInteractor(IDataManager dataManager) {
-        super(dataManager);
+    public ExerciseGoalInteractor() {
     }
 
     /*
@@ -48,12 +46,15 @@ public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGo
 
     @Override
     public Single<ExerciseGoalCreator> doLoadCurrentExerciseGoal() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator();
+        // TODO
+        //return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator();
+        return Single.never();
     }
 
     @Override
     public Completable doUpdateExerciseGoal(final ExerciseGoal.Type type, final List<MetricGoal> metricGoals) {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
+        // TODO
+        /*return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
                 .flatMapCompletable(new Function<ExerciseGoalCreator, CompletableSource>() {
                     @Override
                     public CompletableSource apply(@NonNull final ExerciseGoalCreator exerciseGoalCreator) throws Exception {
@@ -65,6 +66,7 @@ public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGo
                             }
                         });
                     }
-                });
+                });*/
+        return Completable.never();
     }
 }

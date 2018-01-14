@@ -20,31 +20,22 @@ import io.reactivex.Single;
 public interface TrainingContract {
 
     interface View extends IBaseView {
-        void showExerciseBuilderFragment();
-
         void showBluetoothListFragment();
+        void showExerciseBuilderFragment();
         void showExerciseSummaryFragment();
         void showExerciseFragment();
         void showExerciseResultFragment();
-
-        void onDeviceConnected();
 
         void moveToMainActivity();
     }
 
     interface Interactor extends IBaseInteractor {
-        void doSelectDevice(Rx2BleDevice device);
-
-        Single<Rx2BleConnection> doConnect(Rx2BleDevice device);
-        Completable doValidateDevice();
-        void doDisconnect();
-
         Completable doClearExerciseSession();
     }
 
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V,I> {
-        void onDeviceSelect(Rx2BleDevice device);
+        void onDeviceSelect();
         void onExerciseTypeSelect(ExerciseType exerciseType);
         void onExerciseSummaryStart();
         void onExerciseSummaryBack();

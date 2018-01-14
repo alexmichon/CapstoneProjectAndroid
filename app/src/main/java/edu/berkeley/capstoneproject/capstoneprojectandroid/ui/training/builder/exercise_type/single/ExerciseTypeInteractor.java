@@ -2,7 +2,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 
 /**
@@ -12,7 +11,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteracto
 public class ExerciseTypeInteractor extends BaseInteractor implements ExerciseTypeContract.Interactor {
 
     @Inject
-    public ExerciseTypeInteractor(IDataManager dataManager) {
-        super(dataManager);
+    public ExerciseTypeInteractor() {
     }
 }

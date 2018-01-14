@@ -32,54 +32,13 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
 
 
     @Override
-    public void onDeviceSelect(Rx2BleDevice device) {
-        getView().showLoading();
-
-        getCompositeDisposable().add(getInteractor()
-                .doConnect(device)
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<Rx2BleConnection>() {
-
-                               @Override
-                               public void accept(Rx2BleConnection connection) throws Exception {
-                                   Timber.d("Connection succeeded");
-                                   onDeviceConnected();
-                               }
-                           }, new Consumer<Throwable>() {
-                               @Override
-                               public void accept(Throwable throwable) throws Exception {
-                                   Timber.e(throwable, "Connection failed");
-                                   getView().showError("Connection failed");
-                                   getView().hideLoading();
-                               }
-                           }
-                ));
-
+    public void onDeviceSelect() {
+        if (isViewAttached()) {
+            getView().showExerciseBuilderFragment();
+        }
     }
 
-    private void onDeviceConnected() {
-        getView().showMessage("Connected");
-        getCompositeDisposable().add(getInteractor()
-                .doValidateDevice()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        Timber.d("Device validated");
-                        getView().onDeviceConnected();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Timber.e("Device not validated");
-                        getView().hideLoading();
-                        getView().showError("Unknown device");
-                    }
-                })
-        );
-    }
+
 
     public void onExerciseTypeSelect(ExerciseType exerciseType) {
         if (isViewAttached()) {

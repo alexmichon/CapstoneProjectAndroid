@@ -91,14 +91,6 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     @Override
-    public void onDeviceConnected() {
-        hideLoading();
-        showMessage("Device validated");
-        //showExerciseTypesFragment();
-        showExerciseBuilderFragment();
-    }
-
-    @Override
     public void moveToMainActivity() {
         Intent intent = new Intent(TrainingActivity.this, MainActivity.class);
         startActivity(intent);
@@ -106,8 +98,8 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     @Override
-    public void onBluetoothDeviceSelected(Rx2BleDevice device) {
-        getPresenter().onDeviceSelect(device);
+    public void onBluetoothDeviceSelected() {
+        getPresenter().onDeviceSelect();
     }
 
     @Override

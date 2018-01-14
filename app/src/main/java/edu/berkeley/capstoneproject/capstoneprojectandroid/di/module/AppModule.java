@@ -7,8 +7,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
@@ -52,12 +50,6 @@ public class AppModule {
     @ApplicationContext
     Context provideContext() {
         return mApplication;
-    }
-
-    @Provides
-    @Singleton
-    IDataManager provideDataManager(DataManager dataManager) {
-        return dataManager;
     }
 
 

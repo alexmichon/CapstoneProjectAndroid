@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
@@ -26,12 +25,13 @@ import io.reactivex.functions.Function;
 public class ExerciseSummaryInteractor extends BaseInteractor implements ExerciseSummaryContract.Interactor {
 
     @Inject
-    public ExerciseSummaryInteractor(IDataManager dataManager) {
-        super(dataManager);
+    public ExerciseSummaryInteractor() {
     }
 
     @Override
     public Single<ExerciseGoalCreator> doGetCurrentExerciseGoal() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator();
+        // TODO
+        //return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator();
+        return Single.never();
     }
 }

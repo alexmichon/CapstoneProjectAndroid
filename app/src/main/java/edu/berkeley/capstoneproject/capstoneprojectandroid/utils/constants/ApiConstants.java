@@ -6,7 +6,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants;
 
 public class ApiConstants {
 
-    public static final String BASE_URL = "http://192.168.1.3:3000/";
+    public static final String BASE_URL = "http://192.168.1.2:3000/";
     public static final String API_VERSION = "api/v1";
 
     public static final String API_URL = BASE_URL + API_VERSION;

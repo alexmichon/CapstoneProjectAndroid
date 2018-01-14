@@ -2,7 +2,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
@@ -17,8 +16,7 @@ public class MainInteractor extends BaseInteractor implements MainContract.Inter
     private final IAuthManager mAuthManager;
 
     @Inject
-    public MainInteractor(IDataManager dataManager, IAuthManager authManager) {
-        super(dataManager);
+    public MainInteractor(IAuthManager authManager) {
         mAuthManager = authManager;
     }
 

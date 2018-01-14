@@ -2,16 +2,11 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -22,8 +17,7 @@ public class BluetoothListInteractor extends BaseInteractor implements Bluetooth
     private final IBluetoothManager mBluetoothManager;
 
     @Inject
-    public BluetoothListInteractor(IDataManager dataManager, IBluetoothManager bluetoothManager) {
-        super(dataManager);
+    public BluetoothListInteractor(IBluetoothManager bluetoothManager) {
         mBluetoothManager = bluetoothManager;
     }
 
@@ -35,5 +29,25 @@ public class BluetoothListInteractor extends BaseInteractor implements Bluetooth
     @Override
     public Observable<Rx2BleDevice> doLoadPairedDevices() {
         return mBluetoothManager.doGetPairedDevices();
+    }
+
+    @Override
+    public void doSelectDevice(Rx2BleDevice device) {
+        mBluetoothManager.setDevice(device);
+    }
+
+    @Override
+    public Completable doConnect(final Rx2BleDevice device) {
+        return mBluetoothManager.doConnect();
+    }
+
+    @Override
+    public Completable doValidateDevice() {
+        return mBluetoothManager.doValidate();
+    }
+
+    @Override
+    public Completable doDisconnect() {
+        return mBluetoothManager.doDisconnect();
     }
 }

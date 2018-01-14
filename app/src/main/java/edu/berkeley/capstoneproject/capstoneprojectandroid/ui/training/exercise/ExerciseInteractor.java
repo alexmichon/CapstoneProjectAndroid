@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
@@ -42,8 +41,7 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     private final IMeasurementManager mMeasurementManager;
 
     @Inject
-    public ExerciseInteractor(IDataManager dataManager, IExerciseManager exerciseManager, IMeasurementManager measurementManager) {
-        super(dataManager);
+    public ExerciseInteractor(IExerciseManager exerciseManager, IMeasurementManager measurementManager) {
         mExerciseManager = exerciseManager;
         mMeasurementManager = measurementManager;
     }
