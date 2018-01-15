@@ -4,5 +4,5 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
  * Created by Alex on 14/01/2018.
  */
 
-public class BaseRequest {
+public class MetricMeasurementListRequest extends BaseRequest {
 }

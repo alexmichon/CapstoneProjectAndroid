@@ -1,19 +1,24 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Alex on 28/12/2017.
  */
 
-public class ObjectRequest<T extends BaseRequest> {
+public class BaseRequest<T> {
 
-    @SerializedName(value = T.SERIALIZED_NAME)
-    @Expose
-    private T mObject;
+    private final String mKey;
+    private final T mObject;
 
-    public ObjectRequest(T object) {
+    public BaseRequest(String key, T object) {
+        mKey = key;
         mObject = object;
+    }
+
+    public String getKey() {
+        return mKey;
+    }
+
+    public T getObject() {
+        return mObject;
     }
 }
