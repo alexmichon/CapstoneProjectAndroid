@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.gsonparserfactory.GsonParserFactory;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
@@ -41,9 +42,12 @@ public class CapstoneProjectAndroidApplication extends Application {
         super.onCreate();
         instance = this;
 
-        AndroidNetworking.initialize(getApplicationContext());
+        mAppComponent = createAppComponent();
+
+        AndroidNetworking.initialize(getApplicationContext(), getNetworkComponent().okHttpClient());
+        AndroidNetworking.setParserFactory(new GsonParserFactory());
         if (BuildConfig.DEBUG) {
-            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
+            //AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
         }
 
         if (BuildConfig.DEBUG) {
@@ -54,8 +58,6 @@ public class CapstoneProjectAndroidApplication extends Application {
                 }
             });
         }
-
-        mAppComponent = createAppComponent();
     }
 
     public AppComponent getAppComponent() {

@@ -3,13 +3,23 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.inject.Named;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 19/11/2017.
  */
 
-public class MeasurementRequest {
+public class MeasurementRequest extends BaseRequest {
+
+    @SerializedName("action")
+    @Expose
+    private final String mAction = "save";
 
     @SerializedName("took_at")
     @Expose
@@ -23,6 +33,8 @@ public class MeasurementRequest {
     @Expose
     private final int mMetricId;
 
+    @SerializedName("exercise_id")
+    @Expose(serialize = false)
     private final int mExerciseId;
 
     public MeasurementRequest(Measurement measurement) {

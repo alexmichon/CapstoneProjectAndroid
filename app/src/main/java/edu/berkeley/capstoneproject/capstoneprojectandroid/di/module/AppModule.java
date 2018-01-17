@@ -11,8 +11,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.Blueto
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
@@ -112,5 +114,11 @@ public class AppModule {
     @Singleton
     IBluetoothManager provideBluetoothManager(BluetoothManager bluetoothManager) {
         return bluetoothManager;
+    }
+
+    @Provides
+    @Singleton
+    IExerciseBuilderManager provideExerciseBuilderManager(ExerciseBuilderManager exerciseBuilderManager) {
+        return exerciseBuilderManager;
     }
 }

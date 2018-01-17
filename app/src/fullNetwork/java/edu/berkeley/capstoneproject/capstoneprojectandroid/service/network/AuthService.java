@@ -45,7 +45,6 @@ public class AuthService extends NetworkService implements IAuthService {
             public void subscribe(@NonNull final SingleEmitter<User> e) throws Exception {
                 Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_LOGIN)
                         .addBodyParameter(new LoginRequest(email, password))
-                        .setOkHttpClient(getOkHttpClient())
                         .build()
                         .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
                             @Override
@@ -69,7 +68,6 @@ public class AuthService extends NetworkService implements IAuthService {
     public Single<User> doRegister(final String email, final String password, final String passwordConfirmation, final String firstName, final String lastName) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_REGISTER)
                 .addBodyParameter(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
-                .setOkHttpClient(getOkHttpClient())
                 .build()
                 .getObjectObservable(RegisterResponse.class)
                 .singleOrError()
@@ -113,7 +111,6 @@ public class AuthService extends NetworkService implements IAuthService {
             @Override
             public void run() throws Exception {
                 Rx2AndroidNetworking.delete(ApiEndPoint.ENDPOINT_LOGOUT)
-                        .setOkHttpClient(getOkHttpClient())
                         .build()
                         .getAsOkHttpResponse(new OkHttpResponseListener() {
                             @Override

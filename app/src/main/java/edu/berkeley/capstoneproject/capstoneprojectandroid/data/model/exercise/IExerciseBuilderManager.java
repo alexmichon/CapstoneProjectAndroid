@@ -12,5 +12,7 @@ public interface IExerciseBuilderManager {
 
     void setExerciseType(ExerciseType exerciseType);
 
-    Single<Exercise> build();
+    void setExerciseBuilder(Exercise.Builder builder);
+
+    Single<Exercise> doCreate();
 }

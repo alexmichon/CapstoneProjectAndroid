@@ -1,35 +1,14 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise;
 
-import org.reactivestreams.Subscriber;
-
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.ENCODER_OBSERVABLE;
-import static edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.ExerciseService.IMU_OBSERVABLE;
 
 /**
  * Created by Alex on 10/11/2017.
@@ -88,12 +67,19 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public Completable doStartExercise() {
-        return mExerciseManager.start();
+        return mExerciseManager.doStartSensors();
+    }
+
+    @Override
+    public Completable doStartStreaming() {
+        return mExerciseManager.doStartExerciseStream();
     }
 
     @Override
     public Completable doStopExercise() {
-        return mExerciseManager.stop();
+        return Completable.concatArray(
+                mExerciseManager.doStopStreaming(),
+                mExerciseManager.doStopSensors());
     }
 
 
@@ -103,7 +89,7 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
-    public Completable doSaveMeasurement(final Exercise exercise, final Measurement measurement) {
-        return mMeasurementManager.save(measurement);
+    public void doSaveMeasurement(final Measurement measurement) {
+        mExerciseManager.doSendMeasurement(measurement);
     }
 }

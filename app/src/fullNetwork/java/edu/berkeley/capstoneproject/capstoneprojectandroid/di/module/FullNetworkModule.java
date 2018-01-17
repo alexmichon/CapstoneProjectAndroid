@@ -1,10 +1,16 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.module;
 
+import com.androidnetworking.gsonparserfactory.GsonParserFactory;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
+import com.androidnetworking.interfaces.Parser;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.BuildConfig;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHeader;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
@@ -26,9 +32,10 @@ public class FullNetworkModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(@Named("apiInterceptor") Interceptor apiInterceptor, @Named("authInterceptor") Interceptor authInterceptor) {
+    OkHttpClient provideOkHttpClient(@Named("apiInterceptor") Interceptor apiInterceptor, @Named("logInterceptor") Interceptor logInterceptor, @Named("authInterceptor") Interceptor authInterceptor) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(apiInterceptor)
+                .addNetworkInterceptor(logInterceptor)
                 .addNetworkInterceptor(authInterceptor)
                 .build();
     }
@@ -67,8 +74,29 @@ public class FullNetworkModule {
 
     @Provides
     @Singleton
+    @Named("logInterceptor")
+    Interceptor provideOkLogInterceptor() {
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            return interceptor;
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Provides
+    @Singleton
     @Named("apiInterceptor")
     Interceptor provideOkApiInterceptor(ApiInterceptor apiInterceptor) {
         return apiInterceptor;
+    }
+
+    @Provides
+    @Singleton
+    Parser.Factory provideParserFactory() {
+        GsonBuilder builder = new GsonBuilder();
+        return new GsonParserFactory(builder.create());
     }
 }

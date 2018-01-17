@@ -9,5 +9,5 @@ import io.reactivex.Completable;
 
 public interface IMeasurementManager {
 
-    Completable save(Measurement measurement);
+    Completable doSave(Measurement measurement);
 }

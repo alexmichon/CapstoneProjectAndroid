@@ -20,7 +20,7 @@ public class MeasurementManager implements IMeasurementManager {
     }
 
     @Override
-    public Completable save(Measurement measurement) {
+    public Completable doSave(Measurement measurement) {
         return mApiHelper.getExerciseService().doSaveMeasurement(measurement).toCompletable();
     }
 }

@@ -40,13 +40,15 @@ public class Measurement {
 
     private final Metric mMetric;
 
-    private Exercise mExercise;
+    private final Exercise mExercise;
     private int mId;
 
-    public Measurement(Metric metric, long timestamp, float value) {
+    public Measurement(Exercise exercise, Metric metric, long timestamp, float value) {
         mMetric = metric;
         mTimestamp = timestamp;
         mValue = value;
+        mExercise = exercise;
+        exercise.addMeasurement(this);
     }
 
 
@@ -55,7 +57,7 @@ public class Measurement {
     }
     public float getValue() { return mValue; }
 
-    public static List<Measurement> decodeEncoder(byte[] bytes) {
+    public static List<Measurement> decodeEncoder(Exercise exercise, byte[] bytes) {
 
         List<Measurement> measurements = new ArrayList<>(1);
 
@@ -64,12 +66,12 @@ public class Measurement {
         long timestamp = BytesUtils.bytesToTimestamp(bytes);
         float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_TIMESTAMP);
 
-        measurements.add(new Measurement(encoder.getMetric(Encoder.ID_ANGLE), timestamp, angle));
+        measurements.add(new Measurement(exercise, encoder.getMetric(Encoder.ID_ANGLE), timestamp, angle));
 
         return measurements;
     }
 
-    public static List<Measurement> decodeImu(byte[] bytes) {
+    public static List<Measurement> decodeImu(Exercise exercise, byte[] bytes) {
         List<Measurement> measurements = new ArrayList<>(3);
 
         int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);
@@ -85,16 +87,16 @@ public class Measurement {
         switch(type) {
             case IMU_DATA_ACC:
                 sensor = SensorManager.find(SensorManager.ID_ACCELEROMETER);
-                measurements.add(new Measurement(sensor.getMetric(Accelerometer.ID_ACC_X), timestamp, valX));
-                measurements.add(new Measurement(sensor.getMetric(Accelerometer.ID_ACC_Y), timestamp, valY));
-                measurements.add(new Measurement(sensor.getMetric(Accelerometer.ID_ACC_Z), timestamp, valZ));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_X), timestamp, valX));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_Y), timestamp, valY));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_Z), timestamp, valZ));
                 break;
 
             case IMU_DATA_GYR:
                 sensor = SensorManager.find(SensorManager.ID_GYROSCOPE);
-                measurements.add(new Measurement(sensor.getMetric(Gyroscope.ID_GYR_X), timestamp, valX));
-                measurements.add(new Measurement(sensor.getMetric(Gyroscope.ID_GYR_Y), timestamp, valY));
-                measurements.add(new Measurement(sensor.getMetric(Gyroscope.ID_GYR_Z), timestamp, valZ));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_X), timestamp, valX));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_Y), timestamp, valY));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_Z), timestamp, valZ));
                 break;
         }
 
@@ -107,11 +109,6 @@ public class Measurement {
 
     public Exercise getExercise() {
         return mExercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        mExercise = exercise;
-        mExercise.addMeasurement(this);
     }
 
     public void setId(int id) {

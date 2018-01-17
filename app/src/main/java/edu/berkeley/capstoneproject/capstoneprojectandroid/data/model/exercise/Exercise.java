@@ -23,6 +23,7 @@ public class Exercise implements Parcelable {
     }
 
     private final int mId;
+    private String mName;
 
     private final int mExerciseTypeId;
 
@@ -40,6 +41,18 @@ public class Exercise implements Parcelable {
     public Exercise(int id, ExerciseType exerciseType) {
         mId = id;
         mExerciseTypeId = exerciseType.getId();
+    }
+
+    public Exercise(int id, int exerciseTypeId, String name) {
+        mId = id;
+        mExerciseTypeId = exerciseTypeId;
+        mName = name;
+    }
+
+    public Exercise(int id, ExerciseType exerciseType, String name) {
+        mId = id;
+        mExerciseTypeId = exerciseType.getId();
+        mName = name;
     }
 
     public int getExerciseTypeId() {
@@ -72,9 +85,11 @@ public class Exercise implements Parcelable {
 
     public void addMeasurement(Measurement measurement) {
         MetricMeasurementList metricMeasurementList = getMetricMeasurementList(measurement.getMetric());
-        if (metricMeasurementList != null) {
-            metricMeasurementList.addMeasurement(measurement);
+        if (metricMeasurementList == null) {
+            metricMeasurementList = new MetricMeasurementList(measurement.getMetric());
+            mMetricMeasurementLists.add(metricMeasurementList);
         }
+        metricMeasurementList.addMeasurement(measurement);
     }
 
     public List<MetricMeasurementList> getMetricMeasurementLists() {
@@ -85,8 +100,13 @@ public class Exercise implements Parcelable {
         return mId;
     }
 
+    public String getName() {
+        return mName;
+    }
 
-
+    public void setName(String name) {
+        mName = name;
+    }
 
     protected Exercise(Parcel in) {
         mId = in.readInt();
@@ -121,6 +141,7 @@ public class Exercise implements Parcelable {
 
     public static class Builder {
         private int mId;
+        private String mName;
 
         private int mExerciseTypeId;
 
@@ -134,13 +155,22 @@ public class Exercise implements Parcelable {
             return this;
         }
 
-        public Exercise build() {
-            Exercise exercise = new Exercise(mId, mExerciseTypeId);
-            return exercise;
-        }
-
         public int getExerciseTypeId() {
             return mExerciseTypeId;
+        }
+
+        public Builder withName(String name) {
+            mName = name;
+            return this;
+        }
+
+        public String getName() {
+            return mName;
+        }
+
+        public Exercise build() {
+            Exercise exercise = new Exercise(mId, mExerciseTypeId, mName);
+            return exercise;
         }
     }
 }

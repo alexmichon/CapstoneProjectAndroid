@@ -5,6 +5,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +16,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Timed;
 
@@ -31,40 +36,49 @@ import static edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sen
 
 public class MeasurementService extends BaseService implements IMeasurementService, SensorEventListener {
 
+    private static final int PERIOD = 100000;
+
     private final SensorManager mSensorManager;
-    private final Sensor mAccSensor, mGyrSensor;
+    private final Sensor mAccSensor, mGyrSensor, mRotationSensor;
 
     private float mAccValues[] = new float[3];
     private float mGyrValues[] = new float[3];
     private float mAngleValues[] = new float[1];
 
-    private final long mStartTime;
+    private long mAccStart, mGyrStart, mEncoderStart;
 
     @Inject
     public MeasurementService(SensorManager sensorManager) {
         mSensorManager = sensorManager;
         mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyrSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-
-        mSensorManager.registerListener(this, mAccSensor, 100000);
-        mSensorManager.registerListener(this, mGyrSensor, 100000);
-
-        mStartTime = new Date().getTime();
+        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
     }
 
     @Override
-    public Observable<Measurement> getEncoderObservable() {
-        return Observable.interval(100, TimeUnit.MILLISECONDS).timestamp(TimeUnit.MILLISECONDS)
-            .flatMap(new Function<Timed<?>, ObservableSource<Measurement>>() {
+    public Observable<byte[]> getEncoderObservable() {
+        return Observable.interval(PERIOD, TimeUnit.MICROSECONDS).timestamp(TimeUnit.MILLISECONDS)
+            .flatMap(new Function<Timed<?>, ObservableSource<byte[]>>() {
                 @Override
-                public ObservableSource<Measurement> apply(@NonNull Timed<?> timed) throws Exception {
-                    return Observable.just(new Measurement(
-                            edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ENCODER).getMetric(ID_ANGLE),
-                            timed.time() - mStartTime,
-                            mAngleValues[0]
-                    ));
+                public ObservableSource<byte[]> apply(@NonNull Timed<?> timed) throws Exception {
+                    return Observable.just(ByteBuffer.allocate(8)
+                            .order(ByteOrder.LITTLE_ENDIAN)
+                            .putInt((int) (timed.time() - mEncoderStart))
+                            .putFloat(4, mAngleValues[0])
+                            .array());
                 }
-            });
+            }).doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mSensorManager.registerListener(MeasurementService.this, mRotationSensor, PERIOD);
+                        mEncoderStart = new Date().getTime();
+                    }
+            }).doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mSensorManager.unregisterListener(MeasurementService.this, mRotationSensor);
+                    }
+                });
     }
 
     @Override
@@ -73,60 +87,66 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     }
 
     @Override
-    public Observable<Measurement> getImuObservable() {
+    public Observable<byte[]> getImuObservable() {
         return Observable.merge(getAccObservable(), getGyrObservable());
     }
 
-    private Observable<Measurement> getAccObservable() {
-        return Observable.interval(100, TimeUnit.MILLISECONDS).timestamp(TimeUnit.MILLISECONDS)
-                .flatMap(new Function<Timed<?>, ObservableSource<Measurement>>() {
+    private Observable<byte[]> getAccObservable() {
+        return Observable.interval(PERIOD, TimeUnit.MICROSECONDS).timestamp(TimeUnit.MILLISECONDS)
+                .flatMap(new Function<Timed<?>, ObservableSource<byte[]>>() {
                     @Override
-                    public ObservableSource<Measurement> apply(@NonNull Timed<?> longTimed) throws Exception {
-                        Measurement measurements[] = new Measurement[]{
-                                new Measurement(
-                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ACCELEROMETER).getMetric(ID_ACC_X),
-                                        longTimed.time() - mStartTime,
-                                        mAccValues[0] / 10
-                                ),
-                                new Measurement(
-                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ACCELEROMETER).getMetric(ID_ACC_Y),
-                                        longTimed.time() - mStartTime,
-                                        mAccValues[1] / 10
-                                ),
-                                new Measurement(
-                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ACCELEROMETER).getMetric(ID_ACC_Z),
-                                        longTimed.time() - mStartTime,
-                                        mAccValues[2] / 10
-                                )
-                        };
-                        return Observable.fromArray(measurements);
+                    public ObservableSource<byte[]> apply(@NonNull Timed<?> longTimed) throws Exception {
+                        return Observable.just(ByteBuffer.allocate(20)
+                                .order(ByteOrder.LITTLE_ENDIAN)
+                                .putShort(0, (short) edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ACCELEROMETER)
+                                .putShort(2, Measurement.IMU_DATA_ACC)
+                                .putInt(4, (int) (longTimed.time() - mAccStart))
+                                .putFloat(8, mAccValues[0]/10)
+                                .putFloat(12, mAccValues[1]/10)
+                                .putFloat(16, mAccValues[2]/10)
+                                .array()
+                        );
+                    }
+                }).doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mSensorManager.registerListener(MeasurementService.this, mAccSensor, PERIOD);
+                        mAccStart = new Date().getTime();
+                    }
+                }).doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mSensorManager.unregisterListener(MeasurementService.this, mAccSensor);
                     }
                 });
     }
 
-    private Observable<Measurement> getGyrObservable() {
-        return Observable.interval(100, TimeUnit.MILLISECONDS).timestamp(TimeUnit.MILLISECONDS)
-                .flatMap(new Function<Timed<?>, ObservableSource<Measurement>>() {
+    private Observable<byte[]> getGyrObservable() {
+        return Observable.interval(PERIOD, TimeUnit.MICROSECONDS).timestamp(TimeUnit.MILLISECONDS)
+                .flatMap(new Function<Timed<?>, ObservableSource<byte[]>>() {
                     @Override
-                    public ObservableSource<Measurement> apply(@NonNull Timed<?> longTimed) throws Exception {
-                        Measurement measurements[] = new Measurement[]{
-                                new Measurement(
-                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_X),
-                                        longTimed.time() - mStartTime,
-                                        mGyrValues[0]
-                                ),
-                                new Measurement(
-                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_Y),
-                                        longTimed.time() - mStartTime,
-                                        mGyrValues[1]
-                                ),
-                                new Measurement(
-                                        edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.find(edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_Z),
-                                        longTimed.time() - mStartTime,
-                                        mGyrValues[2]
-                                )
-                        };
-                        return Observable.fromArray(measurements);
+                    public ObservableSource<byte[]> apply(@NonNull Timed<?> longTimed) throws Exception {
+                        return Observable.just(ByteBuffer.allocate(20)
+                                .order(ByteOrder.LITTLE_ENDIAN)
+                                .putShort(0, (short) edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE)
+                                .putShort(2, Measurement.IMU_DATA_GYR)
+                                .putInt(4, (int) (longTimed.time() - mGyrStart))
+                                .putFloat(8, mGyrValues[0]/10)
+                                .putFloat(12, mGyrValues[1]/10)
+                                .putFloat(16, mGyrValues[2]/10)
+                                .array()
+                        );
+                    }
+                }).doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mSensorManager.registerListener(MeasurementService.this, mGyrSensor, PERIOD);
+                        mGyrStart = new Date().getTime();
+                    }
+                }).doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mSensorManager.unregisterListener(MeasurementService.this, mGyrSensor);
                     }
                 });
     }
@@ -141,10 +161,12 @@ public class MeasurementService extends BaseService implements IMeasurementServi
         switch (sensorEvent.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
                 mAccValues = sensorEvent.values;
-                mAngleValues[0] = (float) Math.atan2(mAccValues[2], mAccValues[0]);
                 break;
             case Sensor.TYPE_GYROSCOPE:
                 mGyrValues = sensorEvent.values;
+                break;
+            case Sensor.TYPE_ROTATION_VECTOR:
+                mAngleValues = sensorEvent.values;
                 break;
         }
     }

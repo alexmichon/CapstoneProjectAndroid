@@ -14,8 +14,15 @@ public interface IExerciseManager {
 
     void setCurrentExercise(Exercise exercise);
 
-    Completable start();
-    Completable stop();
+    Completable doStartSensors();
+    Completable doStopSensors();
 
     Flowable<Measurement> listen();
+
+    Completable doSave();
+
+    Completable doStartExerciseStream();
+    Completable doStopStreaming();
+
+    void doSendMeasurement(Measurement measurement);
 }

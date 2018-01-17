@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
+import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,26 +10,29 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseGoalRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseGoalResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResultResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseTypeResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ObjectRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ObjectsRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.SaveMeasurementsRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * Created by Alex on 20/11/2017.
@@ -45,8 +49,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     @Override
     public Single<Exercise> doCreateExercise(final Exercise.Builder builder) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISES)
-                .addBodyParameter(new ExerciseRequest(builder))
-                .setOkHttpClient(getOkHttpClient())
+                .addJSONObjectBody(new ObjectRequest<>("exercise",  new ExerciseRequest(builder)).toJson())
                 .build()
                 .getObjectObservable(ExerciseResponse.class)
                 .singleOrError()
@@ -59,11 +62,21 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     }
 
     @Override
+    public Completable doSaveMeasurements(final Exercise exercise) {
+        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_SAVE_MEASUREMENTS)
+                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
+                .addJSONObjectBody(new ObjectsRequest<>("measurements", new SaveMeasurementsRequest(exercise)).toJson())
+                .build()
+                .getJSONArrayObservable()
+                .singleOrError()
+                .toCompletable();
+    }
+
+    @Override
     public Single<Measurement> doSaveMeasurement(final Measurement measurement) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_MEASUREMENTS)
                 .addPathParameter("exercise_id", String.valueOf(measurement.getExercise().getId()))
-                .addBodyParameter(new MeasurementRequest(measurement))
-                .setOkHttpClient(getOkHttpClient())
+                .addJSONObjectBody(new ObjectRequest<>("measurement", new MeasurementRequest(measurement)).toJson())
                 .build()
                 .getObjectObservable(MeasurementResponse.class)
                 .singleOrError()
@@ -81,8 +94,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
                 .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
                 .addBodyParameter(new ExerciseGoalRequest(exerciseGoalCreator))
-                .setOkHttpClient(getOkHttpClient())
-                .build()
+                .doCreate()
                 .getObjectObservable(ExerciseGoalResponse.class)
                 .singleOrError()
                 .map(new Function<ExerciseGoalResponse, ExerciseGoal>() {
@@ -97,8 +109,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     public Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType) {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPE_DEFAULT_GOAL)
                 .addPathParameter("exercise_type_id", String.valueOf(exerciseType.getId()))
-                .setOkHttpClient(getOkHttpClient())
-                .build()
+                .doCreate()
                 .getObjectObservable(ExerciseGoalResponse.class)
                 .singleOrError()
                 .map(new Function<ExerciseGoalResponse, ExerciseGoalCreator>() {
@@ -113,7 +124,6 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_RESULT)
                 .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
-                .setOkHttpClient(getOkHttpClient())
                 .build()
                 .getObjectObservable(ExerciseResultResponse.class)
                 .singleOrError()
@@ -128,7 +138,6 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     @Override
     public Observable<ExerciseType> doGetExerciseTypes() {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPES)
-                .setOkHttpClient(getOkHttpClient())
                 .build()
                 .getObjectListObservable(ExerciseTypeResponse.class)
                 .flatMap(new Function<List<ExerciseTypeResponse>, ObservableSource<ExerciseTypeResponse>>() {
@@ -143,5 +152,17 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                         return exerciseTypeResponse.getExerciseType();
                     }
                 });
+    }
+
+    @Override
+    public IRxWebSocket doStartStreaming(final Exercise exercise) {
+        return new RxActionCable(getOkHttpClient(), new Request.Builder()
+                .url(ApiConstants.WEBSOCKET_URL + "?exercise_id=" + exercise.getId())
+                .build(), "ExerciseChannel" , "\"exercise_id\":" + exercise.getId());
+    }
+
+    @Override
+    public void doSendMeasurement(IRxWebSocket stream, final Measurement measurement) {
+        stream.send(new MeasurementRequest(measurement).toJson().toString());
     }
 }

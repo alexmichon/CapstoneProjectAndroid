@@ -32,7 +32,7 @@ public class MeasurementTest {
 
     @Before
     public void setup() {
-        mMeasurement = new Measurement(mMetric, DEFAULT_TIMESTAMP, DEFAULT_VALUE);
+        //mMeasurement = new Measurement(mMetric, DEFAULT_TIMESTAMP, DEFAULT_VALUE);
     }
 
     @Test

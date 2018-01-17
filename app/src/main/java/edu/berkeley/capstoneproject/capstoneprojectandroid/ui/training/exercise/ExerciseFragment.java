@@ -32,11 +32,9 @@ import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
-import timber.log.Timber;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -195,7 +193,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         }
         Entry e = new Entry(measurement.getTimestamp(), measurement.getValue());
         set.addEntry(e);
-        Timber.d("Adding measurement: %d, %d, %d, %.2f", measurement.getMetric().getSensor().getId(), measurement.getMetric().getId(), measurement.getTimestamp(), measurement.getValue());
         data.notifyDataChanged();
         chart.notifyDataSetChanged();
         chart.setVisibleXRangeMaximum(1000);
@@ -275,8 +272,6 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     }
 
     private void setPieMeasurement(PieChart pieChart, Measurement measurement) {
-        Timber.d("Adding measurement: %d, %d, %d, %.2f", measurement.getMetric().getSensor().getId(), measurement.getMetric().getId(), measurement.getTimestamp(), measurement.getValue());
-
         float angle = (float) (measurement.getValue() * 180 / Math.PI) + 180f;
 
         List<PieEntry> pieEntries = new ArrayList<>();

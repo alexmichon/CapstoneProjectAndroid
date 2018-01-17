@@ -33,7 +33,12 @@ public class ExerciseBuilderManager implements IExerciseBuilderManager {
     }
 
     @Override
-    public Single<Exercise> build() {
+    public void setExerciseBuilder(Exercise.Builder builder) {
+        mExerciseBuilder = builder;
+    }
+
+    @Override
+    public Single<Exercise> doCreate() {
         return mApiHelper.getExerciseService().doCreateExercise(mExerciseBuilder);
     }
 }

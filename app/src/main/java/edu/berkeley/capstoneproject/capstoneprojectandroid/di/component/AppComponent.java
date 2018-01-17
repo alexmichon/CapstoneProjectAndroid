@@ -6,6 +6,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
@@ -35,6 +36,7 @@ public interface AppComponent {
     IAuthManager authManager();
     IExerciseTypeManager exerciseTypeManager();
     IExerciseManager exerciseManager();
+    IExerciseBuilderManager exerciseBuilderManager();
     IMeasurementManager measurementManager();
     IBluetoothManager bluetoothManager();
 }

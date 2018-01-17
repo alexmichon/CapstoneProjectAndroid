@@ -69,9 +69,15 @@ public class ExerciseBuilderFragment extends BaseFragment<ExerciseBuilderContrac
 
     @Override
     public void onExerciseBuilt() {
+        hideLoading();
         if (mListener != null) {
             mListener.onExerciseBuilt();
         }
+    }
+
+    @Override
+    public void onExerciseError(Throwable throwable) {
+        hideLoading();
     }
 
 
