@@ -18,7 +18,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single.ExerciseTypeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeContract;
 
 /**
  * Created by Alex on 18/11/2017.

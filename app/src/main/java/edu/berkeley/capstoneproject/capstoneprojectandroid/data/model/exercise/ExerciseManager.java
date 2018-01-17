@@ -36,6 +36,8 @@ public class ExerciseManager implements IExerciseManager {
     private final IBluetoothHelper mBluetoothHelper;
 
     private Exercise mExercise;
+    private ExerciseType mExerciseType;
+
     private Disposable mExerciseDisposable;
     private IRxWebSocket mExerciseStream;
 
@@ -53,6 +55,16 @@ public class ExerciseManager implements IExerciseManager {
     @Override
     public void setCurrentExercise(Exercise exercise) {
         mExercise = exercise;
+    }
+
+    @Override
+    public ExerciseType getExerciseType() {
+        return mExerciseType;
+    }
+
+    @Override
+    public void setExerciseType(ExerciseType exerciseType) {
+        mExerciseType = exerciseType;
     }
 
     @Override

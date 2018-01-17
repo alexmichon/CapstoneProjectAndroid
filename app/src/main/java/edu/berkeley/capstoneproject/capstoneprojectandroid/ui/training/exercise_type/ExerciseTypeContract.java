@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
@@ -12,15 +12,16 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 public interface ExerciseTypeContract {
 
     interface View extends IBaseView {
-        void onExerciseTypeSelect(ExerciseType exerciseType);
+        void setYoutubeVideo(String url);
+        void setDescription(String description);
     }
 
     interface Interactor extends IBaseInteractor {
     }
 
     interface Presenter<V extends IBaseView, I extends IBaseInteractor> extends IBasePresenter<V, I> {
-        ExerciseType getExerciseType();
         void setExerciseType(ExerciseType exerciseType);
-        void onExerciseTypeSelect();
+
+        void loadExerciseTypeInfo();
     }
 }

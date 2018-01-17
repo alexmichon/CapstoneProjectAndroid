@@ -16,6 +16,10 @@ public interface IExerciseManager {
 
     void setCurrentExercise(Exercise exercise);
 
+    ExerciseType getExerciseType();
+
+    void setExerciseType(ExerciseType exerciseType);
+
     Completable doStartSensors();
     Completable doStopSensors();
     Completable doStopExercise();

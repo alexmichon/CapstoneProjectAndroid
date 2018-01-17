@@ -45,7 +45,6 @@ public class ExerciseGoalFactory {
     public static class Builder {
 
         private ExerciseType mExerciseType;
-        private ExerciseGoal.Type mType;
         private List<MetricGoal> mMetricGoals = new ArrayList<>();
 
         public Builder withExerciseType(ExerciseType exerciseType) {
@@ -63,30 +62,14 @@ public class ExerciseGoalFactory {
             return this;
         }
 
-        public Builder withType(ExerciseGoal.Type type) {
-            mType = type;
-            return this;
-        }
-
         public ExerciseGoal build() {
             ExerciseGoal exerciseGoal = new ExerciseGoal(ID++, mMetricGoals);
-
-            switch (mType) {
-                case DEFAULT:
-                    exerciseGoal.setMetricGoals(def(mExerciseType).getMetricGoals());
-                    break;
-                case CUSTOM:
-                    break;
-                case NONE:
-                    return null;
-            }
 
             return exerciseGoal;
         }
 
         public ExerciseGoalCreator creator() {
             ExerciseGoalCreator creator = new ExerciseGoalCreator();
-            creator.setType(mType);
             creator.setMetricGoals(mMetricGoals);
 
             return creator;

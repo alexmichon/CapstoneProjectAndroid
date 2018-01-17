@@ -27,16 +27,8 @@ import io.reactivex.functions.Function;
 
 public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGoalContract.Interactor {
 
-    private final IExerciseManager mExerciseManager;
-
     @Inject
-    public ExerciseGoalInteractor(IExerciseManager exerciseManager) {
-        mExerciseManager = exerciseManager;
-    }
-
-    @Override
-    public Single<ExerciseGoal> doGetExerciseGoal() {
-        return mExerciseManager.doGetExerciseGoal();
+    public ExerciseGoalInteractor() {
     }
 
 }

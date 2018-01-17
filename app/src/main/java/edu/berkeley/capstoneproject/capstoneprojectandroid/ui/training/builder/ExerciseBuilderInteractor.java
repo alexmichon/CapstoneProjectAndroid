@@ -26,7 +26,7 @@ public class ExerciseBuilderInteractor extends BaseInteractor implements Exercis
     }
 
     @Override
-    public Single<Exercise> doCreateExercise(ExerciseType exerciseType) {
+    public Single<Exercise> doCreateExercise(final ExerciseType exerciseType) {
         mExerciseBuilderManager.setExerciseBuilder(new Exercise.Builder()
                 .withExerciseType(exerciseType)
         );
@@ -35,6 +35,7 @@ public class ExerciseBuilderInteractor extends BaseInteractor implements Exercis
                     @Override
                     public void accept(Exercise exercise) throws Exception {
                         mExerciseManager.setCurrentExercise(exercise);
+                        mExerciseManager.setExerciseType(exerciseType);
                     }
                 });
     }

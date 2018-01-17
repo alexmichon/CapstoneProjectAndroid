@@ -19,29 +19,23 @@ import io.reactivex.functions.Consumer;
 
 public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extends ExerciseGoalContract.Interactor> extends BasePresenter<V, I> implements ExerciseGoalContract.Presenter<V, I> {
 
+    ExerciseGoal mExerciseGoal;
+
     @Inject
     public ExerciseGoalPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    public void loadExerciseGoal() {
+    public void loadExerciseGoalInfo() {
         if (isViewAttached()) {
-            getView().onExerciseGoalLoading();
+            getView().setMetricGoals(mExerciseGoal.getMetricGoals());
         }
+    }
 
-        getCompositeDisposable().add(getInteractor().doGetExerciseGoal()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<ExerciseGoal>() {
-                    @Override
-                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
-                        if (isViewAttached()) {
-                            getView().onExerciseGoalLoaded(exerciseGoal);
-                        }
-                    }
-                })
-        );
+    @Override
+    public void setExerciseGoal(ExerciseGoal exerciseGoal) {
+        mExerciseGoal = exerciseGoal;
     }
 
 }

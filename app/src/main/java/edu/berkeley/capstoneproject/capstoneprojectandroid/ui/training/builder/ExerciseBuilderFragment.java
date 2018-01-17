@@ -1,6 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,11 +16,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeFragment;
 
 /**
  * Created by Alex on 13/01/2018.

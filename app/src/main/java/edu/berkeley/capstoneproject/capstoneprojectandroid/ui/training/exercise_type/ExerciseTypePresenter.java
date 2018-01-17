@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type;
 
 import javax.inject.Inject;
 
@@ -21,19 +21,15 @@ public class ExerciseTypePresenter<V extends ExerciseTypeContract.View, I extend
     }
 
     @Override
-    public ExerciseType getExerciseType() {
-        return mExerciseType;
-    }
-
-    @Override
     public void setExerciseType(ExerciseType exerciseType) {
         mExerciseType = exerciseType;
     }
 
     @Override
-    public void onExerciseTypeSelect() {
+    public void loadExerciseTypeInfo() {
         if (isViewAttached()) {
-            getView().onExerciseTypeSelect(mExerciseType);
+            getView().setDescription(mExerciseType.getDescription());
+            getView().setYoutubeVideo(mExerciseType.getYoutubeVideo());
         }
     }
 }

@@ -12,10 +12,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
 public class ExerciseGoalCreator {
 
     private List<MetricGoal> mMetricGoals;
-    private ExerciseGoal.Type mType;
 
     public ExerciseGoalCreator() {
-        mType = ExerciseGoal.Type.DEFAULT;
         mMetricGoals = new ArrayList<>();
     }
 
@@ -25,13 +23,5 @@ public class ExerciseGoalCreator {
 
     public void setMetricGoals(List<MetricGoal> metricGoals) {
         mMetricGoals = metricGoals;
-    }
-
-    public ExerciseGoal.Type getType() {
-        return mType;
-    }
-
-    public void setType(ExerciseGoal.Type type) {
-        mType = type;
     }
 }

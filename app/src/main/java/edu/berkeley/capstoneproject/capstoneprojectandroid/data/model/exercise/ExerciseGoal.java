@@ -16,43 +16,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
  * Created by Alex on 17/12/2017.
  */
 
-public class ExerciseGoal {
+public class ExerciseGoal implements Parcelable {
 
-    public enum Type {
-        NONE("None"), DEFAULT("Default"), CUSTOM("Custom");
-
-        private final String mName;
-
-        Type(String name) {
-            mName = name;
-        }
-
-        public static List<String> nameList() {
-            List<String> names = new ArrayList<>();
-            for (Type t: values()) {
-                names.add(t.getName());
-            }
-
-            return names;
-        }
-
-        public static Type find(String name) {
-            for (Type t: values()) {
-                if (t.getName().equals(name)) {
-                    return t;
-                }
-            }
-
-            return null;
-        }
-
-        public String getName() {
-            return mName;
-        }
-    }
 
     private final int mId;
-    private Type mType;
     private List<MetricGoal> mMetricGoals;
 
     public ExerciseGoal(int id, List<MetricGoal> metricGoals) {
@@ -62,14 +29,6 @@ public class ExerciseGoal {
 
     public int getId() {
         return mId;
-    }
-
-    public Type getType() {
-        return mType;
-    }
-
-    public void setType(Type type) {
-        mType = type;
     }
 
     public List<MetricGoal> getMetricGoals() {
@@ -100,5 +59,36 @@ public class ExerciseGoal {
 
     public void removeMetricGoal(MetricGoal metricGoal) {
         mMetricGoals.remove(metricGoal);
+    }
+
+
+
+    protected ExerciseGoal(Parcel in) {
+        mId = in.readInt();
+        mMetricGoals = new ArrayList<>();
+        in.readList(mMetricGoals, null);
+    }
+
+    public static final Creator<ExerciseGoal> CREATOR = new Creator<ExerciseGoal>() {
+        @Override
+        public ExerciseGoal createFromParcel(Parcel in) {
+            return new ExerciseGoal(in);
+        }
+
+        @Override
+        public ExerciseGoal[] newArray(int size) {
+            return new ExerciseGoal[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeList(mMetricGoals);
     }
 }

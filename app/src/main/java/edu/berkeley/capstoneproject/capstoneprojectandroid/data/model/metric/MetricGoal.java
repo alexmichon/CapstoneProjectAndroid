@@ -1,10 +1,13 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Alex on 17/12/2017.
  */
 
-public class MetricGoal {
+public class MetricGoal implements Parcelable {
 
     private final int mId;
     private int mMetricId;
@@ -68,4 +71,41 @@ public class MetricGoal {
     public void setGoal(float goal) {
         mGoal = goal;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeInt(mMetricId);
+        parcel.writeString(mMetricName);
+        parcel.writeString(mAggregator);
+        parcel.writeString(mComparator);
+        parcel.writeFloat(mGoal);
+    }
+
+    protected MetricGoal(Parcel in) {
+        mId = in.readInt();
+        mMetricId = in.readInt();
+        mMetricName = in.readString();
+        mAggregator = in.readString();
+        mComparator = in.readString();
+        mGoal = in.readFloat();
+    }
+
+    public static final Creator<MetricGoal> CREATOR = new Creator<MetricGoal>() {
+        @Override
+        public MetricGoal createFromParcel(Parcel in) {
+            return new MetricGoal(in);
+        }
+
+        @Override
+        public MetricGoal[] newArray(int size) {
+            return new MetricGoal[size];
+        }
+    };
 }
