@@ -14,7 +14,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
  * Created by Alex on 21/12/2017.
  */
 
-public class ExerciseGoalResponse extends BaseResponse<ExerciseGoalCreator> {
+public class ExerciseGoalResponse extends BaseResponse<ExerciseGoal> {
 
     @Expose
     @SerializedName("id")
@@ -25,16 +25,14 @@ public class ExerciseGoalResponse extends BaseResponse<ExerciseGoalCreator> {
     private List<MetricGoalResponse> mMetricGoalResponses;
 
     @Override
-    public ExerciseGoalCreator get() {
-        ExerciseGoalCreator creator = new ExerciseGoalCreator();
-        creator.setType(ExerciseGoal.Type.DEFAULT);
-
+    public ExerciseGoal get() {
         List<MetricGoal> metricGoals = new ArrayList<>();
         for (MetricGoalResponse m: mMetricGoalResponses) {
             metricGoals.add(m.get());
         }
-        creator.setMetricGoals(metricGoals);
 
-        return creator;
+        ExerciseGoal goal = new ExerciseGoal(mId, metricGoals);
+
+        return goal;
     }
 }

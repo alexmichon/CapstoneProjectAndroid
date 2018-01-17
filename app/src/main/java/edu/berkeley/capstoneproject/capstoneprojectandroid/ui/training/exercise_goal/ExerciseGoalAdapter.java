@@ -25,29 +25,16 @@ import timber.log.Timber;
 
 public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapter.ViewHolder> {
 
-    private final List<MetricGoal> mMetricGoals = new ArrayList<>();
-
-    private boolean mEditable = false;
+    private final List<MetricGoal> mMetricGoals;
 
     public ExerciseGoalAdapter(List<MetricGoal> metricGoals) {
-        try {
-            for (MetricGoal m: metricGoals) {
-                mMetricGoals.add(m.clone());
-            }
-        } catch (CloneNotSupportedException e) {
-            Timber.e(e);
-        }
-    }
-
-    public void setEditable(boolean editable) {
-        mEditable = editable;
+        mMetricGoals = metricGoals;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_metric_goal, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
-        viewHolder.setGoalListener(new GoalTextChangedListener(i));
         return viewHolder;
     }
 
@@ -72,17 +59,19 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
         TextView mLabelView;
 
         @BindView(R.id.metric_goal_value)
-        EditText mGoalView;
+        TextView mGoalView;
+
+        @BindView(R.id.metric_goal_aggregator)
+        TextView mAggregatorView;
+
+        @BindView(R.id.metric_goal_comparator)
+        TextView mComparatorView;
 
         private MetricGoal mMetricGoal;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-
-        public void setGoalListener(TextWatcher textWatcher) {
-            mGoalView.addTextChangedListener(textWatcher);
         }
 
         public void bind(MetricGoal metricGoal) {
@@ -92,30 +81,8 @@ public class ExerciseGoalAdapter extends RecyclerView.Adapter<ExerciseGoalAdapte
 
             mLabelView.setText(metricGoal.getMetricName());
             mGoalView.setText(String.valueOf(goal));
-            mGoalView.setEnabled(mEditable);
-        }
-    }
-
-    public class GoalTextChangedListener implements TextWatcher {
-        private final int mPosition;
-
-        public GoalTextChangedListener(int position) {
-            mPosition = position;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            mMetricGoals.get(mPosition).setGoal(Float.valueOf(editable.toString()));
+            mAggregatorView.setText(metricGoal.getAggregator());
+            mComparatorView.setText(metricGoal.getComparator());
         }
     }
 }

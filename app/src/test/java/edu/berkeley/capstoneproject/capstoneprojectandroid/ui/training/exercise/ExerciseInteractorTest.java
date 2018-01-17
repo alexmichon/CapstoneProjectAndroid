@@ -174,13 +174,9 @@ public class ExerciseInteractorTest {
 
         when(measurement.getExercise()).thenReturn(mExercise);
 
-        doReturn(Single.just(measurement)).when(mApiExerciseService).doSaveMeasurement(measurement);
-
         // when
-        mInteractor.doSaveMeasurement(mExercise, measurement);
 
         // then
-        verify(mApiExerciseService).doSaveMeasurement(measurement);
     }
 
     @Test

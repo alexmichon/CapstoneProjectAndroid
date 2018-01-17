@@ -55,9 +55,8 @@ public class ExerciseGoal {
     private Type mType;
     private List<MetricGoal> mMetricGoals;
 
-    public ExerciseGoal(int id, Type type, List<MetricGoal> metricGoals) {
+    public ExerciseGoal(int id, List<MetricGoal> metricGoals) {
         mId = id;
-        mType = type;
         mMetricGoals = metricGoals;
     }
 

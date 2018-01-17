@@ -40,4 +40,7 @@ public class ApiEndPoint {
 
     public static final String ENDPOINT_EXERCISE_RESULT = ApiConstants.API_URL
             + "/exercises/{exercise_id}/exercise_result";
+
+    public static final String ENDPOINT_EXERCISE_STOP = ApiConstants.API_URL
+            + "/exercises/{exercise_id}/stop";
 }

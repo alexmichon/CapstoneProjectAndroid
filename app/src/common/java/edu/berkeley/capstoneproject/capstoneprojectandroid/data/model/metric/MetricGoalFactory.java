@@ -6,6 +6,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
 
 public class MetricGoalFactory {
 
+    private static int ID = 0;
+
     public static Builder builder() {
         return new Builder();
     }
@@ -43,7 +45,7 @@ public class MetricGoalFactory {
         }
 
         public MetricGoal build() {
-            MetricGoal metricGoal = new MetricGoal(mMetricId, mGoal, mType, mComparator);
+            MetricGoal metricGoal = new MetricGoal(ID++, mMetricId, mGoal, mType, mComparator);
             return metricGoal;
         }
     }

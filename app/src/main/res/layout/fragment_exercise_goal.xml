@@ -1,38 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:minWidth="400dp"
-              android:padding="20dp">
-
-    <android.support.v7.widget.ButtonBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/exercise_goal_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:text="OK"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-    </android.support.v7.widget.ButtonBarLayout>
-
-    <Spinner
-        android:id="@+id/exercise_goal_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/exercise_goal_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"/>
-
-
-</LinearLayout>
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                                        android:id="@+id/exercise_goal_recycler"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="10dp"
+                                        android:padding="20dp"/>

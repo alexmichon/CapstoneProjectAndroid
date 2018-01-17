@@ -4,19 +4,25 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
  * Created by Alex on 17/12/2017.
  */
 
-public class MetricGoal implements Cloneable {
+public class MetricGoal {
 
+    private final int mId;
     private int mMetricId;
     private String mMetricName;
     private String mAggregator;
     private String mComparator;
     private float mGoal;
 
-    public MetricGoal(int metricId, float goal, String type, String comparator) {
+    public MetricGoal(int id, int metricId, float goal, String type, String comparator) {
+        mId = id;
         mMetricId = metricId;
         mAggregator = type;
         mComparator = comparator;
         mGoal = goal;
+    }
+
+    public int getId() {
+        return mId;
     }
 
     public int getMetricId() {
@@ -61,15 +67,5 @@ public class MetricGoal implements Cloneable {
 
     public void setGoal(float goal) {
         mGoal = goal;
-    }
-
-    public MetricGoal clone() throws CloneNotSupportedException {
-        MetricGoal metricGoal = (MetricGoal) super.clone();
-        metricGoal.setMetricId(mMetricId);
-        metricGoal.setGoal(mGoal);
-        metricGoal.setAggregator(mAggregator);
-        metricGoal.setComparator(mComparator);
-
-        return metricGoal;
     }
 }

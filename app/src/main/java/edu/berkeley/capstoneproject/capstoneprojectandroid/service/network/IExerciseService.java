@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
@@ -16,13 +17,10 @@ import io.reactivex.Single;
 public interface IExerciseService {
 
     Single<Exercise> doCreateExercise(Exercise.Builder builder);
-
-    Completable doSaveMeasurements(Exercise exercise);
-
-    Single<Measurement> doSaveMeasurement(Measurement measurement);
+    Completable doStopExercise(Exercise exercise);
 
     //Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, Exercise.Builder builder);
-    //Single<ExerciseGoalCreator> doGetDefaultExerciseGoal(ExerciseType exerciseType);
+    //Single<ExerciseGoalCreator> doGetExerciseGoal(ExerciseType exerciseType);
 
     Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
 
@@ -30,4 +28,6 @@ public interface IExerciseService {
 
     IRxWebSocket doStartStreaming(Exercise exercise);
     void doSendMeasurement(IRxWebSocket stream, Measurement measurement);
+
+    Single<ExerciseGoal> doGetExerciseGoal(Exercise exercise);
 }

@@ -16,6 +16,7 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -92,21 +93,13 @@ public class ExerciseManager implements IExerciseManager {
     }
 
     @Override
-    public Flowable<Measurement> listen() {
-        return Flowable.merge(listenEncoder(), listenImu());
+    public Completable doStopExercise() {
+        return mApiHelper.getExerciseService().doStopExercise(mExercise);
     }
 
     @Override
-    public Completable doSave() {
-        //return mApiHelper.getExerciseService().doSaveMeasurements(mExercise);
-//        List<Completable> completableList = new ArrayList<>();
-//        for (MetricMeasurementList metricMeasurementList: mExercise.getMetricMeasurementLists()) {
-//            for (Measurement measurement: metricMeasurementList.getMeasurements()) {
-//                completableList.add(mApiHelper.getExerciseService().doSaveMeasurement(measurement).toCompletable());
-//            }
-//        }
-//        return Completable.concat(completableList);
-        return Completable.complete();
+    public Flowable<Measurement> listen() {
+        return Flowable.merge(listenEncoder(), listenImu());
     }
 
     private Flowable<Measurement> listenEncoder() {
@@ -132,7 +125,7 @@ public class ExerciseManager implements IExerciseManager {
     }
 
     @Override
-    public Completable doStartExerciseStream() {
+    public Completable doStartStreaming() {
         mExerciseStream = mApiHelper.getExerciseService().doStartStreaming(mExercise);
         return mExerciseStream.connect();
     }
@@ -147,5 +140,10 @@ public class ExerciseManager implements IExerciseManager {
         if (mExerciseStream != null) {
             mApiHelper.getExerciseService().doSendMeasurement(mExerciseStream, measurement);
         }
+    }
+
+    @Override
+    public Single<ExerciseGoal> doGetExerciseGoal() {
+        return mApiHelper.getExerciseService().doGetExerciseGoal(mExercise);
     }
 }

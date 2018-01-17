@@ -5,34 +5,28 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.TextView;
-
-import java.util.List;
+import android.widget.FrameLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalDialog;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalFragment;
 
 /**
  * Created by Alex on 18/12/2017.
  */
 
 public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContract.View, ExerciseSummaryContract.Presenter<ExerciseSummaryContract.View, ExerciseSummaryContract.Interactor>>
-        implements ExerciseSummaryContract.View, ExerciseGoalDialog.ExerciseGoalFragmentListener {
+        implements ExerciseSummaryContract.View, ExerciseGoalFragment.ExerciseGoalFragmentListener {
 
     @BindView(R.id.exercise_summary_goal)
-    TextView mExerciseGoalView;
+    FrameLayout mExerciseGoalView;
 
     private ExerciseSummaryFragmentListener mListener;
 
-    private ExerciseGoalDialog mExerciseGoalDialog;
+    private ExerciseGoalFragment mExerciseGoalDialog;
 
 
     public static ExerciseSummaryFragment newInstance(ExerciseSummaryFragmentListener listener) {
@@ -48,7 +42,9 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
         View view = inflater.inflate(R.layout.fragment_exercise_summary, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
-
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.exercise_summary_goal, ExerciseGoalFragment.newInstance(this))
+                .commit();
 
         return view;
     }
@@ -78,10 +74,6 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
         getPresenter().onBackClick();
     }
 
-    @OnClick(R.id.exercise_summary_goal_edit)
-    public void onGoalEditClick(View v) {
-        getPresenter().onExerciseGoalEdit();
-    }
 
     @Override
     public void startExercise() {
@@ -97,34 +89,9 @@ public class ExerciseSummaryFragment extends BaseFragment<ExerciseSummaryContrac
         }
     }
 
-    @Override
-    public void showExerciseGoalEditDialog() {
-        mExerciseGoalDialog = ExerciseGoalDialog.newInstance(this);
-        showDialog(mExerciseGoalDialog, "Exercise Goal");
-    }
-
-
-    @Override
-    public void setExerciseGoalType(ExerciseGoal.Type type) {
-        mExerciseGoalView.setText(type.getName());
-    }
-
-    @Override
-    public void dismissExerciseGoalEditDialog() {
-        update();
-        if (mExerciseGoalDialog != null) {
-            mExerciseGoalDialog.dismiss();
-        }
-    }
-
 
     public void setListener(ExerciseSummaryFragmentListener listener) {
         mListener = listener;
-    }
-
-    @Override
-    public void onExerciseGoalEditDone() {
-        getPresenter().onExerciseGoalDone();
     }
 
     public interface ExerciseSummaryFragmentListener {

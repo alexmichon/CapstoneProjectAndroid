@@ -4,10 +4,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalCreator;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricGoal;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Completable;
@@ -24,49 +27,16 @@ import io.reactivex.functions.Function;
 
 public class ExerciseGoalInteractor extends BaseInteractor implements ExerciseGoalContract.Interactor {
 
+    private final IExerciseManager mExerciseManager;
+
     @Inject
-    public ExerciseGoalInteractor() {
-    }
-
-    /*
-    @Override
-    public Single<ExerciseGoalCreator> doLoadDefaultExerciseGoal() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator().flatMap(new Function<ExerciseCreator, SingleSource<? extends ExerciseType>>() {
-            @Override
-                public SingleSource<? extends ExerciseType> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {
-                        return Single.just(exerciseCreator.getExerciseType());
-                }
-        }).flatMap(new Function<ExerciseType, SingleSource<? extends ExerciseGoalCreator>>() {
-                @Override
-                public SingleSource<? extends ExerciseGoalCreator> apply(@NonNull ExerciseType exerciseType) throws Exception {
-                        return getDataManager().getApiHelper().getExerciseService().doGetDefaultExerciseGoal(exerciseType);
-                }
-        });
-    }*/
-
-    @Override
-    public Single<ExerciseGoalCreator> doLoadCurrentExerciseGoal() {
-        // TODO
-        //return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator();
-        return Single.never();
+    public ExerciseGoalInteractor(IExerciseManager exerciseManager) {
+        mExerciseManager = exerciseManager;
     }
 
     @Override
-    public Completable doUpdateExerciseGoal(final ExerciseGoal.Type type, final List<MetricGoal> metricGoals) {
-        // TODO
-        /*return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
-                .flatMapCompletable(new Function<ExerciseGoalCreator, CompletableSource>() {
-                    @Override
-                    public CompletableSource apply(@NonNull final ExerciseGoalCreator exerciseGoalCreator) throws Exception {
-                        return Completable.fromAction(new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                exerciseGoalCreator.setType(type);
-                                exerciseGoalCreator.setMetricGoals(metricGoals);
-                            }
-                        });
-                    }
-                });*/
-        return Completable.never();
+    public Single<ExerciseGoal> doGetExerciseGoal() {
+        return mExerciseManager.doGetExerciseGoal();
     }
+
 }

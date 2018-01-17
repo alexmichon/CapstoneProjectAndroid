@@ -72,13 +72,14 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public Completable doStartStreaming() {
-        return mExerciseManager.doStartExerciseStream();
+        return mExerciseManager.doStartStreaming();
     }
 
     @Override
     public Completable doStopExercise() {
         return Completable.concatArray(
                 mExerciseManager.doStopStreaming(),
+                mExerciseManager.doStopExercise(),
                 mExerciseManager.doStopSensors());
     }
 

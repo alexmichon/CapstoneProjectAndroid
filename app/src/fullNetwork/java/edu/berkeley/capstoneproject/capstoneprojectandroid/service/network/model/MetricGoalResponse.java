@@ -85,7 +85,7 @@ public class MetricGoalResponse extends BaseResponse<MetricGoal> {
 
     @Override
     public MetricGoal get() {
-        MetricGoal metricGoal = new MetricGoal(mMetricId, mGoal, mAggregator, mComparator);
+        MetricGoal metricGoal = new MetricGoal(mId, mMetricId, mGoal, mAggregator, mComparator);
         metricGoal.setMetricName(mMetricName);
         return metricGoal;
     }

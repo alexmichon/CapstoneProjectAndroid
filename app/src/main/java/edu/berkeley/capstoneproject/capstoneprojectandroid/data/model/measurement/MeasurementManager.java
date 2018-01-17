@@ -19,8 +19,4 @@ public class MeasurementManager implements IMeasurementManager {
         mApiHelper = apiHelper;
     }
 
-    @Override
-    public Completable doSave(Measurement measurement) {
-        return mApiHelper.getExerciseService().doSaveMeasurement(measurement).toCompletable();
-    }
 }

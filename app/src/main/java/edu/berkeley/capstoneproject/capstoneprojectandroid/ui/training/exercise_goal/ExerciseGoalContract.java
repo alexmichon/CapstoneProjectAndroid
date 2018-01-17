@@ -19,31 +19,15 @@ import io.reactivex.Single;
 public interface ExerciseGoalContract {
 
     interface View extends IBaseView {
-        void onCurrentExerciseGoalLoaded(ExerciseGoal exerciseGoal);
-
-        void onDefaultExerciseGoalLoaded(ExerciseGoal exerciseGoal);
-
-        void setMetricGoals(List<MetricGoal> metricGoals);
-
-        void onExerciseGoalEditDone();
-
-        void setExerciseGoalType(ExerciseGoal.Type t);
-        ExerciseGoal.Type getExerciseGoalType();
-
-        List<MetricGoal> getMetricGoals();
+        void onExerciseGoalLoading();
+        void onExerciseGoalLoaded(ExerciseGoal exerciseGoal);
     }
 
     interface Interactor extends IBaseInteractor {
-        //Single<ExerciseGoalCreator> doLoadDefaultExerciseGoal();
-        Single<ExerciseGoalCreator> doLoadCurrentExerciseGoal();
-
-        Completable doUpdateExerciseGoal(ExerciseGoal.Type type, List<MetricGoal> metricGoals);
+        Single<ExerciseGoal> doGetExerciseGoal();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void loadCurrentExerciseGoal();
-        void loadDefaultExerciseGoal();
-
-        void onSaveExerciseGoal();
+        void loadExerciseGoal();
     }
 }

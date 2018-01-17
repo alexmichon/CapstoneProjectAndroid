@@ -12,7 +12,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerPr
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import timber.log.Timber;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -26,87 +25,23 @@ public class ExerciseGoalPresenter<V extends ExerciseGoalContract.View, I extend
     }
 
     @Override
-    public void loadCurrentExerciseGoal() {
+    public void loadExerciseGoal() {
         if (isViewAttached()) {
-            getView().showLoading();
+            getView().onExerciseGoalLoading();
         }
 
-        getCompositeDisposable().add(getInteractor().doLoadCurrentExerciseGoal()
+        getCompositeDisposable().add(getInteractor().doGetExerciseGoal()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<ExerciseGoalCreator>() {
+                .subscribe(new Consumer<ExerciseGoal>() {
                     @Override
-                    public void accept(ExerciseGoalCreator exerciseGoalCreator) throws Exception {
+                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
                         if (isViewAttached()) {
-                            getView().hideLoading();
-                            getView().setExerciseGoalType(exerciseGoalCreator.getType());
-                            getView().setMetricGoals(exerciseGoalCreator.getMetricGoals());
+                            getView().onExerciseGoalLoaded(exerciseGoal);
                         }
                     }
                 })
         );
     }
 
-    @Override
-    public void loadDefaultExerciseGoal() {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
-        /*getCompositeDisposable().add(getInteractor().doLoadDefaultExerciseGoal()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<ExerciseGoalCreator>() {
-                    @Override
-                    public void accept(ExerciseGoalCreator exerciseGoalCreator) throws Exception {
-                        if (isViewAttached()) {
-                            getView().hideLoading();
-                            if (getView().getExerciseGoalType() == ExerciseGoal.Type.DEFAULT) {
-                                getView().setMetricGoals(exerciseGoalCreator.getMetricGoals());
-                            }
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Timber.e(throwable);
-                        if (isViewAttached()) {
-                            getView().hideLoading();
-                        }
-                    }
-                })
-        );*/
-    }
-
-    @Override
-    public void onSaveExerciseGoal() {
-        if (!isViewAttached()) {
-            return;
-        }
-
-        ExerciseGoal.Type type = getView().getExerciseGoalType();
-        List<MetricGoal> metricGoals = getView().getMetricGoals();
-
-        getCompositeDisposable().add(getInteractor().doUpdateExerciseGoal(type, metricGoals)
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        if (isViewAttached()) {
-                            getView().hideLoading();
-                            getView().onExerciseGoalEditDone();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        if (isViewAttached()) {
-                            getView().hideLoading();
-                            getView().showError(throwable);
-                        }
-                    }
-                })
-        );
-    }
 }

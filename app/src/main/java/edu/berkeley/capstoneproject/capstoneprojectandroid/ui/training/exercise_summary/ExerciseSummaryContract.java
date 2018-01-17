@@ -20,21 +20,11 @@ import io.reactivex.disposables.Disposable;
 public interface ExerciseSummaryContract {
 
     interface View extends IBaseView {
-
         void startExercise();
-
         void moveBack();
-
-        void showExerciseGoalEditDialog();
-
-        void setExerciseGoalType(ExerciseGoal.Type type);
-
-        void dismissExerciseGoalEditDialog();
     }
 
     interface Interactor extends IBaseInteractor {
-
-        Single<ExerciseGoalCreator> doGetCurrentExerciseGoal();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
@@ -44,8 +34,5 @@ public interface ExerciseSummaryContract {
         void onBackClick();
 
         void loadExerciseSummary();
-
-        void onExerciseGoalEdit();
-        void onExerciseGoalDone();
     }
 }

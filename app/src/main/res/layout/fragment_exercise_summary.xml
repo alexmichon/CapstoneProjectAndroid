@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:paddingStart="10dp"
+              android:paddingEnd="10dp">
 
     <android.support.v7.widget.ButtonBarLayout
         android:layout_width="match_parent"
@@ -30,37 +32,17 @@
 
     </android.support.v7.widget.ButtonBarLayout>
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:orientation="horizontal">
+        android:text="Goal"
+        style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="Goal:"/>
-
-        <TextView
-            android:id="@+id/exercise_summary_goal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
-
-        <Button
-            android:id="@+id/exercise_summary_goal_edit"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/ic_edit"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/exercise_summary_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"/>
 
 
 
