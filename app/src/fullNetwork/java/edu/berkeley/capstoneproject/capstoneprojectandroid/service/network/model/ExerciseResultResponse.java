@@ -3,7 +3,11 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricResult;
 
 /**
  * Created by Alex on 22/12/2017.
@@ -11,16 +15,21 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 
 public class ExerciseResultResponse extends BaseResponse<ExerciseResult> {
 
-    @Expose
     @SerializedName("id")
+    @Expose
     private int mId;
 
+    @SerializedName("metric_results")
     @Expose
-    @SerializedName("exercise_id")
-    private int mExerciseId;
+    private List<MetricResultResponse> mMetricResultResponses;
 
     @Override
     public ExerciseResult get() {
-        return null;
+        List<MetricResult> metricResults = new ArrayList<>();
+        for (MetricResultResponse metricResultResponse: mMetricResultResponses) {
+            metricResults.add(metricResultResponse.get());
+        }
+
+        return new ExerciseResult(metricResults);
     }
 }

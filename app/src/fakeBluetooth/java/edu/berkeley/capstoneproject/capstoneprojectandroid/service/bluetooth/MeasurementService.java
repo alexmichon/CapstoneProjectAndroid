@@ -64,7 +64,7 @@ public class MeasurementService extends BaseService implements IMeasurementServi
                     return Observable.just(ByteBuffer.allocate(8)
                             .order(ByteOrder.LITTLE_ENDIAN)
                             .putInt((int) (timed.time() - mEncoderStart))
-                            .putFloat(4, mAngleValues[0])
+                            .putFloat(4, (float) (mAngleValues[0] * 180 / Math.PI + 180f))
                             .array());
                 }
             }).doOnSubscribe(new Consumer<Disposable>() {

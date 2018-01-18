@@ -17,9 +17,6 @@ public class ExerciseResultFactory {
 
     public static class Builder {
 
-        private Exercise mExercise;
-        private ExerciseGoal mExerciseGoal;
-
         private List<MetricResult> mMetricResults = new ArrayList<>();
 
         public Builder withMetricResults(List<MetricResult> metricResults) {
@@ -33,7 +30,7 @@ public class ExerciseResultFactory {
         }
 
         public ExerciseResult build() {
-            ExerciseResult exerciseResult = new ExerciseResult(mExercise, mExerciseGoal, mMetricResults);
+            ExerciseResult exerciseResult = new ExerciseResult(mMetricResults);
             return exerciseResult;
         }
     }

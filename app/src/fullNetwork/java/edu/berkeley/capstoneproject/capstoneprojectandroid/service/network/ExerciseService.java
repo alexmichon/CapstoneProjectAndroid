@@ -73,52 +73,6 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                 .toCompletable();
     }
 
-    /*@Override
-    public Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, ExerciseGoalCreator exerciseGoalCreator) {
-        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
-                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
-                .addBodyParameter(new ExerciseGoalRequest(exerciseGoalCreator))
-                .doCreate()
-                .getObjectObservable(ExerciseGoalResponse.class)
-                .singleOrError()
-                .map(new Function<ExerciseGoalResponse, ExerciseGoal>() {
-                    @Override
-                    public ExerciseGoal apply(@NonNull ExerciseGoalResponse exerciseGoalResponse) throws Exception {
-                        return null;
-                    }
-                });
-    }*/
-
-    /*@Override
-    public Single<ExerciseGoalCreator> doGetExerciseGoal(ExerciseType exerciseType) {
-        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPE_DEFAULT_GOAL)
-                .addPathParameter("exercise_type_id", String.valueOf(exerciseType.getId()))
-                .doCreate()
-                .getObjectObservable(ExerciseGoalResponse.class)
-                .singleOrError()
-                .map(new Function<ExerciseGoalResponse, ExerciseGoalCreator>() {
-                    @Override
-                    public ExerciseGoalCreator apply(@NonNull ExerciseGoalResponse exerciseGoalResponse) throws Exception {
-                        return exerciseGoalResponse.get();
-                    }
-                });
-    }*/
-
-    @Override
-    public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
-        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_RESULT)
-                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
-                .build()
-                .getObjectObservable(ExerciseResultResponse.class)
-                .singleOrError()
-                .map(new Function<ExerciseResultResponse, ExerciseResult>() {
-                    @Override
-                    public ExerciseResult apply(@NonNull ExerciseResultResponse exerciseResultResponse) throws Exception {
-                        return exerciseResultResponse.get();
-                    }
-                });
-    }
-
     @Override
     public Observable<ExerciseType> doGetExerciseTypes() {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPES)
@@ -147,7 +101,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     }
 
     @Override
-    public void doSendMeasurement(IRxWebSocket stream, final Measurement measurement) {
+    public void doSendMeasurement(IRxWebSocket stream, Measurement measurement) {
         // TODO Move to other network service
         stream.send(new MeasurementRequest(measurement).toJson().toString());
     }
@@ -163,6 +117,21 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                     @Override
                     public ExerciseGoal apply(ExerciseGoalResponse exerciseGoalResponse) throws Exception {
                         return exerciseGoalResponse.get();
+                    }
+                });
+    }
+
+    @Override
+    public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_RESULT)
+                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
+                .build()
+                .getObjectObservable(ExerciseResultResponse.class)
+                .singleOrError()
+                .map(new Function<ExerciseResultResponse, ExerciseResult>() {
+                    @Override
+                    public ExerciseResult apply(ExerciseResultResponse exerciseResultResponse) throws Exception {
+                        return exerciseResultResponse.get();
                     }
                 });
     }

@@ -129,11 +129,6 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
     }
 
     @Override
-    public void onExerciseResultRetry() {
-        getPresenter().onExerciseResultRetry();
-    }
-
-    @Override
     public void onExerciseBuilt() {
         getPresenter().onExerciseBuilt();
     }

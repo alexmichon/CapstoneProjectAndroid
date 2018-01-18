@@ -22,12 +22,11 @@ public interface IExerciseService {
     //Single<ExerciseGoal> doCreateExerciseGoal(Exercise exercise, Exercise.Builder builder);
     //Single<ExerciseGoalCreator> doGetExerciseGoal(ExerciseType exerciseType);
 
-    Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
-
     Observable<ExerciseType> doGetExerciseTypes();
 
     IRxWebSocket doStartStreaming(Exercise exercise);
     void doSendMeasurement(IRxWebSocket stream, Measurement measurement);
 
     Single<ExerciseGoal> doGetExerciseGoal(Exercise exercise);
+    Single<ExerciseResult> doGetExerciseResult(Exercise exercise);
 }

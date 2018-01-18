@@ -15,31 +15,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Met
 
 public class ExerciseResult {
 
-    private final Exercise mExercise;
-    private final ExerciseGoal mExerciseGoal;
-
     private final List<MetricResult> mMetricResults;
 
-    public ExerciseResult(Exercise exercise, ExerciseGoal exerciseGoal) {
-        mExercise = exercise;
-        mExerciseGoal = exerciseGoal;
-
-        mMetricResults = new ArrayList<>();
-    }
-
-    public ExerciseResult(Exercise exercise, ExerciseGoal exerciseGoal, List<MetricResult> metricResults) {
-        mExercise = exercise;
-        mExerciseGoal = exerciseGoal;
-
+    public ExerciseResult(List<MetricResult> metricResults) {
         mMetricResults = metricResults;
-    }
-
-    public Exercise getExercise() {
-        return mExercise;
-    }
-
-    public ExerciseGoal getExerciseGoal() {
-        return mExerciseGoal;
     }
 
     public List<MetricResult> getMetricResults() {
@@ -48,10 +27,6 @@ public class ExerciseResult {
 
     public MetricResult getMetricResult(int index) {
         return mMetricResults.get(index);
-    }
-
-    public void addMetricResult(MetricResult metricResult) {
-        mMetricResults.add(metricResult);
     }
 
     public int getSize() {

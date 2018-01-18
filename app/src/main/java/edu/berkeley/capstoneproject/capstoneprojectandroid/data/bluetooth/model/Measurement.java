@@ -48,7 +48,7 @@ public class Measurement {
         mTimestamp = timestamp;
         mValue = value;
         mExercise = exercise;
-        exercise.addMeasurement(this);
+        //exercise.addMeasurement(this);
     }
 
 

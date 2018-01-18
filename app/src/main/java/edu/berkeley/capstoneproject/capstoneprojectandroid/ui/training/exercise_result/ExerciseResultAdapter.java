@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricResult;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.views.metric_result.MetricResultChart;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -46,14 +47,8 @@ public class ExerciseResultAdapter extends RecyclerView.Adapter<ExerciseResultAd
         @BindView(R.id.metric_result_label)
         TextView mLabelView;
 
-        @BindView(R.id.metric_result_actual)
-        TextView mActualView;
-
-        @BindView(R.id.metric_result_expected)
-        TextView mExpectedView;
-
-        @BindView(R.id.metric_result_comment)
-        TextView mCommentView;
+        @BindView(R.id.metric_result_chart)
+        MetricResultChart mMetricResultChart;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,9 +57,9 @@ public class ExerciseResultAdapter extends RecyclerView.Adapter<ExerciseResultAd
 
         public void bind(MetricResult metricResult) {
             mLabelView.setText(metricResult.getMetricName());
-            mActualView.setText(String.valueOf(metricResult.getActualValue()));
-            mExpectedView.setText(String.valueOf(metricResult.getExpectedValue()));
-            mCommentView.setText(metricResult.getComment());
+            mMetricResultChart.setMetricResult(metricResult);
+            mMetricResultChart.getData().notifyDataChanged();
+            mMetricResultChart.notifyDataSetChanged();
         }
     }
 }

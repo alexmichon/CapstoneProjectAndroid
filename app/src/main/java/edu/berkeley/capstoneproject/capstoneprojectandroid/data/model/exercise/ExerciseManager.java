@@ -158,4 +158,9 @@ public class ExerciseManager implements IExerciseManager {
     public Single<ExerciseGoal> doGetExerciseGoal() {
         return mApiHelper.getExerciseService().doGetExerciseGoal(mExercise);
     }
+
+    @Override
+    public Single<ExerciseResult> doGetExerciseResult() {
+        return mApiHelper.getExerciseService().doGetExerciseResult(mExercise);
+    }
 }

@@ -23,6 +23,14 @@ public class MetricGoalResponse extends BaseResponse<MetricGoal> {
     @Expose
     private String mMetricName;
 
+    @SerializedName("metric_min")
+    @Expose
+    private float mMetricMin;
+
+    @SerializedName("metric_max")
+    @Expose
+    private float mMetricMax;
+
     @SerializedName("goal")
     @Expose
     private float mGoal;
@@ -87,6 +95,8 @@ public class MetricGoalResponse extends BaseResponse<MetricGoal> {
     public MetricGoal get() {
         MetricGoal metricGoal = new MetricGoal(mId, mMetricId, mGoal, mAggregator, mComparator);
         metricGoal.setMetricName(mMetricName);
+        metricGoal.setMetricMin(mMetricMin);
+        metricGoal.setMetricMax(mMetricMax);
         return metricGoal;
     }
 }

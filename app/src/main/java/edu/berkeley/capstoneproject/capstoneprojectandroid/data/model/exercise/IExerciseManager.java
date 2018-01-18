@@ -31,4 +31,5 @@ public interface IExerciseManager {
     void doSendMeasurement(Measurement measurement);
 
     Single<ExerciseGoal> doGetExerciseGoal();
+    Single<ExerciseResult> doGetExerciseResult();
 }

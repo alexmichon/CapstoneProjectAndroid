@@ -48,9 +48,13 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
         View view = inflater.inflate(R.layout.fragment_exercise_result, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
-        getPresenter().loadExerciseResult();
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getPresenter().loadExerciseResult();
     }
 
     @Override
@@ -77,22 +81,10 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
         getPresenter().onMenuClick();
     }
 
-    @OnClick(R.id.exercise_result_retry)
-    public void onRetryClick(View v) {
-        getPresenter().onRetryClick();
-    }
-
     @Override
     public void menu() {
         if (mListener != null) {
             mListener.onExerciseResultMenu();
-        }
-    }
-
-    @Override
-    public void retry() {
-        if (mListener != null) {
-            mListener.onExerciseResultRetry();
         }
     }
 
@@ -104,6 +96,5 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
 
     public interface ExerciseResultFragmentListener {
         void onExerciseResultMenu();
-        void onExerciseResultRetry();
     }
 }

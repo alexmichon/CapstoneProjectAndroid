@@ -1,8 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,13 +7,12 @@ import java.util.List;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.MetricMeasurementList;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResponse;
 
 /**
  * Created by Alex on 09/11/2017.
  */
 
-public class Exercise implements Parcelable {
+public class Exercise {
 
     public enum State {
         UNSTARTED, STARTED, ENDED;
@@ -106,34 +102,6 @@ public class Exercise implements Parcelable {
 
     public void setName(String name) {
         mName = name;
-    }
-
-    protected Exercise(Parcel in) {
-        mId = in.readInt();
-        mExerciseTypeId = in.readParcelable(ExerciseType.class.getClassLoader());
-    }
-
-    public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
-        @Override
-        public Exercise createFromParcel(Parcel in) {
-            return new Exercise(in);
-        }
-
-        @Override
-        public Exercise[] newArray(int size) {
-            return new Exercise[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mId);
-        parcel.writeInt(mExerciseTypeId);
     }
 
 

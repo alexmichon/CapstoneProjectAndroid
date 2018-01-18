@@ -22,8 +22,6 @@ public interface ExerciseResultContract {
         void onExerciseResultLoading();
 
         void menu();
-
-        void retry();
     }
 
     interface Interactor extends IBaseInteractor {
@@ -35,6 +33,5 @@ public interface ExerciseResultContract {
         void loadExerciseResult();
 
         void onMenuClick();
-        void onRetryClick();
     }
 }

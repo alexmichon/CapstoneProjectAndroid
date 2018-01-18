@@ -12,22 +12,14 @@ public class MetricResult {
 
     private final MetricGoal mMetricGoal;
     private final float mActual;
+    private final float mExpected;
     private final boolean mResult;
 
-    private String mComment;
-
-    public MetricResult(MetricGoal metricGoal, float actual, boolean result) {
+    public MetricResult(MetricGoal metricGoal, float actual, float expected, boolean result) {
         mMetricGoal = metricGoal;
         mActual = actual;
+        mExpected = expected;
         mResult = result;
-        createComment();
-    }
-
-    public MetricResult(MetricGoal metricGoal, float actual, boolean result, String comment) {
-        mMetricGoal = metricGoal;
-        mActual = actual;
-        mResult = result;
-        mComment = comment;
     }
 
     public MetricGoal getMetricGoal() {
@@ -42,28 +34,11 @@ public class MetricResult {
         return mResult;
     }
 
-    public float getExpectedValue() {
-        return mMetricGoal.getGoal();
-    }
-
-    public float getActualValue() {
+    public float getActual() {
         return mActual;
     }
 
-    public String getComment() {
-        return mComment;
-    }
-
-    public void setComment(String comment) {
-        mComment = comment;
-    }
-
-    protected void createComment() {
-        if (mResult) {
-            mComment = "Good job !";
-        }
-        else {
-            mComment = "You'll do better next time";
-        }
+    public float getExpected() {
+        return mExpected;
     }
 }

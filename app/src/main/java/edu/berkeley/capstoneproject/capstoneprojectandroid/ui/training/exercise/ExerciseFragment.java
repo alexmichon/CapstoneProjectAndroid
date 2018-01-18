@@ -272,7 +272,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     }
 
     private void setPieMeasurement(PieChart pieChart, Measurement measurement) {
-        float angle = (float) (measurement.getValue() * 180 / Math.PI) + 180f;
+        float angle = measurement.getValue();
 
         List<PieEntry> pieEntries = new ArrayList<>();
         pieEntries.add(new PieEntry(angle));

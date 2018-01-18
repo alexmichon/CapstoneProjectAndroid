@@ -15,6 +15,8 @@ public class MetricGoal implements Parcelable {
     private String mAggregator;
     private String mComparator;
     private float mGoal;
+    private float mMetricMax;
+    private float mMetricMin;
 
     public MetricGoal(int id, int metricId, float goal, String type, String comparator) {
         mId = id;
@@ -108,4 +110,20 @@ public class MetricGoal implements Parcelable {
             return new MetricGoal[size];
         }
     };
+
+    public float getMetricMin() {
+        return mMetricMin;
+    }
+
+    public void setMetricMin(float metricMin) {
+        mMetricMin = metricMin;
+    }
+
+    public float getMetricMax() {
+        return mMetricMax;
+    }
+
+    public void setMetricMax(float metricMax) {
+        mMetricMax = metricMax;
+    }
 }

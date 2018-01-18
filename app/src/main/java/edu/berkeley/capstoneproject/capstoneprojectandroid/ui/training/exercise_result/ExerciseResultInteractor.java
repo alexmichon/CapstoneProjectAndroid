@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
@@ -16,20 +17,15 @@ import io.reactivex.functions.Function;
 
 public class ExerciseResultInteractor extends BaseInteractor implements ExerciseResultContract.Interactor {
 
+    private final IExerciseManager mExerciseManager;
+
     @Inject
-    public ExerciseResultInteractor() {
+    public ExerciseResultInteractor(IExerciseManager exerciseManager) {
+        mExerciseManager = exerciseManager;
     }
 
     @Override
     public Single<ExerciseResult> doGetExerciseResult() {
-        // TODO
-        /*return getDataManager().getSessionHelper().getTrainingService().getExercise()
-                .flatMap(new Function<Exercise, SingleSource<? extends ExerciseResult>>() {
-                    @Override
-                    public SingleSource<? extends ExerciseResult> apply(@NonNull Exercise exercise) throws Exception {
-                        return getDataManager().getApiHelper().getExerciseService().doGetExerciseResult(exercise);
-                    }
-                });*/
-        return Single.never();
+        return mExerciseManager.doGetExerciseResult();
     }
 }

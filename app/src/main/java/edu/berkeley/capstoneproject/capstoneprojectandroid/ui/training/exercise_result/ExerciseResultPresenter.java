@@ -28,13 +28,6 @@ public class ExerciseResultPresenter<V extends ExerciseResultContract.View, I ex
     }
 
     @Override
-    public void onRetryClick() {
-        if (isViewAttached()) {
-            getView().retry();
-        }
-    }
-
-    @Override
     public void loadExerciseResult() {
         if (isViewAttached()) {
             getView().onExerciseResultLoading();
