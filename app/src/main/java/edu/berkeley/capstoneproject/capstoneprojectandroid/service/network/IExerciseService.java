@@ -17,5 +17,5 @@ public interface IExerciseService {
 
     Single<Measurement> getMaxMeasurement();
 
-    Observable<Exercise> getExercises();
+    Observable<Exercise> doGetExercises();
 }

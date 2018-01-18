@@ -6,6 +6,8 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user;
 
 public class User {
 
+    private Authentication mAuthentication;
+
     private String mEmail;
     private String mFirstName;
     private String mLastName;
@@ -40,6 +42,17 @@ public class User {
         mLastName = lastName;
     }
 
+    public Authentication getAuthentication() {
+        return mAuthentication;
+    }
+
+    public boolean isAuthenticated() {
+        return mAuthentication != null && mAuthentication.isValid();
+    }
+
+    public void setAuthentication(Authentication authentication) {
+        mAuthentication = authentication;
+    }
 
 
     public static class UserBuilder {

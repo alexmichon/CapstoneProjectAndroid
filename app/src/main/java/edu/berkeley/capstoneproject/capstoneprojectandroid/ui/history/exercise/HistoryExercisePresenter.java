@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by Alex on 16/12/2017.
  */
 
-public abstract class HistoryExercisePresenter<V extends HistoryExerciseContract.View, I extends HistoryExerciseContract.Interactor> extends BasePresenter<V, I> implements HistoryExerciseContract.Presenter<V, I> {
+public class HistoryExercisePresenter<V extends HistoryExerciseContract.View, I extends HistoryExerciseContract.Interactor> extends BasePresenter<V, I> implements HistoryExerciseContract.Presenter<V, I> {
 
     @Inject
     public HistoryExercisePresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {

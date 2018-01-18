@@ -1,15 +1,13 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.view.MenuItem;
-
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -25,28 +23,49 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
-    @Override
-    public void onStartTrainingClick() {
-        getView().startTrainingActivity();
-    }
 
-    @Override
-    public void onViewResultsClick() {
-        getView().startResultsActivity();
-    }
-
-    @Override
-    public NavigationView.OnNavigationItemSelectedListener getNavigationListener() {
-        return new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        getView().showMessage("You're already here !");
-                        return true;
+    public void onMainMenuItemClick(MainMenuItem item) {
+        switch (item.getTitle()) {
+            case MainMenuItem.HOME_TITLE:
+                if (isViewAttached()) {
+                    getView().showHomeFragment();
                 }
-                return false;
-            }
-        };
+                break;
+            case MainMenuItem.LOGOUT_TITLE:
+                logout();
+                break;
+            default:
+                if (isViewAttached()) {
+                    getView().showError("Not implemented yet !");
+                }
+                break;
+        }
+    }
+
+    protected void logout() {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+
+        getCompositeDisposable().add(getInteractor().doLogout()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (isViewAttached()) {
+                            getView().startToAuthenticationActivity();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                            getView().showError(throwable);
+                        }
+                    }
+                })
+        );
     }
 }

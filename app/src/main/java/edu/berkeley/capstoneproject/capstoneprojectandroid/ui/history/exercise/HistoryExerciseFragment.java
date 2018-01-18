@@ -11,12 +11,30 @@ import timber.log.Timber;
  * Created by Alex on 08/12/2017.
  */
 
-public abstract class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContract.View, HistoryExerciseContract.Presenter<HistoryExerciseContract.View, HistoryExerciseContract.Interactor>>
+public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContract.View, HistoryExerciseContract.Presenter<HistoryExerciseContract.View, HistoryExerciseContract.Interactor>>
     implements HistoryExerciseContract.View {
 
     private static final String KEY_EXERCISE = "KEY_EXERCISE";
 
     private Exercise mExercise;
+
+
+    public static HistoryExerciseFragment newInstance(Exercise exercise) {
+        HistoryExerciseFragment fragment = new HistoryExerciseFragment();
+
+        Bundle args = new Bundle();
+        args.putParcelable(KEY_EXERCISE, exercise);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+
+    @NonNull
+    @Override
+    public HistoryExerciseContract.Presenter<HistoryExerciseContract.View, HistoryExerciseContract.Interactor> createPresenter() {
+        return getActivityComponent().historyExercisePresenter();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

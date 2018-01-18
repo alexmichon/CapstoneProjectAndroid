@@ -11,9 +11,12 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.TestScheduler;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -49,6 +52,9 @@ public class SplashPresenterTest {
 
     @Test
     public void onStartShouldCheckConnectivity() {
+        // given
+        doReturn(Single.never()).when(mInteractor).doGetStoredAuthentication();
+
         // when
         mPresenter.onStart();
 

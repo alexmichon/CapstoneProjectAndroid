@@ -17,8 +17,7 @@ public class BaseInteractor implements IBaseInteractor {
         mDataManager = dataManager;
     }
 
-    @Override
-    public IDataManager getDataManager() {
+    protected IDataManager getDataManager() {
         return mDataManager;
     }
 }

@@ -20,6 +20,6 @@ public class HistoryExercisesInteractor extends BaseInteractor implements Histor
 
     @Override
     public Observable<Exercise> doGetExercises() {
-        return getDataManager().getApiHelper().getExerciseService().getExercises();
+        return getDataManager().getApiHelper().getExerciseService().doGetExercises();
     }
 }

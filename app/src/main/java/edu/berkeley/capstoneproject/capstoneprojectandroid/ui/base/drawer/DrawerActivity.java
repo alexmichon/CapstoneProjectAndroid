@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer;
 
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
@@ -33,8 +35,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 public abstract class DrawerActivity<V extends IBaseView, P extends IBasePresenter<V, ?>> extends BaseActivity<V, P> {
 
     DrawerLayout mDrawerLayout;
+
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    NavigationView mNavigationView;
+
+    FrameLayout mContainer;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -46,32 +51,39 @@ public abstract class DrawerActivity<V extends IBaseView, P extends IBasePresent
         //ButterKnife.bind(this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.drawer_navigation_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
-    }
 
-    public void setNavigationDrawerMenu(@MenuRes int menu, NavigationView.OnNavigationItemSelectedListener listener) {
-        mNavigationView.getMenu().clear();
-        mNavigationView.inflateMenu(menu);
-        mNavigationView.setNavigationItemSelectedListener(listener);
-    }
-
-    public void setNavigationDrawerHeader(@LayoutRes int layout) {
-        mNavigationView.inflateHeaderView(layout);
-    }
-
-    public void setNavigationDrawerHeader(View view) {
-        mNavigationView.getHeaderView(mNavigationView.getHeaderCount() - 1).setVisibility(View.GONE);
-        mNavigationView.addHeaderView(view);
-    }
-
-
-    public void initNavigationDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open,
+                R.string.drawer_close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    public void setDrawerFragment(BaseFragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.drawer_fragment, fragment)
+                .commit();
+    }
+
+    public ActionBarDrawerToggle getDrawerToggle() {
+        return mDrawerToggle;
+    }
+
+    public DrawerLayout getDrawerLayout() {
+        return mDrawerLayout;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
 }
