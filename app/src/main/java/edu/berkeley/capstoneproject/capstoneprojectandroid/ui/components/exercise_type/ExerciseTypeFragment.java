@@ -1,13 +1,11 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_type;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -70,7 +68,7 @@ public class ExerciseTypeFragment extends BaseFragment<ExerciseTypeContract.View
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercise_type, container, false);
+        View view = inflater.inflate(R.layout.component_exercise_type, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
         mYoutubeFragment = YouTubePlayerSupportFragment.newInstance();

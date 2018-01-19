@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 17/12/2017.
@@ -22,30 +23,41 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 
 public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.View, ExerciseResultContract.Presenter<ExerciseResultContract.View, ExerciseResultContract.Interactor>> implements ExerciseResultContract.View {
 
+    private static final String KEY_EXERCISE_RESULT = "KEY_EXERCISE_RESULT";
+
     @BindView(R.id.exercise_result_recycler)
     RecyclerView mRecyclerView;
 
     private ExerciseResultAdapter mAdapter;
 
-    private ExerciseResultFragment.ExerciseResultFragmentListener mListener;
-
-    public static ExerciseResultFragment newInstance(ExerciseResultFragment.ExerciseResultFragmentListener listener) {
+    public static ExerciseResultFragment newInstance(ExerciseResult exerciseResult) {
         ExerciseResultFragment fragment = new ExerciseResultFragment();
 
-        fragment.setListener(listener);
+        Bundle args = new Bundle();
+        args.putParcelable(KEY_EXERCISE_RESULT, exerciseResult);
+        fragment.setArguments(args);
 
         return fragment;
     }
 
-    public void setListener(ExerciseResultFragment.ExerciseResultFragmentListener listener) {
-        mListener = listener;
-    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+        ExerciseResult exerciseResult = bundle.getParcelable(KEY_EXERCISE_RESULT);
+        if (exerciseResult == null) {
+            Timber.e("Exercise Result can't be null");
+        }
+
+        getPresenter().setExerciseResult(exerciseResult);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercise_result, container, false);
+        View view = inflater.inflate(R.layout.component_exercise_result, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
         return view;
@@ -54,38 +66,14 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPresenter().loadExerciseResult();
+        getPresenter().loadExerciseResultInfo();
     }
 
     @Override
     public void onExerciseResultLoaded(ExerciseResult exerciseResult) {
-        hideLoading();
         mAdapter = new ExerciseResultAdapter(exerciseResult);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    @Override
-    public void onExerciseResultError(Throwable throwable) {
-        hideLoading();
-        showError(throwable);
-    }
-
-    @Override
-    public void onExerciseResultLoading() {
-        showLoading("Please wait while we process your results...");
-    }
-
-    @OnClick(R.id.exercise_result_menu)
-    public void onMenuClick(View v) {
-        getPresenter().onMenuClick();
-    }
-
-    @Override
-    public void menu() {
-        if (mListener != null) {
-            mListener.onExerciseResultMenu();
-        }
     }
 
     @NonNull
@@ -94,7 +82,5 @@ public class ExerciseResultFragment extends BaseFragment<ExerciseResultContract.
         return getActivityComponent().exerciseResultPresenter();
     }
 
-    public interface ExerciseResultFragmentListener {
-        void onExerciseResultMenu();
-    }
+
 }

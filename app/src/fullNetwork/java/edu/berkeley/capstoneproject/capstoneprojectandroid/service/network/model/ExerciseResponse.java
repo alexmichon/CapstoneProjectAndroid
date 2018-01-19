@@ -3,15 +3,24 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.mode
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseCreator;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+import timber.log.Timber;
 
 /**
  * Created by Alex on 19/11/2017.
  */
 
-public class ExerciseResponse {
+public class ExerciseResponse extends BaseResponse<Exercise> {
+
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
 
     @SerializedName("id")
     @Expose
@@ -20,6 +29,18 @@ public class ExerciseResponse {
     @SerializedName("exercise_type_id")
     @Expose
     private int mExerciseTypeId;
+
+    @SerializedName("name")
+    @Expose
+    private String mName;
+
+    @SerializedName("exercise_type_name")
+    @Expose
+    private String mExerciseTypeName;
+
+    @SerializedName("created_at")
+    @Expose
+    private String mCreatedAt;
 
     public int getId() {
         return mId;
@@ -37,11 +58,20 @@ public class ExerciseResponse {
         mExerciseTypeId = exerciseTypeId;
     }
 
-    public Exercise getExercise(Exercise.Builder exerciseCreator) {
-        if (mExerciseTypeId != exerciseCreator.getExerciseTypeId()) {
-            return null;
+    @Override
+    public Exercise get() {
+        Exercise exercise = new Exercise(mId, mExerciseTypeId, mName);
+        exercise.setExerciseTypeName(mExerciseTypeName);
+
+        try {
+            Timber.d("Created at: %s", mCreatedAt);
+            DATE_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = DATE_FORMATTER.parse(mCreatedAt);
+            exercise.setStartDate(date);
+        } catch (ParseException e) {
+            Timber.w(e);
         }
 
-        return new Exercise(mId, exerciseCreator.getExerciseTypeId());
+        return exercise;
     }
 }

@@ -1,12 +1,17 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -19,14 +24,28 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
  * Created by Alex on 06/12/2017.
  */
 
-public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContract.View, HistoryExercisesContract.Presenter<HistoryExercisesContract.View, HistoryExercisesContract.Interactor>> implements HistoryExercisesContract.View {
+public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContract.View, HistoryExercisesContract.Presenter<HistoryExercisesContract.View, HistoryExercisesContract.Interactor>>
+        implements HistoryExercisesContract.View,
+        HistoryExercisesAdapter.HistoryExercisesAdapterListener{
 
     private static final String TITLE = "Exercises";
 
-    @BindView(R.id.exercises_list)
-    ListView mExercisesView;
+    @BindView(R.id.history_exercises_recycler)
+    RecyclerView mExercisesView;
+
+    private List<Exercise> mExerciseList;
+    private HistoryExercisesAdapter mHistoryExercisesAdapter;
 
     private HistoryExercisesAdapter mExercisesAdapter;
+
+    private HistoryExercisesFragmentListener mListener;
+
+
+    public static HistoryExercisesFragment newInstance(HistoryExercisesFragmentListener listener) {
+        HistoryExercisesFragment fragment = new HistoryExercisesFragment();
+        fragment.setListener(listener);
+        return fragment;
+    }
 
 
     @Nullable
@@ -36,7 +55,12 @@ public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContr
 
         setUnbinder(ButterKnife.bind(this, view));
 
-        mExercisesAdapter = new HistoryExercisesAdapter(getContext(), R.layout.row_exercise, Locale.getDefault());
+        mExerciseList = new ArrayList<>();
+
+        mExercisesAdapter = new HistoryExercisesAdapter(mExerciseList);
+        mExercisesAdapter.setListener(this);
+
+        mExercisesView.setLayoutManager(new LinearLayoutManager(getContext()));
         mExercisesView.setAdapter(mExercisesAdapter);
 
         return view;
@@ -48,6 +72,7 @@ public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContr
         getPresenter().loadExercises();
     }
 
+    @NonNull
     @Override
     public HistoryExercisesContract.Presenter<HistoryExercisesContract.View, HistoryExercisesContract.Interactor> createPresenter() {
         return getActivityComponent().historyExercisesPresenter();
@@ -55,8 +80,15 @@ public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContr
 
     @Override
     public void addExercise(Exercise exercise) {
-        mExercisesAdapter.add(exercise);
+        mExerciseList.add(exercise);
         mExercisesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void selectHistoryExercise(Exercise exercise) {
+        if (mListener != null) {
+            mListener.onHistoryExerciseSelect(exercise);
+        }
     }
 
     @Override
@@ -67,5 +99,19 @@ public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContr
     @Override
     public void onExercisesLoaded() {
         hideLoading();
+    }
+
+    @Override
+    public void onHistoryExerciseSelect(Exercise exercise) {
+        getPresenter().onHistoryExerciseSelect(exercise);
+    }
+
+
+    public void setListener(HistoryExercisesFragmentListener listener) {
+        mListener = listener;
+    }
+
+    public interface HistoryExercisesFragmentListener {
+        void onHistoryExerciseSelect(Exercise exercise);
     }
 }

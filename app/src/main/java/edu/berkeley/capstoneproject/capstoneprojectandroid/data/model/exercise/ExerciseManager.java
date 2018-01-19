@@ -163,9 +163,4 @@ public class ExerciseManager implements IExerciseManager {
     public Single<ExerciseResult> doGetExerciseResult() {
         return mApiHelper.getExerciseService().doGetExerciseResult(mExercise);
     }
-
-    @Override
-    public Observable<Exercise> doGetExercises() {
-        return mApiHelper.getExerciseService().doGetExercises();
-    }
 }

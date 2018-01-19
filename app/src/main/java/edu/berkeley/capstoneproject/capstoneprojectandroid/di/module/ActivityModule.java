@@ -39,9 +39,12 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.TrainingExerciseResultContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.TrainingExerciseResultInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.TrainingExerciseResultPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryPresenter;
@@ -67,9 +70,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingA
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_type.ExerciseTypeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_type.ExerciseTypeInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_type.ExerciseTypePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.AppSchedulerProvider;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -391,7 +394,18 @@ public class ActivityModule {
     }
 
 
+    @Provides
+    @PerActivity
+    TrainingExerciseResultContract.Interactor provideTrainingExerciseResultInteractor(TrainingExerciseResultInteractor interactor) {
+        return interactor;
+    }
 
+    @Provides
+    @PerActivity
+    TrainingExerciseResultContract.Presenter<TrainingExerciseResultContract.View, TrainingExerciseResultContract.Interactor>
+    provideTrainingExerciseResultPresenter(TrainingExerciseResultPresenter<TrainingExerciseResultContract.View, TrainingExerciseResultContract.Interactor> presenter) {
+        return presenter;
+    }
 
 
 

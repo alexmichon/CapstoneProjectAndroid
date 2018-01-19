@@ -1,7 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.single;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -16,9 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseDialog;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_type.ExerciseTypeFragment;
 import timber.log.Timber;
 
 /**

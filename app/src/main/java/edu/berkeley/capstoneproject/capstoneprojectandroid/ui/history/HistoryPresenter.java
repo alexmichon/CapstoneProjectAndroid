@@ -2,6 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -15,5 +16,12 @@ public class HistoryPresenter<V extends HistoryContract.View, I extends HistoryC
     @Inject
     public HistoryPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
+    }
+
+    @Override
+    public void onHistoryExerciseSelect(Exercise exercise) {
+        if (isViewAttached()) {
+            getView().showHistoryExerciseFragment(exercise);
+        }
     }
 }

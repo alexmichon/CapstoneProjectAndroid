@@ -9,6 +9,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluet
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IHistoryManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
@@ -39,4 +40,5 @@ public interface AppComponent {
     IExerciseBuilderManager exerciseBuilderManager();
     IMeasurementManager measurementManager();
     IBluetoothManager bluetoothManager();
+    IHistoryManager historyManager();
 }

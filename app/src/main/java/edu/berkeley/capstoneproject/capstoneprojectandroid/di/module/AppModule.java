@@ -14,9 +14,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluet
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.HistoryManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IHistoryManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.MeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.AuthManager;
@@ -120,5 +122,11 @@ public class AppModule {
     @Singleton
     IExerciseBuilderManager provideExerciseBuilderManager(ExerciseBuilderManager exerciseBuilderManager) {
         return exerciseBuilderManager;
+    }
+
+    @Provides
+    @Singleton
+    IHistoryManager provideHistoryManager(HistoryManager historyManager) {
+        return historyManager;
     }
 }

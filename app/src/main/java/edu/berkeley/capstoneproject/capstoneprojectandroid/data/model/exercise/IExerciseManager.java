@@ -33,6 +33,4 @@ public interface IExerciseManager {
 
     Single<ExerciseGoal> doGetExerciseGoal();
     Single<ExerciseResult> doGetExerciseResult();
-
-    Observable<Exercise> doGetExercises();
 }

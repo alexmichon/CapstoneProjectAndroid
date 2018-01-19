@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
@@ -14,24 +14,14 @@ import io.reactivex.Single;
 public interface ExerciseResultContract {
 
     interface View extends IBaseView {
-
         void onExerciseResultLoaded(ExerciseResult exerciseResult);
-
-        void onExerciseResultError(Throwable throwable);
-
-        void onExerciseResultLoading();
-
-        void menu();
     }
 
     interface Interactor extends IBaseInteractor {
-
-        Single<ExerciseResult> doGetExerciseResult();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void loadExerciseResult();
-
-        void onMenuClick();
+        void loadExerciseResultInfo();
+        void setExerciseResult(ExerciseResult exerciseResult);
     }
 }

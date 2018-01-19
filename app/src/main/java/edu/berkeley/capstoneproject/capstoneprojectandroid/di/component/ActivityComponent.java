@@ -14,15 +14,15 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.TrainingExerciseResultContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash.SplashContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_type.ExerciseTypeContract;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -51,4 +51,5 @@ public interface ActivityComponent {
     ExerciseResultContract.Presenter<ExerciseResultContract.View,ExerciseResultContract.Interactor> exerciseResultPresenter();
     ExerciseSummaryContract.Presenter<ExerciseSummaryContract.View,ExerciseSummaryContract.Interactor> exerciseSummaryPresenter();
     ExerciseBuilderContract.Presenter<ExerciseBuilderContract.View, ExerciseBuilderContract.Interactor> exerciseBuilderPresenter();
+    TrainingExerciseResultContract.Presenter<TrainingExerciseResultContract.View,TrainingExerciseResultContract.Interactor> trainingExerciseResultPresenter();
 }

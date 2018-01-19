@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

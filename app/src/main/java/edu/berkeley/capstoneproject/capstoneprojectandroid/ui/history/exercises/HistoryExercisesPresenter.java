@@ -60,6 +60,13 @@ public class HistoryExercisesPresenter<V extends HistoryExercisesContract.View, 
         );
     }
 
+    @Override
+    public void onHistoryExerciseSelect(Exercise exercise) {
+        if (isViewAttached()) {
+            getView().selectHistoryExercise(exercise);
+        }
+    }
+
     protected void cancelLoadExercises() {
         getCompositeDisposable().dispose();
     }

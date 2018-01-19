@@ -2,9 +2,18 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercise;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultFragment;
 import timber.log.Timber;
 
 /**
@@ -15,8 +24,6 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
     implements HistoryExerciseContract.View {
 
     private static final String KEY_EXERCISE = "KEY_EXERCISE";
-
-    private Exercise mExercise;
 
 
     public static HistoryExerciseFragment newInstance(Exercise exercise) {
@@ -41,10 +48,47 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        mExercise = args.getParcelable(KEY_EXERCISE);
+        Exercise exercise = args.getParcelable(KEY_EXERCISE);
 
-        if (mExercise == null) {
+        if (exercise == null) {
             Timber.e("Exercise can't be null");
         }
+
+        getPresenter().setExercise(exercise);
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_history_exercise, container, false);
+        setUnbinder(ButterKnife.bind(this, view));
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getPresenter().loadExerciseResult();
+    }
+
+    @Override
+    public void onExerciseResultError(Throwable throwable) {
+        hideLoading();
+        showError(throwable);
+    }
+
+    @Override
+    public void onExerciseResultLoading() {
+        showLoading("Please wait while we process your results...");
+    }
+
+    @Override
+    public void onExerciseResultLoaded(ExerciseResult exerciseResult) {
+        hideLoading();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.history_exercise_result_container, ExerciseResultFragment.newInstance(exerciseResult))
+                .commit();
     }
 }

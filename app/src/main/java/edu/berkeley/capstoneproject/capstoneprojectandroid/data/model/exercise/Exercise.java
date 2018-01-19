@@ -22,9 +22,10 @@ public class Exercise implements Parcelable {
     }
 
     private final int mId;
-    private String mName;
-
     private final int mExerciseTypeId;
+
+    private String mName;
+    private String mExerciseTypeName;
 
     private Date mStartDate;
     private Date mEndDate;
@@ -121,6 +122,14 @@ public class Exercise implements Parcelable {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public String getExerciseTypeName() {
+        return mExerciseTypeName;
+    }
+
+    public void setExerciseTypeName(String exerciseTypeName) {
+        mExerciseTypeName = exerciseTypeName;
     }
 
 

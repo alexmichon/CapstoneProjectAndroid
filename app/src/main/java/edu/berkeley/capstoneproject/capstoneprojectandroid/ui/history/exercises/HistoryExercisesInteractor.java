@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IHistoryManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import io.reactivex.Observable;
 
@@ -13,15 +14,15 @@ import io.reactivex.Observable;
 
 public class HistoryExercisesInteractor extends BaseInteractor implements HistoryExercisesContract.Interactor {
 
-    private final IExerciseManager mExerciseManager;
+    private final IHistoryManager mHistoryManager;
 
     @Inject
-    public HistoryExercisesInteractor(IExerciseManager exerciseManager) {
-        mExerciseManager = exerciseManager;
+    public HistoryExercisesInteractor(IHistoryManager historyManager) {
+        mHistoryManager = historyManager;
     }
 
     @Override
     public Observable<Exercise> doGetExercises() {
-        return mExerciseManager.doGetExercises();
+        return mHistoryManager.doGetExercises();
     }
 }

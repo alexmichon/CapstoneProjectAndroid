@@ -7,17 +7,15 @@ import android.support.annotation.Nullable;
 
 import butterknife.ButterKnife;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.toolbar.ToolbarActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.TrainingExerciseResultFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
 /**
  * Created by Alex on 17/11/2017.
@@ -26,9 +24,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 public class TrainingActivity extends ToolbarActivity<TrainingContract.View, TrainingContract.Presenter<TrainingContract.View, TrainingContract.Interactor>>
         implements TrainingContract.View,
         BluetoothListFragment.BluetoothListFragmentListener,
+        ExerciseBuilderFragment.ExerciseBuilderFragmentListener,
         ExerciseSummaryFragment.ExerciseSummaryFragmentListener,
         ExerciseFragment.ExerciseFragmentListener,
-        ExerciseResultFragment.ExerciseResultFragmentListener, ExerciseBuilderFragment.ExerciseBuilderFragmentListener {
+        TrainingExerciseResultFragment.TrainingExerciseResultFragmentListener {
 
     private static final int CONTAINER_ID = R.id.training_container;
 
@@ -86,7 +85,7 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
 
     @Override
     public void showExerciseResultFragment() {
-        ExerciseResultFragment fragment = ExerciseResultFragment.newInstance(this);
+        TrainingExerciseResultFragment fragment = TrainingExerciseResultFragment.newInstance(this);
         setFragment(fragment);
     }
 

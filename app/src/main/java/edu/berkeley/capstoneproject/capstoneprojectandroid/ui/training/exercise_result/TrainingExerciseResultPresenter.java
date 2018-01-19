@@ -10,20 +10,21 @@ import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 /**
- * Created by Alex on 17/12/2017.
+ * Created by Alex on 18/01/2018.
  */
 
-public class ExerciseResultPresenter<V extends ExerciseResultContract.View, I extends ExerciseResultContract.Interactor> extends BasePresenter<V, I> implements ExerciseResultContract.Presenter<V, I> {
+public class TrainingExerciseResultPresenter<V extends TrainingExerciseResultContract.View, I extends TrainingExerciseResultContract.Interactor> extends BasePresenter<V, I>
+    implements TrainingExerciseResultContract.Presenter<V, I> {
 
     @Inject
-    public ExerciseResultPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+    public TrainingExerciseResultPresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
     @Override
     public void onMenuClick() {
         if (isViewAttached()) {
-            getView().menu();
+            getView().goToMenu();
         }
     }
 

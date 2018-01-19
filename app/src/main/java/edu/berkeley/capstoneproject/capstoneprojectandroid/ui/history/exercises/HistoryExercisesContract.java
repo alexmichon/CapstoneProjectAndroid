@@ -13,9 +13,11 @@ import io.reactivex.Observable;
 public interface HistoryExercisesContract {
 
     interface View extends IBaseView {
-        void addExercise(Exercise exercise);
         void onLoadingExercises(OnCancelListener cancelListener);
         void onExercisesLoaded();
+
+        void addExercise(Exercise exercise);
+        void selectHistoryExercise(Exercise exercise);
     }
 
     interface Interactor extends IBaseInteractor {
@@ -25,5 +27,7 @@ public interface HistoryExercisesContract {
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
 
         void loadExercises();
+
+        void onHistoryExerciseSelect(Exercise exercise);
     }
 }

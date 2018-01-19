@@ -25,6 +25,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.strea
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
@@ -46,7 +48,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     }
 
     @Override
-    public Single<Exercise> doCreateExercise(final Exercise.Builder builder) {
+    public Single<Exercise> doCreateExercise(Exercise.Builder builder) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISES)
                 .addJSONObjectBody(new ObjectRequest<>("exercise",  new ExerciseRequest(builder)).toJson())
                 .build()
@@ -55,7 +57,7 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                 .map(new Function<ExerciseResponse, Exercise>() {
                     @Override
                     public Exercise apply(@NonNull ExerciseResponse exerciseResponse) throws Exception {
-                        return exerciseResponse.getExercise(builder);
+                        return exerciseResponse.get();
                     }
                 });
     }
@@ -137,11 +139,19 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     public Observable<Exercise> doGetExercises() {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISES)
                 .build()
-                .getObjectObservable(ExerciseResponse.class)
-                .map(new Function<ExerciseResponse, Exercise>() {
+                .getObjectListObservable(ExerciseResponse.class)
+                .flatMap(new Function<List<ExerciseResponse>, ObservableSource<Exercise>>() {
                     @Override
-                    public Exercise apply(ExerciseResponse exerciseResponse) throws Exception {
-                        return exerciseResponse.getExercise(null);
+                    public ObservableSource<Exercise> apply(final List<ExerciseResponse> exerciseResponses) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<Exercise>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<Exercise> e) throws Exception {
+                                for (ExerciseResponse exerciseResponse: exerciseResponses) {
+                                    e.onNext(exerciseResponse.get());
+                                }
+                                e.onComplete();
+                            }
+                        });
                     }
                 });
     }
