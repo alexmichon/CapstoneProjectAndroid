@@ -3,9 +3,13 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.GuestUser;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
@@ -45,8 +49,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
     @Override
     public void onStart() {
         getCompositeDisposable().add(
-                getNetworkStateCompletable().andThen(
-                    getAuthenticationCompletable())
+                getTasks()
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
@@ -55,10 +58,16 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        onStartError(throwable);
+                        Timber.e(throwable);
+                        onStartDone();
                     }
                 })
         );
+    }
+
+    protected Completable getTasks() {
+        return getNetworkStateCompletable()
+                .andThen(getAuthenticationCompletable());
     }
 
     protected Completable getNetworkStateCompletable() {
@@ -78,113 +87,42 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
 
                 return Completable.complete();
             }
-        })
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui());
-    }
-
-    public void checkNetworkState() {
-        Timber.d("Checking network state");
-
-        if (isViewAttached()) {
-            getView().updateMessage("Checking network state...");
-        }
-
-        NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
-        if (info == null || info.getState() != NetworkInfo.State.CONNECTED) {
-            getView().stop();
-        }
+        }).subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        onStartError(throwable);
+                    }
+                });
     }
 
     protected Completable getAuthenticationCompletable() {
-        return getStoredAuthenticationSingle().flatMap(new Function<Authentication, SingleSource<User>>() {
-            @Override
-            public SingleSource<User> apply(@NonNull Authentication authentication) throws Exception {
-                mAuthentication = authentication;
-                return getRestoreAuthenticationSingle(authentication);
-            }
-        }).flatMapCompletable(new Function<User, CompletableSource>() {
-            @Override
-            public CompletableSource apply(@NonNull final User user) throws Exception {
-                return Completable.fromAction(new Action() {
+        //TODO Failed connection to server --> exit app
+        return getInteractor().restoreAuthentication()
+                .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
-                    public void run() throws Exception {
-                        if (user == null || !user.isAuthenticated()) {
-                            mIsLoggedIn = false;
-                            return;
-                        }
-                        mIsLoggedIn = true;
-                        getInteractor().setCurrentUser(user);
-                    }
-                });
-            }
-        });
-    }
-
-
-
-    protected Single<Authentication> getStoredAuthenticationSingle() {
-        return getInteractor().doGetStoredAuthentication()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui());
-    }
-
-    protected Single<User> getRestoreAuthenticationSingle(Authentication authentication) {
-        return getInteractor().doRestoreAuthentication(authentication)
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui());
-    }
-
-
-    protected void getStoredAuthentication() {
-        if (isViewAttached()) {
-            getView().updateMessage("Loading authentication credentials");
-        }
-
-        getCompositeDisposable().add(getInteractor().doGetStoredAuthentication()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<Authentication>() {
-                    @Override
-                    public void accept(Authentication authentication) throws Exception {
-                        mAuthentication = authentication;
-                        if (mAuthentication.isValid()) {
-                            restoreAuthentication(authentication);
+                    public void accept(Disposable disposable) throws Exception {
+                        if (isViewAttached()) {
+                            getView().updateMessage("Restoring authentication...");
                         }
                     }
-                }, new Consumer<Throwable>() {
+                })
+                .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         mIsLoggedIn = false;
                     }
                 })
-        );
-    }
-
-    protected void restoreAuthentication(Authentication authentication) {
-        if (isViewAttached()) {
-            getView().updateMessage("Restoring credentials");
-        }
-
-        getCompositeDisposable().add(getInteractor().doRestoreAuthentication(authentication)
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<User>() {
+                .doOnSuccess(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
-                        mIsLoggedIn = true;
-                        getInteractor().setCurrentUser(user);
-                        onStartDone();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        mIsLoggedIn = false;
-                        onStartDone();
+                        mIsLoggedIn = user.isAuthenticated();
                     }
                 })
-        );
+                .toCompletable();
     }
+
 
     protected void onStartDone() {
         if (isViewAttached()) {

@@ -83,11 +83,6 @@ public class LoginFragment extends AuthenticationFragment<LoginContract.View, Lo
     }
 
     @Override
-    public String getTitle() {
-        return "Login";
-    }
-
-    @Override
     public LoginContract.Presenter<LoginContract.View, LoginContract.Interactor> createPresenter() {
         return getActivityComponent().loginPresenter();
     }

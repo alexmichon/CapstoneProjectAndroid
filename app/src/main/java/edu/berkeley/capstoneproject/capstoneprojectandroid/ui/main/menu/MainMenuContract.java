@@ -22,8 +22,7 @@ public interface MainMenuContract {
     }
 
     interface Interactor extends IBaseInteractor {
-
-        Single<User> doGetCurrentUser();
+        User getCurrentUser();
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {

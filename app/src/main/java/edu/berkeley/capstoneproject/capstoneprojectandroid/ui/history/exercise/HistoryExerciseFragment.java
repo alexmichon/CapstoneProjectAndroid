@@ -47,9 +47,4 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
             Timber.e("Exercise can't be null");
         }
     }
-
-    @Override
-    public String getTitle() {
-        return null;
-    }
 }

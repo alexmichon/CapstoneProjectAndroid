@@ -3,7 +3,9 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.session;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IExerciseCreatorService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.ITrainingService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.session.IUserService;
 
 /**
  * Created by Alex on 15/12/2017.
@@ -12,20 +14,29 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 @Singleton
 public class SessionHelper implements ISessionHelper {
 
-    private User mCurrentUser;
+    private final IUserService mUserService;
+    private final IExerciseCreatorService mExerciseService;
+    private final ITrainingService mTrainingService;
 
     @Inject
-    public SessionHelper() {
-
+    public SessionHelper(IUserService userService, IExerciseCreatorService exerciseService, ITrainingService trainingService) {
+        mUserService = userService;
+        mExerciseService = exerciseService;
+        mTrainingService = trainingService;
     }
 
     @Override
-    public User getCurrentUser() {
-        return mCurrentUser;
+    public IUserService getUserService() {
+        return mUserService;
     }
 
     @Override
-    public void setCurrentUser(User user) {
-        mCurrentUser = user;
+    public IExerciseCreatorService getExerciseCreatorService() {
+        return mExerciseService;
+    }
+
+    @Override
+    public ITrainingService getTrainingService() {
+        return mTrainingService;
     }
 }

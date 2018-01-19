@@ -2,75 +2,135 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
+import java.net.URL;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoal;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHeader;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseGoalResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseResultResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseTypeResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ObjectRequest;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * Created by Alex on 20/11/2017.
  */
 
 @Singleton
-public class ExerciseService implements IExerciseService {
-
-    private final ApiHeader mApiHeader;
+public class ExerciseService extends NetworkService implements IExerciseService {
 
     @Inject
-    public ExerciseService(ApiHeader header) {
-        mApiHeader = header;
+    public ExerciseService(OkHttpClient okHttpClient) {
+        super(okHttpClient);
     }
 
     @Override
-    public Single<Exercise> doCreateExercise(final ExerciseType exerciseType) {
+    public Single<Exercise> doCreateExercise(final Exercise.Builder builder) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISES)
-                .addHeaders(mApiHeader)
-                .addBodyParameter(new ExerciseRequest(exerciseType))
+                .addJSONObjectBody(new ObjectRequest<>("exercise",  new ExerciseRequest(builder)).toJson())
                 .build()
                 .getObjectObservable(ExerciseResponse.class)
                 .singleOrError()
                 .map(new Function<ExerciseResponse, Exercise>() {
                     @Override
                     public Exercise apply(@NonNull ExerciseResponse exerciseResponse) throws Exception {
-                        return exerciseResponse.getExercise(exerciseType);
+                        return exerciseResponse.getExercise(builder);
                     }
                 });
     }
 
     @Override
-    public Single<Measurement> doSaveMeasurement(final Measurement measurement) {
-        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_MEASUREMENTS)
-                .addHeaders(mApiHeader)
-                .addPathParameter("exercise_id", String.valueOf(measurement.getExercise().getId()))
-                .addBodyParameter(new MeasurementRequest(measurement))
+    public Completable doStopExercise(Exercise exercise) {
+        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_EXERCISE_STOP)
+                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
                 .build()
-                .getObjectObservable(MeasurementResponse.class)
+                .getObjectObservable(ExerciseResponse.class)
                 .singleOrError()
-                .map(new Function<MeasurementResponse, Measurement>() {
+                .toCompletable();
+    }
+
+    @Override
+    public Observable<ExerciseType> doGetExerciseTypes() {
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_TYPES)
+                .build()
+                .getObjectListObservable(ExerciseTypeResponse.class)
+                .flatMap(new Function<List<ExerciseTypeResponse>, ObservableSource<ExerciseTypeResponse>>() {
                     @Override
-                    public Measurement apply(@NonNull MeasurementResponse measurementResponse) throws Exception {
-                        measurement.setId(measurementResponse.getId());
-                        return measurement;
+                    public ObservableSource<ExerciseTypeResponse> apply(@NonNull List<ExerciseTypeResponse> exerciseTypeResponses) throws Exception {
+                        return Observable.fromIterable(exerciseTypeResponses);
+                    }
+                })
+                .map(new Function<ExerciseTypeResponse, ExerciseType>() {
+                    @Override
+                    public ExerciseType apply(@NonNull ExerciseTypeResponse exerciseTypeResponse) throws Exception {
+                        return exerciseTypeResponse.getExerciseType();
                     }
                 });
     }
 
     @Override
-    public Single<Measurement> getMaxMeasurement() {
-        // TODO
-        return Single.never();
+    public IRxWebSocket doStartStreaming(final Exercise exercise) {
+        // TODO Move to other network service
+        return new RxActionCable(getOkHttpClient(), new Request.Builder()
+                .url(ApiConstants.WEBSOCKET_URL + "?exercise_id=" + exercise.getId())
+                .build(), "ExerciseChannel" , "\"exercise_id\":" + exercise.getId());
+    }
+
+    @Override
+    public void doSendMeasurement(IRxWebSocket stream, Measurement measurement) {
+        // TODO Move to other network service
+        stream.send(new MeasurementRequest(measurement).toJson().toString());
+    }
+
+    @Override
+    public Single<ExerciseGoal> doGetExerciseGoal(Exercise exercise) {
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
+                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
+                .build()
+                .getObjectObservable(ExerciseGoalResponse.class)
+                .singleOrError()
+                .map(new Function<ExerciseGoalResponse, ExerciseGoal>() {
+                    @Override
+                    public ExerciseGoal apply(ExerciseGoalResponse exerciseGoalResponse) throws Exception {
+                        return exerciseGoalResponse.get();
+                    }
+                });
+    }
+
+    @Override
+    public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_RESULT)
+                .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
+                .build()
+                .getObjectObservable(ExerciseResultResponse.class)
+                .singleOrError()
+                .map(new Function<ExerciseResultResponse, ExerciseResult>() {
+                    @Override
+                    public ExerciseResult apply(ExerciseResultResponse exerciseResultResponse) throws Exception {
+                        return exerciseResultResponse.get();
+                    }
+                });
     }
 
     @Override

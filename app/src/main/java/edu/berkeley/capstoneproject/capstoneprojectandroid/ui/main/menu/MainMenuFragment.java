@@ -40,11 +40,6 @@ public class MainMenuFragment extends BaseFragment<MainMenuContract.View, MainMe
     private MainMenuAdapter mAdapter;
     private MainMenuItemListener mListener;
 
-    @Override
-    public String getTitle() {
-        return null;
-    }
-
 
     public static MainMenuFragment newInstance() {
         return new MainMenuFragment();

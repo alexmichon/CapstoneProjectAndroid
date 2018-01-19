@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FullNetworkModule;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by Alex on 06/12/2017.
@@ -12,4 +13,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.FullNetwork
 @Singleton
 @Component(modules = FullNetworkModule.class)
 public interface FullNetworkComponent extends NetworkComponent {
+
+    OkHttpClient okHttpClient();
 }

@@ -69,7 +69,7 @@ public class HistoryExercisesAdapter extends ArrayAdapter<Exercise> {
 
         Exercise exercise = getItem(position);
         if (exercise != null) {
-            holder.setName(exercise.getType().getName());
+            holder.setName(exercise.getName());
             holder.setDate(exercise.getStartDate());
         }
 

@@ -4,6 +4,8 @@ import android.support.annotation.StringRes;
 
 import com.hannesdorfmann.mosby3.mvp.MvpView;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
+
 /**
  * Created by Alex on 09/11/2017.
  */

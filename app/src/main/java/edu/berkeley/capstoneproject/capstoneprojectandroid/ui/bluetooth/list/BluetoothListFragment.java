@@ -11,13 +11,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
@@ -26,8 +23,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
  */
 
 public class BluetoothListFragment extends BaseFragment<BluetoothListContract.View, BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor>> implements BluetoothListContract.View {
-
-    private static final String TITLE = "Bluetooth Devices";
 
     private static final int REQUEST_ENABLE_BT = 0;
 
@@ -118,22 +113,27 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     @Override
-    public void showError(String message) {
-        Toast.makeText(getBaseActivity(), message, Toast.LENGTH_SHORT).show();
+    public void onDeviceConnecting() {
+        showLoading();
     }
 
     @Override
-    public String getTitle() {
-        return TITLE;
+    public void onDeviceConnected() {
+        hideLoading();
+        if (mListener != null) {
+            mListener.onBluetoothDeviceSelected();
+        }
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getBaseActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @OnItemClick(R.id.bluetooth_list_scanned)
     void OnDeviceClickListener(int position) {
         Rx2BleDevice device = mScannedAdapter.getItem(position);
         getPresenter().onDeviceSelected(device);
-        if (mListener != null) {
-            mListener.onDeviceSelected(device);
-        }
     };
 
 
@@ -143,6 +143,6 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     public interface BluetoothListFragmentListener {
-        void onDeviceSelected(Rx2BleDevice device);
+        void onBluetoothDeviceSelected();
     }
 }

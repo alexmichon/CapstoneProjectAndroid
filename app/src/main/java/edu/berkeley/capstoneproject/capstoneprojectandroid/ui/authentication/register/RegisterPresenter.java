@@ -34,6 +34,8 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
                     onAuthenticationCancel();
                 }
             });
+
+            getInteractor().remember(getView().remember());
         }
 
         getCompositeDisposable().add(getInteractor()

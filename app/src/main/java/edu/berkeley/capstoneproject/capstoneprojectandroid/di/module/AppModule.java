@@ -7,10 +7,20 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseBuilderManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseBuilderManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.MeasurementManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.AuthManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.IPreferencesHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.PreferencesHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.ApplicationContext;
@@ -44,12 +54,6 @@ public class AppModule {
         return mApplication;
     }
 
-    @Provides
-    @Singleton
-    IDataManager provideDataManager(DataManager dataManager) {
-        return dataManager;
-    }
-
 
     @Provides
     @Singleton
@@ -80,5 +84,41 @@ public class AppModule {
     @Singleton
     ISessionHelper provideSessionHelper(SessionHelper sessionHelper) {
         return sessionHelper;
+    }
+
+    @Provides
+    @Singleton
+    IAuthManager provideAuthManager(AuthManager authManager) {
+        return authManager;
+    }
+
+    @Provides
+    @Singleton
+    IExerciseTypeManager provideExerciseTypeManager(ExerciseTypeManager exerciseTypeManager) {
+        return exerciseTypeManager;
+    }
+
+    @Provides
+    @Singleton
+    IExerciseManager provideExerciseManager(ExerciseManager exerciseManager) {
+        return exerciseManager;
+    }
+
+    @Provides
+    @Singleton
+    IMeasurementManager provideMeasurementManager(MeasurementManager measurementManager) {
+        return measurementManager;
+    }
+
+    @Provides
+    @Singleton
+    IBluetoothManager provideBluetoothManager(BluetoothManager bluetoothManager) {
+        return bluetoothManager;
+    }
+
+    @Provides
+    @Singleton
+    IExerciseBuilderManager provideExerciseBuilderManager(ExerciseBuilderManager exerciseBuilderManager) {
+        return exerciseBuilderManager;
     }
 }

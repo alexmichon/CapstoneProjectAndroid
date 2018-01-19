@@ -39,7 +39,7 @@ public class BaseActivityTestRule<T extends BaseActivity> extends ActivityTestRu
         /*mActivityComponent = DaggerTestActivityComponent.builder()
                 .appComponent(getApplication().getAppComponent())
                 .activityModule(new TestActivityModule(getActivity(), mMockMode))
-                .build();
+                .doCreate();
                 */
         return super.apply(base, description);
     }

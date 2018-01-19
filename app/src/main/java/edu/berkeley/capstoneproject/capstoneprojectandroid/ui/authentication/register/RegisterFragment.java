@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.register;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,11 +66,7 @@ public class RegisterFragment extends AuthenticationFragment<RegisterContract.Vi
         mAuthenticationListener.onSwitchToLogin();
     }
 
-    @Override
-    public String getTitle() {
-        return "Login";
-    }
-
+    @NonNull
     @Override
     public RegisterContract.Presenter<RegisterContract.View, RegisterContract.Interactor> createPresenter() {
         return getActivityComponent().registerPresenter();

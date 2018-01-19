@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'jacoco-android'
 
 apply from: "$project.rootDir/tools/script-lint.gradle"
@@ -26,6 +25,7 @@ android {
         }
     }
 
+    flavorDimensions "default"
     productFlavors {
         fake {
             applicationIdSuffix ".fake"
@@ -55,28 +55,28 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'src/main/AndroidManifest.xml'
-            java.srcDirs = ['src/main/java']
+            java.srcDirs = ['src/main/java', 'src/androidTestFakeBluetooth/java', 'src/testFullNetwork/java']
         }
 
         instrumentTest.setRoot('src/androidTest/')
 
         fake {
-            java.srcDirs = ['src/main/java', 'src/fakeBluetooth/java', 'src/fakeNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fakeBluetooth/java', 'src/fakeNetwork/java']
             //manifest.srcFile 'src/fakeAll/AndroidManifest.xml'
         }
 
         fakeBluetooth {
-            java.srcDirs = ['src/main/java', 'src/fakeBluetooth/java', 'src/fullNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fakeBluetooth/java', 'src/fullNetwork/java']
             //manifest.srcFile 'src/fakeBluetooth/AndroidManifest.xml'
         }
 
         fakeNetwork {
-            java.srcDirs = ['src/main/java', 'src/fullBluetooth/java', 'src/fakeNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fullBluetooth/java', 'src/fakeNetwork/java']
             //manifest.srcFile 'src/fakeNetwork/AndroidManifest.xml'
         }
 
         full {
-            java.srcDirs = ['src/main/java', 'src/fullBluetooth/java/', 'src/fullNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fullBluetooth/java/', 'src/fullNetwork/java']
             //manifest.srcFile 'src/full/AndroidManifest.xml'
             //instrumentTest.setRoot('src/androidTestFull')
         }
@@ -117,6 +117,8 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.android.support:support-annotations:26.1.0'
 
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
@@ -134,19 +136,19 @@ dependencies {
     fakeCompile "com.polidea.rxandroidble:mockclient:1.4.3"
 
     compile 'com.google.dagger:dagger:2.13'
-    apt 'com.google.dagger:dagger-compiler:2.13'
-    androidTestApt 'com.google.dagger:dagger-compiler:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.13'
 
     compile 'com.google.dagger:dagger-android:2.13'
     compile 'com.google.dagger:dagger-android-support:2.13' // if you use the support libraries
-    apt 'com.google.dagger:dagger-android-processor:2.13'
-    apt 'com.google.dagger:dagger-compiler:2.13'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
 
     testCompile 'com.google.dagger:dagger:2.13'
-    androidTestApt 'com.google.dagger:dagger-compiler:2.13'
+    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.13'
 
     compile 'com.jakewharton:butterknife:8.8.1'
-    apt 'com.jakewharton:butterknife-compiler:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     compile 'com.amitshekhar.android:rx2-android-networking:1.0.0'
 

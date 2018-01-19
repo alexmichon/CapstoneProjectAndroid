@@ -21,13 +21,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.reg
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExerciseInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise.ExercisePresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeContract;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypeInteractor;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.exercise_type.ExerciseTypePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryPresenter;
@@ -37,6 +30,25 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercise.H
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.HistoryExercisesContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.HistoryExercisesInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.exercises.HistoryExercisesPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExercisePresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_goal.ExerciseGoalPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.ExerciseResultPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesFragment;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesPresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomePresenter;
@@ -55,6 +67,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingA
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.TrainingPresenter;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeContract;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypeInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_type.ExerciseTypePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.AppSchedulerProvider;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -188,20 +203,20 @@ public class ActivityModule {
 
     @Provides
     @PerActivity
-    ExerciseTypeContract.View provideExerciseTypeView(ExerciseTypeFragment fragment) {
+    ExerciseTypesContract.View provideExerciseTypesView(ExerciseTypesFragment fragment) {
         return fragment;
     }
 
     @Provides
     @PerActivity
-    ExerciseTypeContract.Interactor provideExerciseTypeInteractor(ExerciseTypeInteractor interactor) {
+    ExerciseTypesContract.Interactor provideExerciseTypesInteractor(ExerciseTypesInteractor interactor) {
         return interactor;
     }
 
     @Provides
     @PerActivity
-    ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor>
-    provideExerciseTypePresenter(ExerciseTypePresenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> presenter) {
+    ExerciseTypesContract.Presenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor>
+    provideExerciseTypesPresenter(ExerciseTypesPresenter<ExerciseTypesContract.View, ExerciseTypesContract.Interactor> presenter) {
         return presenter;
     }
 
@@ -298,6 +313,92 @@ public class ActivityModule {
 
 
 
+
+    @Provides
+    @PerActivity
+    ExerciseGoalContract.Interactor provideExerciseGoalInteractor(ExerciseGoalInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseGoalContract.Presenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor>
+    provideExerciseGoalPresenter(ExerciseGoalPresenter<ExerciseGoalContract.View, ExerciseGoalContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseBuilderContract.Interactor provideExerciseBuilderInteractor(ExerciseBuilderInteractor interactor) {
+        return interactor;
+    }
+
+
+    @Provides
+    @PerActivity
+    ExerciseBuilderContract.Presenter<ExerciseBuilderContract.View, ExerciseBuilderContract.Interactor>
+    provideExerciseBuilderPresenter(ExerciseBuilderPresenter<ExerciseBuilderContract.View, ExerciseBuilderContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseTypeContract.Interactor provideExerciseTypeInteractor(ExerciseTypeInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseTypeContract.Presenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor>
+    provideExerciseTypePresenter(ExerciseTypePresenter<ExerciseTypeContract.View, ExerciseTypeContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseSummaryContract.Interactor provideExerciseSummaryInteractor(ExerciseSummaryInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseSummaryContract.Presenter<ExerciseSummaryContract.View, ExerciseSummaryContract.Interactor>
+    provideExerciseSummaryPresenter(ExerciseSummaryPresenter<ExerciseSummaryContract.View, ExerciseSummaryContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+    @Provides
+    @PerActivity
+    ExerciseResultContract.Interactor provideExerciseResultInteractor(ExerciseResultInteractor interactor) {
+        return interactor;
+    }
+
+    @Provides
+    @PerActivity
+    ExerciseResultContract.Presenter<ExerciseResultContract.View, ExerciseResultContract.Interactor>
+    provideExerciseResultPresenter(ExerciseResultPresenter<ExerciseResultContract.View, ExerciseResultContract.Interactor> presenter) {
+        return presenter;
+    }
+
+
+
+
+
+
+
+
+
+
     @Provides
     @PerActivity
     HistoryContract.Interactor provideHistoryInteractor(HistoryInteractor interactor) {
@@ -312,15 +413,6 @@ public class ActivityModule {
 
 
 
-
-
-
-    @Provides
-    @PerActivity
-    HistoryExercisesContract.Interactor provideHistoryExercisesInteractor(HistoryExercisesInteractor interactor) {
-        return interactor;
-    }
-
     @Provides
     @PerActivity
     HistoryExercisesContract.Presenter<HistoryExercisesContract.View, HistoryExercisesContract.Interactor>
@@ -328,6 +420,11 @@ public class ActivityModule {
         return presenter;
     }
 
+    @Provides
+    @PerActivity
+    HistoryExercisesContract.Interactor provideHistoryExercisesInteractor(HistoryExercisesInteractor interactor) {
+        return interactor;
+    }
 
 
 

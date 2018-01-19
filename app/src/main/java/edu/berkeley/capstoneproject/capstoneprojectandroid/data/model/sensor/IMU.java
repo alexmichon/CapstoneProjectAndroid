@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
+
 /**
  * Created by Alex on 19/11/2017.
  */

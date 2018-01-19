@@ -20,8 +20,7 @@ public interface AuthenticationFragmentContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        void doRemember(User user);
-        void dontRemember();
+        void remember(boolean enabled);
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {

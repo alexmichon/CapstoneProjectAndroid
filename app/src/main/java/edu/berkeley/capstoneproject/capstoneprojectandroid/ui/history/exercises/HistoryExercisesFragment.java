@@ -49,11 +49,6 @@ public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContr
     }
 
     @Override
-    public String getTitle() {
-        return TITLE;
-    }
-
-    @Override
     public HistoryExercisesContract.Presenter<HistoryExercisesContract.View, HistoryExercisesContract.Interactor> createPresenter() {
         return getActivityComponent().historyExercisesPresenter();
     }

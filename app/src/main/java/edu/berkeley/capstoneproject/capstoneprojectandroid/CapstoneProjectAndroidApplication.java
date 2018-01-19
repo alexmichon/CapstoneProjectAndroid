@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.gsonparserfactory.GsonParserFactory;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
@@ -14,6 +15,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAc
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.NetworkComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.NetworkComponentFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.SessionComponent;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.SessionComponentFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
@@ -30,6 +33,7 @@ public class CapstoneProjectAndroidApplication extends Application {
     private AppComponent mAppComponent;
     private BluetoothComponent mBluetoothComponent;
     private NetworkComponent mNetworkComponent;
+    private SessionComponent mSessionComponent;
 
     private AppModule mAppModule;
 
@@ -38,22 +42,22 @@ public class CapstoneProjectAndroidApplication extends Application {
         super.onCreate();
         instance = this;
 
-        AndroidNetworking.initialize(getApplicationContext());
+        mAppComponent = createAppComponent();
+
+        AndroidNetworking.initialize(getApplicationContext(), getNetworkComponent().okHttpClient());
+        AndroidNetworking.setParserFactory(new GsonParserFactory());
         if (BuildConfig.DEBUG) {
-            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
+            //AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
         }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree() {
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
-                    String packages[] = element.getClassName().split("\\.");
-                    return packages[packages.length-1] + ":" + element.getLineNumber();
+                    return String.format("[%s#%s:%s]", super.createStackElementTag(element), element.getMethodName(), element.getLineNumber());
                 }
             });
         }
-
-        mAppComponent = createAppComponent();
     }
 
     public AppComponent getAppComponent() {
@@ -84,6 +88,12 @@ public class CapstoneProjectAndroidApplication extends Application {
         return mNetworkComponent;
     }
 
+    public SessionComponent getSessionComponent() {
+        if (mSessionComponent == null) {
+            mSessionComponent = createSessionComponent();
+        }
+        return mSessionComponent;
+    }
 
 
 
@@ -97,6 +107,7 @@ public class CapstoneProjectAndroidApplication extends Application {
                 .appModule(getAppModule())
                 .bluetoothComponent(getBluetoothComponent())
                 .networkComponent(getNetworkComponent())
+                .sessionComponent(getSessionComponent())
                 .build();
     }
 
@@ -106,6 +117,10 @@ public class CapstoneProjectAndroidApplication extends Application {
 
     protected NetworkComponent createNetworkComponent() {
         return NetworkComponentFactory.create(this);
+    }
+
+    protected SessionComponent createSessionComponent() {
+        return SessionComponentFactory.create(this);
     }
 
     public ActivityComponent getActivityComponent(BaseActivity activity) {

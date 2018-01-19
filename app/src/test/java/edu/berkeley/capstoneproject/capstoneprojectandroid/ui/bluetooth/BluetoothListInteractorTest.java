@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.DataManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IDeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.BluetoothListInteractor;
@@ -27,7 +27,7 @@ public class BluetoothListInteractorTest {
     private BluetoothListInteractor mInteractor;
 
     @Mock
-    private DataManager mDataManager;
+    private IBluetoothManager mBluetoothManager;
 
     @Mock
     private IBluetoothHelper mBluetoothHelper;
@@ -43,8 +43,7 @@ public class BluetoothListInteractorTest {
 
     @Before
     public void setup() {
-        mInteractor = new BluetoothListInteractor(mDataManager);
-        when(mDataManager.getBluetoothHelper()).thenReturn(mBluetoothHelper);
+        mInteractor = new BluetoothListInteractor(mBluetoothManager);
         when(mBluetoothHelper.getDeviceService()).thenReturn(mDeviceService);
         when(mBluetoothHelper.getConnectionService()).thenReturn(mConnectionService);
     }

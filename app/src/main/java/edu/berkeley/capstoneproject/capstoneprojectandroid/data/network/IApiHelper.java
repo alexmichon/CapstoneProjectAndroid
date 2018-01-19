@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -14,6 +15,4 @@ public interface IApiHelper {
 
     IAuthService getAuthService();
     IExerciseService getExerciseService();
-
-    ApiHeader getApiHeader();
 }

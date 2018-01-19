@@ -20,13 +20,6 @@ public abstract class AuthenticationFragmentPresenter<V extends AuthenticationFr
     @Override
     public void onAuthenticationSuccess(User user) {
         if (isViewAttached()) {
-            if (getView().remember()) {
-                getInteractor().doRemember(user);
-            }
-            else {
-                getInteractor().dontRemember();
-            }
-
             getView().onAuthenticationSuccess(user);
         }
     }
