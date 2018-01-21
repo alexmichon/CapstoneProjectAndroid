@@ -14,13 +14,10 @@ import okhttp3.OkHttpClient;
 
 public interface NetworkComponent {
 
-    IApiHeader apiHeader();
     IAuthService authService();
     IExerciseService exerciseService();
 
     IAuthInterceptor authInterceptor();
 
     OkHttpClient okHttpClient();
-
-    Parser.Factory parserFactory();
 }

@@ -8,7 +8,6 @@ import javax.inject.Singleton;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IAuthInterceptor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.IPreferencesHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.interceptor.AuthInterceptor;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Single;
@@ -111,7 +110,7 @@ public class AuthManager implements IAuthManager {
     @Override
     public void remember(boolean enabled) {
         if (enabled) {
-            mAuthInterceptor.setListener(new AuthInterceptor.Listener() {
+            mAuthInterceptor.setListener(new IAuthInterceptor.Listener() {
                 @Override
                 public void onAuthUpdate(Authentication auth) {
                     save(auth);

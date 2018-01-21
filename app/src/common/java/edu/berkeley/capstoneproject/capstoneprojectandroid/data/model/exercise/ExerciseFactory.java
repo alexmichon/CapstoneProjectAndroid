@@ -8,31 +8,7 @@ public class ExerciseFactory {
 
     private static int ID = 0;
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private int mExerciseTypeId;
-
-        public Builder() {
-
-        }
-
-        public Builder withExerciseType(ExerciseType exerciseType) {
-            mExerciseTypeId = exerciseType.getId();
-            return this;
-        }
-
-        public Builder withExerciseTypeId(int exerciseTypeId) {
-            mExerciseTypeId = exerciseTypeId;
-            return this;
-        }
-
-        public Exercise build() {
-            Exercise exercise = new Exercise(ID++, mExerciseTypeId);
-            return exercise;
-        }
-
+    public static Exercise fromBuilder(Exercise.Builder builder) {
+        return new Exercise(ID++, builder.getExerciseTypeId(), builder.getName());
     }
 }
