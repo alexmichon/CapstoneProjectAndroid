@@ -55,4 +55,11 @@ public class HistoryExercisePresenter<V extends HistoryExerciseContract.View, I 
     public void setExercise(Exercise exercise) {
         mExercise = exercise;
     }
+
+    @Override
+    public void loadExerciseInfo() {
+        if (isViewAttached()) {
+            getView().onExerciseLoaded(mExercise);
+        }
+    }
 }

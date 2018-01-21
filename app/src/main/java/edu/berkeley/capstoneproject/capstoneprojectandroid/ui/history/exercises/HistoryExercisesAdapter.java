@@ -75,7 +75,7 @@ public class HistoryExercisesAdapter extends RecyclerView.Adapter<HistoryExercis
 
             mTextName.setText(exercise.getExerciseTypeName());
 
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, LOCALE);
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, LOCALE);
             mTextDate.setText(dateFormat.format(exercise.getStartDate()));
         }
     }

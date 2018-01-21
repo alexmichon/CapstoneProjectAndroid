@@ -28,8 +28,6 @@ public class HistoryExercisesFragment extends BaseFragment<HistoryExercisesContr
         implements HistoryExercisesContract.View,
         HistoryExercisesAdapter.HistoryExercisesAdapterListener{
 
-    private static final String TITLE = "Exercises";
-
     @BindView(R.id.history_exercises_recycler)
     RecyclerView mExercisesView;
 

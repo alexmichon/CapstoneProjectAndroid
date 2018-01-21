@@ -19,6 +19,8 @@ public interface HistoryExerciseContract {
 
         void onExerciseResultLoading();
 
+        void onExerciseLoaded(Exercise exercise);
+
         void onExerciseResultLoaded(ExerciseResult exerciseResult);
     }
 
@@ -28,6 +30,8 @@ public interface HistoryExerciseContract {
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void setExercise(Exercise exercise);
+
+        void loadExerciseInfo();
         void loadExerciseResult();
     }
 }

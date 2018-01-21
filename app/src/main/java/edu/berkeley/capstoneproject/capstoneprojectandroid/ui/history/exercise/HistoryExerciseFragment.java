@@ -6,9 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import java.text.DateFormat;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResult;
@@ -24,6 +27,15 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
     implements HistoryExerciseContract.View {
 
     private static final String KEY_EXERCISE = "KEY_EXERCISE";
+
+    private DateFormat mDateFormat;
+
+
+    @BindView(R.id.history_exercise_name)
+    TextView mNameView;
+
+    @BindView(R.id.history_exercise_date)
+    TextView mDateView;
 
 
     public static HistoryExerciseFragment newInstance(Exercise exercise) {
@@ -55,6 +67,8 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
         }
 
         getPresenter().setExercise(exercise);
+
+        mDateFormat = DateFormat.getDateTimeInstance();
     }
 
 
@@ -70,6 +84,7 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getPresenter().loadExerciseInfo();
         getPresenter().loadExerciseResult();
     }
 
@@ -82,6 +97,12 @@ public class HistoryExerciseFragment extends BaseFragment<HistoryExerciseContrac
     @Override
     public void onExerciseResultLoading() {
         showLoading("Please wait while we process your results...");
+    }
+
+    @Override
+    public void onExerciseLoaded(Exercise exercise) {
+        mNameView.setText(exercise.getName());
+        mDateView.setText(mDateFormat.format(exercise.getStartDate()));
     }
 
     @Override
