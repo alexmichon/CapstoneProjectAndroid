@@ -34,7 +34,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 
 public abstract class DrawerActivity<V extends IBaseView, P extends IBasePresenter<V, ?>> extends BaseActivity<V, P> {
 
-    @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
     @BindView(R.id.toolbar)
@@ -47,9 +46,13 @@ public abstract class DrawerActivity<V extends IBaseView, P extends IBasePresent
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(R.layout.activity_drawer);
-        mContainer = (FrameLayout) findViewById(R.id.drawer_container);
-        LayoutInflater.from(this).inflate(layoutResID, mContainer, true);
-        ButterKnife.bind(this);
+        final FrameLayout container = (FrameLayout) findViewById(R.id.drawer_container);
+        LayoutInflater.from(this).inflate(layoutResID, container, true);
+        //ButterKnife.bind(this);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(mToolbar);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open,

@@ -46,26 +46,33 @@ public class HomeFragment extends BaseFragment<HomeContract.View, HomeContract.P
         return view;
     }
 
-    @Override
-    public String getTitle() {
-        return TITLE;
-    }
-
     @NonNull
     @Override
     public HomeContract.Presenter<HomeContract.View, HomeContract.Interactor> createPresenter() {
         return getActivityComponent().homePresenter();
     }
 
-    @OnClick(R.id.main_button_start_training)
+    @OnClick(R.id.home_start_training)
     void onStartExerciseClick() {
         getPresenter().onStartTrainingClick();
+    }
+
+    @OnClick(R.id.home_view_results)
+    void onViewResultsClick() {
+        getPresenter().onViewResultsClick();
     }
 
     @Override
     public void startTrainingActivity() {
         if (mListener != null) {
             mListener.onStartTrainingActivity();
+        }
+    }
+
+    @Override
+    public void startResultsActivity() {
+        if (mListener != null) {
+            mListener.onStartResultsActivity();
         }
     }
 
@@ -76,5 +83,6 @@ public class HomeFragment extends BaseFragment<HomeContract.View, HomeContract.P
 
     public interface HomeFragmentListener {
         void onStartTrainingActivity();
+        void onStartResultsActivity();
     }
 }

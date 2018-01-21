@@ -38,11 +38,13 @@ public class TestBytes {
 
     public static List<Measurement> encoderMeasurements() {
         List<Measurement> list = new ArrayList<>(1);
+        /*
         list.add(new Measurement(
                 SensorManager.find(SensorManager.ID_ENCODER).getMetric(ID_ANGLE),
                 999,
                 0.1f
         ));
+        */
         return list;
     }
 
@@ -66,6 +68,7 @@ public class TestBytes {
 
     public static List<Measurement> accMeasurements() {
         List<Measurement> list = new ArrayList<>(3);
+        /*
         list.add(new Measurement(
                 SensorManager.find(SensorManager.ID_ACCELEROMETER).getMetric(ID_ACC_X),
                 999,
@@ -81,6 +84,7 @@ public class TestBytes {
                 999,
                 0.3f
         ));
+        */
         return list;
     }
 
@@ -104,6 +108,7 @@ public class TestBytes {
 
     public static List<Measurement> gyrMeasurements() {
         List<Measurement> list = new ArrayList<>(3);
+        /*
         list.add(new Measurement(
                 SensorManager.find(SensorManager.ID_GYROSCOPE).getMetric(ID_GYR_X),
                 999,
@@ -119,6 +124,7 @@ public class TestBytes {
                 999,
                 0.3f
         ));
+        */
         return list;
     }
 }

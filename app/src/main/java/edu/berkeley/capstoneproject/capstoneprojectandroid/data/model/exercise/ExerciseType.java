@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,6 +14,8 @@ public class ExerciseType implements Parcelable {
 
     private final String mName;
     private final String mDescription;
+    private int mDuration;
+    private String mYoutubeVideo;
 
     public ExerciseType(int id, String name, String description) {
         mId = id;
@@ -30,6 +33,22 @@ public class ExerciseType implements Parcelable {
 
     public String getDescription() {
         return mDescription;
+    }
+
+    public int getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(int duration) {
+        mDuration = duration;
+    }
+
+    public String getYoutubeVideo() {
+        return mYoutubeVideo;
+    }
+
+    public void setYoutubeVideo(String youtubeVideo) {
+        mYoutubeVideo = youtubeVideo;
     }
 
     @Override

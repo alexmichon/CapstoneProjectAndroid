@@ -3,11 +3,9 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 /**
  * Created by Alex on 07/11/2017.
@@ -24,11 +22,20 @@ public interface BluetoothListContract {
         void cleanPairedDevices();
         void showScanningProgress();
         void hideScanningProgress();
+
+        void onDeviceConnecting();
+        void onDeviceConnected();
     }
 
     interface Interactor extends IBaseInteractor {
         Observable<Rx2BleDevice> doDiscovery();
         Observable<Rx2BleDevice> doLoadPairedDevices();
+
+        Completable doConnect(Rx2BleDevice device);
+        Completable doDisconnect();
+        Completable doValidateDevice();
+
+        void doSelectDevice(Rx2BleDevice device);
     }
 
     //@PerActivity

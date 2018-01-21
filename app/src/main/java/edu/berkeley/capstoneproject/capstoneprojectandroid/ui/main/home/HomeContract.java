@@ -14,6 +14,8 @@ public interface HomeContract {
     interface View extends IBaseView {
 
         void startTrainingActivity();
+
+        void startResultsActivity();
     }
 
     interface Interactor extends IBaseInteractor {

@@ -1,12 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.view.MenuItem;
-
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
@@ -29,7 +24,6 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
     }
 
 
-    @Override
     public void onMainMenuItemClick(MainMenuItem item) {
         switch (item.getTitle()) {
             case MainMenuItem.HOME_TITLE:
@@ -60,7 +54,7 @@ public class MainPresenter<V extends MainContract.View, I extends MainContract.I
                     @Override
                     public void run() throws Exception {
                         if (isViewAttached()) {
-                            getView().moveToAuthenticationActivity();
+                            getView().startToAuthenticationActivity();
                         }
                     }
                 }, new Consumer<Throwable>() {

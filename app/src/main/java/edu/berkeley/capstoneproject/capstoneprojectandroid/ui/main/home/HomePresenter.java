@@ -26,6 +26,6 @@ public class HomePresenter<V extends HomeContract.View, I extends HomeContract.I
 
     @Override
     public void onViewResultsClick() {
-        getView().showError("Not implemented yet !");
+        getView().startResultsActivity();
     }
 }

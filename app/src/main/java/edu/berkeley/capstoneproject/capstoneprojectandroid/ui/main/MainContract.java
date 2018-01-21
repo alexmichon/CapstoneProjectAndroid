@@ -1,6 +1,5 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main;
 
-import android.support.design.widget.NavigationView;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
@@ -8,7 +7,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBasePresente
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
 import io.reactivex.Completable;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Alex on 08/11/2017.
@@ -17,9 +15,9 @@ import io.reactivex.disposables.Disposable;
 public interface MainContract {
 
     interface View extends IBaseView {
-        void showHomeFragment();
+        void startToAuthenticationActivity();
 
-        void moveToAuthenticationActivity();
+        void showHomeFragment();
     }
 
     interface Interactor extends IBaseInteractor {

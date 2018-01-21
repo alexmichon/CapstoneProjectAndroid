@@ -10,11 +10,11 @@ import java.util.Map;
 
 public class Authentication {
 
-    private String mAccessToken;
-    private String mClient;
-    private String mExpiry;
-    private String mTokenType;
-    private String mUid;
+    private String mAccessToken = "";
+    private String mClient = "";
+    private String mExpiry = "";
+    private String mTokenType = "";
+    private String mUid = "";
 
     public Authentication(String accessToken, String client, String expiry, String tokenType, String uid) {
         mAccessToken = accessToken;
@@ -22,14 +22,6 @@ public class Authentication {
         mExpiry = expiry;
         mTokenType = tokenType;
         mUid = uid;
-    }
-
-    public Authentication(Map<String, String> headers) {
-        mAccessToken = headers.get("access-token");
-        mClient = headers.get("client");
-        mExpiry = headers.get("expiry");
-        mTokenType = headers.get("token-type");
-        mUid = headers.get("uid");
     }
 
     public String getAccessToken() {
@@ -85,18 +77,5 @@ public class Authentication {
 
         long expiry = Long.valueOf(mExpiry);
         return new Date(expiry).after(new Date());
-    }
-
-
-
-    public Map<String, String> toMap() {
-        Map<String, String> map = new HashMap<>(5);
-        map.put("access-token", mAccessToken);
-        map.put("client", mClient);
-        map.put("expiry", mExpiry);
-        map.put("token-type", mTokenType);
-        map.put("uid", mUid);
-
-        return map;
     }
 }

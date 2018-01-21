@@ -27,18 +27,9 @@ public class MainMenuPresenter<V extends MainMenuContract.View, I extends MainMe
 
     @Override
     public void onResume() {
-        getCompositeDisposable().add(getInteractor().doGetCurrentUser()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<User>() {
-                    @Override
-                    public void accept(User user) throws Exception {
-                        if (isViewAttached()) {
-                            getView().setUser(user);
-                        }
-                    }
-                })
-        );
+        if (isViewAttached()) {
+            getView().setUser(getInteractor().getCurrentUser());
+        }
     }
 
     @Override

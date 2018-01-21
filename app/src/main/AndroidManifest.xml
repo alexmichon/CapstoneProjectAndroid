@@ -22,7 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -32,6 +31,7 @@
         <activity android:name=".ui.authentication.AuthenticationActivity"/>
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.training.TrainingActivity"/>
+        <activity android:name=".ui.history.HistoryActivity"/>
     </application>
 
 </manifest>

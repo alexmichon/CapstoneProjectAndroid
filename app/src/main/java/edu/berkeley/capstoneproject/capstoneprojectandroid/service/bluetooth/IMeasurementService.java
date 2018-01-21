@@ -8,10 +8,10 @@ import io.reactivex.Observable;
  */
 
 public interface IMeasurementService extends IBaseService {
-    Observable<Measurement> getEncoderObservable();
+    Observable<byte[]> getEncoderObservable();
     void setEncoderObservable(Observable<byte[]> encoderObservable);
 
-    Observable<Measurement> getImuObservable();
+    Observable<byte[]> getImuObservable();
     void setImuObservable(Observable<byte[]> imuObservable);
 
 }

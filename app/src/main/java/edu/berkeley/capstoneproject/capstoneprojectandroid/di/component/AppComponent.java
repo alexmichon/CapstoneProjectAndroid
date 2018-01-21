@@ -5,7 +5,13 @@ import javax.inject.Singleton;
 import dagger.BindsInstance;
 import dagger.Component;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.CapstoneProjectAndroidApplication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseBuilderManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ITrainingManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IHistoryManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
 
 /**
@@ -13,7 +19,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
  */
 
 @Singleton
-@Component(modules = {AppModule.class}, dependencies = {BluetoothComponent.class, NetworkComponent.class})
+@Component(modules = {AppModule.class}, dependencies = {BluetoothComponent.class, NetworkComponent.class, SessionComponent.class})
 public interface AppComponent {
 
     @Component.Builder
@@ -22,10 +28,17 @@ public interface AppComponent {
         Builder appModule(AppModule appModule);
         Builder bluetoothComponent(BluetoothComponent bluetoothComponent);
         Builder networkComponent(NetworkComponent networkComponent);
+        Builder sessionComponent(SessionComponent sessionComponent);
         AppComponent build();
     }
 
     void inject(CapstoneProjectAndroidApplication app);
 
-    IDataManager dataManager();
+    IAuthManager authManager();
+    IExerciseTypeManager exerciseTypeManager();
+    ITrainingManager exerciseManager();
+    IExerciseBuilderManager exerciseBuilderManager();
+    IMeasurementManager measurementManager();
+    IBluetoothManager bluetoothManager();
+    IHistoryManager historyManager();
 }

@@ -35,6 +35,8 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
                     onAuthenticationCancel();
                 }
             });
+
+            getInteractor().remember(getView().remember());
         }
 
         getCompositeDisposable().add(

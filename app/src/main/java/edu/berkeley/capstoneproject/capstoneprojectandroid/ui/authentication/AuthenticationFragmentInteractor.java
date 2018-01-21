@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.IDataManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.IAuthManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
 import timber.log.Timber;
@@ -11,26 +11,18 @@ import timber.log.Timber;
 
 public abstract class AuthenticationFragmentInteractor extends BaseInteractor implements AuthenticationFragmentContract.Interactor {
 
-    public AuthenticationFragmentInteractor(IDataManager dataManager) {
-        super(dataManager);
+    private final IAuthManager mAuthManager;
+
+    public AuthenticationFragmentInteractor(IAuthManager authManager) {
+        mAuthManager = authManager;
     }
 
     @Override
-    public void doRemember(User user) {
-        getDataManager().getPreferencesHelper().setAuthentication(user.getAuthentication());
+    public void remember(boolean enabled) {
+        mAuthManager.remember(enabled);
     }
 
-    @Override
-    public void dontRemember() {
-        getDataManager().getPreferencesHelper().removeAuthentication();
-    }
-
-    protected void updateApiHeader(User user) {
-        Timber.d("Updating api header");
-        getDataManager().getApiHelper().getApiHeader().setAuthentication(user.getAuthentication());
-    }
-
-    protected void setCurrentUser(User user) {
-        getDataManager().getSessionHelper().setCurrentUser(user);
+    protected IAuthManager getAuthManager() {
+        return mAuthManager;
     }
 }

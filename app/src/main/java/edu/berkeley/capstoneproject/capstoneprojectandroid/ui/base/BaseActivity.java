@@ -124,8 +124,11 @@ public abstract class BaseActivity<V extends IBaseView, P extends IBasePresenter
     protected void setFragment(@IdRes int containerViewId, BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(containerViewId, fragment).commit();
+    }
 
-        setTitle(fragment.getTitle());
+    public void showDialog(BaseDialog dialog, String tag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        dialog.show(fragmentManager, tag);
     }
 
     public void setUnbinder(Unbinder unBinder) {

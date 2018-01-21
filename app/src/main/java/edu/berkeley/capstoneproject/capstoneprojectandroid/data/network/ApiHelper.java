@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IAuthService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -13,16 +14,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExer
 @Singleton
 public class ApiHelper implements IApiHelper {
 
-    private static final String TAG = ApiHelper.class.getSimpleName();
-
-    private final ApiHeader mApiHeader;
-
     private final IAuthService mAuthService;
     private final IExerciseService mExerciseService;
 
     @Inject
-    public ApiHelper(ApiHeader apiHeader, IAuthService authService, IExerciseService exerciseService) {
-        mApiHeader = apiHeader;
+    public ApiHelper(IAuthService authService, IExerciseService exerciseService) {
         mAuthService = authService;
         mExerciseService = exerciseService;
     }
@@ -35,10 +31,5 @@ public class ApiHelper implements IApiHelper {
     @Override
     public IExerciseService getExerciseService() {
         return mExerciseService;
-    }
-
-    @Override
-    public ApiHeader getApiHeader() {
-        return mApiHeader;
     }
 }

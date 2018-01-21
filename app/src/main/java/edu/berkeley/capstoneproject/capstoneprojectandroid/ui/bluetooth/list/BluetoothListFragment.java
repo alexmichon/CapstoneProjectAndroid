@@ -11,13 +11,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.ActivityComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 
@@ -26,8 +23,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
  */
 
 public class BluetoothListFragment extends BaseFragment<BluetoothListContract.View, BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor>> implements BluetoothListContract.View {
-
-    private static final String TITLE = "Bluetooth Devices";
 
     private static final int REQUEST_ENABLE_BT = 0;
 
@@ -44,7 +39,7 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_bluetooth, container, false);
+        View view = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
         ButterKnife.bind(this, view);
 
@@ -118,21 +113,28 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     @Override
+    public void onDeviceConnecting() {
+        showLoading();
+    }
+
+    @Override
+    public void onDeviceConnected() {
+        hideLoading();
+        if (mListener != null) {
+            mListener.onBluetoothDeviceSelected();
+        }
+    }
+
+    @Override
     public void showError(String message) {
         Toast.makeText(getBaseActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public String getTitle() {
-        return TITLE;
-    }
-
     @OnItemClick(R.id.bluetooth_list_scanned)
     void OnDeviceClickListener(int position) {
-        Rx2BleDevice device = mScannedAdapter.getItem(position);
-        getPresenter().onDeviceSelected(device);
-        if (mListener != null) {
-            mListener.onDeviceSelected(device);
+        if (position < mScannedAdapter.getCount()) {
+            Rx2BleDevice device = mScannedAdapter.getItem(position);
+            getPresenter().onDeviceSelected(device);
         }
     };
 
@@ -143,6 +145,6 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     public interface BluetoothListFragmentListener {
-        void onDeviceSelected(Rx2BleDevice device);
+        void onBluetoothDeviceSelected();
     }
 }

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="activity_title_text_size">20sp</dimen>
+    <dimen name="activity_subtitle_text_size">17sp</dimen>
     <dimen name="menu_padding_left_right">16dp</dimen>
     <dimen name="menu_item_padding_top_bottom">8dp</dimen>
     <dimen name="navigation_drawer_width">300dp</dimen>
+    <dimen name="title_layout_margin">10dp</dimen>
+    <dimen name="fragment_layout_margin">10dp</dimen>
+    <dimen name="button_bar_layout_margin">20dp</dimen>
+    <dimen name="home_button_size">100dp</dimen>
 </resources>

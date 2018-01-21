@@ -65,7 +65,6 @@ public class SplashPresenterTest {
     @Test
     public void onNetworkNotConnectedShouldUpdateView() {
         // when
-        mPresenter.checkNetworkState();
 
         // then
         verify(mView).stop();

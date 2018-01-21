@@ -11,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.R;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.drawer.DrawerActivity;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.history.HistoryActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.home.HomeFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.menu.MainMenuItem;
@@ -49,7 +50,7 @@ public class MainActivity extends DrawerActivity<MainContract.View, MainContract
     }
 
     @Override
-    public void moveToAuthenticationActivity() {
+    public void startToAuthenticationActivity() {
         Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
         moveToActivity(intent);
     }
@@ -68,6 +69,12 @@ public class MainActivity extends DrawerActivity<MainContract.View, MainContract
     @Override
     public void onStartTrainingActivity() {
         Intent intent = new Intent(MainActivity.this, TrainingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onStartResultsActivity() {
+        Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
         startActivity(intent);
     }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="@dimen/fragment_layout_margin">
+
+    <TextView
+        android:id="@+id/history_exercise_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/title_layout_margin"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/activity_title_text_size"/>
+
+    <TextView
+        android:id="@+id/history_exercise_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/activity_subtitle_text_size"/>
+
+    <FrameLayout
+        android:id="@+id/history_exercise_result_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

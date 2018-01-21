@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:gravity="center">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:textSize="20sp"
         android:text="What do you want to do ?"/>
@@ -25,9 +26,9 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/main_button_start_training"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:id="@+id/home_start_training"
+                android:layout_width="@dimen/home_button_size"
+                android:layout_height="@dimen/home_button_size"
                 android:layout_gravity="center"
                 android:padding="10dp"
                 android:text="Start training"
@@ -42,10 +43,9 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/main_button_view_results"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
+                android:id="@+id/home_view_results"
+                android:layout_width="@dimen/home_button_size"
+                android:layout_height="@dimen/home_button_size"
                 android:layout_gravity="center"
                 android:padding="10dp"
                 android:text="View results"
