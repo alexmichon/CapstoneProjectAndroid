@@ -49,7 +49,7 @@ public class ExerciseBuilderFragment extends BaseFragment<ExerciseBuilderContrac
 
     @Override
     public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        getPresenter().selectExerciseType(exerciseType);
+        getPresenter().onExerciseTypeSelect(exerciseType);
     }
 
     @Nullable

@@ -38,7 +38,7 @@ public class ExerciseService extends BaseService implements IExerciseService {
     }
 
     @Override
-    public Observable<Map<String, Observable<byte[]>>> startExercise() {
+    public Single<Map<String, Observable<byte[]>>> startExercise() {
         // TODO
         Observable<Observable<byte[]>> encoderObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_ENCODER, NotificationSetupMode.DEFAULT);
         Observable<Observable<byte[]>> imuObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);
@@ -50,6 +50,6 @@ public class ExerciseService extends BaseService implements IExerciseService {
                 map.put(ENCODER_OBSERVABLE, encoderObservable);
                 return map;
             }
-        });
+        }).singleOrError();
     }
 }

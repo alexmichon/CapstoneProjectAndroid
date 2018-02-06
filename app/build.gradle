@@ -61,22 +61,22 @@ android {
         instrumentTest.setRoot('src/androidTest/')
 
         fake {
-            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fakeBluetooth/java', 'src/fakeNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/fakeBluetooth/java', 'src/fakeNetwork/java']
             //manifest.srcFile 'src/fakeAll/AndroidManifest.xml'
         }
 
         fakeBluetooth {
-            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fakeBluetooth/java', 'src/fullNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/fakeBluetooth/java', 'src/fullNetwork/java']
             //manifest.srcFile 'src/fakeBluetooth/AndroidManifest.xml'
         }
 
         fakeNetwork {
-            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fullBluetooth/java', 'src/fakeNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/fullBluetooth/java', 'src/fakeNetwork/java']
             //manifest.srcFile 'src/fakeNetwork/AndroidManifest.xml'
         }
 
         full {
-            java.srcDirs = ['src/main/java', 'src/common/java', 'src/fullBluetooth/java/', 'src/fullNetwork/java']
+            java.srcDirs = ['src/main/java', 'src/fullBluetooth/java/', 'src/fullNetwork/java']
             //manifest.srcFile 'src/full/AndroidManifest.xml'
             //instrumentTest.setRoot('src/androidTestFull')
         }

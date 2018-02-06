@@ -25,6 +25,14 @@ public class UserFactory {
         return mAdmin;
     }
 
+    public static User create() {
+        return builder()
+                .withEmail("john.doe@example.com")
+                .withFirstName("John")
+                .withLastName("Doe")
+                .build();
+    }
+
     public static class UserBuilder {
 
         private Authentication mAuthentication;

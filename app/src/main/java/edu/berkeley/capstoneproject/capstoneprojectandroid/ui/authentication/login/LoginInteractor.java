@@ -19,7 +19,7 @@ public class LoginInteractor extends AuthenticationFragmentInteractor implements
     }
     
     @Override
-    public Single<User> doLoginCall(String email, String password) {
-        return getAuthManager().login(email, password);
+    public Single<User> doLogin(String email, String password) {
+        return getAuthManager().doLogin(email, password);
     }
 }

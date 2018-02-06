@@ -23,6 +23,6 @@ public interface ExerciseBuilderContract {
     }
 
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
-        void selectExerciseType(ExerciseType exerciseType);
+        void onExerciseTypeSelect(ExerciseType exerciseType);
     }
 }

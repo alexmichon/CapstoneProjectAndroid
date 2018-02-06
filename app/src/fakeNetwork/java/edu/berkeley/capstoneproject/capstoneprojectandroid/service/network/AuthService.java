@@ -33,8 +33,7 @@ public class AuthService implements IAuthService {
     public Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName) {
         User user = new User(email, firstName, lastName);
         user.setAuthentication(
-                AuthenticationFactory.defaultBuilder()
-                    .build()
+                AuthenticationFactory.create()
         );
         return Single.just(user);
     }

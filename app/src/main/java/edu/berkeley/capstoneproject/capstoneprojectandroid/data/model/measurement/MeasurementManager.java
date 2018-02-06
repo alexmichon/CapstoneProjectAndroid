@@ -2,9 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measureme
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import io.reactivex.Completable;
 
 /**
  * Created by Alex on 30/12/2017.

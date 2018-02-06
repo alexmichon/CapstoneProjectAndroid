@@ -19,7 +19,7 @@ public class RegisterInteractor extends AuthenticationFragmentInteractor impleme
     }
 
     @Override
-    public Single<User> doRegisterApiCall(String email, String password, String passwordConfirmation, String firstName, String lastName) {
-        return getAuthManager().register(email, password, passwordConfirmation, firstName, lastName);
+    public Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName) {
+        return getAuthManager().doRegister(email, password, passwordConfirmation, firstName, lastName);
     }
 }

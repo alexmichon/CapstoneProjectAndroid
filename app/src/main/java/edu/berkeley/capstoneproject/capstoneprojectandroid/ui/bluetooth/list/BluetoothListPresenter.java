@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
@@ -24,8 +23,6 @@ import timber.log.Timber;
 
 public class BluetoothListPresenter<V extends BluetoothListContract.View, I extends BluetoothListContract.Interactor>
         extends BasePresenter<V, I> implements BluetoothListContract.Presenter<V, I> {
-
-    private Disposable mScanDisposable;
 
     @Inject
     public BluetoothListPresenter(I interactor,
@@ -59,53 +56,56 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
         getView().showScanningProgress();
 
-        mScanDisposable = getInteractor()
-                .doDiscovery()
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .distinct(new Function<Rx2BleDevice, String>() {
-                        @Override
-                        public String apply(@NonNull Rx2BleDevice device) throws Exception {
-                            return device.getMacAddress();
-                        }
-                    })
-                    .take(BluetoothConstants.SCAN_TIME, TimeUnit.SECONDS)
-                    .subscribeWith(new DisposableObserver<Rx2BleDevice>() {
-                        @Override
-                        public void onNext(@NonNull Rx2BleDevice bluetoothDevice) {
-                            Timber.d("New device");
-                            getView().addScannedDevice(bluetoothDevice);
-                        }
-
-                        @Override
-                        public void onError(Throwable t) {
-                            Timber.e(t, "Scanning error");
-                            getView().hideScanningProgress();
-                            getView().showError("Scanning error");
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            Timber.d("Scan completed");
-                            getView().hideScanningProgress();
-                        }
-                    });
-        getCompositeDisposable().add(mScanDisposable);
+        getCompositeDisposable().add(getInteractor().doStartScanning()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .distinct(new Function<Rx2BleDevice, String>() {
+                    @Override
+                    public String apply(@NonNull Rx2BleDevice device) throws Exception {
+                        return device.getMacAddress();
+                    }
+                })
+                .take(BluetoothConstants.SCAN_TIME, TimeUnit.SECONDS)
+                .doOnNext(new Consumer<Rx2BleDevice>() {
+                    @Override
+                    public void accept(Rx2BleDevice rx2BleDevice) throws Exception {
+                        Timber.d("New device");
+                        getView().addScannedDevice(rx2BleDevice);
+                    }
+                }).doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        Timber.d("Scan completed");
+                        getView().hideScanningProgress();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Timber.e(throwable, "Scanning error");
+                        getView().hideScanningProgress();
+                        getView().showError("Scanning error");
+                    }
+                })
+                .subscribe()
+        );
     }
 
     @Override
-    public void onStopScanning() {
-        getView().hideScanningProgress();
-        if (mScanDisposable != null) {
-            getCompositeDisposable().remove(mScanDisposable);
-            mScanDisposable.dispose();
-            mScanDisposable = null;
+    public void stopScanning() {
+        if (isViewAttached()) {
+            getView().hideScanningProgress();
         }
+
+        getInteractor().doStopScanning()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe();
     }
 
     @Override
     public void onDeviceSelected(Rx2BleDevice device) {
-        onStopScanning();
+        stopScanning();
 
         if (isViewAttached()) {
             getView().onDeviceConnecting();
@@ -141,8 +141,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
             getView().showMessage("Connected");
         }
 
-        getCompositeDisposable().add(getInteractor()
-                .doValidateDevice()
+        getCompositeDisposable().add(getInteractor().doValidateDevice()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Action() {

@@ -22,8 +22,13 @@ public class BluetoothListInteractor extends BaseInteractor implements Bluetooth
     }
 
     @Override
-    public Observable<Rx2BleDevice> doDiscovery() {
-        return mBluetoothManager.doScan();
+    public Observable<Rx2BleDevice> doStartScanning() {
+        return mBluetoothManager.doStartScanning();
+    }
+
+    @Override
+    public Completable doStopScanning() {
+        return mBluetoothManager.doStopScanning();
     }
 
     @Override

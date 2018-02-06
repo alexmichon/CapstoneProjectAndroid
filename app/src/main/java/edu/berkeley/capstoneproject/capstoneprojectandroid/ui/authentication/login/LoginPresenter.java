@@ -3,13 +3,10 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.lo
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentContract;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -40,7 +37,7 @@ public class LoginPresenter<V extends LoginContract.View, I extends LoginContrac
         }
 
         getCompositeDisposable().add(
-                getInteractor().doLoginCall(email, password)
+                getInteractor().doLogin(email, password)
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .subscribe(new Consumer<User>() {

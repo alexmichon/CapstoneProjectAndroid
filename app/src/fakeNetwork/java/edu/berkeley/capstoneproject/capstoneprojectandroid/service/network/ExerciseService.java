@@ -4,7 +4,7 @@ import android.content.Context;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
@@ -55,7 +55,7 @@ public class ExerciseService implements IExerciseService {
     @Override
     public Observable<ExerciseType> doGetExerciseTypes() {
         return Observable.just(
-                ExerciseTypeFactory.test()
+                ExerciseTypeFactory.create()
         );
     }
 

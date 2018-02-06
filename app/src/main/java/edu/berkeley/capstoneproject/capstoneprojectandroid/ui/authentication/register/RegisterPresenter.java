@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.authentication.AuthenticationFragmentPresenter;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseView;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
@@ -39,7 +38,7 @@ public class RegisterPresenter<V extends RegisterContract.View, I extends Regist
         }
 
         getCompositeDisposable().add(getInteractor()
-                .doRegisterApiCall(email, password, passwordConfirmation, firstName, lastName)
+                .doRegister(email, password, passwordConfirmation, firstName, lastName)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {

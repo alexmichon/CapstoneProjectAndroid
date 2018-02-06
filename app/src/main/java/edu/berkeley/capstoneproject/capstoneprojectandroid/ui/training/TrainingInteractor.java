@@ -20,10 +20,4 @@ public class TrainingInteractor extends BaseInteractor implements TrainingContra
     @Inject
     public TrainingInteractor() {
     }
-
-    @Override
-    public Completable doClearExerciseSession() {
-        // TODO
-        return Completable.complete();
-    }
 }

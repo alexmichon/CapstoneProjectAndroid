@@ -10,7 +10,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.HashMap;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.MeasurementFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ITrainingManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IExerciseService;
@@ -19,6 +20,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric.Metric;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 import static junit.framework.Assert.assertEquals;
@@ -39,175 +41,85 @@ public class ExerciseInteractorTest {
     private ExerciseInteractor mInteractor;
 
     @Mock
-    private Exercise mExercise;
-
-    @Mock
-    private ExerciseType mExerciseType;
-
-    @Mock
-    private ITrainingManager mExerciseManager;
-
-    @Mock
-    private IMeasurementManager mMeasurementManager;
-
-    @Mock
-    private IApiHelper mApiHelper;
-
-    @Mock
-    private IBluetoothHelper mBluetoothHelper;
-
-    @Mock
-    private edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.IExerciseService mApiExerciseService;
-
-    @Mock
-    private IExerciseService mBluetoothExerciseService;
+    private ITrainingManager mTrainingManager;
 
     @Before
     public void setup() {
-        doReturn(mApiExerciseService).when(mApiHelper).getExerciseService();
-
-        doReturn(mBluetoothExerciseService).when(mBluetoothHelper).getExerciseService();
-
-        mExercise = Mockito.mock(Exercise.class);
-        mExerciseType = Mockito.mock(ExerciseType.class);
-
-        mInteractor = new ExerciseInteractor(mExerciseManager, mMeasurementManager);
+        mInteractor = new ExerciseInteractor(mTrainingManager);
     }
 
     @Test
-    public void doCreateExerciseShouldCallApi() {
+    public void getExerciseShouldCallTrainingManager() {
         // given
-        //doReturn(Single.never()).when(mApiExerciseService).doCreateExercise(mExerciseType);
 
         // when
-        //mInteractor.doCreateExercise();
+        mInteractor.getExercise();
 
         // then
-        //verify(mApiExerciseService).doCreateExercise(mExerciseType);
+        verify(mTrainingManager).getCurrentExercise();
     }
 
     @Test
-    public void doCreateExerciseShouldReturnCorrectExercise() {
+    public void doPrepareExerciseShouldCallTrainingManager() {
         // given
-        //doReturn(Single.just(mExercise)).when(mApiExerciseService).doCreateExercise(mExerciseType);
 
         // when
-        //Exercise exercise = mInteractor.doCreateExercise().blockingGet();
+        mInteractor.doPrepareExercise();
 
         // then
-        //assertEquals(exercise, mExercise);
+        verify(mTrainingManager).doStartSensors();
     }
 
 
 
 
     @Test
-    public void doStartExerciseShouldCallBluetooth() {
+    public void doStartStreamingShouldCallTrainingManager() {
         // given
-        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
-        doReturn(Observable.just(sensorService)).when(mBluetoothExerciseService).startExercise();
 
         // when
-        //mInteractor.doStartExercise(mExercise).test();
+        mInteractor.doStartStreaming();
 
         // then
-        //verify(mBluetoothExerciseService).startExercise();
+        verify(mTrainingManager).doStartStreaming();
     }
 
     @Test
-    public void doStartExerciseShouldReturnOnComplete() {
+    public void doStopExerciseShouldCallTrainingManager() {
         // given
-        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
-        doReturn(sensorService).when(mBluetoothHelper).getMeasurementService();
-        Observable observable = Observable.just(new HashMap<String, Observable<byte[]>>());
-        doReturn(observable).when(mBluetoothExerciseService).startExercise();
+        doReturn(Completable.complete()).when(mTrainingManager).doStopStreaming();
+        doReturn(Completable.complete()).when(mTrainingManager).doStopExercise();
+        doReturn(Completable.complete()).when(mTrainingManager).doStopSensors();
 
         // when
-        //Completable completable = mInteractor.doStartExercise(mExercise);
-        //TestObserver testObserver = completable.test();
+        mInteractor.doStopExercise();
 
         // then
-        //observable.test().assertSubscribed();
-        //testObserver.assertComplete();
+        verify(mTrainingManager).doStopExercise();
+        verify(mTrainingManager).doStopStreaming();
+        verify(mTrainingManager).doStopSensors();
     }
 
     @Test
-    public void doStartExerciseShouldForwardErrorOnFailure() {
+    public void doListenShouldCallTrainingManager() {
         // given
-        Error error = new Error();
-        Observable observable = Observable.error(error);
-        doReturn(observable).when(mBluetoothExerciseService).startExercise();
 
         // when
-        //Completable completable = mInteractor.doStartExercise(mExercise);
-        //TestObserver testObserver = completable.test();
+        mInteractor.doListen();
 
         // then
-        //testObserver.assertError(error);
+        verify(mTrainingManager).doListen();
     }
 
     @Test
-    public void doStopExerciseShouldDisposeSubscription() {
+    public void doSaveMeasurementShouldCallTrainingManager() {
         // given
-        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
-        Observable<IMeasurementService> observable = Mockito.mock(Observable.class);
-
-        doReturn(observable).when(mBluetoothExerciseService).startExercise();
-        //mInteractor.doStartExercise(mExercise);
+        Measurement measurement = MeasurementFactory.builder().build();
 
         // when
-        //mInteractor.doStopExercise();
+        mInteractor.doSaveMeasurement(measurement);
 
         // then
-        // TODO
+        verify(mTrainingManager).doSendMeasurement(measurement);
     }
-
-    @Test
-    public void doSaveMeasurementShouldCallApi() {
-        // given
-        Measurement measurement = Mockito.mock(Measurement.class);
-
-        Metric metric = Mockito.mock(Metric.class);
-        when(measurement.getMetric()).thenReturn(metric);
-        when(metric.getId()).thenReturn(0);
-
-        when(measurement.getExercise()).thenReturn(mExercise);
-
-        // when
-
-        // then
-    }
-
-    @Test
-    public void doListenImuShouldCallSensorService() {
-        // given
-        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
-        doReturn(sensorService).when(mBluetoothHelper).getMeasurementService();
-
-        Observable<byte[]> imuObservable = Observable.never();
-        doReturn(imuObservable).when(sensorService).getImuObservable();
-
-        // when
-        //mInteractor.doListenImu();
-
-        // then
-        //verify(sensorService).getImuObservable();
-    }
-
-    @Test
-    public void doListenEncoderShouldCallSensorService() {
-        // given
-        IMeasurementService sensorService = Mockito.mock(IMeasurementService.class);
-        doReturn(sensorService).when(mBluetoothHelper).getMeasurementService();
-
-        Observable<byte[]> encoderObservable = Observable.never();
-        doReturn(encoderObservable).when(sensorService).getEncoderObservable();
-
-        // when
-        //mInteractor.doListenEncoder();
-
-        // then
-        //verify(sensorService).getEncoderObservable();
-    }
-
 }

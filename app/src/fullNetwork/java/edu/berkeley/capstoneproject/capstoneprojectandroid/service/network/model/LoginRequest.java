@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Alex on 07/11/2017.
  */
 
-public class LoginRequest {
+public class LoginRequest extends BaseRequest {
 
     @SerializedName("email")
     @Expose

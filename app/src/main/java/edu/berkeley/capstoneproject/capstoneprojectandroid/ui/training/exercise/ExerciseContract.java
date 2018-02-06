@@ -1,6 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.scope.PerActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.IBaseInteractor;
@@ -23,7 +23,7 @@ public interface ExerciseContract {
         void onExerciseStopped();
 
         void onCreatingExercise();
-        void onStartingExercise();
+        void onPreparingExercise();
 
         void onStartRecording();
 
@@ -47,13 +47,13 @@ public interface ExerciseContract {
 
         Exercise getExercise();
 
-        Completable doStartExercise();
+        Completable doPrepareExercise();
 
         Completable doStartStreaming();
 
         Completable doStopExercise();
 
-        Flowable<Measurement> doListenMeasurements();
+        Flowable<Measurement> doListen();
 
         void doSaveMeasurement(Measurement measurement);
     }

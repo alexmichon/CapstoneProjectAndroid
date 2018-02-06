@@ -33,7 +33,7 @@ public class SplashInteractor extends BaseInteractor implements SplashContract.I
     }
 
     @Override
-    public Single<User> restoreAuthentication() {
+    public Single<User> doRestoreAuthentication() {
         return mAuthManager.restore();
     }
 }

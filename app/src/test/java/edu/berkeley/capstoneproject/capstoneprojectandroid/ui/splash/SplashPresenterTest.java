@@ -11,11 +11,11 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedulerProvider;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.TestScheduler;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -51,23 +51,29 @@ public class SplashPresenterTest {
     }
 
     @Test
-    public void onStartShouldCheckConnectivity() {
+    public void onStartShouldCheckNetwork() {
         // given
-        doReturn(Single.never()).when(mInteractor).doGetStoredAuthentication();
+        doReturn(Single.never()).when(mInteractor).doRestoreAuthentication();
+        doReturn(Single.never()).when(mInteractor).doCheckNetworkState();
 
         // when
         mPresenter.onStart();
 
         // then
-        verify(mPresenter).checkNetworkState();
+        verify(mInteractor).doCheckNetworkState();
     }
 
     @Test
-    public void onNetworkNotConnectedShouldUpdateView() {
+    public void onStartShouldRestoreAuthentication() {
+        // given
+        doReturn(Single.never()).when(mInteractor).doRestoreAuthentication();
+        doReturn(Single.never()).when(mInteractor).doCheckNetworkState();
+
         // when
+        mPresenter.onStart();
 
         // then
-        verify(mView).stop();
+        verify(mInteractor).doRestoreAuthentication();
     }
 
     @After

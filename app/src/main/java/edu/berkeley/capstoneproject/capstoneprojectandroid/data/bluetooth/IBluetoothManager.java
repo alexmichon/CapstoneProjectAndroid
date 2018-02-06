@@ -9,7 +9,9 @@ import io.reactivex.Observable;
  */
 
 public interface IBluetoothManager {
-    Observable<Rx2BleDevice> doScan();
+    Observable<Rx2BleDevice> doStartScanning();
+
+    Completable doStopScanning();
 
     Observable<Rx2BleDevice> doGetPairedDevices();
 

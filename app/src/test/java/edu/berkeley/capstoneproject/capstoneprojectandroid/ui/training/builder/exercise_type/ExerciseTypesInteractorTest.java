@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeManager;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.IExerciseTypeRepository;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.exercise_type.list.ExerciseTypesInteractor;
 
 import static org.mockito.Mockito.verify;
@@ -24,9 +23,6 @@ public class ExerciseTypesInteractorTest {
     @Mock
     private IExerciseTypeManager mExerciseTypeManager;
 
-    @Mock
-    private IExerciseTypeRepository mRepository;
-
     @Before
     public void setup() {
         mInteractor = new ExerciseTypesInteractor(mExerciseTypeManager);
@@ -38,6 +34,6 @@ public class ExerciseTypesInteractorTest {
         mInteractor.doLoadExerciseTypes();
 
         // then
-        verify(mRepository).query();
+        verify(mExerciseTypeManager).doGetExerciseTypes();
     }
 }

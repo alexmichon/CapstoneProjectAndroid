@@ -15,8 +15,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAc
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.DaggerAppComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.NetworkComponent;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.NetworkComponentFactory;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.SessionComponent;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.di.component.SessionComponentFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.ActivityModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseActivity;
@@ -33,7 +31,6 @@ public class CapstoneProjectAndroidApplication extends Application {
     private AppComponent mAppComponent;
     private BluetoothComponent mBluetoothComponent;
     private NetworkComponent mNetworkComponent;
-    private SessionComponent mSessionComponent;
 
     private AppModule mAppModule;
 
@@ -88,13 +85,6 @@ public class CapstoneProjectAndroidApplication extends Application {
         return mNetworkComponent;
     }
 
-    public SessionComponent getSessionComponent() {
-        if (mSessionComponent == null) {
-            mSessionComponent = createSessionComponent();
-        }
-        return mSessionComponent;
-    }
-
 
 
     protected AppModule createAppModule() {
@@ -107,7 +97,6 @@ public class CapstoneProjectAndroidApplication extends Application {
                 .appModule(getAppModule())
                 .bluetoothComponent(getBluetoothComponent())
                 .networkComponent(getNetworkComponent())
-                .sessionComponent(getSessionComponent())
                 .build();
     }
 
@@ -117,10 +106,6 @@ public class CapstoneProjectAndroidApplication extends Application {
 
     protected NetworkComponent createNetworkComponent() {
         return NetworkComponentFactory.create(this);
-    }
-
-    protected SessionComponent createSessionComponent() {
-        return SessionComponentFactory.create(this);
     }
 
     public ActivityComponent getActivityComponent(BaseActivity activity) {

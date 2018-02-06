@@ -6,9 +6,9 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor;
 
 public class SensorManager {
 
-    public static final int ID_ENCODER = 1;
-    public static final int ID_ACCELEROMETER = 2;
-    public static final int ID_GYROSCOPE = 3;
+    public static final short ID_ENCODER = 1;
+    public static final short ID_ACCELEROMETER = 2;
+    public static final short ID_GYROSCOPE = 3;
 
     private static final String NAME_ACCELEROMETER = "Accelerometer";
     private static final String NAME_GYROSCOPE = "Gyroscope";

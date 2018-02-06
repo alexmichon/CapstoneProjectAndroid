@@ -10,10 +10,11 @@ import io.reactivex.Single;
 public interface IAuthManager {
 
     User getCurrentUser();
+    void setCurrentUser(User user);
 
-    Single<User> login(String email, String password);
-    Single<User> register(String email, String password, String passwordConfirmation, String firstName, String lastName);
-    Completable logout();
+    Single<User> doLogin(String email, String password);
+    Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName);
+    Completable doLogout();
     Single<User> restore();
 
     void remember(boolean enabled);

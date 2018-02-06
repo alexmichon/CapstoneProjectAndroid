@@ -3,10 +3,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.metric;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-
 /**
  * Created by Alex on 17/12/2017.
  */

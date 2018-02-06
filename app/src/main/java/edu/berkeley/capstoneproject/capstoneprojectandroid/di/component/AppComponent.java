@@ -19,7 +19,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.di.module.AppModule;
  */
 
 @Singleton
-@Component(modules = {AppModule.class}, dependencies = {BluetoothComponent.class, NetworkComponent.class, SessionComponent.class})
+@Component(modules = {AppModule.class}, dependencies = {BluetoothComponent.class, NetworkComponent.class})
 public interface AppComponent {
 
     @Component.Builder
@@ -28,7 +28,6 @@ public interface AppComponent {
         Builder appModule(AppModule appModule);
         Builder bluetoothComponent(BluetoothComponent bluetoothComponent);
         Builder networkComponent(NetworkComponent networkComponent);
-        Builder sessionComponent(SessionComponent sessionComponent);
         AppComponent build();
     }
 

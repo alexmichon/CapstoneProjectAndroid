@@ -3,20 +3,14 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.splash;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authentication;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.GuestUser;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
-import io.reactivex.Single;
-import io.reactivex.SingleSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -99,7 +93,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
 
     protected Completable getAuthenticationCompletable() {
         //TODO Failed connection to server --> exit app
-        return getInteractor().restoreAuthentication()
+        return getInteractor().doRestoreAuthentication()
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {

@@ -8,30 +8,31 @@ public class AuthenticationFactory {
 
     private static Authentication mAdminAuth;
 
-    public static AuthenticationBuilder builder() {
-        return new AuthenticationBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static Authentication admin() {
         if (mAdminAuth == null) {
-            mAdminAuth = defaultBuilder()
+            mAdminAuth = builder()
                     .withUid("admin@admin.com")
                     .build();
         }
         return mAdminAuth;
     }
 
-    public static AuthenticationBuilder defaultBuilder() {
-        return new AuthenticationBuilder()
+    public static Authentication create() {
+        return new Builder()
                 .withAccessToken("access-token")
                 .withClient("client")
                 .withExpiry("expiry")
                 .withTokenType("token-type")
-                .withUid("uid");
+                .withUid("uid")
+                .build();
     }
 
 
-    public static class AuthenticationBuilder {
+    public static class Builder {
 
         private String mAccessToken;
         private String mClient;
@@ -39,31 +40,31 @@ public class AuthenticationFactory {
         private String mTokenType;
         private String mUid;
 
-        public AuthenticationBuilder() {
+        public Builder() {
 
         }
 
-        public AuthenticationBuilder withAccessToken(String accessToken) {
+        public Builder withAccessToken(String accessToken) {
             mAccessToken = accessToken;
             return this;
         }
 
-        public AuthenticationBuilder withClient(String client) {
+        public Builder withClient(String client) {
             mClient = client;
             return this;
         }
 
-        public AuthenticationBuilder withExpiry(String expiry) {
+        public Builder withExpiry(String expiry) {
             mExpiry = expiry;
             return this;
         }
 
-        public AuthenticationBuilder withTokenType(String tokenType) {
+        public Builder withTokenType(String tokenType) {
             mTokenType = tokenType;
             return this;
         }
 
-        public AuthenticationBuilder withUid(String uid) {
+        public Builder withUid(String uid) {
             mUid = uid;
             return this;
         }

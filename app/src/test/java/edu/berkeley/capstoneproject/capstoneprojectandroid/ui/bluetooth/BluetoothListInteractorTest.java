@@ -30,39 +30,37 @@ public class BluetoothListInteractorTest {
     private IBluetoothManager mBluetoothManager;
 
     @Mock
-    private IBluetoothHelper mBluetoothHelper;
-
-    @Mock
-    private IDeviceService mDeviceService;
-
-    @Mock
-    private IConnectionService mConnectionService;
-
-    @Mock
     private Rx2BleDevice mDevice;
 
     @Before
     public void setup() {
         mInteractor = new BluetoothListInteractor(mBluetoothManager);
-        when(mBluetoothHelper.getDeviceService()).thenReturn(mDeviceService);
-        when(mBluetoothHelper.getConnectionService()).thenReturn(mConnectionService);
     }
 
     @Test
-    public void doDiscoveryShouldCallRepository() {
+    public void doStartScanningShouldCallManager() {
         // when
-        mInteractor.doDiscovery();
+        mInteractor.doStartScanning();
 
         // then
-        verify(mDeviceService).getScannedDevices();
+        verify(mBluetoothManager).doStartScanning();
     }
 
     @Test
-    public void doLoadPairedDevicesShouldCallRepository() {
+    public void doStopScanningShouldCallManager() {
+        // when
+        mInteractor.doStopScanning();
+
+        // then
+        verify(mBluetoothManager).doStopScanning();
+    }
+
+    @Test
+    public void doLoadPairedDevicesShouldCallManager() {
         // when
         mInteractor.doLoadPairedDevices();
 
         // then
-        verify(mDeviceService).getPairedDevices();
+        verify(mBluetoothManager).doGetPairedDevices();
     }
 }

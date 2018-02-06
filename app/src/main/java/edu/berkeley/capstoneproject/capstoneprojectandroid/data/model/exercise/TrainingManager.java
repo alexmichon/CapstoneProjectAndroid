@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscription;
 
 import java.util.Map;
 
@@ -8,7 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.bytes.BytesDecoder;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
 import io.reactivex.BackpressureStrategy;
@@ -17,7 +19,6 @@ import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -34,17 +35,21 @@ public class TrainingManager implements ITrainingManager {
 
     private final IApiHelper mApiHelper;
     private final IBluetoothHelper mBluetoothHelper;
+    private final BytesDecoder mBytesDecoder;
 
     private Exercise mExercise;
     private ExerciseType mExerciseType;
 
-    private Disposable mExerciseDisposable;
+    private Subscription mListenSubscription;
+    private Subscription mImuSubscription;
+
     private IRxWebSocket mExerciseStream;
 
     @Inject
-    public TrainingManager(IApiHelper apiHelper, IBluetoothHelper bluetoothHelper) {
+    public TrainingManager(IApiHelper apiHelper, IBluetoothHelper bluetoothHelper, BytesDecoder decoder) {
         mApiHelper = apiHelper;
         mBluetoothHelper = bluetoothHelper;
+        mBytesDecoder = decoder;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class TrainingManager implements ITrainingManager {
 
     @Override
     public Completable doStartSensors() {
-        return mBluetoothHelper.getExerciseService().startExercise()
+        return mBluetoothHelper.getExerciseService().doStartExercise()
                 .flatMapCompletable(new Function<Map<String,Observable<byte[]>>, CompletableSource>() {
                     @Override
                     public CompletableSource apply(final Map<String, Observable<byte[]>> stringObservableMap) throws Exception {
@@ -83,12 +88,6 @@ public class TrainingManager implements ITrainingManager {
                             }
                         });
                     }
-                })
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        mExerciseDisposable = disposable;
-                    }
                 });
     }
 
@@ -97,8 +96,9 @@ public class TrainingManager implements ITrainingManager {
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                if (mExerciseDisposable != null) {
-                    mExerciseDisposable.dispose();
+                if (mListenSubscription != null) {
+                    mListenSubscription.cancel();
+                    mListenSubscription = null;
                 }
             }
         });
@@ -110,8 +110,19 @@ public class TrainingManager implements ITrainingManager {
     }
 
     @Override
-    public Flowable<Measurement> listen() {
-        return Flowable.merge(listenEncoder(), listenImu());
+    public Flowable<Measurement> doListen() {
+        return Flowable.merge(listenEncoder(), listenImu())
+                .doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(Subscription subscription) throws Exception {
+                        mListenSubscription = subscription;
+                    }
+                });
+    }
+
+    @Override
+    public boolean isListening() {
+        return mListenSubscription != null;
     }
 
     private Flowable<Measurement> listenEncoder() {
@@ -120,7 +131,7 @@ public class TrainingManager implements ITrainingManager {
                 .flatMap(new Function<byte[], Publisher<Measurement>>() {
                     @Override
                     public Publisher<Measurement> apply(byte[] bytes) throws Exception {
-                        return Flowable.fromIterable(Measurement.decodeEncoder(mExercise, bytes));
+                        return Flowable.fromIterable(mBytesDecoder.decodeEncoder(mExercise, bytes));
                     }
                 });
     }
@@ -131,7 +142,7 @@ public class TrainingManager implements ITrainingManager {
                 .flatMap(new Function<byte[], Publisher<Measurement>>() {
                     @Override
                     public Publisher<Measurement> apply(byte[] bytes) throws Exception {
-                        return Flowable.fromIterable(Measurement.decodeImu(mExercise, bytes));
+                        return Flowable.fromIterable(mBytesDecoder.decodeImu(mExercise, bytes));
                     }
                 });
     }

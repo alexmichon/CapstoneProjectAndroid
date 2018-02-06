@@ -8,5 +8,5 @@ import io.reactivex.Observable;
 
 public interface IExerciseTypeManager {
 
-    Observable<ExerciseType> loadExerciseTypes();
+    Observable<ExerciseType> doGetExerciseTypes();
 }

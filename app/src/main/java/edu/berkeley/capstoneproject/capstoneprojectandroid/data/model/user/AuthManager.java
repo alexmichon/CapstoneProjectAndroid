@@ -39,7 +39,7 @@ public class AuthManager implements IAuthManager {
     }
 
     @Override
-    public Single<User> login(String email, String password) {
+    public Single<User> doLogin(String email, String password) {
         return mApiHelper.getAuthService().doLogin(email, password).doOnSuccess(new Consumer<User>() {
             @Override
             public void accept(User user) throws Exception {
@@ -49,7 +49,7 @@ public class AuthManager implements IAuthManager {
     }
 
     @Override
-    public Single<User> register(String email, String password, String passwordConfirmation, String firstName, String lastName) {
+    public Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName) {
         return mApiHelper.getAuthService().doRegister(email, password, passwordConfirmation, firstName, lastName)
                 .doOnSuccess(new Consumer<User>() {
                     @Override
@@ -65,21 +65,27 @@ public class AuthManager implements IAuthManager {
     }
 
     @Override
-    public Completable logout() {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                mAuthInterceptor.setAuthentication(null);
-                mPreferencesHelper.removeAuthentication();
-                remember(false);
-                mCurrentUser = null;
-            }
-        });
+    public Completable doLogout() {
+        return mApiHelper.getAuthService().doLogout(mCurrentUser)
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mAuthInterceptor.setAuthentication(null);
+                        mPreferencesHelper.removeAuthentication();
+                        remember(false);
+                        mCurrentUser = null;
+                    }
+                });
     }
 
     @Override
     public User getCurrentUser() {
         return mCurrentUser;
+    }
+
+    @Override
+    public void setCurrentUser(User user) {
+        mCurrentUser = user;
     }
 
     @Override
@@ -103,7 +109,7 @@ public class AuthManager implements IAuthManager {
         });
     }
 
-    private void save(Authentication authentication) {
+    protected void save(Authentication authentication) {
         mPreferencesHelper.setAuthentication(authentication);
     }
 
@@ -118,7 +124,6 @@ public class AuthManager implements IAuthManager {
             });
         }
         else {
-            mPreferencesHelper.removeAuthentication();
             mAuthInterceptor.setListener(null);
         }
     }

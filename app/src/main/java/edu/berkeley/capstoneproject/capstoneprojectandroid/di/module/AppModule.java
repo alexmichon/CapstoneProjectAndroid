@@ -11,6 +11,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.Blueto
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.bytes.BytesDecoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseBuilderManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.TrainingManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeManager;
@@ -27,8 +28,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.IPreference
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.pref.PreferencesHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.ApplicationContext;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.PreferenceInfo;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.session.ISessionHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.session.SessionHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.AppConstants;
@@ -80,12 +79,6 @@ public class AppModule {
     @Singleton
     IPreferencesHelper providePreferencesHelper(PreferencesHelper preferencesHelper) {
         return preferencesHelper;
-    }
-
-    @Provides
-    @Singleton
-    ISessionHelper provideSessionHelper(SessionHelper sessionHelper) {
-        return sessionHelper;
     }
 
     @Provides

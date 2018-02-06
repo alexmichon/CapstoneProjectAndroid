@@ -23,7 +23,7 @@ public class ExerciseBuilderPresenter<V extends ExerciseBuilderContract.View, I 
     }
 
     @Override
-    public void selectExerciseType(ExerciseType exerciseType) {
+    public void onExerciseTypeSelect(ExerciseType exerciseType) {
         if (isViewAttached()) {
             getView().showLoading();
         }

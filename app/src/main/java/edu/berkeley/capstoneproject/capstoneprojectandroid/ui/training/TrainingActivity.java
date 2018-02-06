@@ -13,7 +13,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list.Blu
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.main.MainActivity;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.builder.ExerciseBuilderFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise.ExerciseFragment;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.components.exercise_result.ExerciseResultFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_result.TrainingExerciseResultFragment;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise_summary.ExerciseSummaryFragment;
 
@@ -101,14 +100,9 @@ public class TrainingActivity extends ToolbarActivity<TrainingContract.View, Tra
 
     @Override
     public void onBluetoothDeviceSelected() {
-        getPresenter().onDeviceSelect();
+        getPresenter().onBluetoothDeviceSelect();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getPresenter().onDestroy();
-    }
 
     @Override
     public void onExerciseSummaryStart() {

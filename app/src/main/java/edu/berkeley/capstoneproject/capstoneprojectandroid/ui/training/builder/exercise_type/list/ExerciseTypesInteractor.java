@@ -22,6 +22,6 @@ public class ExerciseTypesInteractor extends BaseInteractor implements ExerciseT
 
     @Override
     public Observable<ExerciseType> doLoadExerciseTypes() {
-        return mExerciseTypeManager.loadExerciseTypes();
+        return mExerciseTypeManager.doGetExerciseTypes();
     }
 }

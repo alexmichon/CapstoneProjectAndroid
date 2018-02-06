@@ -8,7 +8,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**
@@ -22,14 +24,34 @@ public class BluetoothManager implements IBluetoothManager {
 
     private Rx2BleDevice mDevice;
 
+    private Disposable mScanningDisposable;
+
     @Inject
     public BluetoothManager(IBluetoothHelper bluetoothHelper) {
         mBluetoothHelper = bluetoothHelper;
     }
 
     @Override
-    public Observable<Rx2BleDevice> doScan() {
-        return mBluetoothHelper.getDeviceService().getScannedDevices();
+    public Observable<Rx2BleDevice> doStartScanning() {
+        return mBluetoothHelper.getDeviceService().getScannedDevices()
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mScanningDisposable = disposable;
+                    }
+                });
+    }
+
+    @Override
+    public Completable doStopScanning() {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                if (mScanningDisposable != null) {
+                    mScanningDisposable.dispose();
+                }
+            }
+        });
     }
 
     @Override

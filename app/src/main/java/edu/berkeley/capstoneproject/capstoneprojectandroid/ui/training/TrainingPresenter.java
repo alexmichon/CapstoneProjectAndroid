@@ -32,17 +32,9 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
 
 
     @Override
-    public void onDeviceSelect() {
+    public void onBluetoothDeviceSelect() {
         if (isViewAttached()) {
             getView().showExerciseBuilderFragment();
-        }
-    }
-
-
-
-    public void onExerciseTypeSelect(ExerciseType exerciseType) {
-        if (isViewAttached()) {
-            getView().showExerciseSummaryFragment();
         }
     }
 
@@ -86,10 +78,5 @@ public class TrainingPresenter<V extends TrainingContract.View, I extends Traini
         if (isViewAttached()) {
             getView().showExerciseFragment();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        getInteractor().doClearExerciseSession();
     }
 }

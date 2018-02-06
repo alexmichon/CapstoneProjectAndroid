@@ -28,7 +28,9 @@ public interface BluetoothListContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Observable<Rx2BleDevice> doDiscovery();
+        Observable<Rx2BleDevice> doStartScanning();
+        Completable doStopScanning();
+
         Observable<Rx2BleDevice> doLoadPairedDevices();
 
         Completable doConnect(Rx2BleDevice device);
@@ -36,13 +38,14 @@ public interface BluetoothListContract {
         Completable doValidateDevice();
 
         void doSelectDevice(Rx2BleDevice device);
+
     }
 
     //@PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void onLoadPairedDevices();
         void onStartScanning();
-        void onStopScanning();;
+        void stopScanning();;
 
         void onDeviceSelected(Rx2BleDevice device);
     }

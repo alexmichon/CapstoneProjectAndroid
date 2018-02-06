@@ -12,10 +12,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.Authe
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.user.User;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.ApiEndPoint;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.LoginRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.LoginResponse;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.AuthenticationResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.RegisterRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.RegisterResponse;
 import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
@@ -40,90 +41,54 @@ public class AuthService extends NetworkService implements IAuthService {
 
     @Override
     public Single<User> doLogin(final String email, final String password) {
-        return Single.create(new SingleOnSubscribe<User>() {
-            @Override
-            public void subscribe(@NonNull final SingleEmitter<User> e) throws Exception {
-                Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_LOGIN)
-                        .addBodyParameter(new LoginRequest(email, password))
-                        .build()
-                        .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
-                            @Override
-                            public void onResponse(Response okHttpResponse, Object response) {
-                                LoginResponse loginResponse = (LoginResponse) response;
-                                loginResponse.setHeaders(okHttpResponse.headers().toMultimap());
-                                User user = loginResponse.getUser();
-                                e.onSuccess(user);
-                            }
-
-                            @Override
-                            public void onError(ANError anError) {
-                                e.onError(anError);
-                            }
-                        });
-            }
-        });
+        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_LOGIN)
+                .addJSONObjectBody(new LoginRequest(email, password).toJson())
+                .build()
+                .getObjectObservable(AuthenticationResponse.class)
+                .map(new Function<AuthenticationResponse, User>() {
+                    @Override
+                    public User apply(AuthenticationResponse authenticationResponse) throws Exception {
+                        return authenticationResponse.get();
+                    }
+                })
+                .singleOrError();
     }
 
     @Override
     public Single<User> doRegister(final String email, final String password, final String passwordConfirmation, final String firstName, final String lastName) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_REGISTER)
-                .addBodyParameter(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName))
+                .addJSONObjectBody(new RegisterRequest(email, password, passwordConfirmation, firstName, lastName).toJson())
                 .build()
-                .getObjectObservable(RegisterResponse.class)
+                .getObjectObservable(AuthenticationResponse.class)
                 .singleOrError()
-                .map(new Function<RegisterResponse, User>() {
+                .map(new Function<AuthenticationResponse, User>() {
                     @Override
-                    public User apply(@NonNull RegisterResponse registerResponse) throws Exception {
-                        return registerResponse.getUser();
+                    public User apply(@NonNull AuthenticationResponse registerResponse) throws Exception {
+                        return registerResponse.get();
                     }
                 });
     }
 
     @Override
     public Single<User> doRestoreAuthentication(final Authentication authentication) {
-        return Single.create(new SingleOnSubscribe<User>() {
-            @Override
-            public void subscribe(@NonNull final SingleEmitter<User> singleEmitter) throws Exception {
-                Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_VALIDATE_TOKEN)
-                        .setOkHttpClient(getOkHttpClient())
-                        .build()
-                        .getAsOkHttpResponseAndObject(LoginResponse.class, new OkHttpResponseAndParsedRequestListener() {
-                            @Override
-                            public void onResponse(Response response, Object o) {
-                                LoginResponse loginResponse = (LoginResponse) o;
-                                loginResponse.setHeaders(response.headers().toMultimap());
-                                User user = loginResponse.getUser();
-                                singleEmitter.onSuccess(user);
-                            }
-
-                            @Override
-                            public void onError(ANError anError) {
-                                singleEmitter.onError(anError);
-                            }
-                        });
-            }
-        });
+        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_VALIDATE_TOKEN)
+                .build()
+                .getObjectObservable(AuthenticationResponse.class)
+                .map(new Function<AuthenticationResponse, User>() {
+                    @Override
+                    public User apply(AuthenticationResponse authenticationResponse) throws Exception {
+                        return authenticationResponse.get();
+                    }
+                })
+                .singleOrError();
     }
 
     @Override
     public Completable doLogout(final User user) {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                Rx2AndroidNetworking.delete(ApiEndPoint.ENDPOINT_LOGOUT)
-                        .build()
-                        .getAsOkHttpResponse(new OkHttpResponseListener() {
-                            @Override
-                            public void onResponse(Response response) {
-
-                            }
-
-                            @Override
-                            public void onError(ANError anError) {
-                                Completable.error(anError);
-                            }
-                        });
-            }
-        });
+        return Rx2AndroidNetworking.delete(ApiEndPoint.ENDPOINT_LOGOUT)
+                .build()
+                .getObjectObservable(Object.class)
+                .singleOrError()
+                .toCompletable();
     }
 }

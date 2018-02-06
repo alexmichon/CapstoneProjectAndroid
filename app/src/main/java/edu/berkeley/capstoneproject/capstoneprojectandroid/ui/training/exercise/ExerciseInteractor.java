@@ -2,7 +2,7 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ITrainingManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
@@ -17,48 +17,11 @@ import io.reactivex.Flowable;
 public class ExerciseInteractor extends BaseInteractor implements ExerciseContract.Interactor {
 
     private final ITrainingManager mExerciseManager;
-    private final IMeasurementManager mMeasurementManager;
 
     @Inject
-    public ExerciseInteractor(ITrainingManager exerciseManager, IMeasurementManager measurementManager) {
+    public ExerciseInteractor(ITrainingManager exerciseManager) {
         mExerciseManager = exerciseManager;
-        mMeasurementManager = measurementManager;
     }
-
-    /*@Override
-    public Single<ExerciseGoal> doCreateExerciseGoal() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseGoalCreator()
-                .flatMap(new Function<ExerciseGoalCreator, SingleSource<? extends ExerciseGoal>>() {
-                    @Override
-                    public SingleSource<? extends ExerciseGoal> apply(@NonNull final ExerciseGoalCreator exerciseGoalCreator) throws Exception {
-                        return getDataManager().getSessionHelper().getTrainingService().getExercise()
-                                .flatMap(new Function<Exercise, SingleSource<? extends ExerciseGoal>>() {
-                                    @Override
-                                    public SingleSource<? extends ExerciseGoal> apply(@NonNull Exercise exercise) throws Exception {
-                                        return getDataManager().getApiHelper().getExerciseService().doCreateExerciseGoal(exercise, exerciseGoalCreator);
-                                    }
-                                });
-                    }
-                });
-    }*/
-
-
-    /*@Override
-    public Single<Exercise> doCreateExercise() {
-        return getDataManager().getSessionHelper().getExerciseCreatorService().getExerciseCreator()
-                .flatMap(new Function<ExerciseCreator, SingleSource<? extends Exercise>>() {
-                    @Override
-                    public SingleSource<? extends Exercise> apply(@NonNull ExerciseCreator exerciseCreator) throws Exception {
-                        return getDataManager().getApiHelper().getExerciseService().doCreateExercise(exerciseCreator);
-                    }
-                })
-                .flatMap(new Function<Exercise, SingleSource<? extends Exercise>>() {
-                    @Override
-                    public SingleSource<? extends Exercise> apply(@NonNull Exercise exercise) throws Exception {
-                        return getDataManager().getSessionHelper().getTrainingService().setExercise(exercise).toSingleDefault(exercise);
-                    }
-                });
-    }*/
 
     @Override
     public Exercise getExercise() {
@@ -66,7 +29,7 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
     }
 
     @Override
-    public Completable doStartExercise() {
+    public Completable doPrepareExercise() {
         return mExerciseManager.doStartSensors();
     }
 
@@ -84,8 +47,8 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
 
     @Override
-    public Flowable<Measurement> doListenMeasurements() {
-        return mExerciseManager.listen();
+    public Flowable<Measurement> doListen() {
+        return mExerciseManager.doListen();
     }
 
     @Override

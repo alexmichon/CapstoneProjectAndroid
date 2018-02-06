@@ -8,6 +8,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -17,8 +19,6 @@ import timber.log.Timber;
 
 public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I extends ExerciseTypesContract.Interactor>
         extends BasePresenter<V, I> implements ExerciseTypesContract.Presenter<V, I> {
-
-    private IExerciseTypeRepository mRepository;
 
     @Inject
     public ExerciseTypesPresenter(I interactor,
@@ -38,25 +38,32 @@ public class ExerciseTypesPresenter<V extends ExerciseTypesContract.View, I exte
             .doLoadExerciseTypes()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribeWith(new DisposableObserver<ExerciseType>() {
+                .doOnNext(new Consumer<ExerciseType>() {
                     @Override
-                    public void onNext(@NonNull ExerciseType exerciseType) {
+                    public void accept(ExerciseType exerciseType) throws Exception {
                         Timber.d("New exercise type found");
-                        getView().addExerciseType(exerciseType);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
                         if (isViewAttached()) {
-                            getView().onExerciseTypesError(e);
+                            getView().addExerciseType(exerciseType);
                         }
                     }
-
+                })
+                .doOnComplete(new Action() {
                     @Override
-                    public void onComplete() {
-                        getView().onExerciseTypesDoneLoading();
+                    public void run() throws Exception {
+                        if (isViewAttached()) {
+                            getView().onExerciseTypesDoneLoading();
+                        }
                     }
                 })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        if (isViewAttached()) {
+                            getView().onExerciseTypesError(throwable);
+                        }
+                    }
+                })
+                .subscribe()
         );
     }
 

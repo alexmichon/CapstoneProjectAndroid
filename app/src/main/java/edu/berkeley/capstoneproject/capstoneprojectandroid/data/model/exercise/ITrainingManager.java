@@ -1,10 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import io.reactivex.Completable;
-import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -25,7 +23,9 @@ public interface ITrainingManager {
     Completable doStopSensors();
     Completable doStopExercise();
 
-    Flowable<Measurement> listen();
+    Flowable<Measurement> doListen();
+
+    boolean isListening();
 
     Completable doStartStreaming();
     Completable doStopStreaming();

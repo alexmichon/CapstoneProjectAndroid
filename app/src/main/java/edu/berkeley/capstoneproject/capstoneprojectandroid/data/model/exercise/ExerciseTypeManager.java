@@ -21,7 +21,7 @@ public class ExerciseTypeManager implements IExerciseTypeManager {
     }
 
     @Override
-    public Observable<ExerciseType> loadExerciseTypes() {
+    public Observable<ExerciseType> doGetExerciseTypes() {
         return mApiHelper.getExerciseService().doGetExerciseTypes();
     }
 }

@@ -18,7 +18,7 @@ public interface RegisterContract extends AuthenticationFragmentContract {
     }
 
     interface Interactor extends AuthenticationFragmentContract.Interactor {
-        Single<User> doRegisterApiCall(String email, String password, String passwordConfirmation, String firstName, String lastName);
+        Single<User> doRegister(String email, String password, String passwordConfirmation, String firstName, String lastName);
     }
 
     @PerActivity

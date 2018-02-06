@@ -69,7 +69,7 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     @Override
     public void onPause() {
         super.onPause();
-        getPresenter().onStopScanning();
+        getPresenter().stopScanning();
         cleanPairedDevices();
         cleanScannedDevices();
     }

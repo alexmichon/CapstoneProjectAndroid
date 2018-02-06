@@ -4,8 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BasePresenter;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.ISchedulerProvider;
 import io.reactivex.Observable;
@@ -26,7 +25,6 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
 
     private boolean mRecording = false;
 
-    private Exercise mExercise;
 
     @Inject
     public ExercisePresenter(I interactor, ISchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -43,15 +41,16 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
         if (isViewAttached()) {
             getView().onExerciseCreated(getInteractor().getExercise());
         }
-        startExercise();
+
+        prepareExercise();
     }
 
-    protected void startExercise() {
+    protected void prepareExercise() {
         if (isViewAttached()) {
-            getView().onStartingExercise();
+            getView().onPreparingExercise();
         }
 
-        getCompositeDisposable().add(getInteractor().doStartExercise()
+        getCompositeDisposable().add(getInteractor().doPrepareExercise()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .doOnComplete(new Action() {
@@ -86,7 +85,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
                         Timber.d("Exercise started");
 
                         if (isViewAttached()) {
-                            getView().onExerciseReady(mExercise);
+                            getView().onExerciseReady(getInteractor().getExercise());
                         }
 
                         startListening();
@@ -107,7 +106,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
     }
 
     protected void startListening() {
-        getCompositeDisposable().add(getInteractor().doListenMeasurements()
+        getCompositeDisposable().add(getInteractor().doListen()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .doOnNext(new Consumer<Measurement>() {

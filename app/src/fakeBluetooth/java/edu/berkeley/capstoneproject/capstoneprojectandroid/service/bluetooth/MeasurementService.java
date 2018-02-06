@@ -12,7 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.BytesFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
@@ -32,11 +33,10 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     private static final int PERIOD_US = 1000000 / FREQUENCY_HZ;
 
     private final SensorManager mSensorManager;
-    private final Sensor mAccSensor, mGyrSensor, mRotationSensor;
+    private final Sensor mAccSensor, mGyrSensor;
 
     private float mAccValues[] = new float[3];
     private float mGyrValues[] = new float[3];
-    private float mAngleValues[] = new float[1];
 
     private long mAccStart, mGyrStart, mEncoderStart;
 
@@ -45,7 +45,6 @@ public class MeasurementService extends BaseService implements IMeasurementServi
         mSensorManager = sensorManager;
         mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyrSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
     }
 
     @Override
@@ -54,24 +53,18 @@ public class MeasurementService extends BaseService implements IMeasurementServi
             .flatMap(new Function<Timed<?>, ObservableSource<byte[]>>() {
                 @Override
                 public ObservableSource<byte[]> apply(@NonNull Timed<?> timed) throws Exception {
-                    return Observable.just(ByteBuffer.allocate(8)
-                            .order(ByteOrder.LITTLE_ENDIAN)
-                            .putInt((int) (timed.time() - mEncoderStart))
-                            .putFloat(4, (float) ((Math.atan2(mAccValues[2], mAccValues[0]) * 180 % 180 + 180) % 180))
-                            .array());
+                    return Observable.just(BytesFactory.encoderBuilder()
+                            .withTimestamp((int) (timed.time() - mEncoderStart))
+                            .withAngle((float) ((Math.atan2(mAccValues[2], mAccValues[0]) * 180 % 180 + 180) % 180))
+                            .build()
+                    );
                 }
             }).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-                        mSensorManager.registerListener(MeasurementService.this, mRotationSensor, PERIOD_US);
                         mEncoderStart = new Date().getTime();
                     }
-            }).doOnDispose(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        mSensorManager.unregisterListener(MeasurementService.this, mRotationSensor);
-                    }
-                });
+            });
     }
 
     @Override
@@ -89,15 +82,12 @@ public class MeasurementService extends BaseService implements IMeasurementServi
                 .flatMap(new Function<Timed<?>, ObservableSource<byte[]>>() {
                     @Override
                     public ObservableSource<byte[]> apply(@NonNull Timed<?> longTimed) throws Exception {
-                        return Observable.just(ByteBuffer.allocate(20)
-                                .order(ByteOrder.LITTLE_ENDIAN)
-                                .putShort(0, (short) edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_ACCELEROMETER)
-                                .putShort(2, Measurement.IMU_DATA_ACC)
-                                .putInt(4, (int) (longTimed.time() - mAccStart))
-                                .putFloat(8, mAccValues[0]/10)
-                                .putFloat(12, mAccValues[1]/10)
-                                .putFloat(16, mAccValues[2]/10)
-                                .array()
+                        return Observable.just(BytesFactory.accBuilder()
+                                .withTimestamp((int) (longTimed.time() - mGyrStart))
+                                .withX(mAccValues[0]/10)
+                                .withY(mAccValues[0]/10)
+                                .withZ(mAccValues[0]/10)
+                                .build()
                         );
                     }
                 }).doOnSubscribe(new Consumer<Disposable>() {
@@ -119,15 +109,12 @@ public class MeasurementService extends BaseService implements IMeasurementServi
                 .flatMap(new Function<Timed<?>, ObservableSource<byte[]>>() {
                     @Override
                     public ObservableSource<byte[]> apply(@NonNull Timed<?> longTimed) throws Exception {
-                        return Observable.just(ByteBuffer.allocate(20)
-                                .order(ByteOrder.LITTLE_ENDIAN)
-                                .putShort(0, (short) edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.SensorManager.ID_GYROSCOPE)
-                                .putShort(2, Measurement.IMU_DATA_GYR)
-                                .putInt(4, (int) (longTimed.time() - mGyrStart))
-                                .putFloat(8, mGyrValues[0]/10)
-                                .putFloat(12, mGyrValues[1]/10)
-                                .putFloat(16, mGyrValues[2]/10)
-                                .array()
+                        return Observable.just(BytesFactory.gyrBuilder()
+                                .withTimestamp((int) (longTimed.time() - mGyrStart))
+                                .withX(mGyrValues[0]/10)
+                                .withY(mGyrValues[1]/10)
+                                .withZ(mGyrValues[2]/10)
+                                .build()
                         );
                     }
                 }).doOnSubscribe(new Consumer<Disposable>() {
@@ -157,9 +144,6 @@ public class MeasurementService extends BaseService implements IMeasurementServi
                 break;
             case Sensor.TYPE_GYROSCOPE:
                 mGyrValues = sensorEvent.values;
-                break;
-            case Sensor.TYPE_ROTATION_VECTOR:
-                mAngleValues = sensorEvent.values;
                 break;
         }
     }

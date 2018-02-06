@@ -30,22 +30,19 @@ public interface TrainingContract {
     }
 
     interface Interactor extends IBaseInteractor {
-        Completable doClearExerciseSession();
     }
 
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V,I> {
-        void onDeviceSelect();
-        void onExerciseTypeSelect(ExerciseType exerciseType);
+        void onBluetoothDeviceSelect();
+
         void onExerciseSummaryStart();
         void onExerciseSummaryBack();
-        void onExerciseDone();
 
         void onExerciseBuilt();
+        void onExerciseDone();
+
         void onExerciseResultMenu();
-
         void onExerciseResultRetry();
-
-        void onDestroy();
     }
 }

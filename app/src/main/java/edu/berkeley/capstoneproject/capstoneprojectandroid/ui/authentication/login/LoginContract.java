@@ -15,7 +15,7 @@ public interface LoginContract extends AuthenticationFragmentContract {
     }
 
     interface Interactor extends AuthenticationFragmentContract.Interactor {
-        Single<User> doLoginCall(String email, String password);
+        Single<User> doLogin(String email, String password);
     }
 
     @PerActivity

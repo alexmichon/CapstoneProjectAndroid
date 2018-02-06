@@ -29,7 +29,7 @@ public interface SplashContract {
     interface Interactor extends IBaseInteractor {
 
         Single<NetworkInfo> doCheckNetworkState();
-        Single<User> restoreAuthentication();
+        Single<User> doRestoreAuthentication();
     }
 
     @PerActivity
