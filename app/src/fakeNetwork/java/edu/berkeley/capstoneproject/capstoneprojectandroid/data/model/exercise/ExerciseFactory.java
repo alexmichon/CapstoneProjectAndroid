@@ -25,17 +25,19 @@ public class ExerciseFactory {
     public static class Builder {
 
         private int mExerciseTypeId;
+        private int mDuration;
 
         public Builder() {
 
         }
 
         public Builder(Exercise.Builder builder) {
-            mExerciseTypeId = builder.getExerciseTypeId();
+            withExerciseType(builder.getExerciseType());
         }
 
         public Builder withExerciseType(ExerciseType exerciseType) {
             mExerciseTypeId = exerciseType.getId();
+            mDuration = exerciseType.getDuration();
             return this;
         }
 
@@ -44,8 +46,14 @@ public class ExerciseFactory {
             return this;
         }
 
+        public Builder withDuration(int duration) {
+            mDuration = duration;
+            return this;
+        }
+
         public Exercise build() {
             Exercise exercise = new Exercise(ID++, mExerciseTypeId);
+            exercise.setDuration(mDuration);
             return exercise;
         }
     }

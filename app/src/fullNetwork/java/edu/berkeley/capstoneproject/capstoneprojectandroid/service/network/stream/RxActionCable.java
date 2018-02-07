@@ -1,4 +1,4 @@
-package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
+package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
@@ -26,7 +25,7 @@ import timber.log.Timber;
  * Created by Alex on 16/01/2018.
  */
 
-public class RxActionCable implements IRxWebSocket {
+public class RxActionCable implements IStream {
 
     private static final int NORMAL_CLOSURE = 1000;
     private static final int GOING_AWAY = 1001;
@@ -134,16 +133,18 @@ public class RxActionCable implements IRxWebSocket {
     }
 
     @Override
-    public void send(final String data) {
+    public void send(final String ...data) {
         JSONObject json = null;
-        try {
-            json = new JSONObject()
-                    .put("command", COMMAND_MESSAGE)
-                    .put("identifier", getIdentifier())
-                    .put("data", data);
-            mWebSocket.send(json.toString());
-        } catch (JSONException e) {
-            Timber.w(e);
+        for (String d: data) {
+            try {
+                json = new JSONObject()
+                        .put("command", COMMAND_MESSAGE)
+                        .put("identifier", getIdentifier())
+                        .put("data", d);
+                mWebSocket.send(json.toString());
+            } catch (JSONException e) {
+                Timber.w(e);
+            }
         }
     }
 

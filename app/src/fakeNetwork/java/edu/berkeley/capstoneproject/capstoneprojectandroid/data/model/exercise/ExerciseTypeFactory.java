@@ -14,6 +14,8 @@ public class ExerciseTypeFactory {
         return new Builder()
                 .withName("Test Exercise Type")
                 .withDescription("This is a test exercise type")
+                .withDuration(10)
+                .withVideoUrl("Iu1qa8N2ID0")
                 .build();
     }
 
@@ -21,6 +23,10 @@ public class ExerciseTypeFactory {
 
         private String mName;
         private String mDescription;
+
+        private int mDuration;
+
+        private String mVideoUrl;
 
         public Builder withName(String name) {
             mName = name;
@@ -32,8 +38,22 @@ public class ExerciseTypeFactory {
             return this;
         }
 
+        public Builder withDuration(int duration) {
+            mDuration = duration;
+            return this;
+        }
+
+        public Builder withVideoUrl(String videoUrl) {
+            mVideoUrl = videoUrl;
+            return this;
+        }
+
         public ExerciseType build() {
             ExerciseType exerciseType = new ExerciseType(ID++, mName, mDescription);
+
+            exerciseType.setDuration(mDuration);
+            exerciseType.setYoutubeVideo(mVideoUrl);
+
             return exerciseType;
         }
     }

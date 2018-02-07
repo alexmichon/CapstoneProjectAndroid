@@ -61,8 +61,8 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         getPresenter().onStartScanning();
     }
 

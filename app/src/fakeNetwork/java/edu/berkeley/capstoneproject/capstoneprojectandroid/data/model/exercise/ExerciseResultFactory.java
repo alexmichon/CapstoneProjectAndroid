@@ -15,6 +15,18 @@ public class ExerciseResultFactory {
         return new Builder();
     }
 
+    public static ExerciseResult create() {
+        return builder()
+                .withMetricResults(MetricResultFactory.createList(5))
+                .build();
+    }
+
+    public static ExerciseResult fromExerciseGoal(ExerciseGoal exerciseGoal) {
+        return builder()
+                .withMetricResults(MetricResultFactory.fromMetricGoals(exerciseGoal.getMetricGoals()))
+                .build();
+    }
+
     public static class Builder {
 
         private List<MetricResult> mMetricResults = new ArrayList<>();

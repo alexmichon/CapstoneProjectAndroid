@@ -19,9 +19,9 @@ public class Gyroscope extends Sensor {
     public Gyroscope(int id, String name) {
         super(id, name);
         setMetrics(new Metric[] {
-                new Metric(this, ID_GYR_X, NAME_GYR_X),
-                new Metric(this, ID_GYR_Y, NAME_GYR_Y),
-                new Metric(this, ID_GYR_Z, NAME_GYR_Z)
+                new Metric(ID_GYR_X, NAME_GYR_X, this),
+                new Metric(ID_GYR_Y, NAME_GYR_Y, this),
+                new Metric(ID_GYR_Z, NAME_GYR_Z, this)
         });
     }
 }

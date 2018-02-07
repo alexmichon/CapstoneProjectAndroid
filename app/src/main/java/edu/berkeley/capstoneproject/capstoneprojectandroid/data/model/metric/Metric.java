@@ -8,26 +8,45 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.sensor.Sen
 
 public class Metric {
 
+    private final int mID;
+
     private final Sensor mSensor;
     private final String mName;
 
-    private final int mID;
+    private float mMin;
+    private float mMax;
 
-    public Metric(Sensor sensor, int id, String name) {
-        mSensor = sensor;
+    public Metric(int id, String name, Sensor sensor) {
         mID = id;
         mName = name;
+        mSensor = sensor;
     }
 
-    public Sensor getSensor() {
-        return mSensor;
+    public int getId() {
+        return mID;
     }
 
     public String getName() {
         return mName;
     }
 
-    public int getId() {
-        return mID;
+    public Sensor getSensor() {
+        return mSensor;
+    }
+
+    public float getMin() {
+        return mMin;
+    }
+
+    public void setMin(float min) {
+        mMin = min;
+    }
+
+    public float getMax() {
+        return mMax;
+    }
+
+    public void setMax(float max) {
+        mMax = max;
     }
 }

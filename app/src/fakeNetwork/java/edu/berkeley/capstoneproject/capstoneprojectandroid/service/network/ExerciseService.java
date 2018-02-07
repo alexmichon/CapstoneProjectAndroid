@@ -4,6 +4,8 @@ import android.content.Context;
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseGoalFactory;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseResultFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseFactory;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseTypeFactory;
@@ -13,7 +15,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.E
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ExerciseType;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.di.qualifier.ApplicationContext;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.ExerciseStream;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IExerciseStream;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -39,7 +43,7 @@ public class ExerciseService implements IExerciseService {
 
     @Override
     public Completable doStopExercise(Exercise exercise) {
-        return null;
+        return Completable.complete();
     }
 
     @Override
@@ -49,7 +53,7 @@ public class ExerciseService implements IExerciseService {
 
     @Override
     public Single<ExerciseResult> doGetExerciseResult(Exercise exercise) {
-        return Single.never();
+        return Single.just(ExerciseResultFactory.fromExerciseGoal(exercise.getExerciseGoal()));
     }
 
     @Override
@@ -60,17 +64,19 @@ public class ExerciseService implements IExerciseService {
     }
 
     @Override
-    public IRxWebSocket doStartStreaming(Exercise exercise) {
-        return null;
-    }
-
-    @Override
-    public void doSendMeasurement(IRxWebSocket stream, Measurement measurement) {
-
-    }
-
-    @Override
     public Single<ExerciseGoal> doGetExerciseGoal(Exercise exercise) {
-        return null;
+        return Single.just(
+                ExerciseGoalFactory.create(exercise)
+        );
     }
+
+
+
+
+
+    @Override
+    public IExerciseStream getExerciseStreaming(Exercise exercise) {
+        return new ExerciseStream(exercise);
+    }
+
 }

@@ -42,21 +42,7 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
 
     @Override
     public void onStart() {
-        getCompositeDisposable().add(
-                getTasks()
-                .subscribe(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        onStartDone();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Timber.e(throwable);
-                        onStartDone();
-                    }
-                })
-        );
+        checkPermissions();
     }
 
     protected Completable getTasks() {
@@ -129,6 +115,41 @@ public class SplashPresenter<V extends SplashContract.View, I extends SplashCont
                 getView().moveToMainActivity();
             }
         }
+    }
+
+
+    protected void checkPermissions() {
+        if (isViewAttached()) {
+            getView().checkPermissions();
+        }
+    }
+
+    @Override
+    public void onPermissionResult(String permission, int result) {
+        if (result != 1) {
+            if (isViewAttached()) {
+                getView().stop();
+            }
+        }
+    }
+
+    @Override
+    public void onPermissionCheckDone() {
+        getCompositeDisposable().add(
+                getTasks()
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                onStartDone();
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Timber.e(throwable);
+                                onStartDone();
+                            }
+                        })
+        );
     }
 
 

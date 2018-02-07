@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import io.reactivex.Single;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Alex on 30/12/2017.
@@ -39,6 +40,12 @@ public class ExerciseBuilderManager implements IExerciseBuilderManager {
 
     @Override
     public Single<Exercise> doCreate() {
-        return mApiHelper.getExerciseService().doCreateExercise(mExerciseBuilder);
+        return mApiHelper.getExerciseService().doCreateExercise(mExerciseBuilder)
+                .doOnSuccess(new Consumer<Exercise>() {
+                    @Override
+                    public void accept(Exercise exercise) throws Exception {
+                        exercise.setExerciseType(mExerciseBuilder.getExerciseType());
+                    }
+                });
     }
 }

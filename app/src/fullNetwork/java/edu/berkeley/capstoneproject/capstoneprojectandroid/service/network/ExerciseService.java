@@ -2,7 +2,6 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.service.network;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
-import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,7 +20,9 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ExerciseTypeResponse;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.MeasurementRequest;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.model.ObjectRequest;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.ExerciseStream;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IExerciseStream;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.ApiConstants;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -31,7 +32,6 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -92,20 +92,6 @@ public class ExerciseService extends NetworkService implements IExerciseService 
     }
 
     @Override
-    public IRxWebSocket doStartStreaming(final Exercise exercise) {
-        // TODO Move to other network service
-        return new RxActionCable(getOkHttpClient(), new Request.Builder()
-                .url(ApiConstants.WEBSOCKET_URL + "?exercise_id=" + exercise.getId())
-                .build(), "ExerciseChannel" , "\"exercise_id\":" + exercise.getId());
-    }
-
-    @Override
-    public void doSendMeasurement(IRxWebSocket stream, Measurement measurement) {
-        // TODO Move to other network service
-        stream.send(new MeasurementRequest(measurement).toJson().toString());
-    }
-
-    @Override
     public Single<ExerciseGoal> doGetExerciseGoal(Exercise exercise) {
         return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_EXERCISE_GOAL)
                 .addPathParameter("exercise_id", String.valueOf(exercise.getId()))
@@ -154,5 +140,18 @@ public class ExerciseService extends NetworkService implements IExerciseService 
                         });
                     }
                 });
+    }
+
+
+
+
+
+    @Override
+    public IExerciseStream getExerciseStreaming(final Exercise exercise) {
+        // TODO Move to other network service
+        return new ExerciseStream(getOkHttpClient(), new Request.Builder()
+                .url(ApiConstants.WEBSOCKET_URL + "?exercise_id=" + exercise.getId())
+                .build(),
+                exercise);
     }
 }

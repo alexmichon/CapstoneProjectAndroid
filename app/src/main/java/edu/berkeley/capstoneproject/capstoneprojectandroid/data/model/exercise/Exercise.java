@@ -24,6 +24,9 @@ public class Exercise implements Parcelable {
     private final int mId;
     private final int mExerciseTypeId;
 
+    private ExerciseGoal mExerciseGoal;
+    private ExerciseType mExerciseType;
+
     private String mName;
     private String mExerciseTypeName;
 
@@ -135,12 +138,29 @@ public class Exercise implements Parcelable {
         mName = name;
     }
 
+
+    public ExerciseType getExerciseType() {
+        return mExerciseType;
+    }
+
+    public void setExerciseType(ExerciseType exerciseType) {
+        mExerciseType = exerciseType;
+    }
+
     public String getExerciseTypeName() {
         return mExerciseTypeName;
     }
 
     public void setExerciseTypeName(String exerciseTypeName) {
         mExerciseTypeName = exerciseTypeName;
+    }
+
+    public ExerciseGoal getExerciseGoal() {
+        return mExerciseGoal;
+    }
+
+    public void setExerciseGoal(ExerciseGoal exerciseGoal) {
+        mExerciseGoal = exerciseGoal;
     }
 
 
@@ -179,20 +199,15 @@ public class Exercise implements Parcelable {
         private int mId;
         private String mName;
 
-        private int mExerciseTypeId;
+        private ExerciseType mExerciseType;
 
         public Builder withExerciseType(ExerciseType exerciseType) {
-            mExerciseTypeId = exerciseType.getId();
+            mExerciseType = exerciseType;
             return this;
         }
 
-        public Builder withExerciseTypeId(int exerciseTypeId) {
-            mExerciseTypeId = exerciseTypeId;
-            return this;
-        }
-
-        public int getExerciseTypeId() {
-            return mExerciseTypeId;
+        public ExerciseType getExerciseType() {
+            return mExerciseType;
         }
 
         public Builder withName(String name) {
@@ -205,7 +220,7 @@ public class Exercise implements Parcelable {
         }
 
         public Exercise build() {
-            Exercise exercise = new Exercise(mId, mExerciseTypeId, mName);
+            Exercise exercise = new Exercise(mId, mExerciseType, mName);
             return exercise;
         }
     }

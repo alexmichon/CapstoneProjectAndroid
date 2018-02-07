@@ -15,7 +15,7 @@ public class Encoder extends Sensor {
     public Encoder(int id, String name) {
         super(id, name);
         setMetrics(new Metric[] {
-                new Metric(this, ID_ANGLE, NAME_ANGLE)
+                new Metric(ID_ANGLE, NAME_ANGLE, this)
         });
     }
 }

@@ -6,9 +6,9 @@ import io.reactivex.Completable;
  * Created by Alex on 16/01/2018.
  */
 
-public interface IRxWebSocket {
+public interface IStream {
 
     Completable connect();
     Completable disconnect();
-    void send(String string);
+    void send(String ...string);
 }

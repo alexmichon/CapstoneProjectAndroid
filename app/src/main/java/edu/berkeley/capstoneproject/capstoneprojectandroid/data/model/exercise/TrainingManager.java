@@ -12,7 +12,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluet
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.bytes.BytesDecoder;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IExerciseStream;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
@@ -43,7 +44,7 @@ public class TrainingManager implements ITrainingManager {
     private Subscription mListenSubscription;
     private Subscription mImuSubscription;
 
-    private IRxWebSocket mExerciseStream;
+    private IExerciseStream mExerciseStream;
 
     @Inject
     public TrainingManager(IApiHelper apiHelper, IBluetoothHelper bluetoothHelper, BytesDecoder decoder) {
@@ -149,7 +150,7 @@ public class TrainingManager implements ITrainingManager {
 
     @Override
     public Completable doStartStreaming() {
-        mExerciseStream = mApiHelper.getExerciseService().doStartStreaming(mExercise);
+        mExerciseStream = mApiHelper.getExerciseService().getExerciseStreaming(mExercise);
         return mExerciseStream.connect();
     }
 
@@ -161,13 +162,19 @@ public class TrainingManager implements ITrainingManager {
     @Override
     public void doSendMeasurement(final Measurement measurement) {
         if (mExerciseStream != null) {
-            mApiHelper.getExerciseService().doSendMeasurement(mExerciseStream, measurement);
+            mExerciseStream.doSendMeasurement(measurement);
         }
     }
 
     @Override
     public Single<ExerciseGoal> doGetExerciseGoal() {
-        return mApiHelper.getExerciseService().doGetExerciseGoal(mExercise);
+        return mApiHelper.getExerciseService().doGetExerciseGoal(mExercise)
+                .doOnSuccess(new Consumer<ExerciseGoal>() {
+                    @Override
+                    public void accept(ExerciseGoal exerciseGoal) throws Exception {
+                        mExercise.setExerciseGoal(exerciseGoal);
+                    }
+                });
     }
 
     @Override

@@ -42,7 +42,9 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                 .subscribe(new Consumer<Rx2BleDevice>() {
                     @Override
                     public void accept(Rx2BleDevice device) throws Exception {
-                        getView().addPairedDevice(device);
+                        if (isViewAttached()) {
+                            getView().addPairedDevice(device);
+                        }
                     }
                 })
         );
@@ -54,7 +56,9 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
         // TODO Check Bluetooth status and prompt if disabled
 
-        getView().showScanningProgress();
+        if (isViewAttached()) {
+            getView().showScanningProgress();
+        }
 
         getCompositeDisposable().add(getInteractor().doStartScanning()
                 .subscribeOn(getSchedulerProvider().io())
@@ -70,21 +74,27 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
                     @Override
                     public void accept(Rx2BleDevice rx2BleDevice) throws Exception {
                         Timber.d("New device");
-                        getView().addScannedDevice(rx2BleDevice);
+                        if (isViewAttached()) {
+                            getView().addScannedDevice(rx2BleDevice);
+                        }
                     }
                 }).doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
                         Timber.d("Scan completed");
-                        getView().hideScanningProgress();
+                        if (isViewAttached()) {
+                            getView().hideScanningProgress();
+                        }
                     }
                 })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Timber.e(throwable, "Scanning error");
-                        getView().hideScanningProgress();
-                        getView().showError("Scanning error");
+                        if (isViewAttached()) {
+                            getView().hideScanningProgress();
+                            getView().showError("Scanning error");
+                        }
                     }
                 })
                 .subscribe()

@@ -19,9 +19,9 @@ public class Accelerometer extends Sensor {
     public Accelerometer(int id, String name) {
         super(id, name);
         setMetrics(new Metric[] {
-                new Metric(this, ID_ACC_X, NAME_ACC_X),
-                new Metric(this, ID_ACC_Y, NAME_ACC_Y),
-                new Metric(this, ID_ACC_Z, NAME_ACC_Z)
+                new Metric(ID_ACC_X, NAME_ACC_X, this),
+                new Metric(ID_ACC_Y, NAME_ACC_Y, this),
+                new Metric(ID_ACC_Z, NAME_ACC_Z, this)
         });
     }
 }

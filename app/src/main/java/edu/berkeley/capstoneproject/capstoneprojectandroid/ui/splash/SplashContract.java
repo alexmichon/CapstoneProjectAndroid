@@ -23,6 +23,9 @@ public interface SplashContract {
         void done();
 
         void moveToAuthenticationActivity(Authentication authentication);
+
+        void checkPermissions();
+
         void moveToMainActivity();
     }
 
@@ -35,5 +38,9 @@ public interface SplashContract {
     @PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
         void onStart();
+
+        void onPermissionResult(String permission, int result);
+
+        void onPermissionCheckDone();
     }
 }

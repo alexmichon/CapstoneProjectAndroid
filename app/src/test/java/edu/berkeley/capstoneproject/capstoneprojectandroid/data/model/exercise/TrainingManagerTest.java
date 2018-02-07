@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,13 +18,10 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measuremen
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMeasurementService;
-import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IRxWebSocket;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -176,14 +172,14 @@ public class TrainingManagerTest {
         Exercise exercise = ExerciseFactory.create();
         mTrainingManager.setCurrentExercise(exercise);
 
-        IRxWebSocket socket = Mockito.mock(IRxWebSocket.class);
-        doReturn(socket).when(mNetExerciseService).doStartStreaming(exercise);
+        IStream socket = Mockito.mock(IStream.class);
+        doReturn(socket).when(mNetExerciseService).doGetStreaming(exercise);
 
         // when
         mTrainingManager.doStartStreaming();
 
         // then
-        verify(mNetExerciseService).doStartStreaming(exercise);
+        verify(mNetExerciseService).doGetStreaming(exercise);
         verify(socket).connect();
     }
 
@@ -196,8 +192,8 @@ public class TrainingManagerTest {
         Measurement measurement = MeasurementFactory.builder()
                 .build();
 
-        IRxWebSocket socket = Mockito.mock(IRxWebSocket.class);
-        doReturn(socket).when(mNetExerciseService).doStartStreaming(exercise);
+        IStream socket = Mockito.mock(IStream.class);
+        doReturn(socket).when(mNetExerciseService).doGetStreaming(exercise);
         mTrainingManager.doStartStreaming();
 
         // when
@@ -213,8 +209,8 @@ public class TrainingManagerTest {
         Exercise exercise = ExerciseFactory.create();
         mTrainingManager.setCurrentExercise(exercise);
 
-        IRxWebSocket socket = Mockito.mock(IRxWebSocket.class);
-        doReturn(socket).when(mNetExerciseService).doStartStreaming(exercise);
+        IStream socket = Mockito.mock(IStream.class);
+        doReturn(socket).when(mNetExerciseService).doGetStreaming(exercise);
         mTrainingManager.doStartStreaming();
 
         // when
