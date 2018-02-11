@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.convert.RxObservableConverter;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
@@ -50,10 +51,10 @@ public class Rx2BleConnection {
 
     public Observable<Observable<byte[]>> setupNotification(UUID uuid, NotificationSetupMode setupMode) {
         final rx.Observable<rx.Observable<byte[]>> observable = mConnection.setupNotification(uuid, setupMode);
-        return RxObservableConverter.convert(observable).map(new Function<rx.Observable<byte[]>, Observable<byte[]>>() {
+        return RxObservableConverter.convert(observable).flatMap(new Function<rx.Observable<byte[]>, ObservableSource<Observable<byte[]>>>() {
             @Override
-            public Observable<byte[]> apply(@NonNull rx.Observable<byte[]> observable) throws Exception {
-                return RxObservableConverter.convert(observable);
+            public ObservableSource<Observable<byte[]>> apply(rx.Observable<byte[]> observable) throws Exception {
+                return Observable.just(RxObservableConverter.convert(observable));
             }
         });
     }

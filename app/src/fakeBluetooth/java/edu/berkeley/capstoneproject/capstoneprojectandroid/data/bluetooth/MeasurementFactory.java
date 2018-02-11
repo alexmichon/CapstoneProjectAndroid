@@ -20,6 +20,7 @@ public class MeasurementFactory {
         private Metric mMetric;
         private long mTimestamp;
         private float mValue;
+        private int mBatch;
 
         public Builder withExercise(Exercise exercise) {
             mExercise = exercise;
@@ -41,8 +42,13 @@ public class MeasurementFactory {
             return this;
         }
 
+        public Builder withBatch(int batch) {
+            mBatch = batch;
+            return this;
+        }
+
         public Measurement build() {
-            Measurement measurement = new Measurement(mExercise, mMetric, mTimestamp, mValue);
+            Measurement measurement = new Measurement(mExercise, mMetric, mBatch, mTimestamp, mValue);
             return measurement;
         }
     }

@@ -10,9 +10,9 @@ import javax.inject.Inject;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -38,18 +38,29 @@ public class ExerciseService extends BaseService implements IExerciseService {
     }
 
     @Override
-    public Single<Map<String, Observable<byte[]>>> startExercise() {
+    public Observable<Map<String, Observable<byte[]>>> doStartExercise() {
         // TODO
         Observable<Observable<byte[]>> encoderObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_ENCODER, NotificationSetupMode.DEFAULT);
+        //return mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);
+        //Observable<Observable<byte[]>> encoderObservableObservable  = Observable.just(Observable.<byte[]>never());
         Observable<Observable<byte[]>> imuObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);
         return Observable.zip(encoderObservableObservable, imuObservableObservable, new BiFunction<Observable<byte[]>, Observable<byte[]>, Map<String, Observable<byte[]>>>() {
             @Override
-            public Map<String, Observable<byte[]>> apply(@NonNull Observable<byte[]> encoderObservable, @NonNull Observable<byte[]> imuObservable) throws Exception {
+            public Map<String, Observable<byte[]>> apply(Observable<byte[]> observable, Observable<byte[]> observable2) throws Exception {
                 Map<String, Observable<byte[]>> map = new HashMap<String, Observable<byte[]>>();
-                map.put(IMU_OBSERVABLE, imuObservable);
-                map.put(ENCODER_OBSERVABLE, encoderObservable);
+                map.put(IMU_OBSERVABLE, observable);
+                //map.put(ENCODER_OBSERVABLE, encoderObservable);
                 return map;
             }
-        }).singleOrError();
+
+            //return imuObservableObservable.map(new Function<Observable<byte[]>, Map<String, Observable<byte[]>>>() {
+            /*@Override
+            public Map<String, Observable<byte[]>> apply(Observable<byte[]> observable) throws Exception {
+                Map<String, Observable<byte[]>> map = new HashMap<String, Observable<byte[]>>();
+                map.put(IMU_OBSERVABLE, observable);
+                //map.put(ENCODER_OBSERVABLE, encoderObservable);
+                return map;
+            }*/
+        });
     }
 }

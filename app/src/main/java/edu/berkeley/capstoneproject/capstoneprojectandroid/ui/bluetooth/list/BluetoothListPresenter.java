@@ -56,6 +56,8 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
 
         // TODO Check Bluetooth status and prompt if disabled
 
+        getInteractor().doStopScanning();
+
         if (isViewAttached()) {
             getView().showScanningProgress();
         }
@@ -110,6 +112,18 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
         getInteractor().doStopScanning()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                })
                 .subscribe();
     }
 

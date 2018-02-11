@@ -18,19 +18,24 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.BytesUtils;
 
 public class Measurement {
 
+    private final int mBatch;
+
     private final long mTimestamp;
     private final float mValue;
 
     private final Metric mMetric;
+    private final int mMetricId;
 
     private final Exercise mExercise;
     private int mId;
 
-    public Measurement(Exercise exercise, Metric metric, long timestamp, float value) {
+    public Measurement(Exercise exercise, Metric metric, int batch, long timestamp, float value) {
         mMetric = metric;
+        mMetricId = metric.getId();
         mTimestamp = timestamp;
         mValue = value;
         mExercise = exercise;
+        mBatch = batch;
         //exercise.addMeasurement(this);
     }
 
@@ -44,6 +49,10 @@ public class Measurement {
         return mMetric;
     }
 
+    public int getMetricId() {
+        return mMetricId;
+    }
+
     public Exercise getExercise() {
         return mExercise;
     }
@@ -54,5 +63,9 @@ public class Measurement {
 
     public int getId() {
         return mId;
+    }
+
+    public int getBatch() {
+        return mBatch;
     }
 }

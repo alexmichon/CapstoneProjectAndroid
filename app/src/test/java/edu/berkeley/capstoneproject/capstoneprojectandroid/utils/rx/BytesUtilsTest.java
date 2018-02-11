@@ -12,13 +12,27 @@ import static junit.framework.Assert.assertEquals;
 
 public class BytesUtilsTest {
 
+
+    @Test
+    public void bytesToInt8ShouldReturnCorrectValue() {
+        // given
+        byte bytes[] = {(byte) 0x01};
+
+        // when
+        int value = BytesUtils.bytesToUInt8(bytes);
+
+        // then
+        assertEquals(1, value);
+    }
+
+
     @Test
     public void bytesToInt16ShouldReturnCorrectValue() {
         // given
         byte bytes[] = {(byte) 0x01, (byte) 0x00};
 
         // when
-        int value = BytesUtils.bytesToInt16(bytes);
+        int value = BytesUtils.bytesToUInt16(bytes);
 
         // then
         assertEquals(1, value);
@@ -30,7 +44,7 @@ public class BytesUtilsTest {
         byte bytes[] = {(byte) 0xFF, (byte) 0xFF};
 
         // when
-        short value = BytesUtils.bytesToInt16(bytes);
+        short value = BytesUtils.bytesToUInt16(bytes);
 
         // then
         assertEquals(-1, value);
@@ -42,7 +56,7 @@ public class BytesUtilsTest {
         byte bytes[] = {(byte) 0x00, (byte) 0x01, (byte) 0x00};
 
         // when
-        short value = BytesUtils.bytesToInt16(bytes, 1);
+        short value = BytesUtils.bytesToUInt16(bytes, 1);
 
         // then
         assertEquals(1, value);

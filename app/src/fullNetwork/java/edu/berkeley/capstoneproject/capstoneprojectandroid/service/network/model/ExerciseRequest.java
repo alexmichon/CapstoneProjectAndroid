@@ -20,7 +20,7 @@ public class ExerciseRequest extends BaseRequest{
     String mName;
 
     public ExerciseRequest(Exercise.Builder builder) {
-        mExerciseTypeId = builder.getExerciseTypeId();
+        mExerciseTypeId = builder.getExerciseType().getId();
         mName = builder.getName();
     }
 }

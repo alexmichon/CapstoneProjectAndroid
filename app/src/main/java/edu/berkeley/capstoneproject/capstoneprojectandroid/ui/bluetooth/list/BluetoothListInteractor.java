@@ -43,7 +43,7 @@ public class BluetoothListInteractor extends BaseInteractor implements Bluetooth
 
     @Override
     public Completable doConnect(final Rx2BleDevice device) {
-        return mBluetoothManager.doConnect();
+        return mBluetoothManager.doConnect(device);
     }
 
     @Override

@@ -9,16 +9,26 @@ import java.nio.ByteOrder;
 
 public final class BytesUtils {
 
-    public static final int BYTES_INT16     = 2;
+    public static final int BYTES_UINT8 = 1;
+    public static final int BYTES_UINT16 = 2;
     public static final int BYTES_TIMESTAMP = 4;
     public static final int BYTES_FLOAT     = 4;
 
-    public static short bytesToInt16(byte[] bytes) {
-        return bytesToInt16(bytes, 0);
+    public static short bytesToUInt8(byte[] bytes) {
+        return bytesToUInt8(bytes, 0);
     }
 
-    public static short bytesToInt16(byte[] bytes, int offset) {
-        ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, BYTES_INT16).order(ByteOrder.LITTLE_ENDIAN);
+    public static short bytesToUInt8(byte[] bytes, int offset) {
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, BYTES_UINT8).order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.get();
+    }
+
+    public static short bytesToUInt16(byte[] bytes) {
+        return bytesToUInt16(bytes, 0);
+    }
+
+    public static short bytesToUInt16(byte[] bytes, int offset) {
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, BYTES_UINT16).order(ByteOrder.LITTLE_ENDIAN);
         return buffer.getShort();
     }
 

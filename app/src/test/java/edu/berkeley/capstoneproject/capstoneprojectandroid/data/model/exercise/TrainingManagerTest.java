@@ -18,6 +18,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measuremen
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IExerciseService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMeasurementService;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IExerciseStream;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -173,13 +174,13 @@ public class TrainingManagerTest {
         mTrainingManager.setCurrentExercise(exercise);
 
         IStream socket = Mockito.mock(IStream.class);
-        doReturn(socket).when(mNetExerciseService).doGetStreaming(exercise);
+        doReturn(socket).when(mNetExerciseService).getExerciseStreaming(exercise);
 
         // when
         mTrainingManager.doStartStreaming();
 
         // then
-        verify(mNetExerciseService).doGetStreaming(exercise);
+        verify(mNetExerciseService).getExerciseStreaming(exercise);
         verify(socket).connect();
     }
 
@@ -192,15 +193,15 @@ public class TrainingManagerTest {
         Measurement measurement = MeasurementFactory.builder()
                 .build();
 
-        IStream socket = Mockito.mock(IStream.class);
-        doReturn(socket).when(mNetExerciseService).doGetStreaming(exercise);
+        IExerciseStream socket = Mockito.mock(IExerciseStream.class);
+        doReturn(socket).when(mNetExerciseService).getExerciseStreaming(exercise);
         mTrainingManager.doStartStreaming();
 
         // when
         mTrainingManager.doSendMeasurement(measurement);
 
         // then
-        verify(mNetExerciseService).doSendMeasurement(socket, measurement);
+        verify(socket).doSendMeasurement(measurement);
     }
 
     @Test
@@ -210,7 +211,7 @@ public class TrainingManagerTest {
         mTrainingManager.setCurrentExercise(exercise);
 
         IStream socket = Mockito.mock(IStream.class);
-        doReturn(socket).when(mNetExerciseService).doGetStreaming(exercise);
+        doReturn(socket).when(mNetExerciseService).getExerciseStreaming(exercise);
         mTrainingManager.doStartStreaming();
 
         // when

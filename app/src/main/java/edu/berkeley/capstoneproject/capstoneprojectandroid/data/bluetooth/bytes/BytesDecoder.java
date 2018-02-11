@@ -52,7 +52,7 @@ public class BytesDecoder {
         long timestamp = BytesUtils.bytesToTimestamp(bytes);
         float angle = BytesUtils.bytesToFloat(bytes, BytesUtils.BYTES_TIMESTAMP);
 
-        measurements.add(new Measurement(exercise, encoder.getMetric(Encoder.ID_ANGLE), timestamp, angle));
+        measurements.add(new Measurement(exercise, encoder.getMetric(Encoder.ID_ANGLE), 0, timestamp, angle));
 
         return measurements;
     }
@@ -60,9 +60,10 @@ public class BytesDecoder {
     public List<Measurement> decodeImu(Exercise exercise, byte[] bytes) {
         List<Measurement> measurements = new ArrayList<>(3);
 
-        int type = BytesUtils.bytesToInt16(bytes, BytesUtils.BYTES_INT16);
-        long timestamp = BytesUtils.bytesToTimestamp(bytes, 2 * BytesUtils.BYTES_INT16);
-        int offset = 2 * BytesUtils.BYTES_INT16 + BytesUtils.BYTES_TIMESTAMP;
+        int type = BytesUtils.bytesToUInt8(bytes, BytesUtils.BYTES_UINT8);
+        int batch = BytesUtils.bytesToUInt16(bytes, 2 * BytesUtils.BYTES_UINT8);
+        long timestamp = BytesUtils.bytesToTimestamp(bytes, 2 * BytesUtils.BYTES_UINT8 + BytesUtils.BYTES_UINT16);
+        int offset = 2 * BytesUtils.BYTES_UINT16 + BytesUtils.BYTES_TIMESTAMP;
 
         float valX = BytesUtils.bytesToFloat(bytes, offset + 0 * BytesUtils.BYTES_FLOAT);
         float valY = BytesUtils.bytesToFloat(bytes, offset + 1 * BytesUtils.BYTES_FLOAT);
@@ -73,16 +74,16 @@ public class BytesDecoder {
         switch(type) {
             case IMU_DATA_ACC:
                 sensor = SensorManager.find(SensorManager.ID_ACCELEROMETER);
-                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_X), timestamp, valX));
-                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_Y), timestamp, valY));
-                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_Z), timestamp, valZ));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_X), batch, timestamp, valX));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_Y), batch, timestamp, valY));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Accelerometer.ID_ACC_Z), batch, timestamp, valZ));
                 break;
 
             case IMU_DATA_GYR:
                 sensor = SensorManager.find(SensorManager.ID_GYROSCOPE);
-                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_X), timestamp, valX));
-                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_Y), timestamp, valY));
-                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_Z), timestamp, valZ));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_X), batch, timestamp, valX));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_Y), batch, timestamp, valY));
+                measurements.add(new Measurement(exercise, sensor.getMetric(Gyroscope.ID_GYR_Z), batch, timestamp, valZ));
                 break;
         }
 

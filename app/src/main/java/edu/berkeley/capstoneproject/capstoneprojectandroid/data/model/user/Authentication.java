@@ -75,6 +75,10 @@ public class Authentication {
             return false;
         }
 
+        if (mExpiry.equals("")) {
+            return false;
+        }
+
         long expiry = Long.valueOf(mExpiry);
         return new Date(expiry).after(new Date());
     }

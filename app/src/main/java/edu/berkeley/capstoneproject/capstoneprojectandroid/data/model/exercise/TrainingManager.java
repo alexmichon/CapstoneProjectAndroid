@@ -76,16 +76,15 @@ public class TrainingManager implements ITrainingManager {
     @Override
     public Completable doStartSensors() {
         return mBluetoothHelper.getExerciseService().doStartExercise()
-                .flatMapCompletable(new Function<Map<String,Observable<byte[]>>, CompletableSource>() {
+                .singleOrError()
+                .flatMapCompletable(new Function<Map<String, Observable<byte[]>>, CompletableSource>() {
                     @Override
-                    public CompletableSource apply(final Map<String, Observable<byte[]>> stringObservableMap) throws Exception {
+                    public CompletableSource apply(final Map<String, Observable<byte[]>> observableMap) throws Exception {
                         return Completable.fromAction(new Action() {
                             @Override
                             public void run() throws Exception {
                                 mBluetoothHelper.getMeasurementService()
-                                        .setEncoderObservable(stringObservableMap.get(ENCODER_OBSERVABLE));
-                                mBluetoothHelper.getMeasurementService()
-                                        .setImuObservable(stringObservableMap.get(IMU_OBSERVABLE));
+                                        .setImuObservable(observableMap.get(IMU_OBSERVABLE));
                             }
                         });
                     }
@@ -112,7 +111,7 @@ public class TrainingManager implements ITrainingManager {
 
     @Override
     public Flowable<Measurement> doListen() {
-        return Flowable.merge(listenEncoder(), listenImu())
+        return listenImu()
                 .doOnSubscribe(new Consumer<Subscription>() {
                     @Override
                     public void accept(Subscription subscription) throws Exception {

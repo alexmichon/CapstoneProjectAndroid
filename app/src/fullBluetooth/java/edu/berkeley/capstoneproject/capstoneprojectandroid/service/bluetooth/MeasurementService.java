@@ -1,14 +1,8 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.model.Measurement;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Alex on 18/11/2017.
@@ -25,18 +19,8 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     }
 
     @Override
-    public Observable<Measurement> getEncoderObservable() {
-        return mEncoderObservable.map(new Function<byte[], List<Measurement>>() {
-            @Override
-            public List<Measurement> apply(@NonNull byte[] bytes) throws Exception {
-                return Measurement.decodeEncoder(bytes);
-            }
-        }).flatMap(new Function<List<Measurement>, ObservableSource<Measurement>>() {
-            @Override
-            public ObservableSource<Measurement> apply(@NonNull List<Measurement> measurements) throws Exception {
-                return Observable.fromIterable(measurements);
-            }
-        });
+    public Observable<byte[]> getEncoderObservable() {
+        return mEncoderObservable;
     }
 
     @Override
@@ -45,18 +29,8 @@ public class MeasurementService extends BaseService implements IMeasurementServi
     }
 
     @Override
-    public Observable<Measurement> getImuObservable() {
-        return mImuObservable.map(new Function<byte[], List<Measurement>>() {
-            @Override
-            public List<Measurement> apply(@NonNull byte[] bytes) throws Exception {
-                return Measurement.decodeImu(bytes);
-            }
-        }).flatMap(new Function<List<Measurement>, ObservableSource<Measurement>>() {
-            @Override
-            public ObservableSource<Measurement> apply(@NonNull List<Measurement> measurements) throws Exception {
-                return Observable.fromIterable(measurements);
-            }
-        });
+    public Observable<byte[]> getImuObservable() {
+        return mImuObservable;
     }
 
     @Override

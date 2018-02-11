@@ -60,14 +60,15 @@ public class BluetoothManager implements IBluetoothManager {
     }
 
     @Override
-    public Completable doConnect() {
-        return mBluetoothHelper.getConnectionService().connect(mDevice, false)
+    public Completable doConnect(final Rx2BleDevice device) {
+        return mBluetoothHelper.getConnectionService().connect(device, false)
                 .flatMapCompletable(new Function<Rx2BleConnection, CompletableSource>() {
                     @Override
                     public CompletableSource apply(final Rx2BleConnection rx2BleConnection) throws Exception {
                         return Completable.fromAction(new Action() {
                             @Override
                             public void run() throws Exception {
+                                mDevice = device;
                                 mBluetoothHelper.setConnection(rx2BleConnection);
                                 mBluetoothHelper.setDevice(mDevice);
                             }

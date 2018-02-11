@@ -24,11 +24,13 @@ public class ExerciseStream implements IExerciseStream {
     private static final String HEADER_TIMESTAMP = "Timestamp";
     private static final String HEADER_VALUE = "Value";
     private static final String HEADER_METRIC = "Metric";
+    private static final String HEADER_BATCH = "Batch";
 
     private static final String[] HEADERS = new String[] {
             HEADER_TIMESTAMP,
             HEADER_VALUE,
             HEADER_METRIC,
+            HEADER_BATCH,
     };
 
     private final Exercise mExercise;
@@ -117,7 +119,8 @@ public class ExerciseStream implements IExerciseStream {
         String data[] = new String[] {
                 String.valueOf(measurement.getTimestamp()),
                 String.valueOf(measurement.getValue()),
-                String.valueOf(measurement.getMetric().getId())
+                String.valueOf(measurement.getMetric().getId()),
+                String.valueOf(measurement.getBatch()),
         };
 
         send(data);
