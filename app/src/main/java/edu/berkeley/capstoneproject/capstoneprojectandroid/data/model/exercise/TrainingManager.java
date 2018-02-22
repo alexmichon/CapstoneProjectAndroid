@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
+import android.support.annotation.NonNull;
+
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscription;
 
@@ -16,6 +18,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.strea
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -75,7 +79,7 @@ public class TrainingManager implements ITrainingManager {
 
     @Override
     public Completable doStartSensors() {
-        return mBluetoothHelper.getExerciseService().doStartExercise()
+/*        return mBluetoothHelper.getExerciseService().doStartExercise()
                 .singleOrError()
                 .flatMapCompletable(new Function<Map<String, Observable<byte[]>>, CompletableSource>() {
                     @Override
@@ -88,7 +92,29 @@ public class TrainingManager implements ITrainingManager {
                             }
                         });
                     }
-                });
+                });*/
+
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
+                mBluetoothHelper.getExerciseService().doStartExercise()
+                        .subscribe(new Consumer<Map<String, Observable<byte[]>>>() {
+                            @Override
+                            public void accept(Map<String, Observable<byte[]>> map) throws Exception {
+                                //mBluetoothHelper.getMeasurementService()
+                                //        .setEncoderObservable(map.get(ENCODER_OBSERVABLE));
+                                mBluetoothHelper.getMeasurementService()
+                                        .setImuObservable(map.get(IMU_OBSERVABLE));
+                                e.onComplete();
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                e.onError(throwable);
+                            }
+                        });
+            }
+        });
     }
 
     @Override

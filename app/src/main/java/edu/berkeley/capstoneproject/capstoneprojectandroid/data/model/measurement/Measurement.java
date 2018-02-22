@@ -23,19 +23,19 @@ public class Measurement {
     private final long mTimestamp;
     private final float mValue;
 
-    private final Metric mMetric;
+    private final int mSensorId;
     private final int mMetricId;
 
     private final Exercise mExercise;
     private int mId;
 
-    public Measurement(Exercise exercise, Metric metric, int batch, long timestamp, float value) {
-        mMetric = metric;
-        mMetricId = metric.getId();
+    public Measurement(Exercise exercise, int sensorId, int metricId, int batch, long timestamp, float value) {
+        mExercise = exercise;
+        mSensorId = sensorId;
+        mMetricId = metricId;
+        mBatch = batch;
         mTimestamp = timestamp;
         mValue = value;
-        mExercise = exercise;
-        mBatch = batch;
         //exercise.addMeasurement(this);
     }
 
@@ -45,8 +45,8 @@ public class Measurement {
     }
     public float getValue() { return mValue; }
 
-    public Metric getMetric() {
-        return mMetric;
+    public int getSensorId() {
+        return mSensorId;
     }
 
     public int getMetricId() {

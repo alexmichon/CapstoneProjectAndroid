@@ -89,15 +89,6 @@ public class Exercise implements Parcelable {
         return null;
     }
 
-    public void addMeasurement(Measurement measurement) {
-        MetricMeasurementList metricMeasurementList = getMetricMeasurementList(measurement.getMetric());
-        if (metricMeasurementList == null) {
-            metricMeasurementList = new MetricMeasurementList(measurement.getMetric());
-            mMetricMeasurementLists.add(metricMeasurementList);
-        }
-        metricMeasurementList.addMeasurement(measurement);
-    }
-
     public List<MetricMeasurementList> getMetricMeasurementLists() {
         return mMetricMeasurementLists;
     }

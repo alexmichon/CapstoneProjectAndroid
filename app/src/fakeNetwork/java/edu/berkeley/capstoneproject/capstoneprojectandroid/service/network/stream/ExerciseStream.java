@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
@@ -25,12 +26,14 @@ public class ExerciseStream implements IExerciseStream {
     private static final String HEADER_VALUE = "Value";
     private static final String HEADER_METRIC = "Metric";
     private static final String HEADER_BATCH = "Batch";
+    private static final String HEADER_SENSOR = "Sensor";
 
     private static final String[] HEADERS = new String[] {
             HEADER_TIMESTAMP,
             HEADER_VALUE,
             HEADER_METRIC,
             HEADER_BATCH,
+            HEADER_SENSOR,
     };
 
     private final Exercise mExercise;
@@ -80,10 +83,10 @@ public class ExerciseStream implements IExerciseStream {
             if(file.exists() && !file.isDirectory()){
                 Timber.w("File already exists");
                 FileWriter mFileWriter = new FileWriter(filePath, true);
-                mWriter = new CSVWriter(mFileWriter);
+                mWriter = new CSVWriter(mFileWriter, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
             }
             else {
-                mWriter = new CSVWriter(new FileWriter(filePath));
+                mWriter = new CSVWriter(new FileWriter(file), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
             }
         } catch (IOException e) {
             Timber.e(e);
@@ -118,9 +121,10 @@ public class ExerciseStream implements IExerciseStream {
     public void doSendMeasurement(Measurement measurement) {
         String data[] = new String[] {
                 String.valueOf(measurement.getTimestamp()),
-                String.valueOf(measurement.getValue()),
-                String.valueOf(measurement.getMetric().getId()),
+                String.format(new Locale("en", "US"), "%.5f", measurement.getValue()),
+                String.valueOf(measurement.getMetricId()),
                 String.valueOf(measurement.getBatch()),
+                String.valueOf(measurement.getSensorId()),
         };
 
         send(data);

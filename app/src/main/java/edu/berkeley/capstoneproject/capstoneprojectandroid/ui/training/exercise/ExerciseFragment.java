@@ -168,7 +168,7 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
     public void addMeasurement(Measurement measurement) {
         LineChart chart = null;
 
-        switch (measurement.getMetric().getSensor().getId()) {
+        switch (measurement.getSensorId()) {
             case SensorManager.ID_ACCELEROMETER:
                 chart = mAccView;
                 break;
@@ -207,11 +207,11 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
             return;
         }
 
-        Metric metric = measurement.getMetric();
-        ILineDataSet set = data.getDataSetByLabel(metric.getName(), true);
+        int metricId = measurement.getMetricId();
+        ILineDataSet set = data.getDataSetByLabel(String.valueOf(metricId), true);
 
         if(set == null) {
-            set = createSet(metric.getName(), data.getDataSetCount());
+            set = createSet(String.valueOf(metricId), data.getDataSetCount());
             data.addDataSet(set);
         }
         Entry e = new Entry(measurement.getTimestamp(), measurement.getValue());
@@ -300,8 +300,8 @@ public class ExerciseFragment extends BaseFragment<ExerciseContract.View, Exerci
         List<PieEntry> pieEntries = new ArrayList<>();
         pieEntries.add(new PieEntry(angle));
 
-        Metric metric = measurement.getMetric();
-        IPieDataSet set = new PieDataSet(pieEntries, metric.getName());
+        int metricId = measurement.getMetricId();
+        IPieDataSet set = new PieDataSet(pieEntries, String.valueOf(metricId));
 
         PieData data = new PieData(set);
         pieChart.setData(data);
