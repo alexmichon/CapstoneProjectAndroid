@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.component;
 
+import android.bluetooth.BluetoothAdapter;
+
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IConnectionService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IDeviceService;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IExerciseService;
@@ -10,6 +12,8 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.IMe
  */
 
 public interface BluetoothComponent {
+
+    BluetoothAdapter bluetoothAdapter();
 
     IDeviceService deviceService();
     IConnectionService connectionService();

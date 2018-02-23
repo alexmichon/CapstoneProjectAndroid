@@ -15,10 +15,12 @@ public interface IBluetoothManager {
 
     Observable<Rx2BleDevice> doGetPairedDevices();
 
-    Completable doConnect();
+    Completable doConnect(Rx2BleDevice device);
     Completable doDisconnect();
     Completable doValidate();
 
     Rx2BleDevice getDevice();
-    void setDevice(Rx2BleDevice device);
+    boolean getBluetoothStatus();
+
+    boolean isConnected();
 }

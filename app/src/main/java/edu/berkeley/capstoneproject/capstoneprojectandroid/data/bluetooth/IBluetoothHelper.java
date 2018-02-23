@@ -16,12 +16,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 @Singleton
 public interface IBluetoothHelper {
 
-    Rx2BleDevice getDevice();
-    void setDevice(Rx2BleDevice device);
-
-    Rx2BleConnection getConnection();
-    void setConnection(Rx2BleConnection connection);
-
     IConnectionService getConnectionService();
 
     IDeviceService getDeviceService();
@@ -29,4 +23,6 @@ public interface IBluetoothHelper {
     IExerciseService getExerciseService();
 
     IMeasurementService getMeasurementService();
+
+    boolean getBluetoothStatus();
 }

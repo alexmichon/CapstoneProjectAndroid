@@ -9,11 +9,11 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 
 public interface IBaseService {
 
-    Rx2BleConnection getConnection();
+    /*Rx2BleConnection getConnection();
 
     void setConnection(Rx2BleConnection connection);
 
     Rx2BleDevice getDevice();
 
-    void setDevice(Rx2BleDevice device);
+    void setDevice(Rx2BleDevice device);*/
 }

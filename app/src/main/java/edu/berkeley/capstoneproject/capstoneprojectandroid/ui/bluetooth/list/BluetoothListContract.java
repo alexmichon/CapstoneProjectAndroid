@@ -37,14 +37,17 @@ public interface BluetoothListContract {
         Completable doDisconnect();
         Completable doValidateDevice();
 
-        void doSelectDevice(Rx2BleDevice device);
+        boolean getBluetoothState();
 
+        boolean isConnected();
     }
 
     //@PerActivity
     interface Presenter<V extends View, I extends Interactor> extends IBasePresenter<V, I> {
+        void onStart();
+
         void onLoadPairedDevices();
-        void onStartScanning();
+        void startScanning();
         void stopScanning();;
 
         void onDeviceSelected(Rx2BleDevice device);

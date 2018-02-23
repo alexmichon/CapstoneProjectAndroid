@@ -22,6 +22,7 @@ public class BluetoothManager implements IBluetoothManager {
 
     private final IBluetoothHelper mBluetoothHelper;
 
+    private Rx2BleConnection mConnection;
     private Rx2BleDevice mDevice;
 
     private Disposable mScanningDisposable;
@@ -60,16 +61,16 @@ public class BluetoothManager implements IBluetoothManager {
     }
 
     @Override
-    public Completable doConnect() {
-        return mBluetoothHelper.getConnectionService().connect(mDevice, false)
+    public Completable doConnect(final Rx2BleDevice device) {
+        return mBluetoothHelper.getConnectionService().connect(device, false)
                 .flatMapCompletable(new Function<Rx2BleConnection, CompletableSource>() {
                     @Override
                     public CompletableSource apply(final Rx2BleConnection rx2BleConnection) throws Exception {
                         return Completable.fromAction(new Action() {
                             @Override
                             public void run() throws Exception {
-                                mBluetoothHelper.setConnection(rx2BleConnection);
-                                mBluetoothHelper.setDevice(mDevice);
+                                mDevice = device;
+                                mConnection = rx2BleConnection;
                             }
                         });
                     }
@@ -88,7 +89,7 @@ public class BluetoothManager implements IBluetoothManager {
 
     @Override
     public Completable doValidate() {
-        return mBluetoothHelper.getConnectionService().validateDevice();
+        return mBluetoothHelper.getConnectionService().validateDevice(mConnection);
     }
 
     @Override
@@ -97,7 +98,12 @@ public class BluetoothManager implements IBluetoothManager {
     }
 
     @Override
-    public void setDevice(Rx2BleDevice device) {
-        mDevice = device;
+    public boolean getBluetoothStatus() {
+        return mBluetoothHelper.getBluetoothStatus();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return (mConnection != null && mDevice.getConnectionState() == Rx2BleDevice.ConnectionState.CONNECTED);
     }
 }

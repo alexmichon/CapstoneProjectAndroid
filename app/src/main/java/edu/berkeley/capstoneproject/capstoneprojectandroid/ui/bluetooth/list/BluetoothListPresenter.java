@@ -31,6 +31,20 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
         super(interactor, schedulerProvider, compositeDisposable);
     }
 
+
+    @Override
+    public void onStart() {
+        if (!getInteractor().getBluetoothState()) {
+            getView().promptBluetooth();
+        }
+        else if (getInteractor().isConnected()) {
+            getView().onDeviceConnected();
+        }
+        else {
+            startScanning();
+        }
+    }
+
     @Override
     public void onLoadPairedDevices() {
         Timber.d("Get paired devices");
@@ -49,7 +63,7 @@ public class BluetoothListPresenter<V extends BluetoothListContract.View, I exte
     }
 
     @Override
-    public void onStartScanning() {
+    public void startScanning() {
         Timber.d("Start scanning");
 
         // TODO Check Bluetooth status and prompt if disabled

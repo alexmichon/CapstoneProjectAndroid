@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
@@ -33,12 +34,7 @@ public class ExerciseService extends BaseService implements IExerciseService {
     }
 
     @Override
-    public void setConnection(Rx2BleConnection connection) {
-        mConnection = connection;
-    }
-
-    @Override
-    public Single<Map<String, Observable<byte[]>>> startExercise() {
+    public Single<Map<String, Observable<byte[]>>> doStartExercise() {
         // TODO
         Observable<Observable<byte[]>> encoderObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_ENCODER, NotificationSetupMode.DEFAULT);
         Observable<Observable<byte[]>> imuObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);

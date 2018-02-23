@@ -9,7 +9,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 
 public class BaseService implements IBaseService {
 
-    private Rx2BleConnection mConnection;
+    /*private Rx2BleConnection mConnection;
     private Rx2BleDevice mDevice;
 
     public Rx2BleConnection getConnection() {
@@ -26,5 +26,5 @@ public class BaseService implements IBaseService {
 
     public void setDevice(Rx2BleDevice device) {
         mDevice = device;
-    }
+    }*/
 }
