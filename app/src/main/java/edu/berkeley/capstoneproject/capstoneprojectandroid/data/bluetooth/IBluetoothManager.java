@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevice;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -20,5 +21,8 @@ public interface IBluetoothManager {
     Completable doValidate();
 
     Rx2BleDevice getDevice();
-    void setDevice(Rx2BleDevice device);
+    Rx2BleConnection getConnection();
+    boolean getBluetoothStatus();
+
+    boolean isConnected();
 }

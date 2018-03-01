@@ -1,6 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise;
 
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
@@ -19,7 +20,7 @@ public interface ITrainingManager {
 
     void setExerciseType(ExerciseType exerciseType);
 
-    Completable doStartSensors();
+    Completable doStartSensors(Rx2BleConnection connection);
     Completable doStopSensors();
     Completable doStopExercise();
 

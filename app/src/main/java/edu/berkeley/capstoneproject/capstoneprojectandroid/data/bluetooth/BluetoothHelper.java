@@ -1,5 +1,7 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth;
 
+import android.bluetooth.BluetoothAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleDevic
 @Singleton
 public class BluetoothHelper implements IBluetoothHelper {
 
-    private final List<IBaseService> mServices = new ArrayList<>();
+    private final BluetoothAdapter mBluetoothAdapter;
 
     private final IDeviceService mDeviceService;
     private final IConnectionService mConnectionService;
@@ -32,43 +34,13 @@ public class BluetoothHelper implements IBluetoothHelper {
     private Rx2BleConnection mConnection;
 
     @Inject
-    public BluetoothHelper(IDeviceService deviceService, IConnectionService connectionService, IExerciseService exerciseService, IMeasurementService measurementService) {
+    public BluetoothHelper(BluetoothAdapter adapter, IDeviceService deviceService, IConnectionService connectionService, IExerciseService exerciseService, IMeasurementService measurementService) {
+        mBluetoothAdapter = adapter;
+
         mDeviceService = deviceService;
         mConnectionService = connectionService;
         mExerciseService = exerciseService;
         mMeasurementService = measurementService;
-
-        mServices.add(mDeviceService);
-        mServices.add(mConnectionService);
-        mServices.add(mExerciseService);
-        mServices.add(mMeasurementService);
-    }
-
-
-    @Override
-    public Rx2BleDevice getDevice() {
-        return mDevice;
-    }
-
-    @Override
-    public void setDevice(Rx2BleDevice device) {
-        mDevice = device;
-        for (IBaseService service: mServices) {
-            service.setDevice(device);
-        }
-    }
-
-    @Override
-    public Rx2BleConnection getConnection() {
-        return mConnection;
-    }
-
-    @Override
-    public void setConnection(Rx2BleConnection connection) {
-        mConnection = connection;
-        for (IBaseService service: mServices) {
-            service.setConnection(connection);
-        }
     }
 
     @Override
@@ -88,6 +60,11 @@ public class BluetoothHelper implements IBluetoothHelper {
 
     public IMeasurementService getMeasurementService() {
         return mMeasurementService;
+    }
+
+    @Override
+    public boolean getBluetoothStatus() {
+        return (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled());
     }
 
 }

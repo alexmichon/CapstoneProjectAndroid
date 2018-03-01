@@ -15,7 +15,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.rx.TestSchedule
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 
 import static junit.framework.Assert.assertFalse;
@@ -92,7 +91,7 @@ public class BluetoothListPresenterTest {
         doReturn(Observable.empty()).when(mInteractor).doStartScanning();
 
         // when
-        mPresenter.onStartScanning();
+        mPresenter.startScanning();
 
         // then
         verify(mInteractor).doStartScanning();
@@ -104,7 +103,7 @@ public class BluetoothListPresenterTest {
         doReturn(Observable.empty()).when(mInteractor).doStartScanning();
 
         // when
-        mPresenter.onStartScanning();
+        mPresenter.startScanning();
 
         // then
         verify(mView).showScanningProgress();
@@ -118,7 +117,7 @@ public class BluetoothListPresenterTest {
         doReturn("").when(device).getMacAddress();
 
         // when
-        mPresenter.onStartScanning();
+        mPresenter.startScanning();
         mTestScheduler.triggerActions();
 
         // then
@@ -131,7 +130,7 @@ public class BluetoothListPresenterTest {
         doReturn(Observable.error(new Error())).when(mInteractor).doStartScanning();
 
         // when
-        mPresenter.onStartScanning();
+        mPresenter.startScanning();
         mTestScheduler.triggerActions();
 
         // then

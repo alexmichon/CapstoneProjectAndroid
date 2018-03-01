@@ -11,15 +11,10 @@ import io.reactivex.Single;
  */
 
 public interface IConnectionService extends IBaseService {
-    Rx2BleDevice getDevice();
 
     Single<Rx2BleConnection> connect(Rx2BleDevice device, boolean autoconnect);
 
     void disconnect();
 
-    Rx2BleDevice.ConnectionState getConnectionState();
-
-    Observable<Rx2BleDevice.ConnectionState> observeConnectionStateChange();
-
-    Completable validateDevice();
+    Completable validateDevice(Rx2BleConnection connection);
 }

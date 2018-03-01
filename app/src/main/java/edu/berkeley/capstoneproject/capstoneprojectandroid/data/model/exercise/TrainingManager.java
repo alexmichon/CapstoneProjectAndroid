@@ -16,6 +16,7 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measuremen
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.network.IApiHelper;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IExerciseStream;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.service.network.stream.IStream;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
@@ -78,7 +79,7 @@ public class TrainingManager implements ITrainingManager {
     }
 
     @Override
-    public Completable doStartSensors() {
+    public Completable doStartSensors(final Rx2BleConnection connection) {
 /*        return mBluetoothHelper.getExerciseService().doStartExercise()
                 .singleOrError()
                 .flatMapCompletable(new Function<Map<String, Observable<byte[]>>, CompletableSource>() {
@@ -94,10 +95,26 @@ public class TrainingManager implements ITrainingManager {
                     }
                 });*/
 
+//            .subscribe(new Consumer<Map<String, Observable<byte[]>>>() {
+//                @Override
+//                public void accept(Map<String, Observable<byte[]>> map) throws Exception {
+//                    //mBluetoothHelper.getMeasurementService()
+//                    //        .setEncoderObservable(map.get(ENCODER_OBSERVABLE));
+//
+//                    e.onComplete();
+//                }
+//            }, new Consumer<Throwable>() {
+//                @Override
+//                public void accept(Throwable throwable) throws Exception {
+//                    e.onError(throwable);
+//                }
+//            });
+
+
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(@NonNull final CompletableEmitter e) throws Exception {
-                mBluetoothHelper.getExerciseService().doStartExercise()
+                mBluetoothHelper.getExerciseService().doStartExercise(connection)
                         .subscribe(new Consumer<Map<String, Observable<byte[]>>>() {
                             @Override
                             public void accept(Map<String, Observable<byte[]>> map) throws Exception {

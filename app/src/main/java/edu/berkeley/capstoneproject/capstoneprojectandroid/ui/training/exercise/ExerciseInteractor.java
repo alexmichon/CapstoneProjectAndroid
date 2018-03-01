@@ -2,11 +2,13 @@ package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.training.exercise
 
 import javax.inject.Inject;
 
+import edu.berkeley.capstoneproject.capstoneprojectandroid.data.bluetooth.IBluetoothManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.Measurement;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.Exercise;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.exercise.ITrainingManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.data.model.measurement.IMeasurementManager;
 import edu.berkeley.capstoneproject.capstoneprojectandroid.ui.base.BaseInteractor;
+import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConnection;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -17,10 +19,12 @@ import io.reactivex.Flowable;
 public class ExerciseInteractor extends BaseInteractor implements ExerciseContract.Interactor {
 
     private final ITrainingManager mExerciseManager;
+    private final IBluetoothManager mBluetoothManager;
 
     @Inject
-    public ExerciseInteractor(ITrainingManager exerciseManager) {
+    public ExerciseInteractor(ITrainingManager exerciseManager, IBluetoothManager bluetoothManager) {
         mExerciseManager = exerciseManager;
+        mBluetoothManager = bluetoothManager;
     }
 
     @Override
@@ -30,7 +34,8 @@ public class ExerciseInteractor extends BaseInteractor implements ExerciseContra
 
     @Override
     public Completable doPrepareExercise() {
-        return mExerciseManager.doStartSensors();
+        Rx2BleConnection connection = mBluetoothManager.getConnection();
+        return mExerciseManager.doStartSensors(connection);
     }
 
     @Override

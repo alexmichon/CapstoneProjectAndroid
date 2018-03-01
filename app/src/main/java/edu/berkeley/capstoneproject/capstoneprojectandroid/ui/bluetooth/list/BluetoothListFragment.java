@@ -1,8 +1,10 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.ui.bluetooth.list;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,14 +58,25 @@ public class BluetoothListFragment extends BaseFragment<BluetoothListContract.Vi
     }
 
     @Override
-    public BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor> createPresenter() {
-        return getActivityComponent().bluetoothListPresenter();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getPresenter().onStart();
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getPresenter().onStartScanning();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                getPresenter().startScanning();
+            }
+        }
+
+    }
+
+    @NonNull
+    @Override
+    public BluetoothListContract.Presenter<BluetoothListContract.View, BluetoothListContract.Interactor> createPresenter() {
+        return getActivityComponent().bluetoothListPresenter();
     }
 
     @Override

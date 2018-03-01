@@ -22,6 +22,7 @@ public class BluetoothManager implements IBluetoothManager {
 
     private final IBluetoothHelper mBluetoothHelper;
 
+    private Rx2BleConnection mConnection;
     private Rx2BleDevice mDevice;
 
     private Disposable mScanningDisposable;
@@ -69,8 +70,7 @@ public class BluetoothManager implements IBluetoothManager {
                             @Override
                             public void run() throws Exception {
                                 mDevice = device;
-                                mBluetoothHelper.setConnection(rx2BleConnection);
-                                mBluetoothHelper.setDevice(mDevice);
+                                mConnection = rx2BleConnection;
                             }
                         });
                     }
@@ -89,7 +89,7 @@ public class BluetoothManager implements IBluetoothManager {
 
     @Override
     public Completable doValidate() {
-        return mBluetoothHelper.getConnectionService().validateDevice();
+        return mBluetoothHelper.getConnectionService().validateDevice(mConnection);
     }
 
     @Override
@@ -98,7 +98,17 @@ public class BluetoothManager implements IBluetoothManager {
     }
 
     @Override
-    public void setDevice(Rx2BleDevice device) {
-        mDevice = device;
+    public Rx2BleConnection getConnection() {
+        return mConnection;
+    }
+
+    @Override
+    public boolean getBluetoothStatus() {
+        return mBluetoothHelper.getBluetoothStatus();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return (mConnection != null && mDevice.getConnectionState() == Rx2BleDevice.ConnectionState.CONNECTED);
     }
 }

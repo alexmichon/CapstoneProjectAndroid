@@ -166,6 +166,7 @@ public class ExercisePresenter<V extends ExerciseContract.View, I extends Exerci
 
     @Override
     public void onStartRecording() {
+        Timber.d("Start recording");
         mRecording = true;
         if (isViewAttached()) {
             getView().onStartRecording();

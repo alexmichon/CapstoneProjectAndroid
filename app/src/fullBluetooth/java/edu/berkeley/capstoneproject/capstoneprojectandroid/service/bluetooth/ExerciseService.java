@@ -11,7 +11,6 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.ble.Rx2BleConne
 import edu.berkeley.capstoneproject.capstoneprojectandroid.utils.constants.BluetoothConstants;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 
 /**
@@ -22,7 +21,6 @@ public class ExerciseService extends BaseService implements IExerciseService {
 
     public static final String ENCODER_OBSERVABLE = "EncoderObservable";
     public static final String IMU_OBSERVABLE = "ImuObservable";
-    private Rx2BleConnection mConnection;
 
     private Disposable mEncoderNotificationObservable;
     private Disposable mImuNotificationObservable;
@@ -33,17 +31,12 @@ public class ExerciseService extends BaseService implements IExerciseService {
     }
 
     @Override
-    public void setConnection(Rx2BleConnection connection) {
-        mConnection = connection;
-    }
-
-    @Override
-    public Observable<Map<String, Observable<byte[]>>> doStartExercise() {
+    public Observable<Map<String, Observable<byte[]>>> doStartExercise(Rx2BleConnection connection) {
         // TODO
         //Observable<Observable<byte[]>> encoderObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_ENCODER, NotificationSetupMode.DEFAULT);
         //return mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);
         Observable<Observable<byte[]>> encoderObservableObservable  = Observable.just(Observable.<byte[]>never());
-        Observable<Observable<byte[]>> imuObservableObservable = mConnection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);
+        Observable<Observable<byte[]>> imuObservableObservable = connection.setupNotification(BluetoothConstants.UUID_CHARACTERISTIC_IMU, NotificationSetupMode.DEFAULT);
         /*return Observable.zip(encoderObservableObservable, imuObservableObservable, new BiFunction<Observable<byte[]>, Observable<byte[]>, Map<String, Observable<byte[]>>>() {
             @Override
             public Map<String, Observable<byte[]>> apply(Observable<byte[]> observable, Observable<byte[]> observable2) throws Exception {

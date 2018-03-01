@@ -14,7 +14,5 @@ public interface IExerciseService extends IBaseService {
     String ENCODER_OBSERVABLE = "EncoderObservable";
     String IMU_OBSERVABLE = "ImuObservable";
 
-    void setConnection(Rx2BleConnection connection);
-
-    Observable<Map<String, Observable<byte[]>>> doStartExercise();
+    Observable<Map<String, Observable<byte[]>>> doStartExercise(Rx2BleConnection connection);
 }

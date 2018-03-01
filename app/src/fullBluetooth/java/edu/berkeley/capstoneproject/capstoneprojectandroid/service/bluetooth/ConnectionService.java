@@ -68,25 +68,12 @@ public class ConnectionService extends BaseService implements IConnectionService
 
 
 
-    @Override
-    public Rx2BleDevice.ConnectionState getConnectionState() {
-        return getDevice().getConnectionState();
-    }
-
-
-    @Override
-    public Observable<Rx2BleDevice.ConnectionState> observeConnectionStateChange() {
-        return getDevice().observeConnectionStateChange();
-    }
-
-
-
 
 
 
     @Override
-    public Completable validateDevice() {
-        final Observable<Rx2BleDeviceServices> observable = getConnection().discoverServices();
+    public Completable validateDevice(Rx2BleConnection connection) {
+        final Observable<Rx2BleDeviceServices> observable = connection.discoverServices();
 
         return Completable.create(new CompletableOnSubscribe() {
             @Override

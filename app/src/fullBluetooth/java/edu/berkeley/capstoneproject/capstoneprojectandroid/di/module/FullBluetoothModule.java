@@ -1,5 +1,6 @@
 package edu.berkeley.capstoneproject.capstoneprojectandroid.di.module;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 
 import com.polidea.rxandroidble.RxBleClient;
@@ -24,6 +25,13 @@ import edu.berkeley.capstoneproject.capstoneprojectandroid.service.bluetooth.Mea
 
 @Module(includes = AppModule.class)
 public class FullBluetoothModule {
+
+    @Provides
+    @Singleton
+    BluetoothAdapter provideBluetoothAdaoter() {
+        return BluetoothAdapter.getDefaultAdapter();
+    }
+
 
     @Provides
     @Singleton
